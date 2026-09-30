@@ -1,0 +1,545 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/vllm-project/vllm",
+  "retrievedAt": "2026-09-30",
+  "sourceAcquisition": "Read-only official GitHub connector plus public GitHub REST commit metadata. No external writes.",
+  "fixturePolicy": {
+    "maxFileBytes": 1048576,
+    "fullSelectedSourceFiles": true,
+    "verbatimSource": true,
+    "gitBlobVerification": "all selected source and LICENSE files verified against GitHub blob SHA-1"
+  },
+  "limitations": [
+    "All five fixes were inspected to select these cases and suggest patterns. Their own pre/post results are retrospective seed regressions, never heldout generalization.",
+    "No model calls, GPU workloads, repository scripts, or vLLM imports were performed during case selection.",
+    "Semantic inputs are expectations supported by upstream evidence, not executed application tests.",
+    "A future generation/calibration/holdout experiment must freeze rule generation before exposing calibration/holdout labels; partition by immutable date and lineage. Keep #8568 and #14352 together."
+  ],
+  "futureChronologicalPartitionProposal": {
+    "status": "not activated; no generalization result",
+    "generation": [
+      "vllm-pr-2570"
+    ],
+    "calibration": [
+      "vllm-pr-2664"
+    ],
+    "heldoutPool": [
+      "vllm-pr-8568",
+      "vllm-pr-9034",
+      "vllm-pr-14352"
+    ],
+    "warning": "These cases have now been inspected. A new independent hidden corpus is preferred for final generalization; do not relabel these seed-specific replays as heldout."
+  },
+  "cases": [
+    {
+      "id": "vllm-pr-2570",
+      "pattern": "if self.max_tokens < 1:\n    $$$BODY",
+      "rationale": "SamplingParams permits max_tokens=None, but the old _verify_args compares None with 1, raising TypeError. The fix adds an explicit is-not-None guard and changes the annotation to Optional[int].",
+      "scope": "SamplingParams._verify_args in the full immutable vllm/sampling_params.py file; validation only.",
+      "lineageGroup": "sampling-params-optional-max-tokens",
+      "expectedCounts": {
+        "before": 1,
+        "after": 0
+      },
+      "semanticInputs": [
+        {
+          "input": {
+            "max_tokens": null
+          },
+          "expectedBefore": "TypeError at optional comparison",
+          "expectedAfter": "accepted by max_tokens validation"
+        },
+        {
+          "input": {
+            "max_tokens": 0
+          },
+          "expectedBefore": "ValueError",
+          "expectedAfter": "ValueError"
+        },
+        {
+          "input": {
+            "max_tokens": 1
+          },
+          "expectedBefore": "accepted",
+          "expectedAfter": "accepted"
+        }
+      ],
+      "limitations": [
+        "No vLLM imports, model downloads, GPU execution, or upstream tests were run.",
+        "Direct upstream unit test supports the accepted-None behavior; GPU regression is retained as evidence only.",
+        "The exact if-statement pattern is narrow and does not establish general detection of optional-value misuse."
+      ],
+      "prNumber": 2570,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2570",
+      "mergedAt": "2024-01-24T06:38:55Z",
+      "baseSha": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+      "headSha": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "prBaseSha": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+      "prHeadSha": "db93a939ac90887dff3aa5b3fbe038ed3654385f",
+      "path": "vllm/sampling_params.py",
+      "beforeFile": "fixtures/pr-2570/before/vllm/sampling_params.py",
+      "afterFile": "fixtures/pr-2570/after/vllm/sampling_params.py",
+      "beforeBlobSha": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+      "afterBlobSha": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+      "beforeUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+      "afterUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+      "licenseFile": "fixtures/pr-2570/LICENSE",
+      "licenseBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "licenseUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/LICENSE",
+      "changedPaths": [
+        "tests/test_regression.py",
+        "tests/test_sampling_params.py",
+        "vllm/sampling_params.py"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "merged_pr",
+          "url": "https://github.com/vllm-project/vllm/pull/2570"
+        },
+        {
+          "kind": "immutable_commit",
+          "url": "https://github.com/vllm-project/vllm/commit/3209b4903376fd723858b256dcfabb8420a0cc64"
+        },
+        {
+          "kind": "merge_commit_metadata",
+          "file": "evidence/pr-2570-merge-commit.json"
+        },
+        {
+          "kind": "direct_upstream_unit_test",
+          "file": "evidence/pr-2570/after/tests/test_sampling_params.py",
+          "url": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_sampling_params.py"
+        },
+        {
+          "kind": "upstream_gpu_regression_not_run",
+          "file": "evidence/pr-2570/after/tests/test_regression.py",
+          "url": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_regression.py"
+        }
+      ],
+      "split": "seed_regression",
+      "labelStatus": "source-supported expectation; not independently executed upstream-runtime ground truth",
+      "patternStatus": "suggested; parent or adapter worker must record actual scanner counts",
+      "semanticInputStatus": "hand-authored bounded scenarios inferred from exact source, PR descriptions, tests, and issue reports; not yet executed",
+      "generation": {
+        "modelCalls": 0,
+        "origin": "researcher-selected retrospective patterns",
+        "holdoutGeneralization": false
+      }
+    },
+    {
+      "id": "vllm-pr-2664",
+      "pattern": "self.engine.encode_request_async($$$ARGS)",
+      "rationale": "AsyncLLMEngine.add_request directly called encode_request_async even when engine_use_ray was true. A Ray actor method requires .remote(). The fix branches on engine_use_ray and retains the direct call in the non-Ray else branch.",
+      "scope": "AsyncLLMEngine.add_request in the full immutable vllm/engine/async_llm_engine.py file; dispatch choice only.",
+      "lineageGroup": "async-engine-ray-encoding-dispatch",
+      "expectedCounts": {
+        "before": 1,
+        "after": 1
+      },
+      "semanticInputs": [
+        {
+          "input": {
+            "engine_use_ray": true
+          },
+          "expectedBefore": "direct actor method call; reported TypeError",
+          "expectedAfter": "remote actor method dispatch"
+        },
+        {
+          "input": {
+            "engine_use_ray": false
+          },
+          "expectedBefore": "direct ordinary method call",
+          "expectedAfter": "direct ordinary method call"
+        }
+      ],
+      "limitations": [
+        "No Ray actor, event loop integration, engine, model, or GPU was run.",
+        "PR supplies a concrete error report but adds no test file.",
+        "Static broad-call pattern deliberately remains after the fix. A semantic verifier must inspect enclosing control flow and reject the fixed else-branch candidate."
+      ],
+      "prNumber": 2664,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2664",
+      "mergedAt": "2024-01-30T16:17:06Z",
+      "baseSha": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+      "headSha": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+      "prBaseSha": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+      "prHeadSha": "c5c755eeea3ac6552b01d2fcc765c6f684110a2b",
+      "path": "vllm/engine/async_llm_engine.py",
+      "beforeFile": "fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+      "afterFile": "fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+      "beforeBlobSha": "2885aab9f31611813dcd2e44674f20119058baa2",
+      "afterBlobSha": "a63d48016b83c366207752f86f1728eda512100a",
+      "beforeUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+      "afterUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm/engine/async_llm_engine.py",
+      "licenseFile": "fixtures/pr-2664/LICENSE",
+      "licenseBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "licenseUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/LICENSE",
+      "changedPaths": [
+        "vllm/engine/async_llm_engine.py"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "merged_pr",
+          "url": "https://github.com/vllm-project/vllm/pull/2664"
+        },
+        {
+          "kind": "immutable_commit",
+          "url": "https://github.com/vllm-project/vllm/commit/d79ced3292445d8471b3c4e5ce2dbf311834ec1b"
+        },
+        {
+          "kind": "merge_commit_metadata",
+          "file": "evidence/pr-2664-merge-commit.json"
+        }
+      ],
+      "split": "seed_regression",
+      "labelStatus": "source-supported expectation; not independently executed upstream-runtime ground truth",
+      "patternStatus": "suggested; parent or adapter worker must record actual scanner counts",
+      "semanticInputStatus": "hand-authored bounded scenarios inferred from exact source, PR descriptions, tests, and issue reports; not yet executed",
+      "generation": {
+        "modelCalls": 0,
+        "origin": "researcher-selected retrospective patterns",
+        "holdoutGeneralization": false
+      }
+    },
+    {
+      "id": "vllm-pr-8568",
+      "pattern": "if \"tool_choice\" not in data and \"tools\" in data:\n    $$$BODY",
+      "rationale": "Presence of the tools key was confused with availability of tools. With tools=null the validator invented tool_choice=auto and then rejected its own choice; an empty tools list also incorrectly defaulted to auto. The fix uses truthiness of data.get('tools').",
+      "scope": "ChatCompletionRequest.check_tool_usage in the full immutable vllm/entrypoints/openai/protocol.py file; absent tool_choice only.",
+      "lineageGroup": "openai-chat-request-validation",
+      "expectedCounts": {
+        "before": 1,
+        "after": 0
+      },
+      "semanticInputs": [
+        {
+          "input": {
+            "tools": null
+          },
+          "expectedBefore": "ValueError after setting tool_choice=auto",
+          "expectedAfter": "no injected tool_choice; model default none"
+        },
+        {
+          "input": {
+            "tools": []
+          },
+          "expectedBefore": "tool_choice=auto",
+          "expectedAfter": "no injected tool_choice; model default none"
+        },
+        {
+          "input": {},
+          "expectedBefore": "model default none",
+          "expectedAfter": "model default none"
+        },
+        {
+          "input": {
+            "tool_choice": "auto",
+            "tools": null
+          },
+          "expectedBefore": "ValueError",
+          "expectedAfter": "ValueError"
+        }
+      ],
+      "limitations": [
+        "No Pydantic model import or upstream test execution was run.",
+        "The full upstream test file is included; its missing-tools, null-tools, empty-tools and explicit-choice cases support expectations.",
+        "The exact key names make this a local regression pattern, not proof of cross-project generalization."
+      ],
+      "prNumber": 8568,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/8568",
+      "mergedAt": "2024-09-26T23:23:17Z",
+      "baseSha": "e2f6f26e8636b8a23e5c0cda533a70c40ade01ec",
+      "headSha": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+      "prBaseSha": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+      "prHeadSha": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "beforeFile": "fixtures/pr-8568/before/vllm/entrypoints/openai/protocol.py",
+      "afterFile": "fixtures/pr-8568/after/vllm/entrypoints/openai/protocol.py",
+      "beforeBlobSha": "40d27f984fbaac881a7f278bd56a83dcd311696a",
+      "afterBlobSha": "646aa4537999ee3f47da0b5579ff9ccfba294bfc",
+      "beforeUrl": "https://github.com/vllm-project/vllm/blob/e2f6f26e8636b8a23e5c0cda533a70c40ade01ec/vllm/entrypoints/openai/protocol.py",
+      "afterUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/vllm/entrypoints/openai/protocol.py",
+      "licenseFile": "fixtures/pr-8568/LICENSE",
+      "licenseBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "licenseUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/LICENSE",
+      "changedPaths": [
+        "tests/tool_use/test_chat_completion_request_validations.py",
+        "vllm/entrypoints/openai/protocol.py"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "merged_pr",
+          "url": "https://github.com/vllm-project/vllm/pull/8568"
+        },
+        {
+          "kind": "immutable_commit",
+          "url": "https://github.com/vllm-project/vllm/commit/ee2da3e9efb38add804e2023d47e9f42f38bd638"
+        },
+        {
+          "kind": "merge_commit_metadata",
+          "file": "evidence/pr-8568-merge-commit.json"
+        },
+        {
+          "kind": "direct_upstream_unit_tests",
+          "file": "evidence/pr-8568/after/tests/tool_use/test_chat_completion_request_validations.py",
+          "url": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/tests/tool_use/test_chat_completion_request_validations.py"
+        }
+      ],
+      "split": "seed_regression",
+      "labelStatus": "source-supported expectation; not independently executed upstream-runtime ground truth",
+      "patternStatus": "suggested; parent or adapter worker must record actual scanner counts",
+      "semanticInputStatus": "hand-authored bounded scenarios inferred from exact source, PR descriptions, tests, and issue reports; not yet executed",
+      "generation": {
+        "modelCalls": 0,
+        "origin": "researcher-selected retrospective patterns",
+        "holdoutGeneralization": false
+      }
+    },
+    {
+      "id": "vllm-pr-9034",
+      "pattern": "self.data._cached_all_token_ids[-num_new_tokens:]",
+      "rationale": "When delta mode produces no new tokens, num_new_tokens is zero. Python -0 equals 0, so the slice returned the entire cached token list instead of an empty list. The fix returns [] before reaching the slice when num_new_tokens==0.",
+      "scope": "Sequence.get_output_token_ids_to_return in the full immutable vllm/sequence.py file; specifically zero-token delta extraction. PR also changes two serving paths, outside this selected primary-file replay.",
+      "lineageGroup": "sequence-zero-token-delta-slice",
+      "expectedCounts": {
+        "before": 1,
+        "after": 1
+      },
+      "semanticInputs": [
+        {
+          "input": {
+            "delta": true,
+            "output_len": 0,
+            "last_output_token_ids_offset": 0,
+            "cached_all_token_ids": [
+              101,
+              102
+            ]
+          },
+          "expectedBefore": [
+            101,
+            102
+          ],
+          "expectedAfter": []
+        },
+        {
+          "input": {
+            "delta": true,
+            "output_len": 3,
+            "last_output_token_ids_offset": 3,
+            "cached_all_token_ids": [
+              101,
+              102,
+              201,
+              202,
+              203
+            ]
+          },
+          "expectedBefore": [
+            101,
+            102,
+            201,
+            202,
+            203
+          ],
+          "expectedAfter": []
+        },
+        {
+          "input": {
+            "delta": true,
+            "output_len": 3,
+            "last_output_token_ids_offset": 2,
+            "cached_all_token_ids": [
+              101,
+              102,
+              201,
+              202,
+              203
+            ]
+          },
+          "expectedBefore": 203,
+          "expectedAfter": 203
+        },
+        {
+          "input": {
+            "delta": true,
+            "output_len": 3,
+            "last_output_token_ids_offset": 1,
+            "cached_all_token_ids": [
+              101,
+              102,
+              201,
+              202,
+              203
+            ]
+          },
+          "expectedBefore": [
+            202,
+            203
+          ],
+          "expectedAfter": [
+            202,
+            203
+          ]
+        }
+      ],
+      "limitations": [
+        "No vLLM package or upstream GPU/inference tests were run.",
+        "This isolates one sub-fix of a four-file PR; it cannot establish resolution of the entire serving regression.",
+        "Broad negative-slice pattern intentionally matches both versions. The fixed version requires semantic rejection using the earlier zero guard.",
+        "The linked integration test covers streaming usage/logprobs; it is not a direct unit test of the extracted method."
+      ],
+      "prNumber": 9034,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/9034",
+      "mergedAt": "2024-10-15T22:40:43Z",
+      "baseSha": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+      "headSha": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "prBaseSha": "e9d517f27673ec8736c026f2311d3c250d5f9061",
+      "prHeadSha": "8f15b82381530c9938c5a75825b5a0129afa8cc0",
+      "path": "vllm/sequence.py",
+      "beforeFile": "fixtures/pr-9034/before/vllm/sequence.py",
+      "afterFile": "fixtures/pr-9034/after/vllm/sequence.py",
+      "beforeBlobSha": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+      "afterBlobSha": "728445cb4b5458282a371f720e96dbffb8ed9352",
+      "beforeUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+      "afterUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+      "licenseFile": "fixtures/pr-9034/LICENSE",
+      "licenseBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "licenseUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/LICENSE",
+      "changedPaths": [
+        "tests/entrypoints/openai/test_chunked_prompt.py",
+        "vllm/entrypoints/openai/serving_chat.py",
+        "vllm/entrypoints/openai/serving_completion.py",
+        "vllm/sequence.py"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "merged_pr",
+          "url": "https://github.com/vllm-project/vllm/pull/9034"
+        },
+        {
+          "kind": "immutable_commit",
+          "url": "https://github.com/vllm-project/vllm/commit/ba30942240d35eb26b503e139eb4b01ccbbeb954"
+        },
+        {
+          "kind": "merge_commit_metadata",
+          "file": "evidence/pr-9034-merge-commit.json"
+        },
+        {
+          "kind": "issue",
+          "url": "https://github.com/vllm-project/vllm/issues/8988"
+        },
+        {
+          "kind": "upstream_gpu_integration_not_run",
+          "file": "evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+          "url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests/entrypoints/openai/test_chunked_prompt.py"
+        }
+      ],
+      "split": "seed_regression",
+      "labelStatus": "source-supported expectation; not independently executed upstream-runtime ground truth",
+      "patternStatus": "suggested; parent or adapter worker must record actual scanner counts",
+      "semanticInputStatus": "hand-authored bounded scenarios inferred from exact source, PR descriptions, tests, and issue reports; not yet executed",
+      "generation": {
+        "modelCalls": 0,
+        "origin": "researcher-selected retrospective patterns",
+        "holdoutGeneralization": false
+      }
+    },
+    {
+      "id": "vllm-pr-14352",
+      "pattern": "if not data.get(\"logprobs\"):\n    $$$BODY",
+      "rationale": "ChatCompletionRequest defaults top_logprobs to zero. On dictionary/JSON roundtrip, the old validator required logprobs=true whenever top_logprobs was present, rejecting its own zero default. The fix imposes that requirement only when top_logprobs>0.",
+      "scope": "ChatCompletionRequest.check_logprobs in the full immutable vllm/entrypoints/openai/protocol.py file; logprobs/top_logprobs relation only.",
+      "lineageGroup": "openai-chat-request-validation",
+      "expectedCounts": {
+        "before": 1,
+        "after": 0
+      },
+      "semanticInputs": [
+        {
+          "input": {
+            "top_logprobs": 0,
+            "logprobs": false
+          },
+          "expectedBefore": "ValueError",
+          "expectedAfter": "accepted"
+        },
+        {
+          "input": {
+            "top_logprobs": 1,
+            "logprobs": false
+          },
+          "expectedBefore": "ValueError",
+          "expectedAfter": "ValueError"
+        },
+        {
+          "input": {
+            "top_logprobs": 1,
+            "logprobs": true
+          },
+          "expectedBefore": "accepted",
+          "expectedAfter": "accepted"
+        },
+        {
+          "input": {
+            "top_logprobs": -1,
+            "logprobs": true
+          },
+          "expectedBefore": "ValueError",
+          "expectedAfter": "ValueError"
+        }
+      ],
+      "limitations": [
+        "No Pydantic or vLLM import, model, or GPU was run.",
+        "Issue #14351 supplies a minimal roundtrip reproduction; this PR adds no test file.",
+        "Shares the same full source file and conservative lineage group with #8568. Keep both on the same side of any future train/holdout split."
+      ],
+      "prNumber": 14352,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/14352",
+      "mergedAt": "2025-03-18T12:50:05Z",
+      "baseSha": "414919138b74ec2e654a25548e031c8fa4b02e64",
+      "headSha": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+      "prBaseSha": "69ff99fdcddf4d6dbcebf5f750b121dd171b86a3",
+      "prHeadSha": "e62e274caab25ea5aa862b1bdc6ab0e4586803fa",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "beforeFile": "fixtures/pr-14352/before/vllm/entrypoints/openai/protocol.py",
+      "afterFile": "fixtures/pr-14352/after/vllm/entrypoints/openai/protocol.py",
+      "beforeBlobSha": "90076a45d414ab8032cb913e57a28e5919a4889f",
+      "afterBlobSha": "a96ca1f7570086c2b4100446dea43950e3b9d34e",
+      "beforeUrl": "https://github.com/vllm-project/vllm/blob/414919138b74ec2e654a25548e031c8fa4b02e64/vllm/entrypoints/openai/protocol.py",
+      "afterUrl": "https://github.com/vllm-project/vllm/blob/dd732028f59dd149cfdd4e6ca899d50c5839051e/vllm/entrypoints/openai/protocol.py",
+      "licenseFile": "fixtures/pr-14352/LICENSE",
+      "licenseBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "licenseUrl": "https://github.com/vllm-project/vllm/blob/dd732028f59dd149cfdd4e6ca899d50c5839051e/LICENSE",
+      "changedPaths": [
+        "vllm/entrypoints/openai/protocol.py"
+      ],
+      "sourceEvidence": [
+        {
+          "kind": "merged_pr",
+          "url": "https://github.com/vllm-project/vllm/pull/14352"
+        },
+        {
+          "kind": "immutable_commit",
+          "url": "https://github.com/vllm-project/vllm/commit/dd732028f59dd149cfdd4e6ca899d50c5839051e"
+        },
+        {
+          "kind": "merge_commit_metadata",
+          "file": "evidence/pr-14352-merge-commit.json"
+        },
+        {
+          "kind": "minimal_issue_reproduction",
+          "url": "https://github.com/vllm-project/vllm/issues/14351"
+        }
+      ],
+      "split": "seed_regression",
+      "labelStatus": "source-supported expectation; not independently executed upstream-runtime ground truth",
+      "patternStatus": "suggested; parent or adapter worker must record actual scanner counts",
+      "semanticInputStatus": "hand-authored bounded scenarios inferred from exact source, PR descriptions, tests, and issue reports; not yet executed",
+      "generation": {
+        "modelCalls": 0,
+        "origin": "researcher-selected retrospective patterns",
+        "holdoutGeneralization": false
+      }
+    }
+  ]
+}

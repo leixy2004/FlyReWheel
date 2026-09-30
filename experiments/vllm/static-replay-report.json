@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/vllm-project/vllm",
+  "experiment": "retrospective-static-seed-replay",
+  "engine": "@ast-grep/napi@0.45.3",
+  "grammar": "@ast-grep/lang-python@0.0.6",
+  "manifestDigest": "edf4aa0e331bb59f37876dea22fa6f568736ea58dcc373abf12f20823871fc3a",
+  "mode": "real_native_static_detection",
+  "ruleAuthor": "assistant-authored from public fix evidence; not generated through the application Codex adapter",
+  "summary": {
+    "cases": 5,
+    "executionErrors": 0,
+    "detectorExpectationsMatched": 5,
+    "staticSeparationCases": 3,
+    "fixedCodeStillCandidateCases": 2
+  },
+  "limitations": [
+    "Rules were authored with knowledge of these fixes. Their own before/after snapshots are training regressions, not heldout generalization.",
+    "No application Codex inference, GPU workload, project test suite, or semantic adjudication was executed.",
+    "A disappearing structural match is not proof of program correctness, rule precision, or bug recall.",
+    "All results stay local. No GitHub comments, issues, pull requests, or statuses are published."
+  ],
+  "results": [
+    {
+      "id": "vllm-pr-2570",
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2570",
+      "mergedAt": "2024-01-24T06:38:55Z",
+      "baseSha": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+      "headSha": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "path": "vllm/sampling_params.py",
+      "pattern": "if self.max_tokens < 1:\n    $$$BODY",
+      "rationale": "SamplingParams permits max_tokens=None, but the old _verify_args compares None with 1, raising TypeError. The fix adds an explicit is-not-None guard and changes the annotation to Optional[int].",
+      "execution": "succeeded",
+      "sourceDigests": {
+        "before": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+        "after": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c"
+      },
+      "bundleDigest": "b1c8c21b0e325d6cb9bdc2e0fa9f11af45813e3966ddc0f09caed0f8277e1021",
+      "counts": {
+        "before": 1,
+        "after": 0,
+        "expected": {
+          "before": 1,
+          "after": 0
+        }
+      },
+      "detectorExpectationMatched": true,
+      "staticSeparationObserved": true,
+      "fixedCodeStillCandidate": false,
+      "inertCommentPreservesMatches": true,
+      "beforeAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 186,
+              "column": 9,
+              "offset": 8985
+            },
+            "end": {
+              "line": 188,
+              "column": 74,
+              "offset": 9112
+            }
+          },
+          "matchedText": "if self.max_tokens < 1:\n            raise ValueError(\n                f\"max_tokens must be at least 1, got {self.max_tokens}.\")"
+        }
+      ],
+      "afterAnchors": [],
+      "semanticStatus": "not_verified",
+      "publication": "disabled"
+    },
+    {
+      "id": "vllm-pr-2664",
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2664",
+      "mergedAt": "2024-01-30T16:17:06Z",
+      "baseSha": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+      "headSha": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+      "path": "vllm/engine/async_llm_engine.py",
+      "pattern": "self.engine.encode_request_async($$$ARGS)",
+      "rationale": "AsyncLLMEngine.add_request directly called encode_request_async even when engine_use_ray was true. A Ray actor method requires .remote(). The fix branches on engine_use_ray and retains the direct call in the non-Ray else branch.",
+      "execution": "succeeded",
+      "sourceDigests": {
+        "before": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+        "after": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf"
+      },
+      "bundleDigest": "8e95fa7ef657ad9cf603bbc10daadb6a92dcd023e323c91a5c432226b4cc1d71",
+      "counts": {
+        "before": 1,
+        "after": 1,
+        "expected": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "detectorExpectationMatched": true,
+      "staticSeparationObserved": false,
+      "fixedCodeStillCandidate": true,
+      "inertCommentPreservesMatches": true,
+      "beforeAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 450,
+              "column": 34,
+              "offset": 16925
+            },
+            "end": {
+              "line": 454,
+              "column": 39,
+              "offset": 17106
+            }
+          },
+          "matchedText": "self.engine.encode_request_async(\n            request_id=request_id,\n            prompt=prompt,\n            prompt_token_ids=prompt_token_ids,\n            lora_request=lora_request)"
+        }
+      ],
+      "afterAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 458,
+              "column": 38,
+              "offset": 17218
+            },
+            "end": {
+              "line": 462,
+              "column": 43,
+              "offset": 17415
+            }
+          },
+          "matchedText": "self.engine.encode_request_async(\n                request_id=request_id,\n                prompt=prompt,\n                prompt_token_ids=prompt_token_ids,\n                lora_request=lora_request)"
+        }
+      ],
+      "semanticStatus": "not_verified",
+      "publication": "disabled"
+    },
+    {
+      "id": "vllm-pr-8568",
+      "prUrl": "https://github.com/vllm-project/vllm/pull/8568",
+      "mergedAt": "2024-09-26T23:23:17Z",
+      "baseSha": "e2f6f26e8636b8a23e5c0cda533a70c40ade01ec",
+      "headSha": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "pattern": "if \"tool_choice\" not in data and \"tools\" in data:\n    $$$BODY",
+      "rationale": "Presence of the tools key was confused with availability of tools. With tools=null the validator invented tool_choice=auto and then rejected its own choice; an empty tools list also incorrectly defaulted to auto. The fix uses truthiness of data.get('tools').",
+      "execution": "succeeded",
+      "sourceDigests": {
+        "before": "febd1cdf906cb32795f7a87952609a12a73dcb5c3da4a994beb7730de1df6753",
+        "after": "99df40b03a8fcd80494791fd49c1e2f4f6589936eb4e62b15683fd960e8ed7ea"
+      },
+      "bundleDigest": "148db07b3361dacf17fb794fdf687350fabd21a387924796e945f477550ebd81",
+      "counts": {
+        "before": 1,
+        "after": 0,
+        "expected": {
+          "before": 1,
+          "after": 0
+        }
+      },
+      "detectorExpectationMatched": true,
+      "staticSeparationObserved": true,
+      "fixedCodeStillCandidate": false,
+      "inertCommentPreservesMatches": true,
+      "beforeAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 389,
+              "column": 9,
+              "offset": 14171
+            },
+            "end": {
+              "line": 390,
+              "column": 41,
+              "offset": 14261
+            }
+          },
+          "matchedText": "if \"tool_choice\" not in data and \"tools\" in data:\n            data[\"tool_choice\"] = \"auto\""
+        }
+      ],
+      "afterAnchors": [],
+      "semanticStatus": "not_verified",
+      "publication": "disabled"
+    },
+    {
+      "id": "vllm-pr-9034",
+      "prUrl": "https://github.com/vllm-project/vllm/pull/9034",
+      "mergedAt": "2024-10-15T22:40:43Z",
+      "baseSha": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+      "headSha": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "path": "vllm/sequence.py",
+      "pattern": "self.data._cached_all_token_ids[-num_new_tokens:]",
+      "rationale": "When delta mode produces no new tokens, num_new_tokens is zero. Python -0 equals 0, so the slice returned the entire cached token list instead of an empty list. The fix returns [] before reaching the slice when num_new_tokens==0.",
+      "execution": "succeeded",
+      "sourceDigests": {
+        "before": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "after": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a"
+      },
+      "bundleDigest": "790ad4287d551d52fd91dc93ca5a1e739c3c30f1c0ab1da1b49e392c13b16c0e",
+      "counts": {
+        "before": 1,
+        "after": 1,
+        "expected": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "detectorExpectationMatched": true,
+      "staticSeparationObserved": false,
+      "fixedCodeStillCandidate": true,
+      "inertCommentPreservesMatches": true,
+      "beforeAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 535,
+              "column": 16,
+              "offset": 20628
+            },
+            "end": {
+              "line": 535,
+              "column": 65,
+              "offset": 20677
+            }
+          },
+          "matchedText": "self.data._cached_all_token_ids[-num_new_tokens:]"
+        }
+      ],
+      "afterAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 538,
+              "column": 16,
+              "offset": 20683
+            },
+            "end": {
+              "line": 538,
+              "column": 65,
+              "offset": 20732
+            }
+          },
+          "matchedText": "self.data._cached_all_token_ids[-num_new_tokens:]"
+        }
+      ],
+      "semanticStatus": "not_verified",
+      "publication": "disabled"
+    },
+    {
+      "id": "vllm-pr-14352",
+      "prUrl": "https://github.com/vllm-project/vllm/pull/14352",
+      "mergedAt": "2025-03-18T12:50:05Z",
+      "baseSha": "414919138b74ec2e654a25548e031c8fa4b02e64",
+      "headSha": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "pattern": "if not data.get(\"logprobs\"):\n    $$$BODY",
+      "rationale": "ChatCompletionRequest defaults top_logprobs to zero. On dictionary/JSON roundtrip, the old validator required logprobs=true whenever top_logprobs was present, rejecting its own zero default. The fix imposes that requirement only when top_logprobs>0.",
+      "execution": "succeeded",
+      "sourceDigests": {
+        "before": "7715007785d0ec5472ba9c8d45f8ca6bf246f5d33de675ae75b8f7bfba233847",
+        "after": "1fc48b2ee7d49c9c0edb8f063b9278958024d4a9161c56f63d3bb566bfe214b0"
+      },
+      "bundleDigest": "6a9e4feedd6882a6a73be86f662b97b01f005241afd7265c8c3ba7c66b82a92e",
+      "counts": {
+        "before": 1,
+        "after": 0,
+        "expected": {
+          "before": 1,
+          "after": 0
+        }
+      },
+      "detectorExpectationMatched": true,
+      "staticSeparationObserved": true,
+      "fixedCodeStillCandidate": false,
+      "inertCommentPreservesMatches": true,
+      "beforeAnchors": [
+        {
+          "span": {
+            "start": {
+              "line": 551,
+              "column": 13,
+              "offset": 21700
+            },
+            "end": {
+              "line": 554,
+              "column": 18,
+              "offset": 21861
+            }
+          },
+          "matchedText": "if not data.get(\"logprobs\"):\n                raise ValueError(\n                    \"when using `top_logprobs`, `logprobs` must be set to true.\"\n                )"
+        }
+      ],
+      "afterAnchors": [],
+      "semanticStatus": "not_verified",
+      "publication": "disabled"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+**
+!Dockerfile
+!package.json
+!package-lock.json
+!tsconfig.json
+!src/
+!src/**
+!deploy/
+!deploy/tsconfig.build.json
+# Explicit defense in depth; auth, local data, source research and git never enter the context.
+**/.env*
+**/auth.json
+**/.codex
+**/node_modules
+**/*.log
+**/.git

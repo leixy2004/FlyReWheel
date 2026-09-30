@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flyrewheel-config
+data:
+  PORT: "8080"
+  QE_ENABLE_MODEL: "false"
+  QE_S3_ENABLED: "false"
+  QE_CODEX_AUTH_MODE: account
+  QE_CODEX_HOME: /codex-home
+  # Operator must explicitly choose a model and enable inference after target-environment login.
+  QE_CODEX_MODEL: ""
+  QE_MODEL_TIMEOUT_MS: "120000"
+  QE_MODEL_TOKEN_ACCEPTANCE_LIMIT: "30000"

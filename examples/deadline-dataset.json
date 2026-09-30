@@ -1,0 +1,173 @@
+{
+  "name": "synthetic-deadline-regressions-v1",
+  "samples": [
+    {
+      "problemCase": {
+        "id": "learning-bug",
+        "lineageId": "learning-pair",
+        "split": "training",
+        "expected": "violation",
+        "title": "learning-bug",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000001",
+        "path": "learning-bug.ts",
+        "sourceDigest": "da77dacfdc10d1fb81066394777f2a27d70442234acdfbef00747afd5aa4852b",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:learning-bug",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": null
+        }
+      },
+      "source": "async function training() { await waitUntilReady(\"training\"); }",
+      "evidence": [
+        {
+          "id": "context:learning-bug",
+          "kind": "caller-deadline-contract",
+          "content": "Training case: caller and API contract confirm no effective deadline."
+        }
+      ],
+      "fixtureDecision": "violation",
+      "fixtureReason": "Training case: caller and API contract confirm no effective deadline."
+    },
+    {
+      "problemCase": {
+        "id": "learning-fix",
+        "lineageId": "learning-pair",
+        "split": "training",
+        "expected": "safe",
+        "title": "learning-fix",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000002",
+        "path": "learning-fix.ts",
+        "sourceDigest": "926f927802690ab5cfe9690e13d9e1bb0f94fd8123cd0adebcc20f6bdb4b2d70",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:learning-fix",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": "learning-bug"
+        }
+      },
+      "source": "async function trainingFixed() { await waitUntilReady(\"training\", { timeoutMs: 1000 }); }",
+      "evidence": [
+        {
+          "id": "context:learning-fix",
+          "kind": "caller-deadline-contract",
+          "content": "The explicit API timeout bounds the wait."
+        }
+      ],
+      "fixtureDecision": "safe",
+      "fixtureReason": "The explicit API timeout bounds the wait."
+    },
+    {
+      "problemCase": {
+        "id": "new-unbounded",
+        "lineageId": "independent-new-unbounded",
+        "split": "validation",
+        "expected": "violation",
+        "title": "new-unbounded",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000003",
+        "path": "new-unbounded.ts",
+        "sourceDigest": "352795ee3a41cef88a844bcc93724f32b83e12da677c5c0f661f6e77e71d9890",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:new-unbounded",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": null
+        }
+      },
+      "source": "async function nextJob() { await waitUntilReady(\"new-job\"); }",
+      "evidence": [
+        {
+          "id": "context:new-unbounded",
+          "kind": "caller-deadline-contract",
+          "content": "Reviewed caller and API contract: no deadline or cancellation is supplied."
+        }
+      ],
+      "fixtureDecision": "violation",
+      "fixtureReason": "Reviewed caller and API contract: no deadline or cancellation is supplied."
+    },
+    {
+      "problemCase": {
+        "id": "new-fixed",
+        "lineageId": "independent-new-fixed",
+        "split": "validation",
+        "expected": "safe",
+        "title": "new-fixed",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000004",
+        "path": "new-fixed.ts",
+        "sourceDigest": "df47f070ffb628e3734d78cccb5d29d53d12fa3e7b5ba3caef92ad78bdd41bd9",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:new-fixed",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": null
+        }
+      },
+      "source": "async function fixedJob() { await waitUntilReady(\"new-job\", { timeoutMs: 2000 }); }",
+      "evidence": [
+        {
+          "id": "context:new-fixed",
+          "kind": "caller-deadline-contract",
+          "content": "The explicit API timeout bounds the wait."
+        }
+      ],
+      "fixtureDecision": "safe",
+      "fixtureReason": "The explicit API timeout bounds the wait."
+    },
+    {
+      "problemCase": {
+        "id": "outer-deadline",
+        "lineageId": "independent-outer-deadline",
+        "split": "validation",
+        "expected": "safe",
+        "title": "outer-deadline",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000005",
+        "path": "outer-deadline.ts",
+        "sourceDigest": "a4d77abe7b042698f6dd4f759ddb0ef62b0d7ce572b76952c04668f752f99ff8",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:outer-deadline",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": null
+        }
+      },
+      "source": "async function boundedJob() { return withDeadline(1000, () => waitUntilReady(\"bounded-job\")); }",
+      "evidence": [
+        {
+          "id": "context:outer-deadline",
+          "kind": "caller-deadline-contract",
+          "content": "Reviewed withDeadline contract propagates cancellation and enforces a 1000ms deadline on waitUntilReady."
+        }
+      ],
+      "fixtureDecision": "safe",
+      "fixtureReason": "Reviewed withDeadline contract propagates cancellation and enforces a 1000ms deadline on waitUntilReady."
+    },
+    {
+      "problemCase": {
+        "id": "missing-context",
+        "lineageId": "independent-missing-context",
+        "split": "validation",
+        "expected": "unknown",
+        "title": "missing-context",
+        "repository": "synthetic:deadline-contract",
+        "commit": "0000000000000000000000000000000000000006",
+        "path": "missing-context.ts",
+        "sourceDigest": "4dfd1412adf24a2e59f41a422b20f5694e6b74efdcb7f3d86a09a93ee7e3337d",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:missing-context",
+          "reviewedBy": "synthetic-fixture-author",
+          "derivedFromCaseId": null
+        }
+      },
+      "source": "async function opaqueJob() { await waitUntilReady(\"opaque-job\"); }",
+      "evidence": [],
+      "fixtureDecision": "violation",
+      "fixtureReason": "Deliberately optimistic fixture is overridden by the missing-evidence gate"
+    }
+  ]
+}

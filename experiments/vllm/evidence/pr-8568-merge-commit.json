@@ -1,0 +1,37 @@
+{
+  "sha": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+  "parents": [
+    {
+      "sha": "e2f6f26e8636b8a23e5c0cda533a70c40ade01ec",
+      "html_url": "https://github.com/vllm-project/vllm/commit/e2f6f26e8636b8a23e5c0cda533a70c40ade01ec"
+    }
+  ],
+  "message": "fix validation: Only set tool_choice `auto` if at least one tool is provided (#8568)",
+  "messageScope": "subject_only",
+  "committerDate": "2024-09-26T23:23:17Z",
+  "html_url": "https://github.com/vllm-project/vllm/commit/ee2da3e9efb38add804e2023d47e9f42f38bd638",
+  "files": [
+    {
+      "sha": "3d0fe8f06089549a46c5bf513cc53bdca055939c",
+      "filename": "tests/tool_use/test_chat_completion_request_validations.py",
+      "status": "added",
+      "additions": 71,
+      "deletions": 0,
+      "changes": 71,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/tests%2Ftool_use%2Ftest_chat_completion_request_validations.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ee2da3e9efb38add804e2023d47e9f42f38bd638/tests%2Ftool_use%2Ftest_chat_completion_request_validations.py",
+      "patch": "@@ -0,0 +1,71 @@\n+import pytest\n+\n+from vllm.entrypoints.openai.protocol import ChatCompletionRequest\n+\n+\n+def test_chat_completion_request_with_no_tools():\n+    # tools key is not present\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+    })\n+    assert request.tool_choice == 'none'\n+\n+    # tools key is None\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+        'tools':\n+        None\n+    })\n+    assert request.tool_choice == 'none'\n+\n+    # tools key present but empty\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+        'tools': []\n+    })\n+    assert request.tool_choice == 'none'\n+\n+\n+def test_chat_completion_request_with_tool_choice_but_no_tools():\n+    with pytest.raises(ValueError,\n+                       match=\"When using `tool_choice`, `tools` must be set.\"):\n+        ChatCompletionRequest.model_validate({\n+            'messages': [{\n+                'role': 'user',\n+                'content': 'Hello'\n+            }],\n+            'model':\n+            'facebook/opt-125m',\n+            'tool_choice':\n+            'auto'\n+        })\n+\n+    with pytest.raises(ValueError,\n+                       match=\"When using `tool_choice`, `tools` must be set.\"):\n+        ChatCompletionRequest.model_validate({\n+            'messages': [{\n+                'role': 'user',\n+                'content': 'Hello'\n+            }],\n+            'model':\n+            'facebook/opt-125m',\n+            'tool_choice':\n+            'auto',\n+            'tools':\n+            None\n+        })"
+    },
+    {
+      "sha": "646aa4537999ee3f47da0b5579ff9ccfba294bfc",
+      "filename": "vllm/entrypoints/openai/protocol.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/vllm%2Fentrypoints%2Fopenai%2Fprotocol.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ee2da3e9efb38add804e2023d47e9f42f38bd638/vllm%2Fentrypoints%2Fopenai%2Fprotocol.py",
+      "patch": "@@ -386,7 +386,7 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n+        if \"tool_choice\" not in data and data.get(\"tools\"):\n             data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation"
+    }
+  ]
+}

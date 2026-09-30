@@ -1,0 +1,59 @@
+{
+  "sha": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+  "parents": [
+    {
+      "sha": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+      "html_url": "https://github.com/vllm-project/vllm/commit/22f8a69549d30b9b00464141797d274fb6b7e65f"
+    }
+  ],
+  "message": "[Bugfix] Fix vLLM UsageInfo and logprobs None AssertionError with empty token_ids (#9034)",
+  "messageScope": "subject_only",
+  "committerDate": "2024-10-15T22:40:43Z",
+  "html_url": "https://github.com/vllm-project/vllm/commit/ba30942240d35eb26b503e139eb4b01ccbbeb954",
+  "files": [
+    {
+      "sha": "61d66365130c74f41da0e85d8b84f5ed15dc3ef4",
+      "filename": "tests/entrypoints/openai/test_chunked_prompt.py",
+      "status": "added",
+      "additions": 126,
+      "deletions": 0,
+      "changes": 126,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests%2Fentrypoints%2Fopenai%2Ftest_chunked_prompt.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests%2Fentrypoints%2Fopenai%2Ftest_chunked_prompt.py",
+      "patch": "@@ -0,0 +1,126 @@\n+import openai  # use the official client for correctness check\n+import pytest\n+import pytest_asyncio\n+\n+from ...utils import RemoteOpenAIServer\n+\n+# any model with a chat template should work here\n+MODEL_NAME = \"HuggingFaceH4/zephyr-7b-beta\"\n+\n+\n+@pytest.fixture(scope=\"module\")\n+def server():\n+    args = [\n+        # use half precision for speed and memory savings in CI environment\n+        \"--dtype\",\n+        \"bfloat16\",\n+        \"--max-model-len\",\n+        \"8192\",\n+        \"--enforce-eager\",\n+        # lora config below\n+        \"--max-num-seqs\",\n+        \"128\",\n+        \"--enable-chunked-prefill\",\n+        \"--max-num-batched-tokens\",\n+        \"1000\",\n+        # large prompts create a lot of output\n+        \"--disable-log-requests\",\n+    ]\n+\n+    with RemoteOpenAIServer(MODEL_NAME, args) as remote_server:\n+        yield remote_server\n+\n+\n+@pytest_asyncio.fixture\n+async def client(server):\n+    async with server.get_async_client() as async_client:\n+        yield async_client\n+\n+\n+@pytest.mark.asyncio\n+async def test_completion_stream_options_and_logprobs_with_long_prompts(\n+        client: openai.AsyncOpenAI):\n+    # Test stream with long prompt\n+    prompt = \"What is the capital of France?\" * 400\n+\n+    stream = await client.completions.create(\n+        model=MODEL_NAME,\n+        prompt=prompt,\n+        max_tokens=5,\n+        temperature=0.0,\n+        stream=True,\n+        stream_options={\n+            \"include_usage\": True,\n+            \"continuous_usage_stats\": True,\n+        },\n+        logprobs=5,\n+    )\n+\n+    tokens_received = 0\n+    finished = False\n+    async for chunk in stream:\n+        assert chunk.usage.prompt_tokens >= 0\n+        assert chunk.usage.completion_tokens >= 0\n+        assert chunk.usage.total_tokens == (chunk.usage.prompt_tokens +\n+                                            chunk.usage.completion_tokens)\n+        if not finished:\n+            tokens_received += 1\n+            assert chunk.choices[0].text\n+\n+            if chunk.choices[0].finish_reason is not None:\n+                finished = True\n+\n+        if finished:\n+            assert chunk.usage.completion_tokens == tokens_received\n+\n+\n+@pytest.mark.asyncio\n+async def test_chat_completion_stream_options_and_logprobs_with_long_prompts(\n+        client: openai.AsyncOpenAI):\n+    # Test stream with long prompt\n+    messages = [{\n+        \"role\": \"system\",\n+        \"content\": \"You are a helpful assistant.\"\n+    }, {\n+        \"role\": \"user\",\n+        \"content\": \"What is the capital of France?\" * 400\n+    }]\n+    stream = await client.chat.completions.create(\n+        model=MODEL_NAME,\n+        messages=messages,\n+        max_tokens=5,\n+        temperature=0.0,\n+        stream=True,\n+        stream_options={\n+            \"include_usage\": True,\n+            \"continuous_usage_stats\": True,\n+        },\n+        logprobs=True,\n+        top_logprobs=5,\n+    )\n+\n+    tokens_received = 0\n+    empty_chunks_received = 0\n+    finished = False\n+    async for chunk in stream:\n+        assert chunk.usage.prompt_tokens >= 0\n+        assert chunk.usage.completion_tokens >= 0\n+        assert chunk.usage.total_tokens == (chunk.usage.prompt_tokens +\n+                                            chunk.usage.completion_tokens)\n+\n+        if not finished:\n+            if chunk.choices[0].delta.content == \"\":\n+                # when there is no tokens generated\n+                assert chunk.usage.completion_tokens == 0\n+                assert chunk.choices[0].logprobs is None\n+                empty_chunks_received += 1\n+            else:\n+                tokens_received += 1\n+\n+            if chunk.choices[0].finish_reason is not None:\n+                finished = True\n+\n+        if finished:\n+            assert chunk.usage.completion_tokens == tokens_received\n+\n+    assert empty_chunks_received <= 1"
+    },
+    {
+      "sha": "a8b1c94325902db73726535830e4df3bddea189d",
+      "filename": "vllm/entrypoints/openai/serving_chat.py",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 0,
+      "changes": 6,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fentrypoints%2Fopenai%2Fserving_chat.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fentrypoints%2Fopenai%2Fserving_chat.py",
+      "patch": "@@ -435,6 +435,12 @@ async def chat_completion_stream_generator(\n                         logprobs = None\n \n                     delta_text = output.text\n+\n+                    if not delta_text and not output.token_ids and \\\n+                        not previous_num_tokens[i]:\n+                        # Chunked prefill case, don't return empty chunks\n+                        continue\n+\n                     delta_message: Optional[DeltaMessage]\n \n                     # handle streaming deltas for tools with named tool_choice"
+    },
+    {
+      "sha": "1e08cd9712bc03c7ad9557222a9e20d2d69687cc",
+      "filename": "vllm/entrypoints/openai/serving_completion.py",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 2,
+      "changes": 7,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fentrypoints%2Fopenai%2Fserving_completion.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fentrypoints%2Fopenai%2Fserving_completion.py",
+      "patch": "@@ -274,8 +274,6 @@ async def completion_stream_generator(\n \n                 for output in res.outputs:\n                     i = output.index + prompt_idx * num_choices\n-                    # TODO(simon): optimize the performance by avoiding full\n-                    # text O(n^2) sending.\n \n                     assert request.max_tokens is not None\n                     if request.echo and request.max_tokens == 0:\n@@ -307,6 +305,11 @@ async def completion_stream_generator(\n                         delta_token_ids = output.token_ids\n                         out_logprobs = output.logprobs\n \n+                        if not delta_text and not delta_token_ids \\\n+                            and not previous_num_tokens[i]:\n+                            # Chunked prefill case, don't return empty chunks\n+                            continue\n+\n                     if request.logprobs is not None:\n                         assert out_logprobs is not None, (\n                             \"Did not output logprobs\")"
+    },
+    {
+      "sha": "728445cb4b5458282a371f720e96dbffb8ed9352",
+      "filename": "vllm/sequence.py",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 0,
+      "changes": 3,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fsequence.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm%2Fsequence.py",
+      "patch": "@@ -532,6 +532,9 @@ def get_output_token_ids_to_return(\n             # (which is what we have most of the time)\n             return self.data._cached_all_token_ids[-1]\n \n+        if num_new_tokens == 0:\n+            return []\n+\n         return self.data._cached_all_token_ids[-num_new_tokens:]\n \n     def hash_of_block(self, logical_idx: int) -> int:"
+    }
+  ]
+}

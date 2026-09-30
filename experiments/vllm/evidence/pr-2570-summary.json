@@ -1,0 +1,24 @@
+{
+  "url": "https://github.com/vllm-project/vllm/pull/2570",
+  "title": "[Bugfix] fix crash if max_tokens=None",
+  "body": "Passing max_tokens=None is allowed in the API,\r\nbut after recent changes it started crashing.",
+  "createdAt": "2024-01-24T00:25:27Z",
+  "mergedAt": "2024-01-24T06:38:55Z",
+  "baseSha": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+  "headSha": "db93a939ac90887dff3aa5b3fbe038ed3654385f",
+  "mergeCommitSha": "3209b4903376fd723858b256dcfabb8420a0cc64",
+  "patches": [
+    {
+      "filename": "tests/test_regression.py",
+      "patch": "@@ -22,6 +22,19 @@ def test_duplicated_ignored_sequence_group():\n     assert len(prompts) == len(outputs)\n \n \n+def test_max_tokens_none():\n+    sampling_params = SamplingParams(temperature=0.01,\n+                                     top_p=0.1,\n+                                     max_tokens=None)\n+    llm = LLM(model=\"facebook/opt-125m\",\n+              max_num_batched_tokens=4096,\n+              tensor_parallel_size=1)\n+    prompts = [\"Just say hello!\"]\n+    outputs = llm.generate(prompts, sampling_params=sampling_params)\n+\n+    assert len(prompts) == len(outputs)\n+\n+\n if __name__ == \"__main__\":\n     import pytest\n     pytest.main([__file__])"
+    },
+    {
+      "filename": "tests/test_sampling_params.py",
+      "patch": "@@ -0,0 +1,13 @@\n+\"\"\"Tests for the SamplingParams class.\n+\"\"\"\n+from vllm import SamplingParams\n+\n+\n+def test_max_tokens_none():\n+    \"\"\"max_tokens=None should be allowed\"\"\"\n+    SamplingParams(temperature=0.01, top_p=0.1, max_tokens=None)\n+\n+\n+if __name__ == \"__main__\":\n+    import pytest\n+    pytest.main([__file__])"
+    },
+    {
+      "filename": "vllm/sampling_params.py",
+      "patch": "@@ -108,7 +108,7 @@ def __init__(\n         stop_token_ids: Optional[List[int]] = None,\n         include_stop_str_in_output: bool = False,\n         ignore_eos: bool = False,\n-        max_tokens: int = 16,\n+        max_tokens: Optional[int] = 16,\n         logprobs: Optional[int] = None,\n         prompt_logprobs: Optional[int] = None,\n         skip_special_tokens: bool = True,\n@@ -183,7 +183,7 @@ def _verify_args(self) -> None:\n         if not 0.0 <= self.min_p <= 1.0:\n             raise ValueError(\"min_p must be in [0, 1], got \"\n                              f\"{self.min_p}.\")\n-        if self.max_tokens < 1:\n+        if self.max_tokens is not None and self.max_tokens < 1:\n             raise ValueError(\n                 f\"max_tokens must be at least 1, got {self.max_tokens}.\")\n         if self.logprobs is not None and self.logprobs < 0:"
+    }
+  ]
+}

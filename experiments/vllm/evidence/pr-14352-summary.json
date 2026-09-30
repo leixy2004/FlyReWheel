@@ -1,0 +1,16 @@
+{
+  "url": "https://github.com/vllm-project/vllm/pull/14352",
+  "title": "[Bugfix][Frontend] Fix validation of `logprobs` in `ChatCompletionRequest`",
+  "body": "This fixes the validation of `logprobs` and `top_logprobs` for `ChatCompletionRequest` so that the class accepts its own default values.\n\nFIX [#14351](https://github.com/vllm-project/vllm/issues/14351)\n",
+  "createdAt": "2025-03-06T10:15:44Z",
+  "mergedAt": "2025-03-18T12:50:05Z",
+  "baseSha": "69ff99fdcddf4d6dbcebf5f750b121dd171b86a3",
+  "headSha": "e62e274caab25ea5aa862b1bdc6ab0e4586803fa",
+  "mergeCommitSha": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+  "patches": [
+    {
+      "filename": "vllm/entrypoints/openai/protocol.py",
+      "patch": "@@ -546,7 +546,7 @@ def check_logprobs(cls, data):\n             if top_logprobs < 0:\n                 raise ValueError(\"`top_logprobs` must be a positive value.\")\n \n-            if not data.get(\"logprobs\"):\n+            if top_logprobs > 0 and not data.get(\"logprobs\"):\n                 raise ValueError(\n                     \"when using `top_logprobs`, `logprobs` must be set to true.\"\n                 )"
+    }
+  ]
+}

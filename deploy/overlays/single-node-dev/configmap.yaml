@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flyrewheel-config
+data:
+  QE_S3_ENABLED: "true"
+  QE_S3_ENDPOINT: http://flyrewheel-s3:8333
+  QE_S3_BUCKET: flyrewheel-artifacts
+  QE_S3_REGION: us-east-1
+  # Only for this isolated development overlay. Production requires verified HTTPS.
+  QE_S3_ALLOW_INSECURE: "true"

@@ -1,0 +1,26 @@
+{
+  "sha": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+  "parents": [
+    {
+      "sha": "414919138b74ec2e654a25548e031c8fa4b02e64",
+      "html_url": "https://github.com/vllm-project/vllm/commit/414919138b74ec2e654a25548e031c8fa4b02e64"
+    }
+  ],
+  "message": "[Bugfix][Frontend] Fix validation of `logprobs` in `ChatCompletionRequest` (#14352)",
+  "messageScope": "subject_only",
+  "committerDate": "2025-03-18T12:50:05Z",
+  "html_url": "https://github.com/vllm-project/vllm/commit/dd732028f59dd149cfdd4e6ca899d50c5839051e",
+  "files": [
+    {
+      "sha": "a96ca1f7570086c2b4100446dea43950e3b9d34e",
+      "filename": "vllm/entrypoints/openai/protocol.py",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/dd732028f59dd149cfdd4e6ca899d50c5839051e/vllm%2Fentrypoints%2Fopenai%2Fprotocol.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/dd732028f59dd149cfdd4e6ca899d50c5839051e/vllm%2Fentrypoints%2Fopenai%2Fprotocol.py",
+      "patch": "@@ -548,7 +548,7 @@ def check_logprobs(cls, data):\n             if top_logprobs < 0:\n                 raise ValueError(\"`top_logprobs` must be a positive value.\")\n \n-            if not data.get(\"logprobs\"):\n+            if top_logprobs > 0 and not data.get(\"logprobs\"):\n                 raise ValueError(\n                     \"when using `top_logprobs`, `logprobs` must be set to true.\"\n                 )"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "sha": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+  "parents": [
+    {
+      "sha": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+      "html_url": "https://github.com/vllm-project/vllm/commit/ab406446691f289ef51d1abd8d1ff66760eda36f"
+    }
+  ],
+  "message": "Fix 'Actor methods cannot be called directly' when using `--engine-use-ray` (#2664)",
+  "messageScope": "subject_only",
+  "committerDate": "2024-01-30T16:17:05Z",
+  "html_url": "https://github.com/vllm-project/vllm/commit/d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+  "files": [
+    {
+      "sha": "a63d48016b83c366207752f86f1728eda512100a",
+      "filename": "vllm/engine/async_llm_engine.py",
+      "status": "modified",
+      "additions": 13,
+      "deletions": 5,
+      "changes": 18,
+      "blob_url": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm%2Fengine%2Fasync_llm_engine.py",
+      "raw_url": "https://github.com/vllm-project/vllm/raw/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm%2Fengine%2Fasync_llm_engine.py",
+      "patch": "@@ -447,11 +447,19 @@ async def add_request(\n \n         if arrival_time is None:\n             arrival_time = time.time()\n-        prompt_token_ids = await self.engine.encode_request_async(\n-            request_id=request_id,\n-            prompt=prompt,\n-            prompt_token_ids=prompt_token_ids,\n-            lora_request=lora_request)\n+\n+        if self.engine_use_ray:\n+            prompt_token_ids = await self.engine.encode_request_async.remote(\n+                request_id=request_id,\n+                prompt=prompt,\n+                prompt_token_ids=prompt_token_ids,\n+                lora_request=lora_request)\n+        else:\n+            prompt_token_ids = await self.engine.encode_request_async(\n+                request_id=request_id,\n+                prompt=prompt,\n+                prompt_token_ids=prompt_token_ids,\n+                lora_request=lora_request)\n \n         stream = self._request_tracker.add_request(\n             request_id,"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "validation": "source-integrity-only",
+  "sourceExecution": false,
+  "files": [
+    {
+      "caseId": "vllm-pr-2570",
+      "path": "fixtures/pr-2570/before/vllm/sampling_params.py",
+      "bytes": 12375,
+      "gitBlobSha": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+      "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-2570",
+      "path": "fixtures/pr-2570/after/vllm/sampling_params.py",
+      "bytes": 12417,
+      "gitBlobSha": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+      "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-2570",
+      "path": "fixtures/pr-2570/LICENSE",
+      "bytes": 11357,
+      "gitBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-2664",
+      "path": "fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+      "bytes": 24172,
+      "gitBlobSha": "2885aab9f31611813dcd2e44674f20119058baa2",
+      "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-2664",
+      "path": "fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+      "bytes": 24481,
+      "gitBlobSha": "a63d48016b83c366207752f86f1728eda512100a",
+      "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-2664",
+      "path": "fixtures/pr-2664/LICENSE",
+      "bytes": 11357,
+      "gitBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-8568",
+      "path": "fixtures/pr-8568/before/vllm/entrypoints/openai/protocol.py",
+      "bytes": 31618,
+      "gitBlobSha": "40d27f984fbaac881a7f278bd56a83dcd311696a",
+      "sha256": "febd1cdf906cb32795f7a87952609a12a73dcb5c3da4a994beb7730de1df6753",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-8568",
+      "path": "fixtures/pr-8568/after/vllm/entrypoints/openai/protocol.py",
+      "bytes": 31620,
+      "gitBlobSha": "646aa4537999ee3f47da0b5579ff9ccfba294bfc",
+      "sha256": "99df40b03a8fcd80494791fd49c1e2f4f6589936eb4e62b15683fd960e8ed7ea",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-8568",
+      "path": "fixtures/pr-8568/LICENSE",
+      "bytes": 11357,
+      "gitBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-9034",
+      "path": "fixtures/pr-9034/before/vllm/sequence.py",
+      "bytes": 54777,
+      "gitBlobSha": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+      "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-9034",
+      "path": "fixtures/pr-9034/after/vllm/sequence.py",
+      "bytes": 54832,
+      "gitBlobSha": "728445cb4b5458282a371f720e96dbffb8ed9352",
+      "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-9034",
+      "path": "fixtures/pr-9034/LICENSE",
+      "bytes": 11357,
+      "gitBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-14352",
+      "path": "fixtures/pr-14352/before/vllm/entrypoints/openai/protocol.py",
+      "bytes": 60882,
+      "gitBlobSha": "90076a45d414ab8032cb913e57a28e5919a4889f",
+      "sha256": "7715007785d0ec5472ba9c8d45f8ca6bf246f5d33de675ae75b8f7bfba233847",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-14352",
+      "path": "fixtures/pr-14352/after/vllm/entrypoints/openai/protocol.py",
+      "bytes": 60903,
+      "gitBlobSha": "a96ca1f7570086c2b4100446dea43950e3b9d34e",
+      "sha256": "1fc48b2ee7d49c9c0edb8f063b9278958024d4a9161c56f63d3bb566bfe214b0",
+      "matchesUpstreamBlobSha": true
+    },
+    {
+      "caseId": "vllm-pr-14352",
+      "path": "fixtures/pr-14352/LICENSE",
+      "bytes": 11357,
+      "gitBlobSha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "matchesUpstreamBlobSha": true
+    }
+  ],
+  "allMatch": true,
+  "totalBytes": 424862,
+  "largestFileBytes": 60903
+}

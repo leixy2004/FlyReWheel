@@ -1,0 +1,20 @@
+{
+  "url": "https://github.com/vllm-project/vllm/pull/8568",
+  "title": "fix validation: Only set tool_choice `auto` if at least one tool is provided",
+  "body": "Passing \r\n\r\n```\r\n{\r\n...\r\n\"tools\": null\r\n}\r\n```\r\n\r\nwithout \"tool_choice\" key causes a validation failure because the code sets \"tool_choice\" to \"auto\" on its own and then fails because it finds \"tools\" as None.\r\nThis change fixes the validation so that \"tool_choice\" is only set if at least one tool is provided",
+  "createdAt": "2024-09-18T15:17:18Z",
+  "mergedAt": "2024-09-26T23:23:17Z",
+  "baseSha": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+  "headSha": "eae161c33f47a0b760701769f56fc249563f8ed0",
+  "mergeCommitSha": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+  "patches": [
+    {
+      "filename": "tests/tool_use/test_chat_completion_request_validations.py",
+      "patch": "@@ -0,0 +1,71 @@\n+import pytest\n+\n+from vllm.entrypoints.openai.protocol import ChatCompletionRequest\n+\n+\n+def test_chat_completion_request_with_no_tools():\n+    # tools key is not present\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+    })\n+    assert request.tool_choice == 'none'\n+\n+    # tools key is None\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+        'tools':\n+        None\n+    })\n+    assert request.tool_choice == 'none'\n+\n+    # tools key present but empty\n+    request = ChatCompletionRequest.model_validate({\n+        'messages': [{\n+            'role': 'user',\n+            'content': 'Hello'\n+        }],\n+        'model':\n+        'facebook/opt-125m',\n+        'tools': []\n+    })\n+    assert request.tool_choice == 'none'\n+\n+\n+def test_chat_completion_request_with_tool_choice_but_no_tools():\n+    with pytest.raises(ValueError,\n+                       match=\"When using `tool_choice`, `tools` must be set.\"):\n+        ChatCompletionRequest.model_validate({\n+            'messages': [{\n+                'role': 'user',\n+                'content': 'Hello'\n+            }],\n+            'model':\n+            'facebook/opt-125m',\n+            'tool_choice':\n+            'auto'\n+        })\n+\n+    with pytest.raises(ValueError,\n+                       match=\"When using `tool_choice`, `tools` must be set.\"):\n+        ChatCompletionRequest.model_validate({\n+            'messages': [{\n+                'role': 'user',\n+                'content': 'Hello'\n+            }],\n+            'model':\n+            'facebook/opt-125m',\n+            'tool_choice':\n+            'auto',\n+            'tools':\n+            None\n+        })"
+    },
+    {
+      "filename": "vllm/entrypoints/openai/protocol.py",
+      "patch": "@@ -381,7 +381,7 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n+        if \"tool_choice\" not in data and data.get(\"tools\"):\n             data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation"
+    }
+  ]
+}

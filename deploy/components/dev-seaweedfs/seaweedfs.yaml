@@ -1,0 +1,155 @@
+# Development only: upstream 4.48 mini mode, one process and one failure domain.
+# The single-node-dev overlay explicitly enables worker input/result artifact uploads.
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyrewheel-s3
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: flyrewheel-s3
+  ports:
+    - name: s3
+      port: 8333
+      targetPort: s3
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flyrewheel-s3-data
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyrewheel-s3
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-s3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flyrewheel-s3
+        app.kubernetes.io/part-of: flyrewheel
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: seaweedfs
+          image: chrislusf/seaweedfs:4.48
+          imagePullPolicy: IfNotPresent
+          # Direct binary invocation avoids the image entrypoint's root permission-repair path.
+          command: [/usr/bin/weed]
+          args:
+            - mini
+            - -dir=/data
+            - -ip=127.0.0.1
+            - -ip.bind=0.0.0.0
+            - -s3.port=8333
+            - -s3.port.iceberg=0
+            - -s3.port.lance=0
+            - -webdav=false
+            - -admin.ui=false
+            - -master.volumeSizeLimitMB=128
+          env:
+            - name: HOME
+              value: /tmp
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: flyrewheel-s3
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: flyrewheel-s3
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: S3_BUCKET
+              value: flyrewheel-artifacts
+          ports:
+            - name: s3
+              containerPort: 8333
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests: {cpu: 250m, memory: 512Mi, ephemeral-storage: 128Mi}
+            limits: {cpu: "2", memory: 2Gi, ephemeral-storage: 512Mi}
+          # TCP verifies listener availability only, not authenticated S3 correctness.
+          startupProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket: {port: s3}
+            periodSeconds: 30
+            failureThreshold: 6
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: flyrewheel-s3-data
+        - name: tmp
+          emptyDir: {sizeLimit: 128Mi}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: s3-from-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-s3
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: flyrewheel-worker
+      ports:
+        - protocol: TCP
+          port: 8333
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-to-s3
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: flyrewheel-s3
+      ports:
+        - protocol: TCP
+          port: 8333

@@ -1,0 +1,18 @@
+[
+  {
+    "issueNumber": 14351,
+    "url": "https://github.com/vllm-project/vllm/issues/14351",
+    "title": "[Bug]: ChatCompletionRequest rejects its own defaults",
+    "createdAt": "2025-03-06T10:12:54Z",
+    "closedAt": "2025-03-18T12:50:07Z",
+    "summary": "Creating ChatCompletionRequest with omitted logprobs/top_logprobs succeeds, but model_validate(request.model_dump()) raises a validation error on default zero top_logprobs. The issue provides a minimal reproduction and the eventual guard change."
+  },
+  {
+    "issueNumber": 8988,
+    "url": "https://github.com/vllm-project/vllm/issues/8988",
+    "title": "[Bug]: openai.serving_chat tries to call _create_chat_logprobs when the output.text is empty",
+    "createdAt": "2024-10-01T05:46:50Z",
+    "closedAt": "2024-10-15T22:40:44Z",
+    "summary": "Chunked prefill can stream empty output text with no logprobs. The issue reports an IndexError while building logprobs and is closed by PR #9034. That PR also corrects Sequence zero-token delta slicing; the selected replay addresses only the latter sub-fix."
+  }
+]

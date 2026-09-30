@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "ruleId": "effective-wait-deadline",
+  "version": "1",
+  "skill": {
+    "title": "等待必须受有效截止时间约束",
+    "invariant": "A readiness wait must have an effective local or propagated outer deadline.",
+    "applicability": [
+      "Asynchronous readiness waits that may otherwise remain pending"
+    ],
+    "exceptions": [
+      "A verified outer deadline propagates cancellation to the wait",
+      "The operation is already bounded by its API contract"
+    ],
+    "requiredContext": [
+      "caller-deadline-contract"
+    ]
+  },
+  "detector": {
+    "kind": "ast-grep",
+    "language": "typescript",
+    "pattern": "waitUntilReady($JOB)"
+  },
+  "regressionCases": [
+    {
+      "caseId": "learning-bug",
+      "role": "positive"
+    },
+    {
+      "caseId": "learning-fix",
+      "role": "fixed"
+    }
+  ],
+  "provenance": {
+    "sourceCaseIds": [
+      "learning-bug",
+      "learning-fix"
+    ],
+    "parentDigest": null,
+    "author": "synthetic-fixture-author",
+    "createdAt": "2026-09-30T00:00:00Z",
+    "rationale": "Explicitly synthetic bug/fix example inspired by the missing-caller-context class of false positives",
+    "evidenceRefs": [
+      "fixture:learning-bug",
+      "fixture:learning-fix"
+    ]
+  }
+}
