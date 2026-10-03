@@ -106,6 +106,12 @@ bounded successful pair is the later availability result, not a rewritten old ru
 
 ## Product execution is a separate gate
 
+The [offline reproducibility chain](../docs/offline-reproducibility.md) was
+actually run with the compiled CLI at `4be3720`. It prepares the three frozen W0
+inputs, exports jobs and inspects their blocked preflight/not-started state; a
+separate authored evaluator example generates its own inputs before scoring.
+It stops before the missing real execution and research gates.
+
 [Application operations](../docs/application-operations.md) exposes
 `application-jobs prepare-mining`, `preflight`, `bootstrap-check` and `recovery`.
 Preparation exports a normalized job and persists its request, not a queued or
