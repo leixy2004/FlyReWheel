@@ -17,9 +17,11 @@ for the [local matched-experiment bridge](../experiments/matched-revision/README
 They require selected-evidence/no-tools execution and an explicit controls
 declaration. Current frozen temperature/seed/output-token requirements fail
 before dispatch with SDK 0.159.2. An explicitly authored script can exercise
-the contracts without claiming those controls or real inference. This seam
-does not enable matched requests in the outer production workspace runner or
-OpenSandbox adapter.
+the contracts without claiming those controls or real inference. The [matched workspace transport](matched-workspace-runtime.md) now carries fixed
+matched requests, selected citation bindings and optional reasoning settings in the
+outer runner/OpenSandbox wire protocol. Its native declaration is denied before
+lease/allocation until deployment-backed gateway and monetary admission exist;
+authored exceptions still cannot cross into isolated execution.
 
 The managed host worktree must be `ready`, identity-valid, and independently clean (including ignored/untracked files and suspicious index flags). `expectedSha` must equal both the observed checkout and the manifest's `baseSha` / `initialHeadSha`. `prepareWorkspace({baseSha, headSha})` checks out **baseSha**, not headSha. A second independent runtime observation must report the same SHA, cleanliness, identity, and history policy before worker launch.
 

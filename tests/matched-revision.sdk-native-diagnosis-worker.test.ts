@@ -143,6 +143,15 @@ describe('separate authored SDK-native diagnosis worker contract', () => {
       cleanupVerified: true, observations: { sdkInvocations: 1 }, processEvidence: { processGroupStopped: true } });
     expect(result.error).toContain('state');
   });
+  it('enforces optional outer selected-evidence bindings inside the supervised worker', async () => {
+    const f = await harness();
+    const matchedEvidence = { stage: 'diagnosis' as const, feedback: [{ feedbackId: 'feedback-one',
+      evidenceRefs: ['other-feedback-evidence'], requiredEvidenceRefs: [] }] };
+    await expect(runCodexWorkspaceWorker({ ...f.input, matchedEvidence }, MatchedDiagnosisSchema, {
+      codexPathOverride: f.codexPathOverride, boundary: { kind: 'authored-test-no-isolation', fixtureRoot: f.fixtureRoot },
+    })).rejects.toMatchObject({ message: 'Matched result cites evidence outside its selected scope',
+      usage, processEvidence: { processGroupStopped: true }, retainedRuntimePath: null });
+  });
   it('rejects tools in diagnosis responses with cleanup still verified', async () => {
     const f = await harness(`send({type:'thread.started',thread_id:'authored-tools'});
 send({type:'item.completed',item:{id:'tool',type:'command_execution',command:'authored',aggregated_output:'',exit_code:0,status:'completed'}});`);

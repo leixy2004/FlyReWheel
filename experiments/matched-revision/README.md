@@ -91,3 +91,78 @@ construction/diagnosis, source/label readiness and study-adoption gates remain p
 `scoring.ts` is a small per-issue counter, not a parallel product evaluation service. The existing offline paired scorer remains unchanged because its positive/negative alert vocabulary cannot represent legal neighbors, safe-applicable cases or supported non-applicability. This slice retains missed positives, unsupported alerts, unknown/disputed references, scope loss and not-run outputs; zero denominators are `not_estimable`. H−U/H−M differences use identical rosters and show gained/lost positive target IDs. There are no family/repository population estimates, significance tests or invented uncertainty bounds.
 
 `fixture-bound` evidence means only that declared citations resolve in the supplied target packet and missingness gates passed. It is **not independent semantic citation assessment**. Gate pass and metric values therefore establish fixture behavior only. The exported report is a mechanics artifact, not a completed `paper/experiment-protocol/record.schema.json` record; it does not invent human assessor IDs, annotation locks, visibility audits or temporal eligibility. The paper's operational freeze, trusted real execution, fresh independent source/label cohort and competent-baseline verification remain pending.
+
+## Durable authored-study recovery
+
+`runSdkNativeStudy` accepts an optional `MatchedStudyStore`, initialized with the
+existing `Database` adapter and normal checksummed migration runner. Migration
+015 adds the study claim and append-only event ledger; it does not rewrite older
+migrations. No broker, lockfile framework, new dependency, credentials or real
+model capability is introduced.
+
+```ts
+import { openPGliteDatabase } from '../../src/storage/database.js';
+import { MatchedStudyStore } from '../../src/storage/matched-studies.js';
+import { runSdkNativeStudy, sdkNativeStudyDigest } from './sdk-native-study.js';
+
+// All of these inputs and the transport are the same authored-only imports
+// used by the existing native study. Print/save the identity before dispatch.
+const studyDigest = sdkNativeStudyDigest(schedule, configuration);
+console.log({ studyDigest });
+const db = await openPGliteDatabase('/absolute/local/study-db');
+try {
+  const store = await MatchedStudyStore.initialize(db);
+  const result = await runSdkNativeStudy({ mode: 'authored_fixture', schedule,
+    configuration, blocks, transport, store });
+  // After interruption, reopen this database and call with these exact inputs.
+  // A live owner returns not_run / study_running_in_another_driver.
+} finally { await db.close(); }
+```
+
+Status is available without an executable or dispatch option:
+
+```sh
+npm run experiment:matched -- --study-status <study-digest> --db <existing-pglite-directory>
+```
+
+Initializing execution storage applies packaged migrations under the existing
+migration policy. The status command uses `MatchedStudyStore.openExisting(db)`
+and never advances migration history or creates study tables. It reports the lease, frozen arm/target rosters,
+locked diagnoses, retained receipts, uncertain calls and next recovery action.
+`inspectSdkNativeStudy(store, digest)` provides the same concise API;
+`store.inspect(digest)` retains the complete immutable records.
+
+Recovery guarantees and limits:
+
+- The study identity binds schedule and configuration; supplied inputs, including
+  missing blocks, are frozen before first dispatch and cannot be substituted later
+- Transactional claims use database time, row locking, owner UUIDs and increasing
+  fences. The lease exceeds one bounded call plus cleanup by 30 seconds and is
+  renewed at each awaited checkpoint. A stale driver cannot add receipts or finish
+- Dispatch intent commits before calling the transport. Call receipts and the
+  single shared diagnosis commit before downstream work. An interrupted intent is
+  explicitly uncertain, never evidence that no call occurred
+- Reopening a finished study returns its exact saved report without another SDK
+  invocation. Finished block results are similarly reused, with exact roster,
+  source, configuration, call-receipt and diagnosis bindings checked
+- Recovery never resumes inside a started block: it retains all returned receipts,
+  consumed/uncertain slots, the locked shared diagnosis and every planned target.
+  It may execute only never-started blocks. Any uncertain dispatch or unverified
+  cleanup blocks all later launches; remaining targets stay missing in the report
+- A claim recovery changes driver ownership, not the number of scheduled attempts.
+  There are no retries, output selection, new diagnosis samples or favorable rerolls
+- PGlite is a single-process database owner. Sequential close/reopen in fresh local
+  processes is tested; contenders may share one PGlite Database handle. Simultaneous
+  independent processes must use the existing PostgreSQL adapter, not open the same
+  PGlite directory. Use the status API through the owning handle while it is open;
+  run the local status CLI only after that owner has stopped and closed the database. No live PostgreSQL deployment is required or claimed by local tests
+- Recovery reuse is limited to the same immutable study identity and does not alter
+  the protocol's prohibition on output-cache reuse across independent study slots.
+  All outputs remain authored mechanics: zero real model calls and empirical episodes;
+  operational admission, runtime/billing, source/label and adoption gates stay closed
+
+Focused integration coverage:
+
+```sh
+npx vitest run tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=1
+```

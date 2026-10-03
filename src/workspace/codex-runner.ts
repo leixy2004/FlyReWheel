@@ -3,6 +3,9 @@ import { isAbsolute, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import { digestOf } from '../core/identity.js';
+import { CodexModelReasoningEffortSchema } from '../core/codex-model-settings.js';
+import { MatchedCodexExecutionSchema, enforceMatchedCodexExecution } from './matched-codex-policy.js';
+import { MatchedEvidenceSelectionSchema, validateMatchedWorkspaceEnvelope } from './matched-request.js';
 import { EvaluationWorkspaceBindingSchema, WorkspaceHistoryPolicySchema, validateHistoryBinding, type EvaluationWorkspaceBinding } from './history-policy.js';
 import { verifyEvaluationWorkspace } from './evaluation-checkout.js';
 import { acquireWorkspaceExecutionLease, type WorkspaceRecord } from './index.js';
@@ -20,13 +23,18 @@ export const CodexWorkspaceRequestSchema = z.object({
   workspace: z.object({ repoPath: z.string().refine(isAbsolute), runId: Id, attemptId: Id }).strict(),
   expectedSha: z.string().regex(/^[a-f0-9]{40}$/),
   model: z.string().min(1).max(200).regex(/^[A-Za-z0-9._/-]+$/),
+  modelReasoningEffort: CodexModelReasoningEffortSchema.optional(),
+  matchedExecution: MatchedCodexExecutionSchema.optional(),
+  matchedEvidence: MatchedEvidenceSelectionSchema.optional(),
   toolPolicy: z.enum(['full-repo-shell-v1', 'selected-evidence-no-tools-v1']),
   historyPolicy: WorkspaceHistoryPolicySchema,
   evaluation: EvaluationWorkspaceBindingSchema.optional(),
-  outputContract: z.enum(['pr-mining-v1', 'semantic-review-v1', 'semantic-review-v2', 'semantic-review-v3', 'rule-revision-v1', 'rule-revision-v2', 'rule-revision-v3', 'comparison-applicability-v1']).optional(),
+  outputContract: z.enum(['pr-mining-v1', 'semantic-review-v1', 'semantic-review-v2', 'semantic-review-v3', 'rule-revision-v1', 'rule-revision-v2', 'rule-revision-v3', 'comparison-applicability-v1', 'matched-diagnosis-v1', 'matched-proposal-v1', 'matched-review-v1']).optional(),
   prompt: z.string().min(1).max(2_097_152),
   limits: CodexWorkspaceLimits,
 }).strict().superRefine((request, ctx) => {
+  try { validateMatchedWorkspaceEnvelope(request, true); }
+  catch (error) { ctx.addIssue({ code: 'custom', message: error instanceof Error ? error.message : 'Invalid matched request' }); }
   try { validateHistoryBinding(request, request.expectedSha); }
   catch { ctx.addIssue({ code: 'custom', message: 'Evaluation request requires its matching export binding and checkout SHA' }); }
 });
@@ -97,10 +105,11 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
     async run(raw: CodexWorkspaceRequest, signal?: AbortSignal): Promise<CodexWorkspaceResult> {
       const request = CodexWorkspaceRequestSchema.parse(raw);
       validateHistoryBinding(request, request.expectedSha);
-      if ((request.outputContract === 'rule-revision-v1' || request.outputContract === 'rule-revision-v2' || request.outputContract === 'rule-revision-v3' || request.outputContract === 'comparison-applicability-v1') !== (request.toolPolicy === 'selected-evidence-no-tools-v1')) throw new Error('Revision and comparison applicability output require the fixed selected-evidence/no-tools policy');
+      if ((request.outputContract === 'rule-revision-v1' || request.outputContract === 'rule-revision-v2' || request.outputContract === 'rule-revision-v3' || request.outputContract === 'comparison-applicability-v1' || !!request.matchedExecution) !== (request.toolPolicy === 'selected-evidence-no-tools-v1')) throw new Error('Revision and comparison applicability output require the fixed selected-evidence/no-tools policy');
       const serialized = JSON.stringify(request);
       if (Buffer.byteLength(serialized) > request.limits.maxInputBytes) throw new Error('Workspace request exceeds maxInputBytes');
       if (!backend) throw new Error('Production Codex workspace backend is not configured: provision isolated SDK/CLI execution and a credential-isolated gateway; local fixture fallback is forbidden');
+      if (request.matchedExecution) enforceMatchedCodexExecution(request.matchedExecution, backend.kind);
       if (signal?.aborted) throw new RunCancelled('Workspace run cancelled before acquiring a lease');
       const lease = await acquireWorkspaceExecutionLease(request.workspace, request.expectedSha);
       const result: CodexWorkspaceResult = {
@@ -179,6 +188,15 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
             if (result.execution === 'succeeded') result.execution = 'failed';
             result.errors.push(error instanceof Error ? error.message.slice(0, 2000) : 'Runtime cleanup failed');
           }
+        }
+      }
+      if (request.matchedExecution && result.execution === 'succeeded') {
+        try {
+          const { validateMatchedWorkspaceResult } = await import('./matched-result.js');
+          validateMatchedWorkspaceResult(request, result);
+        } catch (error) {
+          result.execution = 'failed';
+          result.errors.push(error instanceof Error ? error.message.slice(0, 2000) : 'Invalid matched workspace result');
         }
       }
       return result;

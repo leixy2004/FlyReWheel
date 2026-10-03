@@ -176,7 +176,7 @@ export async function runMatchedRevision(input: {
   const diagnosisStage = native && suppliedEpisode.diagnosis.condition === 'inferred' && (native.diagnosis || scheduledDiagnosis)
     ? await runAuthoredSdkNativeDiagnosis({ episode: suppliedEpisode, prepared, blockId: scheduled?.blockId ?? suppliedEpisode.id,
       execution: { ...native, diagnosis: SDK_NATIVE_AUTHORED_DIAGNOSIS } }) : null;
-  if (diagnosisStage) native!.observeDiagnosis?.(diagnosisStage);
+  if (diagnosisStage) await native!.observeDiagnosis?.(diagnosisStage);
   // Keep the original pre-output packet identity. The separately identified
   // locked outcome is supervision, never a rewritten source packet or freeze.
   const episode = diagnosisStage ? freeze({ ...suppliedEpisode, diagnosis: diagnosisStage.sharedDiagnosis }) : suppliedEpisode;

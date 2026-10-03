@@ -50,7 +50,8 @@ export interface AuthoredSdkNativeDiagnosisRecord {
 }
 // One in-process promise per transport/episode/repeat. A rejection
 // also remains locked: no retry, replacement, best-output selection or arm sampling.
-// This is deliberately not a durable cross-process execution registry.
+// This cache alone is not cross-process coordination. A durable study supplies
+// a claim-scoped checkpoint object; its SQL driver owns recovery and no-reroll.
 const locked = new WeakMap<object, Map<string, { binding: string; result: Promise<AuthoredSdkNativeDiagnosisRecord> }>>();
 
 function administrativeUnknown(prepared: PreparedRevisionModelInput, pending = false): MatchedDiagnosis {
@@ -98,8 +99,9 @@ export function runAuthoredSdkNativeDiagnosis(input: { episode: FrozenEpisode; p
   const configurationDigest = digestOf(execution.configuration);
   const key = canonicalJson([episode.id, execution.repetition]);
   const binding = digestOf([configurationDigest, blockId, inputDigest]);
-  let registry = locked.get(execution.transport);
-  if (!registry) { registry = new Map(); locked.set(execution.transport, registry); }
+  const registryScope = execution.checkpoint ?? execution.transport;
+  let registry = locked.get(registryScope);
+  if (!registry) { registry = new Map(); locked.set(registryScope, registry); }
   const previous = registry.get(key);
   if (previous) {
     if (previous.binding !== binding) throw new Error('Diagnosis already locked for this episode/repetition with different inputs');

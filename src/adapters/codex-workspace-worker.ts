@@ -254,6 +254,10 @@ export async function runCodexWorkspaceWorker<T>(input: CodexWorkerInput, schema
       if (completed !== 1 || started !== 1 || response === undefined || !usage || !sessionId) throw new Error('Codex worker stream is missing a unique completed result, usage, or session identity');
       if (![usage.input_tokens, usage.output_tokens, usage.cached_input_tokens, usage.cache_write_input_tokens, usage.reasoning_output_tokens].every(number => Number.isSafeInteger(number) && number >= 0)) throw new Error('Invalid Codex usage');
       value = schema.parse(JSON.parse(response));
+      if (input.matchedEvidence) {
+        const { validateMatchedResponse } = await import('../workspace/matched-result.js');
+        validateMatchedResponse(input.matchedEvidence, value);
+      }
     } catch (error) { failure = error; }
     finally {
       dependencies.observe?.({ kind: 'cleanup_started' });

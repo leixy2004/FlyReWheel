@@ -16,7 +16,12 @@ export interface NativeMatchedExecution {
   schedule?: { manifest: SdkNativeSchedule; blockId: string };
   /** Audit hook only; the study driver retains records even on interruption. */
   observeCall?: (arm: Arm, record: CallRecord) => void;
-  observeDiagnosis?: (record: AuthoredSdkNativeDiagnosisRecord) => void;
+  observeDiagnosis?: (record: AuthoredSdkNativeDiagnosisRecord) => void | Promise<void>;
+  /** Awaited durable boundaries. Intent commits before any possible dispatch. */
+  checkpoint?: {
+    beforeCall: (arm: Arm | null, callId: string, requestDigest: string) => Promise<void>;
+    afterCall: (arm: Arm | null, record: CallRecord) => Promise<void>;
+  };
   /** Explicit authored-only stage; absence preserves supplied-diagnosis behavior. */
   diagnosis?: 'authored-once-per-episode-repeat';
 }
@@ -93,6 +98,7 @@ export class SdkNativeLedger {
       || remainingTime <= 0 ? 'Native byte/call/time budget exhausted before dispatch' : null);
     if (preflightFailure) { record.error = preflightFailure; native.failure = preflightFailure; }
     else {
+      await this.execution.checkpoint?.beforeCall(this.arm, native.callId, record.requestDigest);
       const controller = new AbortController(), allowedMs = Math.min(limits.deadlineMsPerCall, remainingTime);
       const timer = setTimeout(() => controller.abort(), Math.max(1, Math.floor(allowedMs)));
       const bridgeStarted = performance.now();
@@ -160,6 +166,7 @@ export class SdkNativeLedger {
       enforcementEvidenceDigest: digestOf({ observations: native.observations, processEvidence: record.transportEvidence?.processEvidence ?? null }) };
     record.nativeRecord = validateSdkNativeCallRecord(native, config);
     record.finishedAt = new Date().toISOString();
+    await this.execution.checkpoint?.afterCall(this.arm, freeze(structuredClone(record)));
     this.calls.push(record);
     if (this.arm !== null) this.execution.observeCall?.(this.arm, freeze(structuredClone(record)));
     return record;

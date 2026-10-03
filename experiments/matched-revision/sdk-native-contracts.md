@@ -54,7 +54,9 @@ byte identity, not provider acceptance, provenance, execution or authorization.
 
 ## Deliberately still pending
 
-Operational native request/worker/transport admission and effective-settings
+The [outer workspace native wire plumbing](../../docs/matched-workspace-runtime.md)
+is implemented separately, with admission still denied before allocation.
+Operational native admission and effective-settings
 verification; independently verified isolation and billing admission; monetary
 stop/reconciliation; real-model construction/diagnosis and empirical allocation;
 analysis and empirical source/label/memory-baseline

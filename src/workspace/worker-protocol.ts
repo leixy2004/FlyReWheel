@@ -5,8 +5,9 @@ import { ComparisonApplicabilityModelResponseSchema } from '../core/comparison-a
 import { MatchedDiagnosisSchema, ProposalSchema, ReviewSchema } from '../core/matched-revision-model.js';
 import { PrMiningModelResponseSchema } from '../core/pr-mining-model.js';
 import { ContextSemanticReviewModelResponseSchema, PerAnchorSemanticReviewModelResponseSchema, SemanticReviewModelResponseSchema } from '../core/semantic-review-model.js';
-import { CodexWorkspaceLimits } from './codex-runner.js';
+import { CodexWorkspaceLimits, CodexWorkspaceRequestSchema, type CodexWorkspaceRequest } from './codex-runner.js';
 import { EvaluationWorkspaceBindingSchema, WorkspaceHistoryPolicySchema, validateHistoryBinding } from './history-policy.js';
+import { MatchedEvidenceSelectionSchema, validateMatchedWorkspaceEnvelope } from './matched-request.js';
 import { MatchedCodexExecutionSchema } from './matched-codex-policy.js';
 import { CodexModelReasoningEffortSchema } from '../core/codex-model-settings.js';
 
@@ -22,20 +23,14 @@ export const WorkspaceWorkerInput = z.object({
   evaluationBranch: z.string().max(100).regex(/^attempt\/[a-z0-9]+(?:-[a-z0-9]+)*--[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
   outputContract: z.enum(['pr-mining-v1', 'semantic-review-v1', 'semantic-review-v2', 'semantic-review-v3', 'rule-revision-v1', 'rule-revision-v2', 'rule-revision-v3', 'comparison-applicability-v1', 'matched-diagnosis-v1', 'matched-proposal-v1', 'matched-review-v1']).optional(),
   matchedExecution: MatchedCodexExecutionSchema.optional(),
+  matchedEvidence: MatchedEvidenceSelectionSchema.optional(),
   limits: CodexWorkspaceLimits,
 }).strict().superRefine((input, ctx) => {
   try { validateHistoryBinding(input); }
   catch { ctx.addIssue({ code: 'custom', message: 'Evaluation worker policy/binding mismatch' }); }
   if (!!input.evaluation !== !!input.evaluationBranch) ctx.addIssue({ code: 'custom', message: 'Evaluation worker requires its bound attempt branch' });
-  const diagnosis = input.outputContract === 'matched-diagnosis-v1';
-  const matched = diagnosis || input.outputContract === 'matched-proposal-v1' || input.outputContract === 'matched-review-v1';
-  if (matched !== !!input.matchedExecution) ctx.addIssue({ code: 'custom', message: 'Matched contracts require explicit matched execution controls, only on matched requests' });
-  if (diagnosis && input.matchedExecution?.kind !== 'authored-sdk-native-no-model') {
-    ctx.addIssue({ code: 'custom', message: 'Matched diagnosis requires authored-sdk-native-no-model execution' });
-  }
-  if (diagnosis && input.toolPolicy !== 'selected-evidence-no-tools-v1') {
-    ctx.addIssue({ code: 'custom', message: 'Matched diagnosis requires the fixed selected-evidence/no-tools policy' });
-  }
+  try { validateMatchedWorkspaceEnvelope(input, false); }
+  catch (error) { ctx.addIssue({ code: 'custom', message: error instanceof Error ? error.message : 'Invalid matched request' }); }
 });
 
 export const WorkspaceWorkerAnswer = z.object({
@@ -117,8 +112,12 @@ export const ComparisonApplicabilityWorkspaceWorkerResult = WorkspaceWorkerResul
 }).strict();
 export type ComparisonApplicabilityWorkspaceWorkerResult = z.infer<typeof ComparisonApplicabilityWorkspaceWorkerResult>;
 
-export const MatchedDiagnosisWorkspaceWorkerResult = WorkspaceWorkerResult.extend({
+export const MatchedDiagnosisWorkspaceWireResult = WorkspaceWorkerResult.extend({
   protocolVersion: z.literal(2), outputContract: z.literal('matched-diagnosis-v1'), value: MatchedDiagnosisSchema,
+}).strict();
+// Preserve the existing authored-only entrypoint/result contract. A wire schema
+// describes bytes; it cannot remove the independent operational admission gate.
+export const MatchedDiagnosisWorkspaceWorkerResult = MatchedDiagnosisWorkspaceWireResult.extend({
   boundary: z.literal('authored-test-no-isolation'),
 }).strict();
 export type MatchedDiagnosisWorkspaceWorkerResult = z.infer<typeof MatchedDiagnosisWorkspaceWorkerResult>;
@@ -132,6 +131,9 @@ export const MatchedWorkspaceWorkerResult = z.discriminatedUnion('outputContract
   MatchedDiagnosisWorkspaceWorkerResult, MatchedProposalWorkspaceWorkerResult, MatchedReviewWorkspaceWorkerResult,
 ]);
 export type MatchedWorkspaceWorkerResult = z.infer<typeof MatchedWorkspaceWorkerResult>;
+export const MatchedWorkspaceWireResult = z.discriminatedUnion('outputContract', [
+  MatchedDiagnosisWorkspaceWireResult, MatchedProposalWorkspaceWorkerResult, MatchedReviewWorkspaceWorkerResult,
+]);
 
 export const WorkspaceWorkerGateway = z.object({ kind: z.literal('credential-isolated-gateway'),
   baseUrl: z.string().max(2048).url(), allowedHost: z.string().max(253).regex(/^[a-zA-Z0-9](?:[a-zA-Z0-9.-]*[a-zA-Z0-9])?$/),
@@ -146,3 +148,18 @@ export type WorkspaceWorkerGateway = z.infer<typeof WorkspaceWorkerGateway>;
 export const WorkspaceWorkerImageConfig = z.object({ schemaVersion: z.literal(1),
   gateway: z.union([z.object({ kind: z.literal('blocked') }).strict(), WorkspaceWorkerGateway]),
 }).strict();
+
+/** One fixed wire encoder shared by the external runtime adapter and contract
+ * tests. It performs no dispatch, approval, credential access or allocation. */
+export function buildWorkspaceWorkerInput(raw: CodexWorkspaceRequest, workingDirectory: string, evaluationBranch?: string) {
+  const request = CodexWorkspaceRequestSchema.parse(raw);
+  const input = WorkspaceWorkerInput.parse({ workingDirectory, model: request.model, prompt: request.prompt,
+    ...(request.modelReasoningEffort === undefined ? {} : { modelReasoningEffort: request.modelReasoningEffort }),
+    ...(request.outputContract === undefined ? {} : { outputContract: request.outputContract }),
+    ...(request.matchedExecution === undefined ? {} : { matchedExecution: request.matchedExecution }),
+    ...(request.matchedEvidence === undefined ? {} : { matchedEvidence: request.matchedEvidence }),
+    toolPolicy: request.toolPolicy, historyPolicy: request.historyPolicy,
+    ...(request.evaluation ? { evaluation: request.evaluation, evaluationBranch } : {}), limits: request.limits });
+  if (Buffer.byteLength(JSON.stringify(input)) > request.limits.maxInputBytes) throw new Error('Workspace worker input exceeds limit');
+  return input;
+}

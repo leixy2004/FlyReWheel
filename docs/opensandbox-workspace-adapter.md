@@ -41,7 +41,7 @@ The image must actually implement:
 1. `workerExecutable verify EXPECTED_SHA EXPECTED_BRANCH all-local-refs-v1`, executed in `/workspace/repo`, returning one JSON `RuntimeObservation` on stdout. It must independently verify exact SHA, branch identity, full history, cleanliness including ignored/untracked files and index flags, and repository/ancestor configuration restrictions
 2. `workerExecutable run /run/flyrewheel/request.json`, returning a bounded JSON result on stdout, using the existing official Codex SDK worker contract inside the isolated runtime
 
-Input contains only working directory, explicit model, prompt, tool/history policies and limits. Worker event streams have cumulative byte and event limits, require exactly one completion, reject error/malformed/unexpected events, and reject output after completion. SDK streaming ends must still be observed before accepting a result.
+Input contains working directory, explicit model, optional reasoning effort, prompt, tool/history policies, fixed output contract and limits. Matched requests additionally carry strict execution declarations and selected citation bindings through the [shared worker encoder](matched-workspace-runtime.md); native admission remains blocked before allocation. Worker event streams have cumulative byte and event limits, require exactly one completion, reject error/malformed/unexpected events, and reject output after completion. SDK streaming ends must still be observed before accepting a result.
 
 The optional fixed `outputContract: "pr-mining-v1"` request selects the strict
 mining schema and protocol-version-2 envelope. It is relayed by the adapter; no

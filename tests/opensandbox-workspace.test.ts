@@ -78,6 +78,14 @@ describe('official OpenSandbox-shaped client integration, no live cluster', () =
       outputContract: 'pr-mining-v1', toolPolicy: request.toolPolicy, historyPolicy: request.historyPolicy, limits: request.limits });
     await f.runtime.stop(); await f.runtime.collect(request.limits); await f.runtime.destroy();
   });
+  it('forwards an explicit reasoning setting through the actual external worker encoder', async () => {
+    const f = fixture();
+    const runtime = f.backend.reserve({ ...request, modelReasoningEffort: 'high' }, workspace);
+    await runtime.prepare(signal()); await runtime.execute(signal());
+    const data = vi.mocked(f.client.files.writeFiles).mock.calls[0][0][0].data;
+    expect(JSON.parse(data as string)).toMatchObject({ modelReasoningEffort: 'high' });
+    await runtime.stop(); await runtime.collect(request.limits); await runtime.destroy();
+  });
   it('cannot treat API kill acknowledgement as destruction proof', async () => {
     const f = fixture(); await f.runtime.prepare(signal()); await f.runtime.stop(); await f.runtime.collect(request.limits);
     f.authority.destroyAndVerify = async () => ({ destroyed: true, verified: false });

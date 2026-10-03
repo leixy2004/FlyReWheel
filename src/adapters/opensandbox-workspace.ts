@@ -3,6 +3,9 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { digestOf } from '../core/identity.js';
 import { EvaluationWorkspaceBindingSchema, WorkspaceHistoryPolicySchema, validateHistoryBinding } from '../workspace/history-policy.js';
+import { CodexWorkspaceRequestSchema } from '../workspace/codex-runner.js';
+import { enforceMatchedCodexExecution } from '../workspace/matched-codex-policy.js';
+import { buildWorkspaceWorkerInput } from '../workspace/worker-protocol.js';
 import type { CodexWorkspaceBackend, CodexWorkspaceRequest, CodexWorkspaceRuntime, RuntimeObservation,
   CollectedArtifact, SandboxStopReceipt, SandboxDestroyReceipt, WorkspaceLimits } from '../workspace/codex-runner.js';
 import type { WorkspaceRecord } from '../workspace/index.js';
@@ -75,7 +78,9 @@ export function createOpenSandboxWorkspaceBackend(raw: OpenSandboxWorkspaceConfi
     || config.workerExecutable.split('/').includes('..')) throw new Error('Invalid trusted OpenSandbox endpoint/worker configuration');
   const create = dependencies.createSandbox ?? (options => Sandbox.create(options));
   const transfer = dependencies.transfer ?? transferSandcastleWorkspace;
-  return { kind: 'isolated-runtime', reserve(request, workspace) {
+  return { kind: 'isolated-runtime', reserve(rawRequest, workspace) {
+    const request = CodexWorkspaceRequestSchema.parse(rawRequest);
+    if (request.matchedExecution) enforceMatchedCodexExecution(request.matchedExecution, 'isolated-runtime');
     validateHistoryBinding(request, request.expectedSha);
     if (digestOf(request.evaluation ?? null) !== digestOf(workspace.evaluation?.binding ?? null)) throw new Error('OpenSandbox evaluation workspace binding mismatch');
     return new OpenSandboxRuntime(config, dependencies.authority, create, transfer, request, workspace);
@@ -160,11 +165,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
     if (!this.prepared || this.executed || this.fenced) return Promise.reject(new Error('OpenSandbox runtime is not prepared or is fenced'));
     this.executed = true;
     this.execution = this.withSignal(signal, async () => {
-      const input = JSON.stringify({ workingDirectory: ROOT, model: this.request.model, prompt: this.request.prompt,
-        ...(this.request.outputContract === undefined ? {} : { outputContract: this.request.outputContract }),
-        toolPolicy: this.request.toolPolicy, historyPolicy: this.request.historyPolicy,
-        ...(this.request.evaluation ? { evaluation: this.request.evaluation, evaluationBranch: this.workspace.branch } : {}), limits: this.request.limits });
-      if (Buffer.byteLength(input) > this.request.limits.maxInputBytes) throw new Error('OpenSandbox worker input exceeds limit');
+      const input = JSON.stringify(buildWorkspaceWorkerInput(this.request, ROOT, this.workspace.branch));
       await this.sandbox!.files.createDirectories([{ path: '/run/flyrewheel', mode: 700 }]);
       this.assertActive();
       await this.sandbox!.files.writeFiles([{ path: INPUT, data: input, mode: 600 }]);

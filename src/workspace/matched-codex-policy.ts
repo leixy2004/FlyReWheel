@@ -15,7 +15,12 @@ export const MatchedRequiredControlsSchema = z.object({
     seed: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER) }).strict(),
   maxOutputTokens: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
 }).strict();
+export const SDK_NATIVE_MATCHED_PROFILE = 'paired-restriction-sdk-native-v1-draft' as const;
+export const SDK_NATIVE_DISPATCH_BLOCKER = 'SDK-native matched dispatch blocked: deployment-bound gateway admission and an authorized monetary arrangement are not implemented';
+
 export const MatchedCodexExecutionSchema = z.discriminatedUnion('kind', [
+  // A transport declaration, never a permission or evidence of admission.
+  z.object({ kind: z.literal('sdk-native-pending-admission'), profile: z.literal(SDK_NATIVE_MATCHED_PROFILE) }).strict(),
   MatchedRequiredControlsSchema.extend({ kind: z.literal('enforce-frozen-controls') }).strict(),
   // Accepted only with the explicitly authored executable boundary. This is
   // never an operational study configuration or a production fallback.
@@ -31,6 +36,7 @@ export function preflightMatchedCodexControls(controls: z.input<typeof MatchedRe
 }
 
 export function enforceMatchedCodexExecution(execution: MatchedCodexExecution, boundary: string | undefined) {
+  if (execution.kind === 'sdk-native-pending-admission') throw new Error(SDK_NATIVE_DISPATCH_BLOCKER);
   if (execution.kind === 'enforce-frozen-controls') {
     const result = preflightMatchedCodexControls({ sampler: execution.sampler, maxOutputTokens: execution.maxOutputTokens });
     throw new Error(`Codex matched controls unsupported before dispatch: ${result.unsupportedControls.join(', ')}`);
