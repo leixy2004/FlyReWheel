@@ -1,0 +1,113 @@
+{
+  "recordedAt": "2026-10-03T21:41:42.489Z",
+  "baseline": {
+    "sha": "d8c89d85e7e4d5c12fab5028fa6fbf54e6114ae3",
+    "tree": "2f099c49430a3930d339e62bf9d8939ba41ba9dc"
+  },
+  "server": "PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "database": "flyrewheel_verify_migration_faults",
+  "backend": "real PostgreSQL via local Unix socket",
+  "modelExecution": "not_run",
+  "deployment": "existing temporary Docker PostgreSQL only",
+  "experiment": "SIGKILL actual Node migration process while actual PostgreSQL transaction owns production advisory lock",
+  "packagedMigrationHashes": {
+    "001_initial.sql": "27ec7bfccbe265234d819d5336e80b0429733b577c1136a97653625b357ceab8",
+    "002_artifact_links.sql": "3024191b93140345d6ae193bd174efa6c4456dd179f83b03819a605413693e39",
+    "003_change_snapshots.sql": "dae68d208cf9614e61f8982a9067a5f7f9082f7b969a04e5673efda964ccbbe2",
+    "004_semantic_reviews.sql": "076b1d0f6bc67cff9bf5994810af896e79b0677f65201aadce9d720ebfadf479",
+    "005_github_pr_evidence.sql": "aa2ae2c38812ab52e03dc8c7d388baae750cb5f70227d8926f193cfc456c8e97",
+    "006_revision_comparisons.sql": "1d3fbd195fb9fb9abef2a3767d14e004ea97599bba147e61224469e8d8a214bc",
+    "007_pr_mining.sql": "5c608c1ac9124e51185e5f2532af3158dfa275a72c5695cae068c725418d0343",
+    "008_revision_generation.sql": "874f4a6e29faf1a2858f0b682180f556db7122fb01ca62056648ec57c31f127b",
+    "009_github_pr_history.sql": "b473d294462b89d4c083571b50735781859073af14c35544b21099c3a231825f",
+    "010_revision_outcomes.sql": "a291efa27b3d7afc4becce72a3e88f27cab29ce5dd2595a79b31b33fe07f3e57",
+    "011_semantic_governance.sql": "94702653b2c7705c4c23409d65fe6f45c788da6a8f9ca12ada5cf88349a2e091",
+    "012_application_jobs.sql": "6efb2bfe5fdfa9332e5647ac60a9eef072f8126ef2dc31a946a28160a0f695a8",
+    "013_repository_contexts.sql": "a68e0cd90bdad52fbe833f2fe2596c95c397897fc6ec09f06185944b931b4a90",
+    "014_governed_reviews.sql": "9dff96799a8943a54d1a11632ab00d3f3ea34fcdd8fd0de2be496e852d537ee4",
+    "015_matched_studies.sql": "ee6a0dd956c3a62ec9776743b9ebb95edd5441fe14255ff6fcb3fd0571928261"
+  },
+  "syntheticProbe": {
+    "name": "016_migration_fault_probe",
+    "sha256": "6dc0ba0c3bbc362338f92502d014fcaf127c6ca626a9f0863ed30a0f250267dd"
+  },
+  "beforeKill": [
+    {
+      "name": "migration-fault-victim",
+      "key": 1,
+      "granted": true
+    },
+    {
+      "name": "migration-fault-waiter-a",
+      "key": 1,
+      "granted": false
+    },
+    {
+      "name": "migration-fault-waiter-b",
+      "key": 1,
+      "granted": false
+    }
+  ],
+  "victimExit": {
+    "code": null,
+    "signal": "SIGKILL"
+  },
+  "rolledBackVisibleState": {
+    "probe": null,
+    "history": null,
+    "checksums": null
+  },
+  "waiters": [
+    {
+      "code": 0,
+      "signal": null,
+      "result": {
+        "applied": [
+          "001_initial",
+          "002_artifact_links",
+          "003_change_snapshots",
+          "004_semantic_reviews",
+          "005_github_pr_evidence",
+          "006_revision_comparisons",
+          "007_pr_mining",
+          "008_revision_generation",
+          "009_github_pr_history",
+          "010_revision_outcomes",
+          "011_semantic_governance",
+          "012_application_jobs",
+          "013_repository_contexts",
+          "014_governed_reviews",
+          "015_matched_studies",
+          "016_migration_fault_probe"
+        ],
+        "adopted": [],
+        "current": "016_migration_fault_probe"
+      }
+    },
+    {
+      "code": 0,
+      "signal": null,
+      "result": {
+        "applied": [],
+        "adopted": [],
+        "current": "016_migration_fault_probe"
+      }
+    }
+  ],
+  "ledger": {
+    "count": 16,
+    "unique_count": 16
+  },
+  "probeRows": 1,
+  "advisoryLocksRemaining": 0,
+  "limitations": [
+    "Fault seam pauses JavaScript after actual appended migration SQL; all database operations use real adapters, no production data used",
+    "Does not restart PostgreSQL or prove storage durability after host failure",
+    "No real model execution or application deployment"
+  ],
+  "assemblyProvenance": {
+    "script": "scripts/verify-postgres-migration-faults.mjs",
+    "scriptSha256": "ebc9f0a9f7a4bfbec54ba968aea66192a29a860a600f4909d31d8945b627f69d",
+    "scope": "Coordinator hash of the unchanged executed script after independent review; recorded baseline commit excludes the then-untracked harness. Not a frozen aggregate acceptance run."
+  }
+}
