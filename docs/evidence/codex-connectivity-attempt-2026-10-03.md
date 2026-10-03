@@ -101,3 +101,66 @@ schemas are temporary reconstruction outputs, not added to the repository.
 The next non-model validation can be a stdio initialize/initialized handshake
 using that version's protocol, with no thread/turn/login methods. Production
 request ingress/lifecycle authority and remote execution security remain separate.
+
+## Explicitly authorized corrected invocation
+
+After the coordinator authorized one further invocation to repair the pre-model
+parameter error, the three unsupported `model_providers.openai.*` overrides were
+removed. No replacement provider, model route or invented retry setting was
+introduced. Installed CLI help reconfirmed the exec flags; its feature listing
+confirmed shell/unified-exec disabling and the unbounded-connection-retries toggle.
+Provider-internal HTTP attempts remain unobserved; one CLI invocation is not a
+claim of one HTTP request or a monetary ceiling.
+
+The same empty-directory/fixed-string test was invoked exactly once more using
+the existing ChatGPT-only login route, official CLI 0.159.2, read-only sandbox,
+tools/search disabled and the 45-second outer deadline. It exited 1 in **0.219
+seconds**, reporting:
+
+```text
+Error: failed to initialize in-process app-server client: Read-only file system (os error 30)
+```
+
+No thread, turn, model identifier, usage, output or tool event appeared. Output
+validation therefore failed. No autonomous retry followed. Total model-capable
+CLI process launches in this task are now two, each separately authorized; both
+failed locally before any observed model turn. Neither failure establishes an
+invalid login, unavailable model service or account/quota denial. Model, usage,
+internal HTTP count and cost remain unknown.
+
+```json
+{
+  "classification": "authorized-corrected-single-host-CLI-invocation",
+  "cliVersion": "0.159.2",
+  "invocationsThisAttempt": 1,
+  "wallTimeoutSeconds": 45,
+  "elapsedSeconds": 0.219,
+  "exitCode": 1,
+  "stopReason": null,
+  "modelOverride": null,
+  "reportedModelIds": "unknown",
+  "reportedUsage": "unknown",
+  "internalHttpAttempts": "unknown-not-observed",
+  "monetaryCost": "unknown",
+  "eventTypes": [],
+  "itemTypes": [],
+  "outputValid": false,
+  "answers": [],
+  "toolEventsObserved": false
+}
+```
+
+Read-only filesystem metadata checks found existing HOME and CODEX_HOME locations
+not writable, while TMPDIR was writable. No auth contents were read, permissions
+changed or directories relocated. The exact failing write path was not exposed by
+the CLI, so these metadata observations do not prove which component caused the
+initialization error.
+
+The [official configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+documents separate `sqlite_home` and `log_dir` paths. They are candidate local
+runtime-state controls, **not a validated fix** for this error; managed cloud
+compatibility has additional limits. No override was applied, no auth home was
+moved, and no app-server listener or additional model-capable process was started.
+A future diagnostic should identify the required writable state path while
+preserving the existing read-only credential location, rather than copy credentials
+or weaken filesystem permissions.
