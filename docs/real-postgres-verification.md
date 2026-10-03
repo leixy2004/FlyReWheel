@@ -18,9 +18,18 @@ ephemeral port. No credentials were copied and no model call was made.
 
 [Structured evidence](evidence/real-postgres-2026-10-03.json) contains the complete
 prepare/restart and upgrade result objects, raw-file hashes, baseline commit/tree,
-and reproduction-script hash. The script hash describes its snapshot at evidence
-assembly and must be rechecked at final source freeze. Source changes or pending
+and reproduction-script hash. Recorded script hashes identify historical snapshots
+at evidence assembly, not a match to the current scripts. Source changes or pending
 aggregate tests are not covered by an older recorded pass.
+
+The [independent review](https://github.com/leixy2004/FlyReWheel/pull/4#issuecomment-5973838169)
+identified an incidental timing dependency in study lease recovery. The current
+prepare script waits, with a bounded timeout, for the database to report lease
+expiry before reclaiming; the separate queue expiry delay remains unchanged.
+The current study script emits `retainedBlockStructurallyEqual`, reflecting its
+parsed-JSON deep-equality assertion. The historical `retainedBlockByteEquivalent`
+field means structural equality, not serialized byte equality; archived evidence
+and hashes remain unchanged, with an interpretation correction in the structured evidence.
 
 | Layer | Observed result | Boundary |
 | --- | --- | --- |

@@ -145,6 +145,7 @@ if (phase === 'service-child') {
       const [retried] = await boss.fetch(crashQueue, { includeMetadata: true });
       assert.equal(retried?.id, crashId); assert.equal(retried.retryCount, 1);
       await boss.complete(crashQueue, crashId, { recoveredAfterWorkerSigkill: true });
+      await until(async () => (await studies[1].inspect(matchedStudyDigest(manifest)))?.leaseExpired);
       const recovered = await studies[1].claim(manifest, 30000);
       assert.equal(recovered.state, 'claimed'); assert.equal(recovered.claim.fence, 2);
       await assert.rejects(studies[0].append(first, blockId, 'block-start', event), { code: 'STUDY_FENCED' });
