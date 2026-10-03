@@ -18,7 +18,7 @@
       "reason": "mkdocs-material bump; official scripts/build documentation command if all required dependencies available as public PyPI wheels without source-build/install hooks",
       "beforeTool": "mkdocs-material==9.4.14",
       "afterTool": "mkdocs-material==9.5.3",
-      "candidateCheck": "mkdocs build --strict --site-dir /tmp/site; do not run packaging or deploy scripts",
+      "candidateCheck": "mkdocs build --site-dir /tmp/site (official build command; no added strictness); do not run packaging or deploy scripts",
       "fallback": "dependency availability/compatibility failure retained; docs-specific tests unknown"
     },
     {
@@ -27,7 +27,7 @@
       "reason": "ruff bump; reuse official scripts/check lint scope and configuration",
       "beforeTool": "ruff==0.1.6",
       "afterTool": "ruff==0.1.9",
-      "candidateCheck": "ruff check httpx tests; no --fix"
+      "candidateCheck": "ruff format httpx tests --diff and ruff check httpx tests; no --fix"
     },
     {
       "number": 3036,
