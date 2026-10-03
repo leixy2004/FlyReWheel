@@ -36,7 +36,9 @@ export async function prepareW0Mining(dbPath: string, output: string) {
   await mkdir(resolve(output));
   await mkdir(resolve(dbPath));
   const db = await openPGliteDatabase(resolve(dbPath));
-  let store = await QualEvoStore.initialize(db);
+  // initialize owns database cleanup if migration fails.
+  let store: QualEvoStore | undefined = await QualEvoStore.initialize(db);
+  let operationFailed = false;
   const exports = [];
   let counts: Record<string, number> = {};
   try {
@@ -73,7 +75,9 @@ export async function prepareW0Mining(dbPath: string, output: string) {
     }
     const expectedCounts = [3, 3, 8, 0, 0, 0, 0];
     if (Object.values(counts).some((count, index) => count !== expectedCounts[index])) throw new Error('UNEXPECTED_STORE_COUNTS');
-    await store.close();
+    const importedStore = store;
+    store = undefined; // Release ownership before close/reopen can reject.
+    await importedStore.close();
     store = await QualEvoStore.openPGlite(resolve(dbPath));
     for (const item of exports) {
       if (digestOf(await store.getPrMiningRequest(item.request.digest)) !== digestOf(item.request)
@@ -83,7 +87,15 @@ export async function prepareW0Mining(dbPath: string, output: string) {
         if (c.expected !== 'unknown' || c.split !== 'training' || c.commit !== (binding.side === 'before' ? item.ledger.beforeCommit : item.ledger.afterCommit)) throw new Error('CASE_BINDING_FAILED');
       }
     }
-  } finally { await store.close(); }
+  } catch (error) {
+    operationFailed = true;
+    throw error;
+  } finally {
+    try { await store?.close(); } catch (error) {
+      // A cleanup failure must not replace the original operation failure.
+      if (!operationFailed) throw error;
+    }
+  }
   for (const item of exports) {
     await writeJson(join(output, `request-input-${item.number}.json`), item.input);
     await writeJson(join(output, `request-${item.number}.json`), item.request);
