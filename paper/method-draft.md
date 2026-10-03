@@ -1,6 +1,6 @@
 # FlyReWheel methods and evidence boundaries
 
-Status: research methods draft, 2026-10-02. The earlier workflow audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; the diagnosis-operator sections now describe the working-tree extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84`, with its own [source hashes and authored-fixture verification](../docs/evidence/revision-operators-verification-2026-10-02.txt). The mixed-anchor review extension has a separate [verification record](../docs/evidence/mixed-anchor-review-verification-2026-10-02.txt) and [compiled mocked-SDK smoke](../docs/evidence/compiled-mixed-anchor-review-smoke-2026-10-02.json). This document separates structural implementation support and authored-fixture evidence from the untested empirical hypotheses. It reports no new empirical experiment or model-quality result. The [claim and evidence checklist](claim-evidence-checklist.md) is the companion audit; the [Phase 0 protocol](phase0-protocol.md) remains the proposed sampling and annotation plan.
+Status: research methods draft, 2026-10-02. The earlier workflow audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; the diagnosis-operator sections now describe the working-tree extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84`, with its own [source hashes and authored-fixture verification](../docs/evidence/revision-operators-verification-2026-10-02.txt). The mixed-anchor review extension has a separate [verification record](../docs/evidence/mixed-anchor-review-verification-2026-10-02.txt) and [compiled mocked-SDK smoke](../docs/evidence/compiled-mixed-anchor-review-smoke-2026-10-02.json). This document separates structural implementation support and authored-fixture evidence from the untested empirical hypotheses. It reports no new empirical experiment or model-quality result. The [claim and evidence checklist](claim-evidence-checklist.md) is the companion audit; the [three-window protocol](discriminating-experiment.md) is the selected pilot route, while the [Phase 0 protocol](phase0-protocol.md) remains deferred design history.
 
 ## Research question and scope
 
@@ -168,6 +168,18 @@ Use paired comparisons on the same future PRs, preserve family/PR dependence in 
 The main hypothesis is weakened if memory baselines match the proposed method, diagnosis errors dominate, gains disappear under matched context and cost, or reduced false alarms are explained by rule suppression or abstention. Such findings should narrow the claim rather than be hidden behind increased rule counts or a completed workflow.
 
 ## Present evidence and epistemic limits
+
+The 2026-10-03 [real PostgreSQL verification](../docs/real-postgres-verification.md)
+adds server-backed infrastructure evidence at baseline
+`237056acaaa3c21684fd63772eaca119e2af5f3a`: concurrent migrations and claims,
+fencing, retry after a killed worker process, database restart persistence,
+014→015 upgrade rollback/preservation, and compiled service health/shutdown.
+The payloads are authored fixtures; model execution is `not_run` and the
+application runtime remains blocked. These checks support recovery and storage
+claims only. They do not supply independent W0/W1/W2 cases, human labels, matched
+live-model outcomes, or evidence of improved future review. The selected
+three-window pilot and its freeze, lineage, equal-budget and annotation gates
+remain prerequisites for any efficacy comparison.
 
 The recorded local closed-loop demonstration uses three real but synthetic Git commits, real ast-grep scanning, embedded PostgreSQL through PGlite, and an authored executable through the installed Codex SDK. Its two predefined candidate scenarios verify that one selected positive is preserved while one selected negative is corrected, and that losing the positive blocks acceptance in the other scenario. It reopens 28 persisted records and inventories 33 artifacts. Proposals, semantic judgments, TP/FP feedback, and decisions are authored fixtures; the source labels stay unknown, `modelExecution` is `not_run`, isolation is unverified, and activation is not performed. These are functional assertions, not measured learning gains. See the [recorded verification](../docs/evidence/local-closed-loop-verification-2026-10-02.txt) and [compiled report](../docs/evidence/local-closed-loop-compiled-2026-10-02.json).
 

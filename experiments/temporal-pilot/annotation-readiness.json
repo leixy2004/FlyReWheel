@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline_temporal_annotation_readiness",
+  "generatedAt": "2026-10-03T21:39:54.361Z",
+  "status": "w0_source_preparation_only",
+  "verification": {
+    "mode": "offline",
+    "networkRequests": 0,
+    "modelCalls": 0,
+    "sourceOrLabelFilesRead": 0,
+    "verifier": "scripts/verify-temporal-frame.mjs",
+    "frame": "experiments/temporal-pilot/httpx-2024-frame.json",
+    "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+    "captureScriptSha256": "759f81d89f24ff3f95895286eac351b948557a13d067a41104dc1d3538a01c2f",
+    "verifierSha256": "edbea776c22436d55a87f9ca1370a90de39a86a9ece275494ac070aef6509ed6",
+    "passed": true,
+    "checks": [
+      "fixed_windows_and_metadata_query",
+      "pagination_and_full_count",
+      "unique_pr_and_merge_commit",
+      "commit_identifiers_and_window_membership",
+      "capture_script_sha256",
+      "strict_metadata_fields_no_labels"
+    ],
+    "adversarialRejections": 9
+  },
+  "repository": "encode/httpx",
+  "frame": {
+    "completeAgainstRecordedApiCount": true,
+    "capturedCount": 70,
+    "uniqueMergeCommits": 70,
+    "pages": 1,
+    "counts": {
+      "W0": 38,
+      "W1": 13,
+      "W2": 19
+    },
+    "zeroYieldWindows": []
+  },
+  "windows": [
+    {
+      "id": "W0",
+      "start": "2024-01-01T00:00:00Z",
+      "endExclusive": "2024-04-01T00:00:00Z",
+      "samples": 38,
+      "semanticEligibility": {
+        "status": "unknown",
+        "count": 38
+      },
+      "independentHumanLabels": 0,
+      "lineage": "not_audited",
+      "nextStage": "source_preparation_only"
+    },
+    {
+      "id": "W1",
+      "start": "2024-04-01T00:00:00Z",
+      "endExclusive": "2024-07-01T00:00:00Z",
+      "samples": 13,
+      "semanticEligibility": {
+        "status": "unknown",
+        "count": 13
+      },
+      "independentHumanLabels": 0,
+      "lineage": "not_audited",
+      "nextStage": "keep_source_and_labels_unopened"
+    },
+    {
+      "id": "W2",
+      "start": "2024-07-01T00:00:00Z",
+      "endExclusive": "2024-10-01T00:00:00Z",
+      "samples": 19,
+      "semanticEligibility": {
+        "status": "unknown",
+        "count": 19
+      },
+      "independentHumanLabels": 0,
+      "lineage": "not_audited",
+      "nextStage": "keep_source_and_labels_unopened"
+    }
+  ],
+  "annotation": {
+    "humanAnnotators": 0,
+    "assignment": "unassigned",
+    "independentLabels": 0,
+    "countBasis": "Declared frame inventory only; not an audit of external annotation systems.",
+    "packageStatus": "not_ready_source_not_captured",
+    "allowedSourcePreparationWindow": "W0",
+    "w0EligiblePrNumbers": [
+      3035,
+      3031,
+      3036,
+      3034,
+      3032,
+      3038,
+      3042,
+      3045,
+      3054,
+      3049,
+      3055,
+      3058,
+      3056,
+      3057,
+      3063,
+      3061,
+      3068,
+      3066,
+      3077,
+      3050,
+      3080,
+      3081,
+      3097,
+      3095,
+      3107,
+      3106,
+      3109,
+      3064,
+      3062,
+      3112,
+      3116,
+      3123,
+      3124,
+      3122,
+      3120,
+      3131,
+      3129,
+      3139
+    ],
+    "blockedSourceOrLabelWindows": [
+      "W1",
+      "W2"
+    ],
+    "policyEnforcement": "Readiness declaration, not a runtime access-control mechanism.",
+    "releaseGate": "Freeze W0 rules before any W1 feedback-label exposure; require separate authorized gates before W1/W2 source or labels are opened."
+  },
+  "limitations": {
+    "preAcquisitionFreeze": "Author declaration only; no independently timestamped preregistration proof.",
+    "completeness": "Internal consistency with recorded GitHub search count; no new API query or independent enumeration.",
+    "sourceIdentities": "Provider-declared commit/tree identifiers; full trees and source bytes not verified here.",
+    "parentCompleteness": "Capture script records equality with API totalCount; raw totalCount not retained per commit, so not independently rederived offline.",
+    "lineageIndependence": "not_audited",
+    "historicalVisibility": "not_established",
+    "researchModelsAndBudgets": "unconfigured",
+    "fullPilotFrozen": false,
+    "empiricalOutcomes": "not_evaluated"
+  }
+}

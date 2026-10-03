@@ -1,0 +1,769 @@
+{
+  "schemaVersion": 1,
+  "kind": "github_metadata_temporal_frame",
+  "repository": "encode/httpx",
+  "selection": {
+    "frozenBeforeAcquisition": true,
+    "rationale": "Public Python HTTP client with bounded scope for later human annotation; not selected for known favorable outcomes.",
+    "rule": "All merged PRs in the fixed interval, without content/outcome filtering.",
+    "windows": [
+      {
+        "id": "W0",
+        "start": "2024-01-01T00:00:00Z",
+        "endExclusive": "2024-04-01T00:00:00Z"
+      },
+      {
+        "id": "W1",
+        "start": "2024-04-01T00:00:00Z",
+        "endExclusive": "2024-07-01T00:00:00Z"
+      },
+      {
+        "id": "W2",
+        "start": "2024-07-01T00:00:00Z",
+        "endExclusive": "2024-10-01T00:00:00Z"
+      }
+    ]
+  },
+  "acquisition": {
+    "api": "https://api.github.com/graphql",
+    "search": "repo:encode/httpx is:pr is:merged merged:2024-01-01..2024-09-30 sort:created-asc",
+    "query": "query($search: String!, $cursor: String) {\n  search(query: $search, type: ISSUE, first: 100, after: $cursor) {\n    issueCount pageInfo { hasNextPage endCursor }\n    nodes { ... on PullRequest {\n      number mergedAt mergeCommit { oid tree { oid } parents(first: 100) { totalCount nodes { oid } } }\n    } }\n  }\n}",
+    "script": "scripts/capture-temporal-frame.mjs",
+    "scriptSha256": "759f81d89f24ff3f95895286eac351b948557a13d067a41104dc1d3538a01c2f",
+    "startedAt": "2026-10-03T21:27:03.471Z",
+    "maxRequests": 10,
+    "requestTimeoutMs": 60000,
+    "requests": 1,
+    "pages": [
+      {
+        "page": 1,
+        "reportedCount": 70,
+        "returnedCount": 70,
+        "hasNextPage": false
+      }
+    ],
+    "completedAt": "2026-10-03T21:27:05.108Z"
+  },
+  "status": "complete",
+  "reportedCount": 70,
+  "capturedCount": 70,
+  "windowCounts": {
+    "W0": 38,
+    "W1": 13,
+    "W2": 19
+  },
+  "pullRequests": [
+    {
+      "number": 3035,
+      "mergedAt": "2024-01-03T05:11:45Z",
+      "window": "W0",
+      "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "parents": [
+        "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+      ],
+      "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+    },
+    {
+      "number": 3031,
+      "mergedAt": "2024-01-03T05:14:26Z",
+      "window": "W0",
+      "mergeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "parents": [
+        "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+      ],
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+    },
+    {
+      "number": 3036,
+      "mergedAt": "2024-01-03T05:36:16Z",
+      "window": "W0",
+      "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+      "parents": [
+        "ea3071642d12ed546d901861a5901da6fad37073"
+      ],
+      "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712"
+    },
+    {
+      "number": 3034,
+      "mergedAt": "2024-01-03T05:44:26Z",
+      "window": "W0",
+      "mergeCommit": "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3",
+      "parents": [
+        "f1ed7463086f0aed97afa61a1197c51840d3bb2e"
+      ],
+      "tree": "ce25806e1c1121ade2cef4e8197866713232bd01"
+    },
+    {
+      "number": 3032,
+      "mergedAt": "2024-01-03T07:18:02Z",
+      "window": "W0",
+      "mergeCommit": "ebc1393c5cf6430e3027bdb724368a9d6e3429ef",
+      "parents": [
+        "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3"
+      ],
+      "tree": "f005abc6d72aeb76ff234a6fba8a63637930281d"
+    },
+    {
+      "number": 3038,
+      "mergedAt": "2024-01-04T15:03:10Z",
+      "window": "W0",
+      "mergeCommit": "c6907c22034e2739c4c1af89908e3c9f90602788",
+      "parents": [
+        "ebc1393c5cf6430e3027bdb724368a9d6e3429ef"
+      ],
+      "tree": "fc69d2ef76957364de977cd389cd9efd3b18c222"
+    },
+    {
+      "number": 3042,
+      "mergedAt": "2024-01-08T11:09:14Z",
+      "window": "W0",
+      "mergeCommit": "ca51b4532a4495c38c8abf1a393dbd80099deae3",
+      "parents": [
+        "c6907c22034e2739c4c1af89908e3c9f90602788"
+      ],
+      "tree": "4fe059332d4f3aa1e04f6d616070b30579dcb242"
+    },
+    {
+      "number": 3045,
+      "mergedAt": "2024-01-10T10:08:43Z",
+      "window": "W0",
+      "mergeCommit": "99cba6ac642b12f0331d069ae324402c54c4c600",
+      "parents": [
+        "ca51b4532a4495c38c8abf1a393dbd80099deae3"
+      ],
+      "tree": "6309516480c904b2adcfac9d536e6f2a6861a862"
+    },
+    {
+      "number": 3054,
+      "mergedAt": "2024-01-12T18:48:03Z",
+      "window": "W0",
+      "mergeCommit": "ab720d325808e1d092787995c2023c9aeb24aff5",
+      "parents": [
+        "99cba6ac642b12f0331d069ae324402c54c4c600"
+      ],
+      "tree": "aff4c0d689d1dafade67bf691c0a92fe33e1af91"
+    },
+    {
+      "number": 3049,
+      "mergedAt": "2024-01-15T09:48:56Z",
+      "window": "W0",
+      "mergeCommit": "8cd952c88fc2d0469cee8f08c2a580652b084375",
+      "parents": [
+        "ab720d325808e1d092787995c2023c9aeb24aff5"
+      ],
+      "tree": "d235d2ddd64305270c8c54b154541aa3d4e618d0"
+    },
+    {
+      "number": 3055,
+      "mergedAt": "2024-01-15T10:04:09Z",
+      "window": "W0",
+      "mergeCommit": "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9",
+      "parents": [
+        "8cd952c88fc2d0469cee8f08c2a580652b084375"
+      ],
+      "tree": "2c408880bcaf9bc1daae3fac91ef00d2925eb02d"
+    },
+    {
+      "number": 3058,
+      "mergedAt": "2024-01-15T11:15:31Z",
+      "window": "W0",
+      "mergeCommit": "73e688875a3579b67eee5795839b9660a1cfe5d8",
+      "parents": [
+        "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9"
+      ],
+      "tree": "c1d66c87afdcea9b1288d3e628f511253904ae18"
+    },
+    {
+      "number": 3056,
+      "mergedAt": "2024-01-15T12:30:09Z",
+      "window": "W0",
+      "mergeCommit": "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e",
+      "parents": [
+        "73e688875a3579b67eee5795839b9660a1cfe5d8"
+      ],
+      "tree": "0e88f8b60fb82a1c632c2266ca71a3c15f8302b6"
+    },
+    {
+      "number": 3057,
+      "mergedAt": "2024-01-15T13:01:04Z",
+      "window": "W0",
+      "mergeCommit": "15f925336c6bad2f5b2711553a6b6763923175de",
+      "parents": [
+        "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e"
+      ],
+      "tree": "09b6ae75014545254949564ce034b0cd28075788"
+    },
+    {
+      "number": 3063,
+      "mergedAt": "2024-01-16T09:53:23Z",
+      "window": "W0",
+      "mergeCommit": "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8",
+      "parents": [
+        "15f925336c6bad2f5b2711553a6b6763923175de"
+      ],
+      "tree": "8dca6ed316f0f907238122dac6e63bb538c74746"
+    },
+    {
+      "number": 3061,
+      "mergedAt": "2024-01-16T10:25:02Z",
+      "window": "W0",
+      "mergeCommit": "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5",
+      "parents": [
+        "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8"
+      ],
+      "tree": "2a00ea62200f31efa73ef213b64b70e0533b5998"
+    },
+    {
+      "number": 3068,
+      "mergedAt": "2024-01-24T14:30:23Z",
+      "window": "W0",
+      "mergeCommit": "371b6e946c9e70df3dce79590c195448eac3f635",
+      "parents": [
+        "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5"
+      ],
+      "tree": "cfa03bb38e898dd5c4ae3fa9aef3961ef961f5d6"
+    },
+    {
+      "number": 3066,
+      "mergedAt": "2024-01-30T07:01:56Z",
+      "window": "W0",
+      "mergeCommit": "37a2901af38f4142ee902c838aaaf92cf8a80f6a",
+      "parents": [
+        "371b6e946c9e70df3dce79590c195448eac3f635"
+      ],
+      "tree": "ccb1dfefb4def3389f15e01e7328b2f930b82f3e"
+    },
+    {
+      "number": 3077,
+      "mergedAt": "2024-02-01T16:19:47Z",
+      "window": "W0",
+      "mergeCommit": "6f461522a5c58839c31be3c82b7bd47fba77109b",
+      "parents": [
+        "37a2901af38f4142ee902c838aaaf92cf8a80f6a"
+      ],
+      "tree": "a63dc46f3668b5133825144bafc0120b4515ffc1"
+    },
+    {
+      "number": 3050,
+      "mergedAt": "2024-02-02T13:29:41Z",
+      "window": "W0",
+      "mergeCommit": "cabd1c095e52e2f67ab63ec17941d3a539d7c877",
+      "parents": [
+        "6f461522a5c58839c31be3c82b7bd47fba77109b"
+      ],
+      "tree": "889bbd1a370f10b105234e8229a5184995d4745c"
+    },
+    {
+      "number": 3080,
+      "mergedAt": "2024-02-06T10:40:35Z",
+      "window": "W0",
+      "mergeCommit": "c51af4ba52d4103517a91f770e617cc579803b2d",
+      "parents": [
+        "cabd1c095e52e2f67ab63ec17941d3a539d7c877"
+      ],
+      "tree": "a92ef97ff802286d022f2b5ac75053388666ddcd"
+    },
+    {
+      "number": 3081,
+      "mergedAt": "2024-02-14T11:14:02Z",
+      "window": "W0",
+      "mergeCommit": "3faa4a8f2e0d406167b913bbfd3afab087662d03",
+      "parents": [
+        "c51af4ba52d4103517a91f770e617cc579803b2d"
+      ],
+      "tree": "c29b80a51cb1e6cf1e8af21630640db337293bf0"
+    },
+    {
+      "number": 3097,
+      "mergedAt": "2024-02-20T16:04:43Z",
+      "window": "W0",
+      "mergeCommit": "cdf1c7ab3a9bd9c0065202d22958999fb8688928",
+      "parents": [
+        "769302a3480ef400baeb5c15e49e9d94849a019a"
+      ],
+      "tree": "d525a8a214559f9d50b0601dae524a322815c1b5"
+    },
+    {
+      "number": 3095,
+      "mergedAt": "2024-02-21T13:06:20Z",
+      "window": "W0",
+      "mergeCommit": "326b9431c761e1ef1e00b9f760d1f654c8db48c6",
+      "parents": [
+        "3faa4a8f2e0d406167b913bbfd3afab087662d03"
+      ],
+      "tree": "40173b1c8fd3f7895fb2e5ae91f41cf66f1d2cb8"
+    },
+    {
+      "number": 3107,
+      "mergedAt": "2024-02-22T14:52:20Z",
+      "window": "W0",
+      "mergeCommit": "77cb36f181b6ee728dd25c781ba5550a8804ee1d",
+      "parents": [
+        "326b9431c761e1ef1e00b9f760d1f654c8db48c6"
+      ],
+      "tree": "d25acdfc7030c3fda529d56769baf6085cef0d46"
+    },
+    {
+      "number": 3106,
+      "mergedAt": "2024-02-23T12:30:05Z",
+      "window": "W0",
+      "mergeCommit": "87713d2172053c4ad05efacf3ab7e0a5c15616fc",
+      "parents": [
+        "77cb36f181b6ee728dd25c781ba5550a8804ee1d"
+      ],
+      "tree": "b56d071d58f24f0d75b4b47c8bc3c534f098d8c2"
+    },
+    {
+      "number": 3109,
+      "mergedAt": "2024-02-23T13:36:45Z",
+      "window": "W0",
+      "mergeCommit": "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2",
+      "parents": [
+        "87713d2172053c4ad05efacf3ab7e0a5c15616fc"
+      ],
+      "tree": "c90dfb8be4e394ab1b63a9ba00092b1391b9a16d"
+    },
+    {
+      "number": 3064,
+      "mergedAt": "2024-02-23T14:11:43Z",
+      "window": "W0",
+      "mergeCommit": "e745060c75d06a7a6c1c90007120af2a43b3fffc",
+      "parents": [
+        "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2"
+      ],
+      "tree": "efa04e600df75aaa02cba19fe835fc02ca5de8d3"
+    },
+    {
+      "number": 3062,
+      "mergedAt": "2024-02-23T14:16:03Z",
+      "window": "W0",
+      "mergeCommit": "fc84f7f6eb77fe5d4428261c837ac8016ec77a28",
+      "parents": [
+        "e745060c75d06a7a6c1c90007120af2a43b3fffc"
+      ],
+      "tree": "5faa4e2bce6a0a16819b94d5b8dfd116d5b5eda9"
+    },
+    {
+      "number": 3112,
+      "mergedAt": "2024-02-23T14:33:15Z",
+      "window": "W0",
+      "mergeCommit": "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f",
+      "parents": [
+        "fc84f7f6eb77fe5d4428261c837ac8016ec77a28"
+      ],
+      "tree": "b5eb8afc512648ec8595bdef96ac7c057f12ed2e"
+    },
+    {
+      "number": 3116,
+      "mergedAt": "2024-02-26T16:36:58Z",
+      "window": "W0",
+      "mergeCommit": "6d852d319acd5d97caf14037dff15ede04b37542",
+      "parents": [
+        "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f"
+      ],
+      "tree": "28924b16f92e72ea15946d9aa614e6afe1f0f070"
+    },
+    {
+      "number": 3123,
+      "mergedAt": "2024-02-28T18:13:23Z",
+      "window": "W0",
+      "mergeCommit": "6045186f7d3a665b965c13dec413e3a346b1a01d",
+      "parents": [
+        "6d852d319acd5d97caf14037dff15ede04b37542"
+      ],
+      "tree": "4d0df881741d097801c8ad03815ca171d8e9f720"
+    },
+    {
+      "number": 3124,
+      "mergedAt": "2024-02-29T11:11:44Z",
+      "window": "W0",
+      "mergeCommit": "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33",
+      "parents": [
+        "6045186f7d3a665b965c13dec413e3a346b1a01d"
+      ],
+      "tree": "cda44d047e03607b82e1d4678a4059a56bf55261"
+    },
+    {
+      "number": 3122,
+      "mergedAt": "2024-02-29T11:42:17Z",
+      "window": "W0",
+      "mergeCommit": "7e10342c2ad44955582e4fef96470f3e653347d4",
+      "parents": [
+        "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33"
+      ],
+      "tree": "fae52b2c5ffd9ea1e6c9b7da8e56d966bd59b233"
+    },
+    {
+      "number": 3120,
+      "mergedAt": "2024-02-29T13:40:07Z",
+      "window": "W0",
+      "mergeCommit": "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb",
+      "parents": [
+        "7e10342c2ad44955582e4fef96470f3e653347d4"
+      ],
+      "tree": "771456d0587370fabadddbd15845b3fa2edb6e30"
+    },
+    {
+      "number": 3131,
+      "mergedAt": "2024-03-01T19:49:23Z",
+      "window": "W0",
+      "mergeCommit": "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d",
+      "parents": [
+        "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb"
+      ],
+      "tree": "7d2b98ce5d901b0bb4a8f879613ee7ae7c4d388c"
+    },
+    {
+      "number": 3129,
+      "mergedAt": "2024-03-01T20:05:55Z",
+      "window": "W0",
+      "mergeCommit": "7df47ce4d93a06f2c3310cd692b4c2336d7663ba",
+      "parents": [
+        "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d"
+      ],
+      "tree": "e7f009ced4ed412fdb476a75970e67ada7ea29ce"
+    },
+    {
+      "number": 3139,
+      "mergedAt": "2024-03-21T10:17:15Z",
+      "window": "W0",
+      "mergeCommit": "392dbe45f086d0877bd288c5d68abf860653b680",
+      "parents": [
+        "7df47ce4d93a06f2c3310cd692b4c2336d7663ba"
+      ],
+      "tree": "2607b9e37d12ad5b198eff48e4e915cc785cebda"
+    },
+    {
+      "number": 3160,
+      "mergedAt": "2024-04-06T06:30:16Z",
+      "window": "W1",
+      "mergeCommit": "45bb65bba12360d94b8c512e6b13ac4b775a402d",
+      "parents": [
+        "392dbe45f086d0877bd288c5d68abf860653b680"
+      ],
+      "tree": "2588e31d2325cb8b7c62acd75de0875abb712d71"
+    },
+    {
+      "number": 3159,
+      "mergedAt": "2024-04-06T11:55:27Z",
+      "window": "W1",
+      "mergeCommit": "5bb2ea0f4e1274730ef85f50f5a6bf07eb74eef4",
+      "parents": [
+        "45bb65bba12360d94b8c512e6b13ac4b775a402d"
+      ],
+      "tree": "a70bd896abe5ddc55adeefeb03818d9fad571a9d"
+    },
+    {
+      "number": 3156,
+      "mergedAt": "2024-04-09T20:38:43Z",
+      "window": "W1",
+      "mergeCommit": "7354ed70ceb1a0f072af82e2cb784ef6b2512ed3",
+      "parents": [
+        "5bb2ea0f4e1274730ef85f50f5a6bf07eb74eef4"
+      ],
+      "tree": "f015f57fc74708641520cdb783316981b37e9d31"
+    },
+    {
+      "number": 3138,
+      "mergedAt": "2024-04-12T06:11:12Z",
+      "window": "W1",
+      "mergeCommit": "4b85e6c3898b94e686b427afd83138c87520b479",
+      "parents": [
+        "7354ed70ceb1a0f072af82e2cb784ef6b2512ed3"
+      ],
+      "tree": "85b31de4fc5ce745225bc87ab020e19fb123c1eb"
+    },
+    {
+      "number": 3185,
+      "mergedAt": "2024-05-01T16:56:18Z",
+      "window": "W1",
+      "mergeCommit": "2f5ae50726b1a2ca78340a25054f81cf4ed926c7",
+      "parents": [
+        "4b85e6c3898b94e686b427afd83138c87520b479"
+      ],
+      "tree": "9a6e293fe5bafe6c016119c330f4b60fe1b3cfd1"
+    },
+    {
+      "number": 3186,
+      "mergedAt": "2024-05-02T10:07:10Z",
+      "window": "W1",
+      "mergeCommit": "be56b747350008b7b0456242691919f9086c0f32",
+      "parents": [
+        "2f5ae50726b1a2ca78340a25054f81cf4ed926c7"
+      ],
+      "tree": "f183c6e84bb235fa0838cc923063968e5b91202e"
+    },
+    {
+      "number": 3187,
+      "mergedAt": "2024-05-03T00:09:08Z",
+      "window": "W1",
+      "mergeCommit": "a7092af2fda78d92daaad7627e4cf0cf5e94b019",
+      "parents": [
+        "be56b747350008b7b0456242691919f9086c0f32"
+      ],
+      "tree": "f71f75a0c4f132667f2a68728eeec2a531b167f9"
+    },
+    {
+      "number": 3174,
+      "mergedAt": "2024-05-05T16:24:16Z",
+      "window": "W1",
+      "mergeCommit": "fa6dac8383541669f42086d4f07c71b0f8d6a279",
+      "parents": [
+        "a7092af2fda78d92daaad7627e4cf0cf5e94b019"
+      ],
+      "tree": "0f987f83f51e0e6762e64c447dc107bb7d5f4a66"
+    },
+    {
+      "number": 3175,
+      "mergedAt": "2024-05-10T10:42:50Z",
+      "window": "W1",
+      "mergeCommit": "88a81c5d31a4a8b4bd0a860dedd3bb12dc09ff86",
+      "parents": [
+        "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+      ],
+      "tree": "09cf30c9ac0002be1c1d57ba6a0e017bfffaea9d"
+    },
+    {
+      "number": 3189,
+      "mergedAt": "2024-05-17T17:25:38Z",
+      "window": "W1",
+      "mergeCommit": "37593c1952f4972040f6163da67e3777fd3d2e94",
+      "parents": [
+        "88a81c5d31a4a8b4bd0a860dedd3bb12dc09ff86"
+      ],
+      "tree": "da9b6d735b7470e54de9c715e1b6c853f23becb0"
+    },
+    {
+      "number": 3213,
+      "mergedAt": "2024-06-03T10:38:14Z",
+      "window": "W1",
+      "mergeCommit": "e186ecc9f82c9a45c031e70f0a153ac54235bd10",
+      "parents": [
+        "37593c1952f4972040f6163da67e3777fd3d2e94"
+      ],
+      "tree": "dfea05df8d38a6bb4604d4d6471f09aca65016a6"
+    },
+    {
+      "number": 3210,
+      "mergedAt": "2024-06-06T15:36:07Z",
+      "window": "W1",
+      "mergeCommit": "92e9dfb3997ab07353bbe98f9b5a6e69b7701c70",
+      "parents": [
+        "e186ecc9f82c9a45c031e70f0a153ac54235bd10"
+      ],
+      "tree": "e36222ccd47f95df667ba950b90dc25c99e05524"
+    },
+    {
+      "number": 3188,
+      "mergedAt": "2024-06-13T13:46:37Z",
+      "window": "W1",
+      "mergeCommit": "db9072f998b53ff66d50778bf5edee8e2cc8ede1",
+      "parents": [
+        "92e9dfb3997ab07353bbe98f9b5a6e69b7701c70"
+      ],
+      "tree": "8731486256fa3fcc4198d5f3a6794180737c7018"
+    },
+    {
+      "number": 3246,
+      "mergedAt": "2024-07-23T14:43:47Z",
+      "window": "W2",
+      "mergeCommit": "b351a44fb6e97dbe3119b738ddff7125cc5dc7af",
+      "parents": [
+        "db9072f998b53ff66d50778bf5edee8e2cc8ede1"
+      ],
+      "tree": "d7cec590d15cf7e93bf7c573eb17aa5dd554855f"
+    },
+    {
+      "number": 3245,
+      "mergedAt": "2024-07-23T14:46:47Z",
+      "window": "W2",
+      "mergeCommit": "359f77d4f6ea722d02c3731e9581456c6386e188",
+      "parents": [
+        "b351a44fb6e97dbe3119b738ddff7125cc5dc7af"
+      ],
+      "tree": "eaa54186111b32d5e00f0c79c7363956a253e619"
+    },
+    {
+      "number": 3247,
+      "mergedAt": "2024-07-23T14:54:34Z",
+      "window": "W2",
+      "mergeCommit": "beb501fc28cb24ef7cd584159bc6ac55d2244dea",
+      "parents": [
+        "359f77d4f6ea722d02c3731e9581456c6386e188"
+      ],
+      "tree": "4eed771aa6115351ba059909c6e6835143d0be74"
+    },
+    {
+      "number": 3250,
+      "mergedAt": "2024-07-26T08:36:03Z",
+      "window": "W2",
+      "mergeCommit": "7c0cda153d301bde9a011e1dd7157d7e2b20889d",
+      "parents": [
+        "beb501fc28cb24ef7cd584159bc6ac55d2244dea"
+      ],
+      "tree": "773d503e5d7a7b4059cbe27862824317b7e1ee5c"
+    },
+    {
+      "number": 3275,
+      "mergedAt": "2024-08-22T15:03:23Z",
+      "window": "W2",
+      "mergeCommit": "1bf1ba51242e6433f6a4cfa45a9338eb85bd7559",
+      "parents": [
+        "7c0cda153d301bde9a011e1dd7157d7e2b20889d"
+      ],
+      "tree": "4e491b65e361a962bb92e4cc5dc31087828edcc3"
+    },
+    {
+      "number": 3285,
+      "mergedAt": "2024-08-27T11:27:08Z",
+      "window": "W2",
+      "mergeCommit": "1d6b6634331686c0701c75b6ff4830925269f23d",
+      "parents": [
+        "1bf1ba51242e6433f6a4cfa45a9338eb85bd7559"
+      ],
+      "tree": "ce8ad921de7fa63e0be08a7bd0b6ce539583e953"
+    },
+    {
+      "number": 3288,
+      "mergedAt": "2024-08-27T12:52:05Z",
+      "window": "W2",
+      "mergeCommit": "609df7ecc0f7cb10a1c998aa9c269bba77337c5f",
+      "parents": [
+        "1d6b6634331686c0701c75b6ff4830925269f23d"
+      ],
+      "tree": "eb588c22adc997f4cff844ffd0c71e77c4ee9a7e"
+    },
+    {
+      "number": 3292,
+      "mergedAt": "2024-09-01T17:45:25Z",
+      "window": "W2",
+      "mergeCommit": "d46fa57a6a5163e39af9eda6e026c60ca646f573",
+      "parents": [
+        "609df7ecc0f7cb10a1c998aa9c269bba77337c5f"
+      ],
+      "tree": "e7ebfff8865f0777890b53d7ce6525d79fbc7b96"
+    },
+    {
+      "number": 3295,
+      "mergedAt": "2024-09-04T12:24:25Z",
+      "window": "W2",
+      "mergeCommit": "0aa20e449e742f81fbc518ce793878015226652d",
+      "parents": [
+        "d46fa57a6a5163e39af9eda6e026c60ca646f573"
+      ],
+      "tree": "4989f88bc673568eaf4e00678ffb09bded8e47a2"
+    },
+    {
+      "number": 3305,
+      "mergedAt": "2024-09-17T10:31:15Z",
+      "window": "W2",
+      "mergeCommit": "d4961b9f8e7f00b654dbdbf200562bd273f598c7",
+      "parents": [
+        "0aa20e449e742f81fbc518ce793878015226652d"
+      ],
+      "tree": "6a918db262a6905ab970c22763b2ca2250d2b89f"
+    },
+    {
+      "number": 3192,
+      "mergedAt": "2024-09-22T20:16:32Z",
+      "window": "W2",
+      "mergeCommit": "f06171fd5a86cf89387f4ee860ea0da207160418",
+      "parents": [
+        "d4961b9f8e7f00b654dbdbf200562bd273f598c7"
+      ],
+      "tree": "83cc686a86ae5a52637a57d7b9c6af23d6f68a01"
+    },
+    {
+      "number": 3318,
+      "mergedAt": "2024-09-24T16:21:56Z",
+      "window": "W2",
+      "mergeCommit": "2e01aa0075327c5c30632207e8b7a1961dda5303",
+      "parents": [
+        "f06171fd5a86cf89387f4ee860ea0da207160418"
+      ],
+      "tree": "a1352cc8d28886a3a9021ddbb51944fa9bc283cd"
+    },
+    {
+      "number": 3317,
+      "mergedAt": "2024-09-24T16:53:13Z",
+      "window": "W2",
+      "mergeCommit": "a18f79610141500cf540b2cf4783559731109d7d",
+      "parents": [
+        "f06171fd5a86cf89387f4ee860ea0da207160418"
+      ],
+      "tree": "5bfe2771c723d64cf401d98bfbebe0f8feb0bfd3"
+    },
+    {
+      "number": 3315,
+      "mergedAt": "2024-09-24T20:52:34Z",
+      "window": "W2",
+      "mergeCommit": "34e1110a9b3f8ff875fd2f61e1721cf68e18e564",
+      "parents": [
+        "a18f79610141500cf540b2cf4783559731109d7d"
+      ],
+      "tree": "d26bcdb5c0f6ae38dbacc5b9574d0e8d4f5a1009"
+    },
+    {
+      "number": 3314,
+      "mergedAt": "2024-09-26T11:01:22Z",
+      "window": "W2",
+      "mergeCommit": "dece72d8cddde56060a3493843abc9ba7c85df81",
+      "parents": [
+        "34e1110a9b3f8ff875fd2f61e1721cf68e18e564"
+      ],
+      "tree": "4f357586afacf7593d2c8fc1e3bb8dbde8d2ff60"
+    },
+    {
+      "number": 3312,
+      "mergedAt": "2024-09-26T17:01:47Z",
+      "window": "W2",
+      "mergeCommit": "49d74a2e7f773f88a84dd4af900d7a8543636ae2",
+      "parents": [
+        "2e01aa0075327c5c30632207e8b7a1961dda5303"
+      ],
+      "tree": "8c1b6f3c9341af3131f09134185a563bf0eae142"
+    },
+    {
+      "number": 3323,
+      "mergedAt": "2024-09-27T09:55:41Z",
+      "window": "W2",
+      "mergeCommit": "7a046618f748c24ab05bd2adf683b8c24a72887b",
+      "parents": [
+        "5766bf58e20548f106e13e95d7064635a9b06941"
+      ],
+      "tree": "c39a7afff5abaae3718891608f08232b2c89c59d"
+    },
+    {
+      "number": 3326,
+      "mergedAt": "2024-09-27T15:36:34Z",
+      "window": "W2",
+      "mergeCommit": "3849e1518f342dd8cd08f8c0537b565d54e6d2a2",
+      "parents": [
+        "49d74a2e7f773f88a84dd4af900d7a8543636ae2"
+      ],
+      "tree": "7a12c2c11d9a51d3f92f39e9c01a28244c042da8"
+    },
+    {
+      "number": 3325,
+      "mergedAt": "2024-09-27T15:41:17Z",
+      "window": "W2",
+      "mergeCommit": "95a9527ed6a8b9a8e53ddee2f61447fb1a37e2a9",
+      "parents": [
+        "3849e1518f342dd8cd08f8c0537b565d54e6d2a2"
+      ],
+      "tree": "1c4f66fd8a102f5242ddadb2fea05bfabee6ef26"
+    }
+  ],
+  "limitations": {
+    "identifiers": "GitHub-declared merge metadata; no local commit/tree verification",
+    "historicalPublicAvailability": "not_established",
+    "lineageIndependence": "not_evaluated",
+    "sourceCapture": "not_run",
+    "humanAnnotators": "unassigned",
+    "independentLabels": 0,
+    "modelExecution": "not_run",
+    "researchModelsAndBudgets": "unconfigured",
+    "fullPilotPreregistration": false,
+    "efficacy": "not_evaluated"
+  }
+}
