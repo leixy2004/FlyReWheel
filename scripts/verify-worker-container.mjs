@@ -190,7 +190,10 @@ export async function main(args) {
     const transferred = await docker(['exec', '-i', container, '/usr/local/bin/node', '-e', receive], { input: await readFile(bundle) });
     assert.equal(Number(transferred.stdout.trim()), (await lstat(bundle)).size);
     await docker(['exec', container, '/usr/bin/git', 'clone', '--branch', branch, '/tmp/source.bundle', '/workspace/repo']);
-    const verify = async sha => docker(['exec', container, '/opt/flyrewheel/bin/workspace-worker', 'verify', sha, branch, 'all-local-refs-v1']);
+    const runtimeBranch = 'attempt/runtime--smoke';
+    await docker(['exec', container, '/usr/bin/git', 'checkout', '-b', runtimeBranch, evidence.sourceSha]);
+    evidence.runtimeBranch = runtimeBranch;
+    const verify = async sha => docker(['exec', container, '/opt/flyrewheel/bin/workspace-worker', 'verify', sha, runtimeBranch, 'all-local-refs-v1']);
     const observed = JSON.parse((await verify(evidence.sourceSha)).stdout);
     assert.equal(observed.headSha, evidence.sourceSha); assert.equal(observed.clean, true); assert.equal(observed.identityValid, true);
     const wrong = JSON.parse((await verify('0'.repeat(40))).stdout);
