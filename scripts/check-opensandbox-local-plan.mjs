@@ -28,7 +28,7 @@ const Plan = z.object({
   apiKeySource: z.literal('task-temporary-file'),
   tls: z.literal('task-certificate-scoped-client-trust'),
   maxSandboxes: z.literal(1),
-  sandboxTtlSeconds: z.number().int().min(1).max(300),
+  sandboxTtlSeconds: z.number().int().min(60).max(300),
   operationDeadlineSeconds: z.number().int().min(1).max(900),
   reserveBytes: z.number().int().min(5 * GiB),
   freeBytes: z.number().int().nonnegative().nullable(),

@@ -1,0 +1,19 @@
+{
+  "classification": "safe-import-and-schema-only-not-startup",
+  "modules": [
+    "opensandbox_server",
+    "opensandbox_server.constants",
+    "opensandbox_server.config",
+    "opensandbox_server.api.schema",
+    "opensandbox_server.startup_guard"
+  ],
+  "fullAppConfigValid": true,
+  "createSandboxRequestValid": true,
+  "dockerPortRange": [
+    49000,
+    49100
+  ],
+  "serverPublishHost": "127.0.0.1",
+  "timeout": 300,
+  "noRealKeyOrCertificate": true
+}

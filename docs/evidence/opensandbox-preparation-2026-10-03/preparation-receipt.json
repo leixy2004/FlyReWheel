@@ -1,0 +1,29 @@
+{
+  "classification": "dependencies-and-static-compatibility-only",
+  "upstreamCommit": "c7dc78a4090e5de2b9119e9bd93952cae24f87bd",
+  "python": "3.13.5",
+  "uv": "0.12.19",
+  "source": "/workspace/scratch/flyrewheel-control-prep/source",
+  "venv": "/workspace/scratch/flyrewheel-control-prep/venv",
+  "cache": "/workspace/scratch/flyrewheel-control-prep/cache",
+  "packageCount": 49,
+  "wheelOnly": true,
+  "hashRequired": true,
+  "sourceBuildHooks": false,
+  "editableOrProjectInstall": false,
+  "linkMode": "hardlink",
+  "preparationLimitBytes": 1073741824,
+  "operationDeadlineSeconds": 180,
+  "freeSpaceStopBytes": 6442450944,
+  "installMinimumObservedFreeBytes": 17624887296,
+  "uniqueAllocatedBytes": 123228160,
+  "sumFileLogicalBytesIncludingHardlinks": 212545952,
+  "rootFreeBytes": 17607827456,
+  "hashes": {
+    "source/server/uv.lock": "c8b44e17239af530ae935ce5a19468ac32147f37faa67e0e8ab92828c8f070d7",
+    "requirements.lock.txt": "f25881dec576fccd2e5f8cb744a4b50cce1beefd24d3de9a206fad41bdf1a59b",
+    "installed.txt": "c62b50fbd85f69f6d36aebd486b3826a465f226b473333770a994b9dba0350cd",
+    "source/server/opensandbox_server/services/docker/runtime.py": "6b2037ccb1be25b0c3fb8e7a1de56d4e84030326250b1d81c208e3675a8142db"
+  },
+  "noKeyCertificateOrService": true
+}

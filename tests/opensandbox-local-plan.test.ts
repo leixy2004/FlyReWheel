@@ -27,7 +27,7 @@ describe('local OpenSandbox proposal validation', () => {
   it('rejects unsafe exposure, capability additions, credentials and unbounded time', () => {
     for (const change of [{ serverHost: '0.0.0.0' }, { publishHost: '0.0.0.0' }, { networkMode: 'host' },
       { addedCapabilities: ['NET_ADMIN'] }, { privileged: true }, { hostBinds: ['/var/run/docker.sock'] },
-      { proxyResolveInternal: true }, { noNewPrivileges: false }, { dropCapabilities: [] }, { pidsLimit: 10000 }, { apiKey: 'not-a-real-secret' }, { networkPolicy: { defaultAction: 'deny' } }, { sandboxTtlSeconds: 301 }]) {
+      { proxyResolveInternal: true }, { noNewPrivileges: false }, { dropCapabilities: [] }, { pidsLimit: 10000 }, { apiKey: 'not-a-real-secret' }, { networkPolicy: { defaultAction: 'deny' } }, { sandboxTtlSeconds: 301 }, { sandboxTtlSeconds: 59 }]) {
       expect(() => checkPlan({ ...proposedPlan, ...change })).toThrow();
     }
   });
