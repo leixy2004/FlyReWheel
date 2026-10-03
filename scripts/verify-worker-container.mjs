@@ -1,7 +1,7 @@
 /** Bounded local runc smoke. Never establishes OpenSandbox production isolation. */
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { chmod, mkdtemp, mkdir, lstat, readdir, rm, statfs } from 'node:fs/promises';
+import { mkdtemp, mkdir, lstat, readFile, readdir, rm, statfs } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,9 +37,16 @@ export function parseArgs(args) {
   const out = {};
   for (let i = 0; i < args.length; i += 2) {
     const key = args[i];
-    assert.ok(['--base', '--cache', '--cache-bytes'].includes(key) && args[i + 1] && !out[key], 'Expected --base DIGEST --cache DIRECTORY --cache-bytes BYTES');
+    assert.ok(['--base', '--cache', '--cache-bytes', '--image', '--image-source'].includes(key) && args[i + 1] && !out[key], 'Expected --base DIGEST --cache DIRECTORY --cache-bytes BYTES');
     out[key] = args[i + 1];
   }
+  if (out['--image']) {
+    assert.deepEqual(Object.keys(out).sort(), ['--image', '--image-source']);
+    assert.match(out['--image'], /^sha256:[a-f0-9]{64}$/);
+    assert.match(out['--image-source'] ?? '', /^[a-f0-9]{40}$/);
+    return { image: out['--image'], imageSource: out['--image-source'] };
+  }
+  assert.ok(!out['--image-source'], 'Image source requires immutable image ID');
   assert.match(out['--base'] ?? '', /^node@sha256:[a-f0-9]{64}$/, 'Explicit official Node digest required');
   assert.ok(out['--cache'] && Number.isSafeInteger(Number(out['--cache-bytes'])) && Number(out['--cache-bytes']) > 0, 'Explicit public cache size required');
   return { base: out['--base'], cache: resolve(out['--cache']), cacheBytes: Number(out['--cache-bytes']) };
@@ -47,12 +54,14 @@ export function parseArgs(args) {
 
 export async function main(args) {
   const options = parseArgs(args);
-  const measuredCacheBytes = await measurePublicCache(options.cache);
-  assert.ok(options.cacheBytes >= measuredCacheBytes, 'Declared cache budget below measured content size');
+  if (!options.image) {
+    const measuredCacheBytes = await measurePublicCache(options.cache);
+    assert.ok(options.cacheBytes >= measuredCacheBytes, 'Declared cache budget below measured content size');
+  }
   const root = fileURLToPath(new URL('../', import.meta.url));
   const task = `flyrewheel-bounded-${randomUUID()}`;
   const scratch = await mkdtemp(join(tmpdir(), `${task}-`));
-  const image = `${task}:verify`;
+  const image = options.image ?? `${task}:verify`;
   const container = `${task}-smoke`;
   const label = `org.flyrewheel.verification=${task}`;
   const env = { PATH: process.env.PATH, HOME: scratch, DOCKER_CONFIG: join(scratch, 'docker'), BUILDX_CONFIG: join(scratch, 'buildx') };
@@ -73,10 +82,10 @@ export async function main(args) {
     requireSpace(available, GiB);
     return available;
   }
-  async function command(bin, argv, { timeout = 120_000, expected = 0, monitor = true, maxBytes = 2 * 1024 * 1024 } = {}) {
+  async function command(bin, argv, { timeout = 120_000, expected = 0, monitor = true, maxBytes = 2 * 1024 * 1024, input } = {}) {
     if (monitor) { if (interrupted) throw interrupted; await free(); }
     return await new Promise((resolveCommand, reject) => {
-      const child = spawn(bin, argv, { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'], detached: true });
+      const child = spawn(bin, argv, { cwd: root, env, stdio: [input ? 'pipe' : 'ignore', 'pipe', 'pipe'], detached: true });
       let stdout = '', stderr = '', bytes = 0, failure;
       const stop = error => {
         if (failure) return;
@@ -84,6 +93,7 @@ export async function main(args) {
         try { process.kill(-child.pid, 'SIGINT'); } catch {}
         setTimeout(() => { try { process.kill(-child.pid, 'SIGKILL'); } catch {} }, 2000).unref();
       };
+      if (input) { child.stdin.on('error', error => stop(error)); child.stdin.end(input); }
       activeStop = stop;
       const timer = setTimeout(() => stop(new Error('Bounded command timed out')), timeout);
       let checking = false;
@@ -120,6 +130,17 @@ export async function main(args) {
     const driver = (await docker(['info', '--format', '{{.Driver}}'])).stdout.trim();
     assert.equal(driver, 'vfs', 'This capacity experiment is scoped to the VFS builder');
     evidence.driver = driver;
+    if (options.image) {
+      // Caller supplies the recorded source/image association; compare every admitted
+      // build input before reusing the immutable local image. This is not attestation.
+      await command('git', ['diff', '--exit-code', options.imageSource, 'HEAD', '--',
+        'package.json', 'package-lock.json', 'tsconfig.json', 'src', 'deploy/tsconfig.build.json',
+        'deploy/workspace-worker/Dockerfile.bounded', 'deploy/workspace-worker/Dockerfile.bounded.dockerignore',
+        'deploy/workspace-worker/prepare-image.mjs', 'deploy/workspace-worker/workspace-worker',
+        'deploy/workspace-worker/workspace-worker.json']);
+      evidence.imageSourceSha = options.imageSource;
+      evidence.reusedImage = true;
+    } else {
     // Pull is explicit and bounded; no mutable tag resolution or registry auth config.
     requireSpace(await free(), 3 * GiB);
     await docker(['pull', options.base], { timeout: 300_000 });
@@ -136,7 +157,10 @@ export async function main(args) {
     await docker(['build', '--network', 'none', '--progress', 'plain', '--build-context', `npmcache=${options.cache}`,
       '--file', 'deploy/workspace-worker/Dockerfile.bounded', '--build-arg', `WORKSPACE_WORKER_BASE_IMAGE=${options.base}`,
       '--label', label, '--tag', image, '.'], { timeout: 600_000, maxBytes: 4 * 1024 * 1024 });
+    }
     const [built] = JSON.parse((await docker(['image', 'inspect', image])).stdout);
+    if (options.image) assert.equal(built.Id, options.image);
+    assert.match(built.Config.Labels?.['org.flyrewheel.verification'] ?? '', /^flyrewheel-bounded-[a-f0-9-]+$/);
     evidence.imageId = built.Id; evidence.imageBytes = built.Size; evidence.imageRetainedForInspection = image;
     assert.equal(built.Config.User, '10001:10001');
     await docker(['create', '--name', container, '--label', label, '--network', 'none', '--read-only', '--cap-drop', 'ALL',
@@ -160,8 +184,11 @@ export async function main(args) {
     assert.equal(JSON.parse(refused.stderr).error, 'WORKSPACE_WORKER_PRODUCTION_BLOCKED');
     evidence.checks.push('compiled-entrypoint-blocked-exit-78-no-output');
     const bundle = join(scratch, 'source.bundle');
-    await command('git', ['bundle', 'create', bundle, '--all']); await chmod(bundle, 0o644);
-    await docker(['cp', bundle, `${container}:/tmp/source.bundle`]);
+    await command('git', ['bundle', 'create', bundle, '--all']);
+    assert.ok((await lstat(bundle)).size <= 16 * 1024 * 1024, 'Bundle exceeds 16 MiB smoke bound');
+    const receive = `const fs=require('fs');let n=0;const chunks=[];process.stdin.on('data',b=>{n+=b.length;if(n>16777216)process.exit(1);chunks.push(b)});process.stdin.on('end',()=>{fs.writeFileSync('/tmp/source.bundle',Buffer.concat(chunks),{flag:'wx',mode:0o600});console.log(n)})`;
+    const transferred = await docker(['exec', '-i', container, '/usr/local/bin/node', '-e', receive], { input: await readFile(bundle) });
+    assert.equal(Number(transferred.stdout.trim()), (await lstat(bundle)).size);
     await docker(['exec', container, '/usr/bin/git', 'clone', '--branch', branch, '/tmp/source.bundle', '/workspace/repo']);
     const verify = async sha => docker(['exec', container, '/opt/flyrewheel/bin/workspace-worker', 'verify', sha, branch, 'all-local-refs-v1']);
     const observed = JSON.parse((await verify(evidence.sourceSha)).stdout);
