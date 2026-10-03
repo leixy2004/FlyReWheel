@@ -19,6 +19,7 @@ export const W0SourcePackageSchema = z.object({
     observations: z.array(AuditObservation).min(1).max(50) }).strict(),
   sourceIdentities: z.object({ baseTip: Identity.extend({ role: z.literal('current-tip-metadata-only-not-source') }).strict(),
     mergeBase: Identity, head: Identity }).strict(),
+  sourceTrees: z.array(Observation).max(50).default([]),
   license: z.object({
     sourceRef: GithubSha,
     // Version 1 supports a root license only: its membership is proved by one complete root tree response.
@@ -63,15 +64,14 @@ export function validateW0SourcePackage(input: unknown) {
   const allowed = new Set([`${prefix}/pulls/${pull.number}`,
     `${prefix}/compare/${evidence.snapshot.baseTip}...${evidence.snapshot.head}?page=1&per_page=1`,
     `${prefix}/contents/${encodeURIComponent(value.license.path)}?ref=${value.license.sourceRef}`]);
-  for (const identity of Object.values(value.sourceIdentities)) {
+  for (const [name, identity] of Object.entries(value.sourceIdentities)) {
     allowed.add(`${prefix}/git/commits/${identity.commit}`);
-    allowed.add(`${prefix}/git/trees/${identity.tree}`);
+    if (name !== 'baseTip') allowed.add(`${prefix}/git/trees/${identity.tree}`);
   }
   for (const change of evidence.snapshot.changes) for (const side of [change.before, change.after])
     if (side.state !== 'absent') allowed.add(`${prefix}/git/blobs/${side.objectId}`);
   for (let page = 1; page <= 3; page++) for (const path of [`issues/${pull.number}/comments`, `pulls/${pull.number}/reviews`, `pulls/${pull.number}/comments`])
     allowed.add(`${prefix}/${path}?page=${page}&per_page=100`);
-  for (const observation of audit.observations) check(allowed.has(observation.endpoint), 'ACQUISITION_ENDPOINT_OUTSIDE_PACKAGE');
   const observe = (observation: z.infer<typeof Observation>, endpoint: string) => {
     check(audited.has(auditKey(observation)), 'SIDECAR_OBSERVATION_UNACCOUNTED');
     check(observation.endpoint === endpoint, 'OBSERVATION_ENDPOINT_MISMATCH');
@@ -107,6 +107,57 @@ export function validateW0SourcePackage(input: unknown) {
   const entry = tree.tree.find(entry => entry.path === license.path);
   check(entry && entry.type === 'blob' && ['100644', '100755'].includes(entry.mode) &&
     entry.sha === license.blobSha1 && entry.size === bytes.length, 'LICENSE_TREE_ENTRY_MISMATCH');
+  // Retained nonrecursive trees must be reachable from the comparison roots.
+  // Merely naming a tree SHA in an audit must never authorize arbitrary source trees.
+  const retained = new Map<string, typeof tree>();
+  for (const observation of [...value.sourceTrees, license.treeObservation]) {
+    const data = z.object({ sha: GithubSha, truncated: z.literal(false), tree: z.array(z.object({
+      path: z.string().min(1), mode: z.string(), type: z.string(), sha: GithubSha,
+      size: z.number().int().nonnegative().optional(),
+    }).passthrough()).max(10_000) }).passthrough().parse(observation.data);
+    observe(observation, `${prefix}/git/trees/${data.sha}`);
+    check(data.tree.every(entry => !entry.path.includes('/') && !['.', '..'].includes(entry.path)) &&
+      new Set(data.tree.map(entry => entry.path)).size === data.tree.length, 'SOURCE_TREE_INVALID');
+    check(!retained.has(data.sha) || digestOf(retained.get(data.sha)) === digestOf(data), 'CONFLICTING_SOURCE_TREE');
+    retained.set(data.sha, data);
+  }
+  const reachable = new Set([value.sourceIdentities.mergeBase.tree, value.sourceIdentities.head.tree]);
+  const queue = [...reachable];
+  for (let i = 0; i < queue.length; i++) for (const entry of retained.get(queue[i])?.tree ?? []) {
+    if (entry.type === 'tree' && entry.mode === '040000' && !reachable.has(entry.sha)) {
+      reachable.add(entry.sha); queue.push(entry.sha);
+    }
+  }
+  for (const sha of retained.keys()) {
+    check(reachable.has(sha), 'UNREACHABLE_SOURCE_TREE');
+    allowed.add(`${prefix}/git/trees/${sha}`);
+  }
+  const atPath = (root: string, path: string) => {
+    let sha = root;
+    const parts = path.split('/');
+    for (const [index, part] of parts.entries()) {
+      const branch = retained.get(sha);
+      check(branch, 'MISSING_SOURCE_PATH_TREE');
+      const found = branch.tree.find(entry => entry.path === part);
+      if (!found) return undefined;
+      if (index === parts.length - 1) return found;
+      if (found.type !== 'tree' || found.mode !== '040000') return undefined;
+      sha = found.sha;
+    }
+    return undefined;
+  };
+  for (const change of evidence.snapshot.changes) for (const which of ['before', 'after'] as const) {
+    const side = change[which], other = change[which === 'before' ? 'after' : 'before'];
+    const path = side.state === 'absent' ? (other.state === 'absent' ? undefined : other.path) : side.path;
+    check(path, 'MISSING_SOURCE_PATH');
+    const root = value.sourceIdentities[which === 'before' ? 'mergeBase' : 'head'].tree;
+    const entry = atPath(root, path);
+    if (side.state === 'absent') check(!entry, 'ABSENT_SOURCE_PRESENT_IN_TREE');
+    else check(entry && entry.sha === side.objectId && entry.mode === side.mode &&
+      entry.type === (side.mode === '160000' ? 'commit' : 'blob') &&
+      (side.mode === '160000' || entry.size === side.byteLength), 'SOURCE_BYTES_TREE_MISMATCH');
+  }
+  for (const observation of audit.observations) check(allowed.has(observation.endpoint), 'ACQUISITION_ENDPOINT_OUTSIDE_PACKAGE');
   return { status: 'offline_source_package_consistency_pass' as const, repository: pull.repository, number: pull.number,
     provenance: value.provenance, evidenceDigest: value.evidence.digest, snapshotDigest: evidence.snapshotDigest,
     sourceIdentities: { baseTip: { commit: value.sourceIdentities.baseTip.commit, tree: value.sourceIdentities.baseTip.tree,
@@ -116,7 +167,7 @@ export function validateW0SourcePackage(input: unknown) {
     historicalW0Feedback: false, historicalSourceAvailability: 'not_established', authenticity: 'declared_live_observation_not_independently_authenticated',
     acquisition: { requests: audit.requests, maxGetRequests: audit.maxGetRequests,
       verification: 'recorded_observation_consistency_not_independent_network_audit', crossPackageRunBudget: 'not_established',
-      scope: 'single_pr_known_commit_root_tree_and_changed_blob_endpoints_only' },
+      scope: 'single_pr_known_commits_reachable_source_trees_and_changed_blobs' },
     syntheticDetection: 'explicit_synthetic_or_integrity_only_rejected_forged_live_claim_not_detectable_offline',
     licenseInterpretation: 'not_performed', licenseCoverageOfBeforeSource: 'unknown', publicationAllowed: false,
     mining: 'not_run', evaluationReady: false };

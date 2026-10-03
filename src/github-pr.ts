@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { Octokit } from '@octokit/rest';
 import { z } from 'zod';
 import { digestOf } from './core/identity.js';
-import { githubHttpFailureDiagnostic, GithubReadError } from './github-pr-diagnostics.js';
+import { classifyGithubReadFailure, githubHttpFailureDiagnostic, GithubReadError } from './github-pr-diagnostics.js';
 import { DEFAULT_SNAPSHOT_LIMITS, SnapshotLimitsSchema, validateChangeSnapshot, type ChangeSnapshot } from './change-snapshot.js';
 import {
   GithubAcquisitionReceiptSchema, GithubAuthor, GithubPath, GithubIssueCommentSchema, GithubPrEvidenceSchema, GithubPullSchema,
@@ -12,10 +12,20 @@ import {
 const Input = z.object({
   repository: GithubRepository, number: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
   maxRequests: z.number().int().min(1).max(50).default(50), limits: SnapshotLimitsSchema.optional(),
+  includeSourceProvenance: z.boolean().default(false),
+  expectedMerge: z.object({ mergedAt: z.string().datetime(), mergeCommit: GithubSha }).strict().optional(),
 }).strict();
 export type CaptureGithubPrInput = z.input<typeof Input>;
 /** Shared in-process allowance for an explicitly invoked serial batch; never serialized as trust. */
 export type GithubCaptureBudget = { requestsRemaining: number; deadline: number };
+export type GithubSourceObservation = { endpoint: string; observedAt: string; dataDigest: string; data: Record<string, unknown> };
+type GithubSourceIdentity = { commit: string; tree: string; observation: GithubSourceObservation };
+export type GithubSourceProvenance = {
+  sourceIdentities: { baseTip: GithubSourceIdentity & { role: 'current-tip-metadata-only-not-source' }; mergeBase: GithubSourceIdentity; head: GithubSourceIdentity };
+  license: { sourceRef: string; path: string; text: string; blobSha1: string; sha256: string;
+    observation: GithubSourceObservation; treeObservation: GithubSourceObservation };
+  sourceTrees: GithubSourceObservation[];
+};
 export class GithubCaptureLimitError extends Error {
   constructor(public readonly reason: 'request-budget' | 'deadline', message: string) { super(message); this.name = 'GithubCaptureLimitError'; }
 }
@@ -71,7 +81,7 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
   const startedAt = new Date().toISOString(), deadline = Math.min(Date.now() + 120_000, testing.budget?.deadline ?? Infinity);
   const observations: z.infer<typeof GithubAcquisitionReceiptSchema>['observations'] = [];
   let requests = 0, decodedResponseBytes = 0;
-  const read = async <T>(endpoint: string, action: (request: { signal: AbortSignal; redirect: 'error' }) => Promise<Response<T>>): Promise<Response<T>> => {
+  const read = async <T>(endpoint: string, action: (request: { signal: AbortSignal; redirect: 'error' }) => Promise<Response<T>>) => {
     if (++requests > options.maxRequests) throw new GithubCaptureLimitError('request-budget', `GitHub request limit ${options.maxRequests} exceeded; no evidence produced`);
     if (testing.budget && testing.budget.requestsRemaining <= 0) throw new GithubCaptureLimitError('request-budget', 'GitHub batch request limit reached; no evidence produced');
     const remaining = deadline - Date.now();
@@ -83,7 +93,8 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
     catch (error) {
       if (Date.now() >= deadline) throw new GithubCaptureLimitError('deadline', 'GitHub acquisition exceeded its bounded deadline');
       // Do not reproduce server bodies or arbitrary credential-bearing request objects in errors.
-      throw new GithubReadError(endpoint, githubHttpFailureDiagnostic(error));
+      const diagnostic = githubHttpFailureDiagnostic(error);
+      throw new GithubReadError(endpoint, diagnostic, classifyGithubReadFailure(error, diagnostic));
     }
     if (Date.now() > deadline) throw new GithubCaptureLimitError('deadline', 'GitHub acquisition exceeded its bounded deadline');
     if (result.status !== 200) throw new Error('Unexpected GitHub read status; no evidence produced');
@@ -91,13 +102,16 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
     decodedResponseBytes += bytes;
     if (bytes > 2_000_000 || decodedResponseBytes > 12_000_000) throw new Error('GitHub decoded-response byte budget exceeded; no evidence produced');
     const requestId = result.headers['x-github-request-id'], serverDate = result.headers.date;
-    observations.push({ endpoint, observedAt: new Date().toISOString(), dataDigest: digestOf(result.data),
+    const observation = { endpoint, observedAt: new Date().toISOString(), dataDigest: digestOf(result.data) };
+    observations.push({ ...observation,
       ...(requestId === undefined ? {} : { requestId: String(requestId) }), ...(serverDate === undefined ? {} : { serverDate: String(serverDate) }) });
-    return result;
+    return { ...result, observation };
   };
   const prEndpoint = `GET /repos/${owner}/${repo}/pulls/${options.number}`;
   const getPull = async () => pull((await read(prEndpoint, request => client.rest.pulls.get({ owner, repo, pull_number: options.number, request }))).data, options.repository, options.number);
   const initial = await getPull();
+  if (options.expectedMerge && (!initial.merged || initial.mergedAt !== options.expectedMerge.mergedAt ||
+    initial.mergeCommit !== options.expectedMerge.mergeCommit)) throw new Error('Frozen PR merge identity changed; no source read');
   if (initial.reportedIssueComments > 300 || initial.reportedReviewComments > 300) throw new Error('Discussion count exceeds bounded capture; no evidence produced');
   const comparison = (await read(`GET /repos/${owner}/${repo}/compare/${initial.baseTip}...${initial.head}?page=1&per_page=1`,
     request => client.rest.repos.compareCommits({ owner, repo, base: initial.baseTip, head: initial.head, page: 1, per_page: 1, request }))).data;
@@ -110,15 +124,20 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
   const paths = new Set<string>();
   for (const file of files) { if (paths.has(file.filename)) throw new Error('Duplicate compare inventory path'); paths.add(file.filename); }
   const rootTrees = new Map<string, string>();
-  for (const commit of [...new Set([mergeBase, initial.head])]) {
-    const value = (await read(`GET /repos/${owner}/${repo}/git/commits/${commit}`, request => client.rest.git.getCommit({ owner, repo, commit_sha: commit, request }))).data;
+  const commitObservations = new Map<string, GithubSourceObservation>();
+  for (const commit of [...new Set([mergeBase, initial.head, ...(options.includeSourceProvenance ? [initial.baseTip] : [])])]) {
+    const response = await read(`GET /repos/${owner}/${repo}/git/commits/${commit}`, request => client.rest.git.getCommit({ owner, repo, commit_sha: commit, request }));
+    const value = response.data;
     if (value.sha !== commit) throw new Error('Git commit identity differs from requested SHA');
     rootTrees.set(commit, GithubSha.parse(value.tree.sha));
+    if (options.includeSourceProvenance) commitObservations.set(commit, { ...response.observation, data: value });
   }
   const trees = new Map<string, Entry[]>();
+  const treeObservations = new Map<string, GithubSourceObservation>();
   const getTree = async (sha: string) => {
     const known = trees.get(sha); if (known) return known;
-    const value = (await read(`GET /repos/${owner}/${repo}/git/trees/${sha}`, request => client.rest.git.getTree({ owner, repo, tree_sha: sha, request }))).data;
+    const response = await read(`GET /repos/${owner}/${repo}/git/trees/${sha}`, request => client.rest.git.getTree({ owner, repo, tree_sha: sha, request }));
+    const value = response.data;
     if (value.sha !== sha || value.truncated !== false) throw new Error('Missing, mismatched or truncated Git tree');
     const entries = z.array(TreeEntry).max(10_000).parse(value.tree), names = new Set<string>();
     for (const entry of entries) {
@@ -126,7 +145,9 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
       names.add(entry.path);
       if ((entry.type === 'tree') !== (entry.mode === '040000') || (entry.type === 'commit') !== (entry.mode === '160000') || (entry.type === 'blob' && entry.size === undefined)) throw new Error('Git tree type/mode/size mismatch');
     }
-    trees.set(sha, entries); return entries;
+    trees.set(sha, entries);
+    if (options.includeSourceProvenance) treeObservations.set(sha, { ...response.observation, data: value });
+    return entries;
   };
   const sizes = new Map<string, number>();
   const sideAt = async (commit: string, path: string): Promise<Side> => {
@@ -208,6 +229,35 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
     prMetadata: { verification: 'caller-supplied-unverified', provider: 'github', repository: initial.repository, number: initial.number, url: initial.url },
     changes: inventory, coverage: { changedPaths: inventory.length, capturedSides: sides.filter(side => side.state === 'captured').length,
       excludedSides: sides.filter(side => side.state === 'excluded').length, capturedBytes, scope: 'changed-entries-only' } });
+  let sourceProvenance: GithubSourceProvenance | undefined;
+  if (options.includeSourceProvenance) {
+    const headTree = rootTrees.get(initial.head)!;
+    const candidates = (await getTree(headTree)).filter(entry => /^(?:LICENSE|LICENCE|COPYING)(?:[._-][A-Za-z0-9._-]+)?$/i.test(entry.path));
+    if (candidates.length !== 1) throw new Error('Exactly one root license file is required for source provenance');
+    const licenseEntry = candidates[0];
+    if (licenseEntry.type !== 'blob' || !['100644', '100755'].includes(licenseEntry.mode) ||
+      licenseEntry.size === undefined || licenseEntry.size < 1 || licenseEntry.size > 262_144) throw new Error('Unsupported root license entry');
+    if (readBytes + licenseEntry.size > 8_388_608) throw new Error('GitHub license-read byte budget exceeded');
+    const response = await read(`GET /repos/${owner}/${repo}/contents/${encodeURIComponent(licenseEntry.path)}?ref=${initial.head}`,
+      request => client.rest.repos.getContent({ owner, repo, path: licenseEntry.path, ref: initial.head, request }));
+    const content = z.object({ type: z.literal('file'), path: Path, sha: GithubSha, size: Size,
+      encoding: z.literal('base64'), content: z.string() }).parse(response.data);
+    const encoded = content.content.replace(/\n/g, ''), bytes = Buffer.from(encoded, 'base64');
+    if (content.path !== licenseEntry.path || content.sha !== licenseEntry.sha || content.size !== licenseEntry.size ||
+      bytes.length !== licenseEntry.size || bytes.toString('base64') !== encoded || hashBlob(bytes) !== licenseEntry.sha)
+      throw new Error('License byte/tree identity verification failed');
+    let text: string;
+    try { text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); }
+    catch { throw new Error('License is not strict UTF-8 text'); }
+    if (bytes.includes(0) || !text.trim() || !Buffer.from(text).equals(bytes)) throw new Error('License is not nonempty text');
+    readBytes += bytes.length;
+    const identity = (commit: string): GithubSourceIdentity => ({ commit, tree: rootTrees.get(commit)!, observation: commitObservations.get(commit)! });
+    sourceProvenance = { sourceIdentities: { baseTip: { ...identity(initial.baseTip), role: 'current-tip-metadata-only-not-source' },
+      mergeBase: identity(mergeBase), head: identity(initial.head) },
+    license: { sourceRef: initial.head, path: licenseEntry.path, text, blobSha1: licenseEntry.sha, sha256: sha256(bytes),
+      observation: { ...response.observation, data: response.data as Record<string, unknown> }, treeObservation: treeObservations.get(headTree)! },
+    sourceTrees: [...treeObservations.values()] };
+  }
   const pages = async <T extends { id: number }>(endpoint: string, get: (page: number, request: { signal: AbortSignal; redirect: 'error' }) => Promise<Response<unknown>>, parse: (data: any) => T): Promise<T[]> => {
     const rows: T[] = [], ids = new Set<number>();
     for (let page = 1; page <= 3; page++) {
@@ -232,6 +282,6 @@ export async function captureGithubPrEvidence(input: CaptureGithubPrInput, testi
       ancestry: 'provider-declared', inventory: 'provider-declared-compare', repositoryContext: 'changed-paths-only',
       discussionConsistency: 'non-atomic-current-observation', discussionCoverage: 'all-pages-returned-within-limits', compareFileCount: files.length,
       sourceStatements: 'untrusted-not-ground-truth-or-feedback' }, discussions: { issueComments, reviews, reviewComments } }));
-  return { ...stored, receipt: GithubAcquisitionReceiptSchema.parse({ kind: 'github-api-observation', startedAt, completedAt: new Date().toISOString(),
+  return { ...stored, ...(sourceProvenance ? { sourceProvenance } : {}), receipt: GithubAcquisitionReceiptSchema.parse({ kind: 'github-api-observation', startedAt, completedAt: new Date().toISOString(),
     authentication: 'none', transport: '@octokit/rest@22.0.1', verification: 'live-api-observation-not-verified-history', requestLimit: options.maxRequests, requests, decodedResponseBytes, observations }) };
 }
