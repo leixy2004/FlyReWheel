@@ -62,7 +62,7 @@ export function checkPlan(input) {
     networkMode: plan.networkMode, executionTransport: plan.executionTransport,
     needsNetAdmin: false, networkPolicyEnabled: false,
     hardeningScope: 'workload-only',
-    extractionHelper: 'upstream starts a tail process with Docker default network/capabilities and no configured resource limits',
+    extractionHelper: 'upstream starts the image entrypoint with tail arguments, default root/network/capabilities and no configured resource limits',
     pendingActions: ['create task-only API key', 'create task-only TLS certificate/key with scoped client trust',
       'start loopback-only server and sandbox port bindings',
       'confirm one upstream execd extraction helper with Docker defaults and an external cleanup deadline'],

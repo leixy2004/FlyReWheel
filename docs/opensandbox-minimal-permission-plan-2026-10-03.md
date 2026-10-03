@@ -27,7 +27,10 @@ claim deny-default egress or production network isolation.
 [endpoint extraction](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/services/docker/networking.py#L707).
 
 **Important upstream helper exception:** execd extraction starts a separate
-`tail -f /dev/null` container from the official execd image. Its create call does
+container with command arguments `tail -f /dev/null` from the official execd image.
+The inspected image retains ENTRYPOINT `./execd`, so this is **not a verified
+tail-only process**: Docker combines the entrypoint with those arguments. The
+image has no User setting, so the helper defaults to root; behavior is untested. Its create call does
 not set network, capability drops, no-new-privileges or CPU/memory/PID limits;
 Docker defaults apply. Workload settings above do not cover this helper. It is
 not explicitly privileged, host-networked, socket-mounted or port-published.
@@ -45,7 +48,7 @@ review an upstream-compatible hardening change; do not silently broaden scope.
 | Create a temporary control-plane API key | 32 random bytes; task directory mode 0700, configuration file 0600. Only this server/client; never injected into the sandbox, command arguments, Git or logs. No external account or authorization is created. Static key has no intrinsic expiry: stop server after at most 15 minutes and delete configuration/key. Keep official authentication enabled. |
 | Create temporary TLS key/certificate and scoped client trust | Certificate SAN 127.0.0.1, validity one day, actual use at most 15 minutes. Standard Uvicorn `--ssl-keyfile`/`--ssl-certfile` serving the official ASGI app at 127.0.0.1; SDK uses a task-scoped CA/dispatcher with verification enabled. No system CA installation, TLS bypass or product adapter relaxation. Delete private key/certificate and stop listener afterward. |
 | Start local authenticated control plane and one SDK sandbox | Pin reviewed upstream source and dependency resolution; temporary Python environment/cache only. Configure via `SANDBOX_CONFIG_PATH`. Existing daemon access stays in host process. Workload uses explicit loopback-published bridge ports. Control-plane-to-execd remains local HTTP: this is not end-to-end TLS. Stop all task processes and verify owned listeners closed within 15 minutes. |
-| Run the official execd extraction helper under its defaults | One official image/helper, recorded image/container IDs, external 60-second cleanup deadline; scope exception described above. No NET_ADMIN sidecar, isolation extension or user-supplied command in helper. Remove exact helper ID on success/failure; no prefix-wide cleanup. |
+| Run the official execd extraction helper under its defaults | One official image/helper, recorded image/container IDs, external 60-second cleanup deadline; scope exception described above. No NET_ADMIN sidecar or isolation extension. Upstream command arguments do not override the image ENTRYPOINT; its behavior is untested. Remove exact helper ID on success/failure; no prefix-wide cleanup. |
 
 The [official startup guard](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/startup_guard.py#L55)
 requires a configured key or an explicit insecure acknowledgment. The proposal
@@ -91,3 +94,7 @@ paths: refused connection, plaintext peer rejected by TLS, and stalled TLS hands
 bounded by deadline. All temporary test sockets are closed. No certificate/key was
 created to run these tests. TypeScript checking also passed. These are operational
 error-path tests, not a successful OpenSandbox server health receipt.
+
+The [metadata-only capacity follow-up](evidence/execd-capacity-2026-10-03.md) pins
+the actual amd64 digest, corrects the helper entrypoint assumption, and describes
+a bounded next measurement. Metadata alone does not admit a pull.

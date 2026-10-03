@@ -19,7 +19,7 @@ describe('local OpenSandbox proposal validation', () => {
     const result = checkPlan(proposedPlan);
     expect(result.needsNetAdmin).toBe(false);
     expect(result.hardeningScope).toBe('workload-only');
-    expect(result.extractionHelper).toContain('Docker default');
+    expect(result.extractionHelper).toContain('default root/network/capabilities');
     expect(result.classification).toBe('static-plan-only-not-runtime-evidence');
     expect(result.blockers).toContain('expanded-image/container/dependency peak budget has not been measured');
     expect(result.pendingActions).toHaveLength(4);
