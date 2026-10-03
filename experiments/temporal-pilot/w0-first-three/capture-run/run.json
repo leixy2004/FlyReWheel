@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_first_three_capture_run",
+  "repository": "encode/httpx",
+  "planSha256": "9b024e81a3886794d4b50fb44767cd53a10a794ffbaf881e4305c6cfd648898a",
+  "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+  "startedAt": "2026-10-03T22:00:21.981Z",
+  "completedAt": "2026-10-03T22:00:27.055Z",
+  "status": "stopped",
+  "items": [
+    {
+      "number": 3035,
+      "status": "failed",
+      "requests": 1,
+      "failure": "GITHUB_READ_FAILED"
+    },
+    {
+      "number": 3031,
+      "status": "unattempted"
+    },
+    {
+      "number": 3036,
+      "status": "unattempted"
+    }
+  ],
+  "requests": 1,
+  "maxGetRequests": 50,
+  "maxTotalTimeMs": 300000,
+  "acceptedEvidenceBytes": 0,
+  "license": "unknown",
+  "licenseAcquisition": "pending_not_implemented_by_this_adapter",
+  "redistribution": "blocked_pending_license",
+  "packageUse": "quarantine_only_not_rule_input",
+  "historicalW0Feedback": false,
+  "historicalDiscussionCutoff": "unknown",
+  "discussionUse": "quarantine_only_not_rule_input",
+  "mining": "not_run",
+  "treeIdentities": "not_retained",
+  "sourceScope": "changed_paths_only_not_complete_repository",
+  "modelCalls": 0,
+  "authentication": "none",
+  "retries": 0,
+  "planPushCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
+  "pushVerification": "local_remote_tracking_last_push_or_fetch_not_live_server",
+  "quarantine": "/tmp/flyrewheel-w0-quarantine-zJ4tNz"
+}

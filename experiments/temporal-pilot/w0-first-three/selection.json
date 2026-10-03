@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_source_acquisition_plan",
+  "repository": "encode/httpx",
+  "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+  "frameCheckpoint": "973a9b7cccef1615b7e11ee1b9318965f9131a7f",
+  "selectionRule": "First three W0 members sorted by mergedAt ascending then number ascending; no content or outcome filtering.",
+  "selected": [
+    {
+      "number": 3035,
+      "mergedAt": "2024-01-03T05:11:45Z",
+      "window": "W0",
+      "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "parents": [
+        "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+      ],
+      "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+    },
+    {
+      "number": 3031,
+      "mergedAt": "2024-01-03T05:14:26Z",
+      "window": "W0",
+      "mergeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "parents": [
+        "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+      ],
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+    },
+    {
+      "number": 3036,
+      "mergedAt": "2024-01-03T05:36:16Z",
+      "window": "W0",
+      "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+      "parents": [
+        "ea3071642d12ed546d901861a5901da6fad37073"
+      ],
+      "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712"
+    }
+  ],
+  "budget": {
+    "maxGetRequests": 50,
+    "maxTotalTimeMs": 300000,
+    "maxEvidenceBytes": 12000000,
+    "retries": 0
+  },
+  "stopRules": [
+    "Stop the entire run immediately on HTTP 401, 403, 429 or a rate-limit diagnostic.",
+    "Do not switch authentication, transport, endpoint families or credentials after a denial.",
+    "Stop on any capture failure; retain selected but unattempted rows and unknown fields.",
+    "No new discovery or W1/W2 source, diff, discussion, labels or model-output reads."
+  ],
+  "transport": "Existing captureGithubPrEvidence default unauthenticated official Octokit GET-only transport; no credential copying or transport substitution.",
+  "sourceScope": "Selected W0 PR changed paths at provider-declared merge-base/head plus PR discussion; no target code execution.",
+  "license": "If capture succeeds, retrieve license only at a selected pinned W0 head with remaining budget; preserve provenance and mark redistribution pending until license established.",
+  "limitations": [
+    "Current API observation, not historical review checkpoint.",
+    "PR baseTip can reflect current branch state; mergeBase/head define changed source.",
+    "No independent human labels, rule mining, models, or efficacy measurements.",
+    "Unsuccessful acquisition is retained, not replaced by another PR."
+  ]
+}
