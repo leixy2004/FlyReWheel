@@ -100,3 +100,57 @@ sh -n deploy/workspace-worker/workspace-worker
 These check input validation, lockfile pins, config defaults and static recipe/wrapper contracts. They are **not container execution tests**. Also run the repository's typecheck, build, worker/adapter tests and full regression suite against the final source.
 
 Before production, actually build and inspect the image, verify SDK/CLI assets and ownership as UID 10001, confirm the blocked profile refuses model execution, and exercise exact-SHA/branch/history/cleanliness and hostile-repository failures with the real image. Then independently test the gateway and all lifecycle/storage/network controls above in the chosen self-hosted deployment, including interrupted/late allocations and cleanup failures. None of those live image/deployment checks has been performed by adding this recipe. The adapter must remain fail-closed until they are satisfied.
+
+## Bounded VFS build and local container smoke
+
+`Dockerfile.bounded` is an alternative for the constrained VFS builder. It keeps
+one stage and one install/compile/prune layer. A named `npmcache` bind context
+supplies only public `_cacache` data; it is not copied into the image. Both npm
+operations remain offline with lifecycle scripts disabled. The existing staging
+validator preserves native helpers/resources, then the redundant platform-package
+vendor directory is removed. This image supports the fixed worker's explicit
+`codexPathOverride`; the generic npm Codex launcher is not a supported entrypoint.
+The original multi-stage recipe remains available.
+
+Prepare a **new task-owned** npm cache from the committed package/lock files,
+using the host's existing authorized HTTPS route and a clean npm configuration.
+Do not copy credentials, npmrc, proxy settings, CA files or host node_modules into
+any build context. Remove the temporary host install after cache preparation.
+The named cache directory must contain only `_cacache`, with no links or special
+files. Cache integrity is checked by npm against the committed lockfile during
+the offline install. Its provenance still depends on the operator's preparation.
+
+Commit the source, then run from a clean named branch:
+
+```sh
+node scripts/verify-worker-container.mjs \
+  --base "$WORKSPACE_WORKER_BASE_IMAGE" \
+  --cache "$PUBLIC_NPM_CACHE_DIRECTORY" \
+  --cache-bytes "$PUBLIC_NPM_CACHE_BYTES"
+```
+
+The base argument must be an explicit `node@sha256:…` reference. The script
+performs a bounded pull, checks platform/inherited environment/hooks/volumes,
+then requires free build space for `8 × expanded base + 2 × cache + 4 GiB`, plus
+a 5 GiB reserve. This is a conservative estimate, not measured peak usage. During
+commands it samples free space every 500 ms and cancels at 6 GiB (one extra GiB
+reaction margin); sampling and client cancellation are not a hard filesystem quota.
+Do not run competing builds. Failed/cancelled daemon work requires inspection
+before retrying. Cache transfer, VFS snapshots and export overhead all consume disk.
+
+The script creates unique task names and local Docker/Buildx config, runs with no
+inherited credentials, and never globally prunes. It removes its container and
+temporary bundle/config directory on completion/failure; the labeled output image,
+public cache and Docker build cache remain for inspection. Reclaim only artifacts
+whose exact IDs and ownership have been independently checked.
+
+The container smoke uses UID 10001, network none, a read-only root, dropped
+capabilities, no-new-privileges, bounded tmpfs/CPU/memory/PIDs, no host bind mounts
+and no published ports. It checks immutable assets, native CLI startup, compiled
+entrypoint exit 78 with the blocked profile, exact Git SHA, wrong SHA, dirty
+checkout, actual stop and removal. This is **local ordinary-runc no-model evidence**,
+not OpenSandbox admission/lifecycle authority, protected request ingress, gateway
+authentication, production isolation or a model review loop. The blocked profile
+returns before request inspection, so that check does not validate protected
+request-file ownership. Existing effective-settings evidence is maintained in
+[the separate configuration report](../../docs/codex-effective-config-readiness.md).
