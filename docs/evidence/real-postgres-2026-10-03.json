@@ -149,5 +149,8 @@
   },
   "negativeChecks": {
     "verifyRestartWithoutActualRestart": "rejected with exit 1"
+  },
+  "interpretationCorrections": {
+    "prepareAndRestart.staleApplicationOwnerRejected": "Historical field name overstates this assertion: it rejects a non-winning application owner, not a former winning owner. True former-owner fencing is separately established by postgres-concurrency-2026-10-03.json. Raw evidence and original script hashes are preserved."
   }
 }

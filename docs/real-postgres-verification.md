@@ -25,7 +25,7 @@ aggregate tests are not covered by an older recorded pass.
 | Layer | Observed result | Boundary |
 | --- | --- | --- |
 | Real PostgreSQL migrations | 15 migrations, four concurrent pool initializers, zero on repeat | Dedicated fresh database |
-| Claims and fencing | One winner among four application claimants and four study claimants; recovered study fence 2; stale owners rejected | Authored application/study identifiers |
+| Claims and fencing | One winner among four application claimants and four study claimants; recovered study fence 2; non-winning application owners and stale study owners rejected | Authored application/study identifiers |
 | Real pg-boss replay | One callback, six observations, zero errors; duplicate rejected | Offline synthetic replay, no inference |
 | Worker process crash | Actual child SIGKILL; same job completed with retry count 1 | Controlled claim/lease recovery scenario |
 | Compiled worker service | `/healthz` and `/readyz` 200; replay six observations/zero errors; SIGTERM exit 0 | `startWorkerService` in a child process; runtime blocked |
@@ -65,6 +65,44 @@ For the recorded run the coordinator used `docker kill --signal KILL` and
 populated database. `verify-restart` reads and extends the evidence produced by
 that exact prepare run. `upgrade` requires its separate empty database. Internal
 `claim-child` and `service-child` modes are launched by the script itself.
+
+## Independent multiprocess extensions
+
+[Concurrency evidence](evidence/postgres-concurrency-2026-10-03.json) records four
+independent Node processes. Concurrent enqueue accepted one job and rejected three
+duplicates. Each of two claim rounds had one winner and three busy results. After
+an explicit cleanup-safe failure made the job retryable, the former winning owner
+was fenced and the new owner completed attempt two. This tests real former-owner
+fencing; the older `staleApplicationOwnerRejected` field in the prepare evidence
+only tested a non-winning owner. Its original raw record and script are retained
+with this interpretation correction. This extension does not claim crash or lease
+expiry recovery, queue-handler execution, or model execution.
+
+[Migration fault evidence](evidence/postgres-migration-faults-2026-10-03.json)
+records SIGKILL of an actual migration process while a real transaction held the
+production advisory lock. Two independent migration processes waited for that
+lock. The victim paused in JavaScript after executing the appended synthetic
+migration SQL, before commit: this is not mid-query cancellation. Probe, ledger
+and checksum tables rolled back; the waiters then applied 16 and zero migrations
+respectively (15 production migrations plus one synthetic probe). The final ledger
+had 16 unique entries, the probe one row, and no remaining experiment locks.
+Source and compiled migration SQL hashes matched. The assembly hash identifies
+the unchanged harness; the recorded historical HEAD excludes the then-untracked
+script and is not a frozen-tree acceptance claim.
+
+Both scripts refuse populated databases. The concurrency script requires its
+fixed database to be absent and creates it; the migration script creates its own
+fixed database if absent and requires it to be empty with no other sessions.
+They retain the resulting databases for inspection and never delete them.
+
+```sh
+timeout 120s node scripts/verify-postgres-concurrency.mjs verify "$PG_VERIFY_SOCKET" /absolute/path/to/concurrency.json
+timeout 120s node scripts/verify-postgres-migration-faults.mjs "$PG_VERIFY_SOCKET" /absolute/path/to/migration-faults.json
+```
+
+Independent reviews found no P0/P1 blocker. Concurrent-child shutdown acknowledges
+closed database resources before final process cleanup; it is not evidence of
+graceful process exit. These bounded scenarios do not prove every interleaving.
 
 ## Remaining gates
 
