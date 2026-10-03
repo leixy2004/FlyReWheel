@@ -11,6 +11,7 @@ import { openSelectedStore, resolveDatabaseSelection } from './storage/connectio
 import { databaseCommand, storeFor, withSelectedQueue } from './cli-database.js';
 import { registerDatabaseMigrationCommands } from './cli-database-migrations.js';
 import { registerRevisionInspectionCommands } from './cli-revision-inspection.js';
+import { registerApplicationOperationCommands } from './cli-application-operations.js';
 import { RevisionComparisonPageSchema } from './storage/store.js';
 import { ReplayDatasetSchema, replayDataset } from './pipeline.js';
 import { runDemo } from './demo.js';
@@ -501,6 +502,7 @@ databaseCommand(cli, 'enqueue', { postgresOnly: true }).requiredOption('--bundle
   await output({ jobId });
 });
 const applications = cli.command('application-jobs').description('Bounded workspace application queue; runtime dependencies are trusted service configuration');
+registerApplicationOperationCommands(applications, output);
 applications.command('validate').requiredOption('--file <file>').option('--out <file>').action(async options => {
   const job = ApplicationJobSchema.parse(await json(options.file));
   await output({ job, ...applicationJobGovernance(job), jobDigest: applicationJobDigest(job), jobId: applicationJobId(job), execution: 'not_run' }, options.out);
