@@ -52,4 +52,3 @@ export function w0SourceFixture(number = 3035): any {
   result.evidence.receipt.requests = observations.length;
   return { ...result, sourceTrees: [result.license.treeObservation], acquisition: { maxGetRequests: 50, requests: observations.length, observations } };
 }
-
