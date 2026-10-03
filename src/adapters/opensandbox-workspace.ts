@@ -91,6 +91,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
   private readonly allocation: OpenSandboxAllocation = { allocationId: randomUUID() };
   private readonly abort = new AbortController();
   private sandbox?: OpenSandboxClient;
+  private clientClosed = false;
   private stopped = false;
   private destroyed = false;
   private fenced = false;
@@ -116,7 +117,14 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
   private async withSignal<T>(signal: AbortSignal, action: () => Promise<T>): Promise<T> {
     const abort = () => this.abort.abort();
     signal.addEventListener('abort', abort, { once: true }); if (signal.aborted) abort();
-    try { this.assertActive(); return await action(); }
+    try {
+      this.assertActive();
+      const result = await action();
+      // An SDK promise may fulfill after abort/fencing even when it emitted no
+      // further events. Keep the listener until result acceptance is checked.
+      this.assertActive();
+      return result;
+    }
     finally { signal.removeEventListener('abort', abort); }
   }
   private async prepareOwned(): Promise<RuntimeObservation> {
@@ -141,6 +149,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
         readyTimeoutSeconds: Math.min(30, this.request.limits.timeoutMs / 1000), signal: this.abort.signal,
       });
       this.allocation.sandboxId = this.sandbox.id;
+      if (this.fenced) this.closeClient();
       this.assertActive();
       await this.transfer(this.workspace, {
         exec: async (command, cwd) => this.command(command, cwd),
@@ -151,6 +160,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       // full history, ignored/untracked/index state without reading repository config.
       const checked = await this.command([this.config.workerExecutable, 'verify', this.request.expectedSha,
         this.workspace.branch, this.request.historyPolicy, ...(this.request.evaluation ? [JSON.stringify(this.request.evaluation)] : [])], ROOT);
+      this.assertActive();
       if (checked.exitCode !== 0) throw new Error('OpenSandbox checkout verification failed');
       const observation = Observation.parse(JSON.parse(checked.stdout));
       if (observation.expectedSha !== this.request.expectedSha || observation.headSha !== this.request.expectedSha
@@ -171,6 +181,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       await this.sandbox!.files.writeFiles([{ path: INPUT, data: input, mode: 600 }]);
       this.assertActive();
       const output = await this.command([this.config.workerExecutable, 'run', INPUT], ROOT);
+      this.assertActive();
       if (output.exitCode !== 0) throw new Error('OpenSandbox worker failed');
       return JSON.parse(output.stdout) as unknown;
     }).catch(() => { throw new Error('OpenSandbox worker failed or exceeded its bounds'); });
@@ -193,19 +204,23 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       } else if (event.type === 'error') { error = true; }
       else if (!['init', 'execution_count', 'result'].includes(event.type)) throw new Error('Unexpected OpenSandbox command event');
     }
+    // EOF itself can arrive late without yielding an event for the loop's guard.
+    this.assertActive();
     if (!complete && !error) throw new Error('Missing OpenSandbox completion');
     return { stdout, stderr, exitCode: error ? 1 : 0 };
   }
 
   stop() {
-    this.stopOperation ??= this.stopOwned();
+    // Cache before abort listeners or authority callbacks can reenter stop().
+    this.stopOperation ??= Promise.resolve().then(() => this.stopOwned());
+    this.fenced = true; this.abort.abort();
     return this.stopOperation;
   }
   private async stopOwned(): Promise<SandboxStopReceipt> {
-    this.fenced = true; this.abort.abort();
     // A late create/transfer cannot issue a worker command after this fence.
-    // Waiting alone is not proof of remote stop: authority separately reconciles.
-    await Promise.allSettled([this.setup, this.execution]);
+    // Do not await SDK work: an unresponsive create/command must not prevent
+    // authority from fencing admission and reconciling this allocation token.
+    // A verified receipt must cover late/unknown creates, not only a known ID.
     if (!this.allocated) { this.stopped = true; return { stopped: true, verified: true }; }
     if (!this.authority) return { stopped: false, verified: false };
     const receipt = await this.authority.stopAndVerify(Object.freeze({ ...this.allocation }));
@@ -234,15 +249,24 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
   }
   destroy() {
     if (!this.stopped || !this.collected) return Promise.reject(new Error('Destruction requires authoritative stop and successful collection'));
-    this.destroyOperation ??= this.destroyOwned();
+    this.destroyOperation ??= Promise.resolve().then(() => this.destroyOwned());
     return this.destroyOperation;
   }
   private async destroyOwned(): Promise<SandboxDestroyReceipt> {
     if (!this.allocated) { this.destroyed = true; return { destroyed: true, verified: true }; }
-    try { await this.sandbox?.kill(); } catch { /* An acknowledgement/error is not destruction evidence. */ }
+    // The authority owns deletion and its independent verification, including
+    // unknown/late allocations. An SDK delete acknowledgement is not evidence
+    // and awaiting a stuck SDK request here would block authoritative recovery.
     const receipt = await this.authority!.destroyAndVerify(Object.freeze({ ...this.allocation }));
     this.destroyed = receipt.destroyed === true && receipt.verified === true;
-    if (this.destroyed) await this.sandbox?.close();
+    if (this.destroyed) this.closeClient();
     return { destroyed: this.destroyed, verified: this.destroyed };
+  }
+  private closeClient() {
+    // Transport disposal is best effort, never proof of resource destruction.
+    // It must not delay a verified authority receipt or throw an unhandled error.
+    if (!this.sandbox || this.clientClosed) return;
+    this.clientClosed = true;
+    try { void this.sandbox.close().catch(() => undefined); } catch { /* local transport disposal only */ }
   }
 }
