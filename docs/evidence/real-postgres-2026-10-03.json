@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-03",
+  "baseline": {
+    "commit": "237056acaaa3c21684fd63772eaca119e2af5f3a",
+    "tree": "3e21d1d39b5da1a63b608508edac2dfee772712a",
+    "scope": "baseline application code plus local verification script; not a frozen final working-tree aggregate"
+  },
+  "reproduction": {
+    "script": "scripts/verify-postgres.mjs",
+    "scriptSha256": "c1f054324821db67e6815a2aa6593ca5eb1ebbe2924ed4de919519b4781cc80b",
+    "hashScope": "script snapshot at evidence assembly; recheck at final source freeze",
+    "studyScript": "scripts/verify-postgres-study.ts",
+    "studyScriptSha256": "3d8c296c11e95f5018d47d9ea3be9f8ce6ce6d16c1770a75bec8aec9a6f6c5d0"
+  },
+  "environment": {
+    "image": "postgres:17",
+    "imageDigest": "sha256:d74eeac9a635390a49bc21bd49fccd973de707e2a53a76ac49b552b8712ec46f",
+    "networkMode": "none",
+    "publishedPorts": {},
+    "socket": "/tmp/flyrewheel-real-pg-7cah9p/socket",
+    "databaseRestartAction": "docker kill --signal KILL, then docker start; reported by executing coordinator",
+    "credentialsCopied": false,
+    "databaseStorage": "same container writable layer /tmp/flyrewheel-pgdata; not a Docker volume or backup/restore"
+  },
+  "rawEvidenceSha256": {
+    "prepareAndRestart": "fdc882a3b27917c5d667860d1519d06d4c385b5bb9ff33d514b5eaebbac230ac",
+    "upgrade": "53056014b9c7372ed3a931ede19152314daf061023b90cea6fd94db4ba347e18",
+    "studyRecovery": "6a60f5bc24334bdd48b06d2b94275487c37842a34396991bb97fee9843bc896e"
+  },
+  "prepareAndRestart": {
+    "server": "PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "serverStartedAt": "2026-10-03T21:10:10.585Z",
+    "backend": "real PostgreSQL server",
+    "modelExecution": "not_run",
+    "deployment": "temporary Docker database only",
+    "migrations": {
+      "count": 15,
+      "concurrentInitializers": 4,
+      "repeatedApplied": 0
+    },
+    "applicationClaimants": 4,
+    "applicationWinners": 1,
+    "staleApplicationOwnerRejected": true,
+    "matchedStudyClaimants": 4,
+    "matchedStudyWinners": 1,
+    "recoveredFence": 2,
+    "staleStudyOwnerRejected": true,
+    "immutableCheckpointVerified": true,
+    "replay": {
+      "id": "f496527c-9c6b-5872-af37-41640e643fed",
+      "callbacks": 1,
+      "errors": 0,
+      "observations": 6
+    },
+    "workerCrash": {
+      "signal": "SIGKILL",
+      "jobId": "ef5ff528-0f08-4e7f-b176-9b0ac093f07e",
+      "retryCount": 1,
+      "completed": true
+    },
+    "workerService": {
+      "healthz": 200,
+      "readyz": 200,
+      "binding": "127.0.0.1",
+      "replayObservations": 6,
+      "replayErrors": 0,
+      "applicationRuntime": "blocked",
+      "applicationModelExecution": "not_run",
+      "gracefulSigtermExit": 0
+    },
+    "restartExpected": {
+      "applicationDigest": "bd5269af64c9ef19c2119e21c71541dd915c8bcf6ecb1bb859f2fd1ecc79451f",
+      "terminal": {
+        "jobDigest": "bd5269af64c9ef19c2119e21c71541dd915c8bcf6ecb1bb859f2fd1ecc79451f",
+        "job": {
+          "schemaVersion": 1,
+          "workspaceId": "real-postgres-verification",
+          "attempt": "initial",
+          "kind": "semantic-review",
+          "ruleDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "snapshotDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "state": "finished",
+        "result": {
+          "status": "blocked",
+          "modelExecution": "not_run",
+          "cleanup": "not_started",
+          "reason": "runtime_unavailable"
+        },
+        "attempts": 1
+      },
+      "studyDigest": "7a1a98567180d792479acc123f09abb385183798b69aa189878f7d18783d7123",
+      "event": {
+        "startedAt": "2026-10-03T21:17:52.287Z"
+      }
+    },
+    "databaseRestart": {
+      "postmasterStartChanged": true,
+      "before": "2026-10-03T21:10:10.585Z",
+      "after": "2026-10-03T21:18:36.771Z",
+      "recordsPreserved": true,
+      "migrationsReapplied": 0,
+      "completedJobsPreserved": 2,
+      "duplicateRejected": true
+    }
+  },
+  "upgrade": {
+    "server": "PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+    "backend": "real PostgreSQL server",
+    "fromMigrations": 14,
+    "toMigrations": 15,
+    "failedBatchRolledBack": true,
+    "failingSqlReachedDriver": true,
+    "failedTableAbsent": true,
+    "historyPreservedAfterFailure": 14,
+    "correctedRetryApplied": [
+      "015_matched_studies"
+    ],
+    "sentinelRecordsPreserved": 1,
+    "repeatedApplied": 0,
+    "modelExecution": "not_run"
+  },
+  "limitations": {
+    "testData": "authored offline fixtures and synthetic claims; real PostgreSQL storage and processes",
+    "modelExecution": "not_run",
+    "applicationRuntime": "blocked",
+    "isolatedWorkspaceRuntime": "not_verified",
+    "s3": "not_verified",
+    "k3sDeployment": "not_verified",
+    "empiricalEffectiveness": "not_evaluated",
+    "finalWorkingTreeTestSuite": "pending"
+  },
+  "studyRecovery": {
+    "backend": "real PostgreSQL server",
+    "sdk": "installed official SDK with authored executable",
+    "modelExecution": "not_run",
+    "driverCrashSignal": "SIGKILL",
+    "completedBlocksBeforeCrash": 1,
+    "authoredCallsBeforeCrash": 12,
+    "expiredByDatabaseClock": true,
+    "completedBlocksAfterRecovery": 2,
+    "authoredCallsAfterRecovery": 24,
+    "retainedBlockByteEquivalent": true,
+    "freshProcessReopenIdentical": true,
+    "additionalCallsOnReopen": 0,
+    "retries": 0,
+    "reportDigest": "7dd45c7378c65443a02d2ef5127be75bcfd0506cafc9084c86dc14a36524fe76"
+  },
+  "negativeChecks": {
+    "verifyRestartWithoutActualRestart": "rejected with exit 1"
+  },
+  "interpretationCorrections": {
+    "prepareAndRestart.staleApplicationOwnerRejected": "Historical field name overstates this assertion: it rejects a non-winning application owner, not a former winning owner. True former-owner fencing is separately established by postgres-concurrency-2026-10-03.json. Raw evidence and original script hashes are preserved.",
+    "studyRecovery.retainedBlockByteEquivalent": "Historical field name means parsed-JSON structural equality, established by assert.deepEqual, not serialized byte equality. Current script output uses retainedBlockStructurallyEqual. The archived field and original hashes are preserved.",
+    "reproductionScriptHashes": "Recorded script hashes identify historical snapshots at evidence assembly, not a match to current reproduction scripts. Later fixes and runs require separate verification evidence."
+  }
+}

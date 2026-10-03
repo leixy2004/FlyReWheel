@@ -2,6 +2,18 @@
 
 Audit date: 2026-10-02. The original audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; subsequent sections cover the diagnosis-operator extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84` and the mixed-anchor working-tree extension on `92b375e62f141127214188a70b9024eec5ae7c27`, each with a separate verification record. This checklist accompanies [the methods draft](method-draft.md). A checked item means the stated narrow implementation claim has supporting source and recorded verification. It does not indicate semantic efficacy. Each run retains its own scope; older test counts do not verify newer behavior. All operator and mixed-anchor verification uses authored fixtures, with no live model experiment.
 
+## Real PostgreSQL infrastructure evidence: 2026-10-03
+
+The [server-backed record](../docs/real-postgres-verification.md) and
+[raw-result archive](../docs/evidence/real-postgres-2026-10-03.json) extend storage
+and recovery evidence at baseline `237056acaaa3c21684fd63772eaca119e2af5f3a`.
+
+- [x] **Actual PostgreSQL migrations and coordination.** PostgreSQL 17.11 applied 15 migrations with four concurrent pools; application and study claims each had one winner among four claimants, and stale owners were rejected.
+- [x] **Bounded recovery and upgrade checks.** An actual pg-boss claimant process was killed and the job completed on retry; database KILL/start preserved asserted records and queue deduplication. A separate 014→015 upgrade rolled back deliberately failing SQL, retained history/data, and applied only 015 on corrected retry.
+- [x] **Compiled worker-service process lifecycle.** Localhost health/readiness returned 200, an offline replay produced six observations and zero errors, and SIGTERM exited zero. The application runtime was blocked and model execution was not run.
+- [ ] **Production isolation or deployment.** A temporary PostgreSQL container is not evidence of an OpenSandbox lifecycle authority, gateway isolation, S3 or k3s deployment, or production database role separation.
+- [ ] **Scientific effectiveness.** These authored infrastructure scenarios do not evaluate diagnosis quality, future-review improvement, or the selected three-window study. Independent labels, frozen study inputs, matched models/evidence/budgets and actual outcomes are still required. Current working-tree aggregate tests are pending.
+
 ## Supported implementation statements
 
 - [x] **Conditional semantic rules are represented independently of a mandatory detector.** The v2 schema stores mechanism, invariant, applicability, exceptions, context, scope, optional assets, provenance, regression roles, and an exact parent digest. Conditions are prose, not executable logic. [Schema](../src/core/semantic-rule.ts); [tests](../tests/semantic-rules.test.ts); [contract](../docs/semantic-rules.md)

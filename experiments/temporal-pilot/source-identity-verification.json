@@ -1,0 +1,807 @@
+{
+  "schemaVersion": 1,
+  "kind": "github_w0_commit_identity_verification",
+  "repository": "encode/httpx",
+  "frame": {
+    "path": "experiments/temporal-pilot/httpx-2024-frame.json",
+    "sha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+    "expectedSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+    "sourceCommit": "973a9b7cccef1615b7e11ee1b9318965f9131a7f"
+  },
+  "scope": {
+    "window": "W0",
+    "expectedCount": 38,
+    "selection": "All W0 members of the byte-pinned frame; no outcome filtering"
+  },
+  "acquisition": {
+    "api": "https://api.github.com/graphql",
+    "startedAt": "2026-10-03T21:39:34.212Z",
+    "script": "scripts/verify-temporal-source-identities.mjs",
+    "scriptSha256": "a10ba8d9002cf95b8fcd64762957b2c523d727cfa35b65a60d411335922ebdcd",
+    "maxRequests": 4,
+    "batchSize": 10,
+    "requestTimeoutMs": 60000,
+    "requests": 4,
+    "batches": [
+      {
+        "request": 1,
+        "numbers": [
+          3035,
+          3031,
+          3036,
+          3034,
+          3032,
+          3038,
+          3042,
+          3045,
+          3054,
+          3049
+        ],
+        "query": "query { repository(owner: \"encode\", name: \"httpx\") {\nc0: object(oid: \"b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc1: object(oid: \"ea3071642d12ed546d901861a5901da6fad37073\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc2: object(oid: \"f1ed7463086f0aed97afa61a1197c51840d3bb2e\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc3: object(oid: \"4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc4: object(oid: \"ebc1393c5cf6430e3027bdb724368a9d6e3429ef\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc5: object(oid: \"c6907c22034e2739c4c1af89908e3c9f90602788\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc6: object(oid: \"ca51b4532a4495c38c8abf1a393dbd80099deae3\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc7: object(oid: \"99cba6ac642b12f0331d069ae324402c54c4c600\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc8: object(oid: \"ab720d325808e1d092787995c2023c9aeb24aff5\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc9: object(oid: \"8cd952c88fc2d0469cee8f08c2a580652b084375\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\n} }",
+        "startedAt": "2026-10-03T21:39:34.214Z",
+        "status": "complete",
+        "completedAt": "2026-10-03T21:39:34.896Z"
+      },
+      {
+        "request": 2,
+        "numbers": [
+          3055,
+          3058,
+          3056,
+          3057,
+          3063,
+          3061,
+          3068,
+          3066,
+          3077,
+          3050
+        ],
+        "query": "query { repository(owner: \"encode\", name: \"httpx\") {\nc0: object(oid: \"419d3a9d80d0c4072f6cb58eeb306148ae89e2e9\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc1: object(oid: \"73e688875a3579b67eee5795839b9660a1cfe5d8\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc2: object(oid: \"d76607b112bf0bfbc79dc4dd8566101c69dbfa6e\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc3: object(oid: \"15f925336c6bad2f5b2711553a6b6763923175de\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc4: object(oid: \"c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc5: object(oid: \"4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc6: object(oid: \"371b6e946c9e70df3dce79590c195448eac3f635\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc7: object(oid: \"37a2901af38f4142ee902c838aaaf92cf8a80f6a\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc8: object(oid: \"6f461522a5c58839c31be3c82b7bd47fba77109b\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc9: object(oid: \"cabd1c095e52e2f67ab63ec17941d3a539d7c877\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\n} }",
+        "startedAt": "2026-10-03T21:39:34.896Z",
+        "status": "complete",
+        "completedAt": "2026-10-03T21:39:35.605Z"
+      },
+      {
+        "request": 3,
+        "numbers": [
+          3080,
+          3081,
+          3097,
+          3095,
+          3107,
+          3106,
+          3109,
+          3064,
+          3062,
+          3112
+        ],
+        "query": "query { repository(owner: \"encode\", name: \"httpx\") {\nc0: object(oid: \"c51af4ba52d4103517a91f770e617cc579803b2d\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc1: object(oid: \"3faa4a8f2e0d406167b913bbfd3afab087662d03\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc2: object(oid: \"cdf1c7ab3a9bd9c0065202d22958999fb8688928\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc3: object(oid: \"326b9431c761e1ef1e00b9f760d1f654c8db48c6\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc4: object(oid: \"77cb36f181b6ee728dd25c781ba5550a8804ee1d\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc5: object(oid: \"87713d2172053c4ad05efacf3ab7e0a5c15616fc\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc6: object(oid: \"4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc7: object(oid: \"e745060c75d06a7a6c1c90007120af2a43b3fffc\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc8: object(oid: \"fc84f7f6eb77fe5d4428261c837ac8016ec77a28\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc9: object(oid: \"df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\n} }",
+        "startedAt": "2026-10-03T21:39:35.605Z",
+        "status": "complete",
+        "completedAt": "2026-10-03T21:39:36.343Z"
+      },
+      {
+        "request": 4,
+        "numbers": [
+          3116,
+          3123,
+          3124,
+          3122,
+          3120,
+          3131,
+          3129,
+          3139
+        ],
+        "query": "query { repository(owner: \"encode\", name: \"httpx\") {\nc0: object(oid: \"6d852d319acd5d97caf14037dff15ede04b37542\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc1: object(oid: \"6045186f7d3a665b965c13dec413e3a346b1a01d\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc2: object(oid: \"4941b40cbbae1ceb2b7a3d4e8064df96806c5e33\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc3: object(oid: \"7e10342c2ad44955582e4fef96470f3e653347d4\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc4: object(oid: \"f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc5: object(oid: \"0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc6: object(oid: \"7df47ce4d93a06f2c3310cd692b4c2336d7663ba\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\nc7: object(oid: \"392dbe45f086d0877bd288c5d68abf860653b680\") { ... on Commit { oid tree { oid } parents(first: 100) { totalCount pageInfo { hasNextPage } nodes { oid } } } }\n} }",
+        "startedAt": "2026-10-03T21:39:36.343Z",
+        "status": "complete",
+        "completedAt": "2026-10-03T21:39:37.000Z"
+      }
+    ],
+    "completedAt": "2026-10-03T21:39:37.000Z"
+  },
+  "status": "complete",
+  "checks": [
+    {
+      "number": 3035,
+      "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "expected": {
+        "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+        "parents": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+        "parents": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ]
+      }
+    },
+    {
+      "number": 3031,
+      "mergeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "expected": {
+        "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+        "parents": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "ea3071642d12ed546d901861a5901da6fad37073",
+        "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+        "parents": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ]
+      }
+    },
+    {
+      "number": 3036,
+      "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+      "expected": {
+        "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "parents": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+        "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "parents": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ]
+      }
+    },
+    {
+      "number": 3034,
+      "mergeCommit": "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3",
+      "expected": {
+        "tree": "ce25806e1c1121ade2cef4e8197866713232bd01",
+        "parents": [
+          "f1ed7463086f0aed97afa61a1197c51840d3bb2e"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3",
+        "tree": "ce25806e1c1121ade2cef4e8197866713232bd01",
+        "parents": [
+          "f1ed7463086f0aed97afa61a1197c51840d3bb2e"
+        ]
+      }
+    },
+    {
+      "number": 3032,
+      "mergeCommit": "ebc1393c5cf6430e3027bdb724368a9d6e3429ef",
+      "expected": {
+        "tree": "f005abc6d72aeb76ff234a6fba8a63637930281d",
+        "parents": [
+          "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "ebc1393c5cf6430e3027bdb724368a9d6e3429ef",
+        "tree": "f005abc6d72aeb76ff234a6fba8a63637930281d",
+        "parents": [
+          "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3"
+        ]
+      }
+    },
+    {
+      "number": 3038,
+      "mergeCommit": "c6907c22034e2739c4c1af89908e3c9f90602788",
+      "expected": {
+        "tree": "fc69d2ef76957364de977cd389cd9efd3b18c222",
+        "parents": [
+          "ebc1393c5cf6430e3027bdb724368a9d6e3429ef"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "c6907c22034e2739c4c1af89908e3c9f90602788",
+        "tree": "fc69d2ef76957364de977cd389cd9efd3b18c222",
+        "parents": [
+          "ebc1393c5cf6430e3027bdb724368a9d6e3429ef"
+        ]
+      }
+    },
+    {
+      "number": 3042,
+      "mergeCommit": "ca51b4532a4495c38c8abf1a393dbd80099deae3",
+      "expected": {
+        "tree": "4fe059332d4f3aa1e04f6d616070b30579dcb242",
+        "parents": [
+          "c6907c22034e2739c4c1af89908e3c9f90602788"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "ca51b4532a4495c38c8abf1a393dbd80099deae3",
+        "tree": "4fe059332d4f3aa1e04f6d616070b30579dcb242",
+        "parents": [
+          "c6907c22034e2739c4c1af89908e3c9f90602788"
+        ]
+      }
+    },
+    {
+      "number": 3045,
+      "mergeCommit": "99cba6ac642b12f0331d069ae324402c54c4c600",
+      "expected": {
+        "tree": "6309516480c904b2adcfac9d536e6f2a6861a862",
+        "parents": [
+          "ca51b4532a4495c38c8abf1a393dbd80099deae3"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "99cba6ac642b12f0331d069ae324402c54c4c600",
+        "tree": "6309516480c904b2adcfac9d536e6f2a6861a862",
+        "parents": [
+          "ca51b4532a4495c38c8abf1a393dbd80099deae3"
+        ]
+      }
+    },
+    {
+      "number": 3054,
+      "mergeCommit": "ab720d325808e1d092787995c2023c9aeb24aff5",
+      "expected": {
+        "tree": "aff4c0d689d1dafade67bf691c0a92fe33e1af91",
+        "parents": [
+          "99cba6ac642b12f0331d069ae324402c54c4c600"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "ab720d325808e1d092787995c2023c9aeb24aff5",
+        "tree": "aff4c0d689d1dafade67bf691c0a92fe33e1af91",
+        "parents": [
+          "99cba6ac642b12f0331d069ae324402c54c4c600"
+        ]
+      }
+    },
+    {
+      "number": 3049,
+      "mergeCommit": "8cd952c88fc2d0469cee8f08c2a580652b084375",
+      "expected": {
+        "tree": "d235d2ddd64305270c8c54b154541aa3d4e618d0",
+        "parents": [
+          "ab720d325808e1d092787995c2023c9aeb24aff5"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "8cd952c88fc2d0469cee8f08c2a580652b084375",
+        "tree": "d235d2ddd64305270c8c54b154541aa3d4e618d0",
+        "parents": [
+          "ab720d325808e1d092787995c2023c9aeb24aff5"
+        ]
+      }
+    },
+    {
+      "number": 3055,
+      "mergeCommit": "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9",
+      "expected": {
+        "tree": "2c408880bcaf9bc1daae3fac91ef00d2925eb02d",
+        "parents": [
+          "8cd952c88fc2d0469cee8f08c2a580652b084375"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9",
+        "tree": "2c408880bcaf9bc1daae3fac91ef00d2925eb02d",
+        "parents": [
+          "8cd952c88fc2d0469cee8f08c2a580652b084375"
+        ]
+      }
+    },
+    {
+      "number": 3058,
+      "mergeCommit": "73e688875a3579b67eee5795839b9660a1cfe5d8",
+      "expected": {
+        "tree": "c1d66c87afdcea9b1288d3e628f511253904ae18",
+        "parents": [
+          "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "73e688875a3579b67eee5795839b9660a1cfe5d8",
+        "tree": "c1d66c87afdcea9b1288d3e628f511253904ae18",
+        "parents": [
+          "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9"
+        ]
+      }
+    },
+    {
+      "number": 3056,
+      "mergeCommit": "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e",
+      "expected": {
+        "tree": "0e88f8b60fb82a1c632c2266ca71a3c15f8302b6",
+        "parents": [
+          "73e688875a3579b67eee5795839b9660a1cfe5d8"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e",
+        "tree": "0e88f8b60fb82a1c632c2266ca71a3c15f8302b6",
+        "parents": [
+          "73e688875a3579b67eee5795839b9660a1cfe5d8"
+        ]
+      }
+    },
+    {
+      "number": 3057,
+      "mergeCommit": "15f925336c6bad2f5b2711553a6b6763923175de",
+      "expected": {
+        "tree": "09b6ae75014545254949564ce034b0cd28075788",
+        "parents": [
+          "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "15f925336c6bad2f5b2711553a6b6763923175de",
+        "tree": "09b6ae75014545254949564ce034b0cd28075788",
+        "parents": [
+          "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e"
+        ]
+      }
+    },
+    {
+      "number": 3063,
+      "mergeCommit": "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8",
+      "expected": {
+        "tree": "8dca6ed316f0f907238122dac6e63bb538c74746",
+        "parents": [
+          "15f925336c6bad2f5b2711553a6b6763923175de"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8",
+        "tree": "8dca6ed316f0f907238122dac6e63bb538c74746",
+        "parents": [
+          "15f925336c6bad2f5b2711553a6b6763923175de"
+        ]
+      }
+    },
+    {
+      "number": 3061,
+      "mergeCommit": "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5",
+      "expected": {
+        "tree": "2a00ea62200f31efa73ef213b64b70e0533b5998",
+        "parents": [
+          "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5",
+        "tree": "2a00ea62200f31efa73ef213b64b70e0533b5998",
+        "parents": [
+          "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8"
+        ]
+      }
+    },
+    {
+      "number": 3068,
+      "mergeCommit": "371b6e946c9e70df3dce79590c195448eac3f635",
+      "expected": {
+        "tree": "cfa03bb38e898dd5c4ae3fa9aef3961ef961f5d6",
+        "parents": [
+          "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "371b6e946c9e70df3dce79590c195448eac3f635",
+        "tree": "cfa03bb38e898dd5c4ae3fa9aef3961ef961f5d6",
+        "parents": [
+          "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5"
+        ]
+      }
+    },
+    {
+      "number": 3066,
+      "mergeCommit": "37a2901af38f4142ee902c838aaaf92cf8a80f6a",
+      "expected": {
+        "tree": "ccb1dfefb4def3389f15e01e7328b2f930b82f3e",
+        "parents": [
+          "371b6e946c9e70df3dce79590c195448eac3f635"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "37a2901af38f4142ee902c838aaaf92cf8a80f6a",
+        "tree": "ccb1dfefb4def3389f15e01e7328b2f930b82f3e",
+        "parents": [
+          "371b6e946c9e70df3dce79590c195448eac3f635"
+        ]
+      }
+    },
+    {
+      "number": 3077,
+      "mergeCommit": "6f461522a5c58839c31be3c82b7bd47fba77109b",
+      "expected": {
+        "tree": "a63dc46f3668b5133825144bafc0120b4515ffc1",
+        "parents": [
+          "37a2901af38f4142ee902c838aaaf92cf8a80f6a"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "6f461522a5c58839c31be3c82b7bd47fba77109b",
+        "tree": "a63dc46f3668b5133825144bafc0120b4515ffc1",
+        "parents": [
+          "37a2901af38f4142ee902c838aaaf92cf8a80f6a"
+        ]
+      }
+    },
+    {
+      "number": 3050,
+      "mergeCommit": "cabd1c095e52e2f67ab63ec17941d3a539d7c877",
+      "expected": {
+        "tree": "889bbd1a370f10b105234e8229a5184995d4745c",
+        "parents": [
+          "6f461522a5c58839c31be3c82b7bd47fba77109b"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "cabd1c095e52e2f67ab63ec17941d3a539d7c877",
+        "tree": "889bbd1a370f10b105234e8229a5184995d4745c",
+        "parents": [
+          "6f461522a5c58839c31be3c82b7bd47fba77109b"
+        ]
+      }
+    },
+    {
+      "number": 3080,
+      "mergeCommit": "c51af4ba52d4103517a91f770e617cc579803b2d",
+      "expected": {
+        "tree": "a92ef97ff802286d022f2b5ac75053388666ddcd",
+        "parents": [
+          "cabd1c095e52e2f67ab63ec17941d3a539d7c877"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "c51af4ba52d4103517a91f770e617cc579803b2d",
+        "tree": "a92ef97ff802286d022f2b5ac75053388666ddcd",
+        "parents": [
+          "cabd1c095e52e2f67ab63ec17941d3a539d7c877"
+        ]
+      }
+    },
+    {
+      "number": 3081,
+      "mergeCommit": "3faa4a8f2e0d406167b913bbfd3afab087662d03",
+      "expected": {
+        "tree": "c29b80a51cb1e6cf1e8af21630640db337293bf0",
+        "parents": [
+          "c51af4ba52d4103517a91f770e617cc579803b2d"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "3faa4a8f2e0d406167b913bbfd3afab087662d03",
+        "tree": "c29b80a51cb1e6cf1e8af21630640db337293bf0",
+        "parents": [
+          "c51af4ba52d4103517a91f770e617cc579803b2d"
+        ]
+      }
+    },
+    {
+      "number": 3097,
+      "mergeCommit": "cdf1c7ab3a9bd9c0065202d22958999fb8688928",
+      "expected": {
+        "tree": "d525a8a214559f9d50b0601dae524a322815c1b5",
+        "parents": [
+          "769302a3480ef400baeb5c15e49e9d94849a019a"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "cdf1c7ab3a9bd9c0065202d22958999fb8688928",
+        "tree": "d525a8a214559f9d50b0601dae524a322815c1b5",
+        "parents": [
+          "769302a3480ef400baeb5c15e49e9d94849a019a"
+        ]
+      }
+    },
+    {
+      "number": 3095,
+      "mergeCommit": "326b9431c761e1ef1e00b9f760d1f654c8db48c6",
+      "expected": {
+        "tree": "40173b1c8fd3f7895fb2e5ae91f41cf66f1d2cb8",
+        "parents": [
+          "3faa4a8f2e0d406167b913bbfd3afab087662d03"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "326b9431c761e1ef1e00b9f760d1f654c8db48c6",
+        "tree": "40173b1c8fd3f7895fb2e5ae91f41cf66f1d2cb8",
+        "parents": [
+          "3faa4a8f2e0d406167b913bbfd3afab087662d03"
+        ]
+      }
+    },
+    {
+      "number": 3107,
+      "mergeCommit": "77cb36f181b6ee728dd25c781ba5550a8804ee1d",
+      "expected": {
+        "tree": "d25acdfc7030c3fda529d56769baf6085cef0d46",
+        "parents": [
+          "326b9431c761e1ef1e00b9f760d1f654c8db48c6"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "77cb36f181b6ee728dd25c781ba5550a8804ee1d",
+        "tree": "d25acdfc7030c3fda529d56769baf6085cef0d46",
+        "parents": [
+          "326b9431c761e1ef1e00b9f760d1f654c8db48c6"
+        ]
+      }
+    },
+    {
+      "number": 3106,
+      "mergeCommit": "87713d2172053c4ad05efacf3ab7e0a5c15616fc",
+      "expected": {
+        "tree": "b56d071d58f24f0d75b4b47c8bc3c534f098d8c2",
+        "parents": [
+          "77cb36f181b6ee728dd25c781ba5550a8804ee1d"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "87713d2172053c4ad05efacf3ab7e0a5c15616fc",
+        "tree": "b56d071d58f24f0d75b4b47c8bc3c534f098d8c2",
+        "parents": [
+          "77cb36f181b6ee728dd25c781ba5550a8804ee1d"
+        ]
+      }
+    },
+    {
+      "number": 3109,
+      "mergeCommit": "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2",
+      "expected": {
+        "tree": "c90dfb8be4e394ab1b63a9ba00092b1391b9a16d",
+        "parents": [
+          "87713d2172053c4ad05efacf3ab7e0a5c15616fc"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2",
+        "tree": "c90dfb8be4e394ab1b63a9ba00092b1391b9a16d",
+        "parents": [
+          "87713d2172053c4ad05efacf3ab7e0a5c15616fc"
+        ]
+      }
+    },
+    {
+      "number": 3064,
+      "mergeCommit": "e745060c75d06a7a6c1c90007120af2a43b3fffc",
+      "expected": {
+        "tree": "efa04e600df75aaa02cba19fe835fc02ca5de8d3",
+        "parents": [
+          "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "e745060c75d06a7a6c1c90007120af2a43b3fffc",
+        "tree": "efa04e600df75aaa02cba19fe835fc02ca5de8d3",
+        "parents": [
+          "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2"
+        ]
+      }
+    },
+    {
+      "number": 3062,
+      "mergeCommit": "fc84f7f6eb77fe5d4428261c837ac8016ec77a28",
+      "expected": {
+        "tree": "5faa4e2bce6a0a16819b94d5b8dfd116d5b5eda9",
+        "parents": [
+          "e745060c75d06a7a6c1c90007120af2a43b3fffc"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "fc84f7f6eb77fe5d4428261c837ac8016ec77a28",
+        "tree": "5faa4e2bce6a0a16819b94d5b8dfd116d5b5eda9",
+        "parents": [
+          "e745060c75d06a7a6c1c90007120af2a43b3fffc"
+        ]
+      }
+    },
+    {
+      "number": 3112,
+      "mergeCommit": "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f",
+      "expected": {
+        "tree": "b5eb8afc512648ec8595bdef96ac7c057f12ed2e",
+        "parents": [
+          "fc84f7f6eb77fe5d4428261c837ac8016ec77a28"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f",
+        "tree": "b5eb8afc512648ec8595bdef96ac7c057f12ed2e",
+        "parents": [
+          "fc84f7f6eb77fe5d4428261c837ac8016ec77a28"
+        ]
+      }
+    },
+    {
+      "number": 3116,
+      "mergeCommit": "6d852d319acd5d97caf14037dff15ede04b37542",
+      "expected": {
+        "tree": "28924b16f92e72ea15946d9aa614e6afe1f0f070",
+        "parents": [
+          "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "6d852d319acd5d97caf14037dff15ede04b37542",
+        "tree": "28924b16f92e72ea15946d9aa614e6afe1f0f070",
+        "parents": [
+          "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f"
+        ]
+      }
+    },
+    {
+      "number": 3123,
+      "mergeCommit": "6045186f7d3a665b965c13dec413e3a346b1a01d",
+      "expected": {
+        "tree": "4d0df881741d097801c8ad03815ca171d8e9f720",
+        "parents": [
+          "6d852d319acd5d97caf14037dff15ede04b37542"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "6045186f7d3a665b965c13dec413e3a346b1a01d",
+        "tree": "4d0df881741d097801c8ad03815ca171d8e9f720",
+        "parents": [
+          "6d852d319acd5d97caf14037dff15ede04b37542"
+        ]
+      }
+    },
+    {
+      "number": 3124,
+      "mergeCommit": "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33",
+      "expected": {
+        "tree": "cda44d047e03607b82e1d4678a4059a56bf55261",
+        "parents": [
+          "6045186f7d3a665b965c13dec413e3a346b1a01d"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33",
+        "tree": "cda44d047e03607b82e1d4678a4059a56bf55261",
+        "parents": [
+          "6045186f7d3a665b965c13dec413e3a346b1a01d"
+        ]
+      }
+    },
+    {
+      "number": 3122,
+      "mergeCommit": "7e10342c2ad44955582e4fef96470f3e653347d4",
+      "expected": {
+        "tree": "fae52b2c5ffd9ea1e6c9b7da8e56d966bd59b233",
+        "parents": [
+          "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "7e10342c2ad44955582e4fef96470f3e653347d4",
+        "tree": "fae52b2c5ffd9ea1e6c9b7da8e56d966bd59b233",
+        "parents": [
+          "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33"
+        ]
+      }
+    },
+    {
+      "number": 3120,
+      "mergeCommit": "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb",
+      "expected": {
+        "tree": "771456d0587370fabadddbd15845b3fa2edb6e30",
+        "parents": [
+          "7e10342c2ad44955582e4fef96470f3e653347d4"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb",
+        "tree": "771456d0587370fabadddbd15845b3fa2edb6e30",
+        "parents": [
+          "7e10342c2ad44955582e4fef96470f3e653347d4"
+        ]
+      }
+    },
+    {
+      "number": 3131,
+      "mergeCommit": "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d",
+      "expected": {
+        "tree": "7d2b98ce5d901b0bb4a8f879613ee7ae7c4d388c",
+        "parents": [
+          "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d",
+        "tree": "7d2b98ce5d901b0bb4a8f879613ee7ae7c4d388c",
+        "parents": [
+          "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb"
+        ]
+      }
+    },
+    {
+      "number": 3129,
+      "mergeCommit": "7df47ce4d93a06f2c3310cd692b4c2336d7663ba",
+      "expected": {
+        "tree": "e7f009ced4ed412fdb476a75970e67ada7ea29ce",
+        "parents": [
+          "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "7df47ce4d93a06f2c3310cd692b4c2336d7663ba",
+        "tree": "e7f009ced4ed412fdb476a75970e67ada7ea29ce",
+        "parents": [
+          "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d"
+        ]
+      }
+    },
+    {
+      "number": 3139,
+      "mergeCommit": "392dbe45f086d0877bd288c5d68abf860653b680",
+      "expected": {
+        "tree": "2607b9e37d12ad5b198eff48e4e915cc785cebda",
+        "parents": [
+          "7df47ce4d93a06f2c3310cd692b4c2336d7663ba"
+        ]
+      },
+      "status": "match",
+      "observed": {
+        "oid": "392dbe45f086d0877bd288c5d68abf860653b680",
+        "tree": "2607b9e37d12ad5b198eff48e4e915cc785cebda",
+        "parents": [
+          "7df47ce4d93a06f2c3310cd692b4c2336d7663ba"
+        ]
+      }
+    }
+  ],
+  "limitations": {
+    "evidence": "Independent lookup of GitHub-declared commit metadata; same authority as the original frame",
+    "localGitObjectVerification": "not_run",
+    "sourceCapture": "not_run",
+    "historicalPublicAvailability": "not_established",
+    "lineageIndependence": "not_evaluated",
+    "w1AndW2Queries": 0,
+    "modelCalls": 0,
+    "efficacy": "not_evaluated"
+  },
+  "summary": {
+    "selected": 38,
+    "matched": 38,
+    "mismatched": 0,
+    "invalid": 0,
+    "notChecked": 0
+  }
+}

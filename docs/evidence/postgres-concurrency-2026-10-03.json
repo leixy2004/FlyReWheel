@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "startedAt": "2026-10-03T21:39:57.695Z",
+  "completedAt": "2026-10-03T21:39:58.824Z",
+  "baseline": {
+    "commit": "973a9b7cccef1615b7e11ee1b9318965f9131a7f",
+    "tree": "6d56260e2e69f15c453112d2669209e8e2434136",
+    "scope": "Current compiled dist APIs plus this local verification script; not an aggregate build verification"
+  },
+  "reproduction": {
+    "script": "scripts/verify-postgres-concurrency.mjs",
+    "scriptSha256": "2bc5efd0506be2866dcabdba9a81baa1fe4a1b297dc7326ffc37b87dffaf7d51",
+    "command": "timeout 120s node scripts/verify-postgres-concurrency.mjs verify SOCKET EVIDENCE"
+  },
+  "server": "PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit",
+  "database": "flyrewheel_verify_concurrency",
+  "socket": "/tmp/flyrewheel-real-pg-7cah9p/socket",
+  "backend": "real PostgreSQL server",
+  "processes": {
+    "count": 4,
+    "pids": [
+      63195,
+      63196,
+      63197,
+      63198
+    ],
+    "barrier": "IPC readiness and phased commands"
+  },
+  "enqueue": {
+    "attempts": 4,
+    "accepted": 1,
+    "duplicatesRejected": 3,
+    "rows": 1,
+    "jobId": "1ce2fe47-66da-5e8b-a190-277745c7baa6"
+  },
+  "claim": {
+    "attempts": 4,
+    "winners": 1,
+    "busy": 3,
+    "nonownerCompletionRejected": 3
+  },
+  "retry": {
+    "cause": "explicit cleanup-safe synthetic failure; no crash or lease expiry",
+    "attempts": 4,
+    "winners": 1,
+    "busy": 3,
+    "staleFormerWinnerRejected": "APPLICATION_JOB_FENCED",
+    "persistedAttempts": 2
+  },
+  "terminal": {
+    "jobDigest": "1ce2fe4766da4e8b4190277745c7baa64ea4fedeb630e7744744ae3c68d4d4cb",
+    "job": {
+      "schemaVersion": 1,
+      "workspaceId": "postgres-multiprocess-concurrency",
+      "attempt": "initial",
+      "kind": "semantic-review",
+      "ruleDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "snapshotDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "state": "finished",
+    "result": {
+      "status": "blocked",
+      "modelExecution": "not_run",
+      "cleanup": "not_started",
+      "reason": "runtime_unavailable"
+    },
+    "attempts": 2
+  },
+  "limitations": {
+    "modelExecution": "not_run",
+    "isolatedRuntime": "not_run",
+    "queueHandlerExecution": "not_run",
+    "databaseRestart": "not_run",
+    "leaseExpiry": "not_run",
+    "effect": "Synthetic job terminal outcome is blocked; no efficacy claim",
+    "sideEffects": "Only newly created flyrewheel_verify_concurrency database; retained for inspection"
+  }
+}
