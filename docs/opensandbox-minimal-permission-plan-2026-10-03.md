@@ -6,9 +6,10 @@ removes helper execution, so the former default-root/network helper exception
 is no longer requested. No control plane, API key or TLS key has been created.
 
 This narrows the [earlier feasibility review](opensandbox-lifecycle-feasibility-2026-10-03.md).
-It is an approval-ready proposal, not a lifecycle receipt. No API key/certificate
-was generated, service installed/started, image pulled or Docker allocation made
-for this proposal. No model, gateway credential or production deployment is needed.
+It is an approval-ready proposal, not a lifecycle receipt. No control-plane API
+key/certificate or service was created. The separately authorized archive test
+pulled one image, created a never-started helper and removed both. No model, gateway
+credential or production deployment is needed.
 
 ## Network choice and exact scope
 
@@ -57,17 +58,20 @@ TLS flags. This launch approach still requires actual compatibility verification
 
 ## Admission budget and run sequence
 
-Observed root free: 17,735,708,672 bytes; tmp free: 9,431,150,592 bytes. Existing
-worker image is 1,720,090,143 logical bytes on VFS; reuse it, no rebuild/copy of
-node_modules. Proposed **additional planning ceiling: 8 GiB**, not an enforceable
-quota or measured admission: dependency environment/cache 1 GiB, execd images and
-extraction copies 3 GiB provisionally, worker VFS copy approximately 1.72 GB plus
-128 MiB scratch, remainder contingency. No sidecar image is needed. Resolve exact
-execd image digest and layer metadata, account for decompression and VFS copies,
-and re-check available bytes before each install/pull/allocation. Unknown expanded
-sizes currently prevent admission. Keep at least 5 GiB free plus a 1 GiB reaction
-margin; sample disk every 500 ms and cancel owned work below 6 GiB. Cancellation
-is not a hard filesystem quota and may not instantly stop a daemon operation.
+The completed bounded layer measurement found 57.52 MiB compressed and
+115.40625 MiB decoded tar. Conservative capacity planning estimates 5.619 GiB
+additional, leaving about 10.898 GiB from the recorded available space. The
+subsequent real pull/create/archive/remove test observed a minimum free space of
+16,739,540,992 bytes (15.59 GiB). The test container and new image were removed.
+This sampled value is not a guaranteed filesystem high-water mark.
+
+Reuse the existing worker image; do not rebuild/copy node_modules. Pin execd to
+`opensandbox/execd@sha256:9b856dad9c73488660522361abfaaa1ddbb9032169bcfb44c83348f46bc1cd9a`.
+Keep the 8 GiB additional planning envelope, 1 GiB dependency allowance, fresh
+pre-stage free-space checks and 500 ms sampling with a 6 GiB reaction threshold.
+No sidecar image is needed. These are planning/stop controls, not hard quotas;
+daemon cancellation may lag. Dependencies and real control-plane operation remain
+unmeasured. [Capacity evidence](evidence/execd-capacity-2026-10-03.md).
 
 After confirmation and admission: start HTTPS server; verify authenticated SDK
 access; reserve/create one sandbox; run only `/usr/bin/id -u`; record actual exit
@@ -79,11 +83,12 @@ unresolved resources rather than claiming durable allocation fencing. Lifecycle
 success is separate from production request ingress, model auth, protected request
 files, frozen evidence and cancellation guarantees, all still unproven here.
 
-## Completed verification without permission changes
+## Completed checks and their limits
 
 `node scripts/check-opensandbox-local-plan.mjs` validates the proposed settings
-offline and reports pending actions, workload-only hardening, helper exception and
-unmeasured capacity. It never starts services or allocates. Optional `--health`
+offline and reports pending actions, workload hardening and the local never-started
+helper patch. Its default capacity fields remain unset; the measured evidence is
+recorded separately and must be refreshed for a launch. It never starts services or allocates. Optional `--health`
 accepts only HTTPS `127.0.0.1` with exact `/health` path, verifies TLS,
 limits response bytes and total deadline, and labels a positive response as health
 only. It does not authenticate or claim lifecycle success.
@@ -94,9 +99,9 @@ bounded by deadline. All temporary test sockets are closed. No certificate/key w
 created to run these tests. TypeScript checking also passed. These are operational
 error-path tests, not a successful OpenSandbox server health receipt.
 
-The [metadata-only capacity follow-up](evidence/execd-capacity-2026-10-03.md) pins
-the actual amd64 digest, corrects the helper entrypoint assumption, and describes
-a bounded next measurement. Metadata alone does not admit a pull.
+The [capacity follow-up](evidence/execd-capacity-2026-10-03.md) records both the
+initial metadata-only investigation and the subsequently authorized measurement.
+Neither is a control-plane lifecycle receipt.
 
 ## Final capacity update for the permission request
 
@@ -117,5 +122,5 @@ one bounded workload. The pinned never-started helper patch removes the previous
 helper execution exception. No
 NET_ADMIN, new model credential, API call, privileged mode or host networking is
 required. None of those pending permissions has been exercised. Before a later
-launch, implement and verify the preparation/cleanup requirements documented in
-the capacity review; the current checker is not that executor.
+launch, verify the preparation/cleanup executor against the documented requirements;
+the static checker is not an executor.
