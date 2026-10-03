@@ -146,4 +146,6 @@ export async function workspaceWorkerMain(args: string[], fixture?: AuthoredWork
   } finally { process.off('SIGTERM', abort); process.off('SIGINT', abort); }
 }
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) await workspaceWorkerMain(process.argv.slice(2));
+// Node resolves module URLs through symlinks; argv can retain the launch alias.
+const launchPath = process.argv[1] ? await realpath(process.argv[1]).catch(() => undefined) : undefined;
+if (launchPath && launchPath === await realpath(fileURLToPath(import.meta.url))) await workspaceWorkerMain(process.argv.slice(2));

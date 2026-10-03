@@ -2,7 +2,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { access, chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
@@ -258,6 +258,37 @@ send({type:'item.updated',item:{id:'todo',type:'todo_list',items:[{text:'Inspect
 describe.each(['source', 'compiled'] as const)('%s executable acceptance', mode => {
   const command = () => mode === 'source' ? ['--import', import.meta.resolve('tsx'), join(project, 'src/workspace-worker-entrypoint.ts')]
     : [join(compiled, 'workspace-worker-entrypoint.js')];
+  it.each(['direct', 'relative-direct', 'file-symlink', 'relative-file-symlink'] as const)('entrypoint detection runs main for %s launch', async launch => {
+    const f = await fixture();
+    const args = command();
+    if (launch === 'relative-direct') args[args.length - 1] = relative(f.repo, args.at(-1)!);
+    else if (launch !== 'direct') {
+      const link = join(f.options.fixtureRoot, mode === 'source' ? 'worker alias #.ts' : 'worker alias #.mjs');
+      await symlink(args.at(-1)!, link);
+      args[args.length - 1] = launch === 'relative-file-symlink' ? relative(f.repo, link) : link;
+    }
+    await expect(exec(process.execPath, [...args, 'invalid-sensitive-input'], {
+      cwd: f.repo, env: workspaceEnvironment(), timeout: 10_000,
+    })).rejects.toMatchObject({ code: 1, stdout: '', stderr: '{"error":"WORKSPACE_WORKER_FAILED"}\n' });
+    await expect(exec(process.execPath, [...args, 'run', '/run/flyrewheel/request.json'], {
+      cwd: f.repo, env: workspaceEnvironment(), timeout: 10_000,
+    })).rejects.toMatchObject({ code: 78, stdout: '', stderr: '{"error":"WORKSPACE_WORKER_PRODUCTION_BLOCKED"}\n' });
+  });
+  it('entrypoint detection does not run main on module import without argv[1]', async () => {
+    const args = command(), module = args.pop()!;
+    const result = await exec(process.execPath, [...args, '--input-type=module', '--eval',
+      `await import(${JSON.stringify(pathToFileURL(module).href)}); process.stdout.write('import-only');`],
+    { cwd: project, env: workspaceEnvironment(), timeout: 10_000 });
+    expect(result).toMatchObject({ stdout: 'import-only', stderr: '' });
+  });
+  it('entrypoint detection does not run main when another executable imports the module', async () => {
+    const args = command(), module = args.pop()!;
+    const harness = join(root, `${mode}-import-only.mjs`);
+    await writeFile(harness, `await import(${JSON.stringify(pathToFileURL(module).href)}); process.stdout.write('import-only');`);
+    const result = await exec(process.execPath, [...args, harness, 'invalid-sensitive-input'],
+      { cwd: project, env: workspaceEnvironment(), timeout: 10_000 });
+    expect(result).toMatchObject({ stdout: 'import-only', stderr: '' });
+  });
   it('executes the adapter verify argv in an explicit fixture harness and emits one observation', async () => {
     const f = await fixture();
     const module = mode === 'source' ? join(project, 'src/workspace-worker-entrypoint.ts') : join(compiled, 'workspace-worker-entrypoint.js');
