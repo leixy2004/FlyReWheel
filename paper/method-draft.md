@@ -2,6 +2,18 @@
 
 Status: research methods draft, 2026-10-02. The earlier workflow audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; the diagnosis-operator sections now describe the working-tree extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84`, with its own [source hashes and authored-fixture verification](../docs/evidence/revision-operators-verification-2026-10-02.txt). The mixed-anchor review extension has a separate [verification record](../docs/evidence/mixed-anchor-review-verification-2026-10-02.txt) and [compiled mocked-SDK smoke](../docs/evidence/compiled-mixed-anchor-review-smoke-2026-10-02.json). This document separates structural implementation support and authored-fixture evidence from the untested empirical hypotheses. It reports no new empirical experiment or model-quality result. The [claim and evidence checklist](claim-evidence-checklist.md) is the companion audit; the [three-window protocol](discriminating-experiment.md) is the selected pilot route, while the [Phase 0 protocol](phase0-protocol.md) remains deferred design history.
 
+## Executable artifact mapping
+
+The [current methods-to-artifacts map](executable-artifact-map.md) binds hypotheses,
+baselines, temporal cutoffs and metric denominators to their actual commands and
+saved evidence at `37d31a2`, with PR #23 separately pinned to `ce9b9fb` and its
+PR #25 follow-up pinned to `a7adb0e`. It preserves the original negative attempts
+and distinguishes the later successful Ruff before/after lint/format pair from
+research effectiveness. Real-model calls and independent human labels remain zero;
+W0 semantic eligibility, docs behavior and external-action behavior remain unknown. Source capture, full committed
+repository context, authored demos and old CI passes do not establish an empirical
+result or validate a newer tree.
+
 ## Research question and scope
 
 FlyReWheel studies whether repository-specific review knowledge can remain useful as code, assumptions, and interfaces change. A historical repair may support a conditional constraint without supporting a universal rule. Subsequent rejection of a finding may reveal an incorrect judgment, missing context, an omitted exception, or a changed repository contract. These explanations imply different maintenance actions. The research hypothesis is that choosing an update from an evidence-supported diagnosis reduces repeated review errors while preserving valid detections, compared with retaining the same history and feedback in general reviewer memory.
