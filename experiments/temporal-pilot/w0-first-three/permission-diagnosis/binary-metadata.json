@@ -1,0 +1,30 @@
+[
+  {
+    "name": "ruff-before",
+    "wheel": {
+      "file": "ruff-0.1.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 6295145,
+      "sha256": "3a0cd909d25f227ac5c36d4e7e681577275fb74ba3b11d288aff7ec47e3ae745"
+    },
+    "member": "ruff-0.1.6.data/scripts/ruff",
+    "archiveMode": "0o100755",
+    "extractedMode": "0555",
+    "bytes": 16175600,
+    "sha256": "bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c",
+    "magic": "7f454c46"
+  },
+  {
+    "name": "ruff-after",
+    "wheel": {
+      "file": "ruff-0.1.9-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 7407581,
+      "sha256": "479ca4250cab30f9218b2e563adc362bd6ae6343df7c7b5a7865300a5156d5a6"
+    },
+    "member": "ruff-0.1.9.data/scripts/ruff",
+    "archiveMode": "0o100755",
+    "extractedMode": "0555",
+    "bytes": 19940016,
+    "sha256": "fa8f10bdef7ac67ef3b04c5bfbb95e2dd8feaacca577092f1b216c3d5d56e141",
+    "magic": "7f454c46"
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "createArgs": [
+    "docker",
+    "create",
+    "--pull=never",
+    "--name",
+    "flyrewheel-w0-ruff-diagnosis",
+    "--user",
+    "65534:65534",
+    "--network=none",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges:true",
+    "--pids-limit=64",
+    "--cpus=1",
+    "--memory=512m",
+    "--memory-swap=512m",
+    "--tmpfs=/tmp:rw,nosuid,nodev,size=128m,mode=1777",
+    "--mount",
+    "type=bind,src=/tmp/flyrewheel-w0-behavior-attempt-1/ruff-before,dst=/wheels,readonly",
+    "--entrypoint=/usr/local/bin/python",
+    "sha256:d3846bce6e97d0ef5c32fc023300d5e39251ad791e6fdfaee41d2ba75246766e",
+    "-I",
+    "-c",
+    "\nimport hashlib,json,os,pathlib,subprocess,sys\ncmd=[sys.executable,'-m','pip','--isolated','install','--disable-pip-version-check','--no-cache-dir','--no-index','--no-deps','--only-binary=:all:','--require-hashes','--find-links=/wheels','--target=/tmp/deps','-r','/wheels/requirements.lock']\nr=subprocess.run(cmd,capture_output=True,text=True,timeout=60)\nresult={'uid':os.getuid(),'install':{'command':cmd,'exitCode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},'ruffExecuted':False}\nresult['mounts']=[line for line in pathlib.Path('/proc/self/mountinfo').read_text().splitlines() if line.split()[4] in ['/tmp','/wheels','/']]\nfor p in ['/tmp/deps','/tmp/deps/bin','/tmp/deps/bin/ruff','/lib64/ld-linux-x86-64.so.2']:\n try:\n  s=os.stat(p);v={'path':p,'mode':oct(s.st_mode),'uid':s.st_uid,'gid':s.st_gid,'executableAccess':os.access(p,os.X_OK)}\n  if p.endswith('/ruff'):v['sha256']=hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()\n  result.setdefault('paths',[]).append(v)\n except OSError as e:result.setdefault('paths',[]).append({'path':p,'errno':e.errno})\nprint(json.dumps(result,indent=2))\n"
+  ],
+  "createExit": 0,
+  "createStderr": "",
+  "hostConfig": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges:true"
+    ],
+    "Memory": 536870912,
+    "MemorySwap": 536870912,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 64,
+    "Tmpfs": {
+      "/tmp": "rw,nosuid,nodev,size=128m,mode=1777"
+    }
+  },
+  "exitCode": 0,
+  "stdout": "{\n  \"uid\": 65534,\n  \"install\": {\n    \"command\": [\n      \"/usr/local/bin/python\",\n      \"-m\",\n      \"pip\",\n      \"--isolated\",\n      \"install\",\n      \"--disable-pip-version-check\",\n      \"--no-cache-dir\",\n      \"--no-index\",\n      \"--no-deps\",\n      \"--only-binary=:all:\",\n      \"--require-hashes\",\n      \"--find-links=/wheels\",\n      \"--target=/tmp/deps\",\n      \"-r\",\n      \"/wheels/requirements.lock\"\n    ],\n    \"exitCode\": 0,\n    \"stdout\": \"Looking in links: /wheels\\nProcessing /wheels/ruff-0.1.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (from -r /wheels/requirements.lock (line 1))\\nInstalling collected packages: ruff\\nSuccessfully installed ruff-0.1.6\\n\",\n    \"stderr\": \"\"\n  },\n  \"ruffExecuted\": false,\n  \"mounts\": [\n    \"126 73 0:27 /var/lib/docker/vfs/dir/da43d056381d75e7d6cc9eb4b9d3eb643bdd59edf504e3c6de03b00ced699e18 / ro,relatime - overlay overlay rw,lowerdir=/run/kata-containers/erofs-multi-layer/a22668db22664b378f52483a0b478350/lower-0,upperdir=/run/kata-containers/erofs-multi-layer/a22668db22664b378f52483a0b478350/upper/upper,workdir=/run/kata-containers/erofs-multi-layer/a22668db22664b378f52483a0b478350/upper/work,index=off,metacopy=off\",\n    \"135 126 0:57 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=131072k\",\n    \"136 126 0:33 /flyrewheel-w0-behavior-attempt-1/ruff-before /wheels ro,relatime - tmpfs none rw\"\n  ],\n  \"paths\": [\n    {\n      \"path\": \"/tmp/deps\",\n      \"mode\": \"0o40755\",\n      \"uid\": 65534,\n      \"gid\": 65534,\n      \"executableAccess\": true\n    },\n    {\n      \"path\": \"/tmp/deps/bin\",\n      \"mode\": \"0o40755\",\n      \"uid\": 65534,\n      \"gid\": 65534,\n      \"executableAccess\": true\n    },\n    {\n      \"path\": \"/tmp/deps/bin/ruff\",\n      \"mode\": \"0o100755\",\n      \"uid\": 65534,\n      \"gid\": 65534,\n      \"executableAccess\": false,\n      \"sha256\": \"bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c\"\n    },\n    {\n      \"path\": \"/lib64/ld-linux-x86-64.so.2\",\n      \"mode\": \"0o100755\",\n      \"uid\": 0,\n      \"gid\": 0,\n      \"executableAccess\": true\n    }\n  ]\n}\n",
+  "stderr": "",
+  "removed": true
+}
