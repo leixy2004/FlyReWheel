@@ -15,7 +15,7 @@ const Plan = z.object({
   useServerProxy: z.literal(true),
   proxyResolveInternal: z.literal(false),
   // These restrictions apply to the workload; the upstream extraction helper differs.
-  execdExtractionHelper: z.literal('official-defaults-pending-confirmation'),
+  execdExtractionHelper: z.literal('pinned-local-patch-never-started'),
   noNewPrivileges: z.literal(true),
   dropCapabilities: z.tuple([z.literal('ALL')]),
   pidsLimit: z.number().int().min(16).max(64),
@@ -38,7 +38,7 @@ const Plan = z.object({
 export const proposedPlan = {
   serverHost: '127.0.0.1', publishHost: '127.0.0.1', networkMode: 'bridge',
   executionTransport: 'official-sdk', useServerProxy: true, proxyResolveInternal: false,
-  execdExtractionHelper: 'official-defaults-pending-confirmation',
+  execdExtractionHelper: 'pinned-local-patch-never-started',
   noNewPrivileges: true, dropCapabilities: ['ALL'], pidsLimit: 64, networkPolicy: null,
   credentialProxy: false, isolationExtension: false, privileged: false,
   addedCapabilities: [], hostBinds: [], apiKeySource: 'task-temporary-file',
@@ -62,10 +62,9 @@ export function checkPlan(input) {
     networkMode: plan.networkMode, executionTransport: plan.executionTransport,
     needsNetAdmin: false, networkPolicyEnabled: false,
     hardeningScope: 'workload-only',
-    extractionHelper: 'upstream starts the image entrypoint with tail arguments, default root/network/capabilities and no configured resource limits',
+    extractionHelper: 'pinned local patch creates a network-none cap-drop-ALL read-only helper and never starts it',
     pendingActions: ['create task-only API key', 'create task-only TLS certificate/key with scoped client trust',
-      'start loopback-only server and sandbox port bindings',
-      'confirm one upstream execd extraction helper with Docker defaults and an external cleanup deadline'],
+      'start loopback-only server and sandbox port bindings'],
     blockers,
     limitation: plan.executionTransport === 'docker-exec'
       ? 'Docker exec is an out-of-band command check, not SDK execd verification'

@@ -1,4 +1,9 @@
-# Minimal local OpenSandbox experiment — pending, not executed
+# Minimal local OpenSandbox control plane — pending, not executed
+
+**Current disposition:** the separately authorized never-started Docker archive
+experiment succeeded. The [pinned local patch](../deploy/opensandbox/README.md)
+removes helper execution, so the former default-root/network helper exception
+is no longer requested. No control plane, API key or TLS key has been created.
 
 This narrows the [earlier feasibility review](opensandbox-lifecycle-feasibility-2026-10-03.md).
 It is an approval-ready proposal, not a lifecycle receipt. No API key/certificate
@@ -26,20 +31,15 @@ claim deny-default egress or production network isolation.
 [Official configuration](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/configuration.md),
 [endpoint extraction](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/services/docker/networking.py#L707).
 
-**Important upstream helper exception:** execd extraction starts a separate
-container with command arguments `tail -f /dev/null` from the official execd image.
-The inspected image retains ENTRYPOINT `./execd`, so this is **not a verified
-tail-only process**: Docker combines the entrypoint with those arguments. The
-image has no User setting, so the helper defaults to root; behavior is untested. Its create call does
-not set network, capability drops, no-new-privileges or CPU/memory/PID limits;
-Docker defaults apply. Workload settings above do not cover this helper. It is
-not explicitly privileged, host-networked, socket-mounted or port-published.
-The unmodified official path therefore needs explicit acceptance of this narrow
-helper behavior, with a 60-second external deadline and removal of its recorded
-ID even if archive extraction fails. At most one helper plus one workload may
-exist. If this exception is unacceptable, stop before execution and separately
-review an upstream-compatible hardening change; do not silently broaden scope.
-[Exact upstream create/start/remove implementation](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/services/docker/runtime.py#L78).
+**Archive helper no longer needs an execution exception.** The original upstream
+helper starts an image with default root/network/capabilities. The selected local
+patch pins upstream commit and original/patched file hashes, removes start/reload,
+and creates an archive-only helper with network none, drop ALL, no-new-privileges
+and read-only root. Actual Docker verification read all five assets while state
+remained `created`, PID 0, StartedAt zero; the helper and new image were removed.
+It is explicitly a local modification, not an unmodified upstream deployment.
+Custom images requiring startup-generated assets are not covered.
+[Patch and proof](../deploy/opensandbox/README.md).
 
 ## Actions needing one explicit confirmation
 
@@ -48,7 +48,6 @@ review an upstream-compatible hardening change; do not silently broaden scope.
 | Create a temporary control-plane API key | 32 random bytes; task directory mode 0700, configuration file 0600. Only this server/client; never injected into the sandbox, command arguments, Git or logs. No external account or authorization is created. Static key has no intrinsic expiry: stop server after at most 15 minutes and delete configuration/key. Keep official authentication enabled. |
 | Create temporary TLS key/certificate and scoped client trust | Certificate SAN 127.0.0.1, validity one day, actual use at most 15 minutes. Standard Uvicorn `--ssl-keyfile`/`--ssl-certfile` serving the official ASGI app at 127.0.0.1; SDK uses a task-scoped CA/dispatcher with verification enabled. No system CA installation, TLS bypass or product adapter relaxation. Delete private key/certificate and stop listener afterward. |
 | Start local authenticated control plane and one SDK sandbox | Pin reviewed upstream source and dependency resolution; temporary Python environment/cache only. Configure via `SANDBOX_CONFIG_PATH`. Existing daemon access stays in host process. Workload uses explicit loopback-published bridge ports. Control-plane-to-execd remains local HTTP: this is not end-to-end TLS. Stop all task processes and verify owned listeners closed within 15 minutes. |
-| Run the official execd extraction helper under its defaults | One official image/helper, recorded image/container IDs, external 60-second cleanup deadline; scope exception described above. No NET_ADMIN sidecar or isolation extension. Upstream command arguments do not override the image ENTRYPOINT; its behavior is untested. Remove exact helper ID on success/failure; no prefix-wide cleanup. |
 
 The [official startup guard](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/startup_guard.py#L55)
 requires a configured key or an explicit insecure acknowledgment. The proposal
@@ -112,10 +111,10 @@ attempt; dependency installation still has a monitored 1 GiB allowance. Preserve
 the 8 GiB planning envelope, 6 GiB reaction threshold and fresh pre-stage checks;
 neither value is a hard quota or a measured Docker peak.
 
-The parent can now request the four concrete permissions in the table above in
-one step: task-only API key, temporary verified/scoped TLS, loopback control plane
-with one bounded workload, and the explicit upstream helper default-root/network/
-capability/resource exception (including its retained execd ENTRYPOINT). No
+The parent can request three concrete permissions in the table above in one step:
+task-only API key, temporary verified/scoped TLS, and loopback control plane with
+one bounded workload. The pinned never-started helper patch removes the previous
+helper execution exception. No
 NET_ADMIN, new model credential, API call, privileged mode or host networking is
 required. None of those pending permissions has been exercised. Before a later
 launch, implement and verify the preparation/cleanup requirements documented in
