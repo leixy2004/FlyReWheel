@@ -58,7 +58,7 @@ describe('official OpenSandbox-shaped client integration, no live cluster', () =
     expect(await f.runtime.stop()).toEqual({ stopped: true, verified: true });
     expect(await f.runtime.collect(request.limits)).toEqual([{ name: 'report.json', bytes: Buffer.from('evidence') }]);
     expect(await f.runtime.destroy()).toEqual({ destroyed: true, verified: true });
-    expect(f.calls).toEqual(['preflight', 'create', 'transfer', 'verify', 'mkdir', 'write', 'run', 'stop', 'collect', 'kill-ack', 'destroy', 'close-client']);
+    expect(f.calls).toEqual(['preflight', 'create', 'transfer', 'verify', 'mkdir', 'write', 'run', 'stop', 'collect', 'destroy', 'close-client']);
     const { connectionConfig, ...createData } = f.create.mock.calls[0][0];
     expect(createData).toMatchObject({ env: {}, volumes: [], image: config.image, resource: { cpu: '1', memory: '2Gi' },
       networkPolicy: { defaultAction: 'deny', egress: [{ action: 'allow', target: config.gatewayHost }] } });
@@ -86,11 +86,11 @@ describe('official OpenSandbox-shaped client integration, no live cluster', () =
     expect(JSON.parse(data as string)).toMatchObject({ modelReasoningEffort: 'high' });
     await runtime.stop(); await runtime.collect(request.limits); await runtime.destroy();
   });
-  it('cannot treat API kill acknowledgement as destruction proof', async () => {
+  it('requires authoritative destruction proof without waiting for an SDK kill', async () => {
     const f = fixture(); await f.runtime.prepare(signal()); await f.runtime.stop(); await f.runtime.collect(request.limits);
     f.authority.destroyAndVerify = async () => ({ destroyed: true, verified: false });
     expect(await f.runtime.destroy()).toEqual({ destroyed: false, verified: false });
-    expect(f.client.kill).toHaveBeenCalled(); expect(f.client.close).not.toHaveBeenCalled();
+    expect(f.client.kill).not.toHaveBeenCalled(); expect(f.client.close).not.toHaveBeenCalled();
   });
   it('does not collect or destroy when stop is unverified', async () => {
     const f = fixture(); await f.runtime.prepare(signal());
@@ -108,7 +108,7 @@ describe('official OpenSandbox-shaped client integration, no live cluster', () =
     const stopping = f.runtime.stop(); finish(f.client); await rejected;
     expect(await stopping).toEqual({ stopped: true, verified: true });
     expect(f.transfer).not.toHaveBeenCalled(); expect(f.client.commands.runStream).not.toHaveBeenCalled();
-    expect(f.authority.stopAndVerify).toHaveBeenCalledWith(expect.objectContaining({ sandboxId: 'authored-sandbox', allocationId: expect.any(String) }));
+    expect(f.authority.stopAndVerify).toHaveBeenCalledWith({ allocationId: expect.any(String) });
   });
   it('reconciles unknown partial allocation on create failure and suppresses raw credential-bearing errors', async () => {
     const f = fixture(); f.create.mockRejectedValueOnce(new Error(config.apiKey));
