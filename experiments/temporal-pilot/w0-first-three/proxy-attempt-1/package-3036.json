@@ -1,0 +1,1074 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-source-package",
+  "provenance": "live-api-observation",
+  "planSha256": "9b024e81a3886794d4b50fb44767cd53a10a794ffbaf881e4305c6cfd648898a",
+  "evidence": {
+    "digest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+    "evidence": {
+      "schemaVersion": 1,
+      "kind": "github-pr-evidence",
+      "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+      "snapshot": {
+        "schemaVersion": 1,
+        "kind": "git-change-snapshot",
+        "repository": {
+          "id": "github:encode/httpx",
+          "identityVerification": "caller-supplied-unverified",
+          "objectFormat": "sha1"
+        },
+        "baseTip": "ea3071642d12ed546d901861a5901da6fad37073",
+        "mergeBase": "ea3071642d12ed546d901861a5901da6fad37073",
+        "head": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "comparison": "merge-base-to-head",
+        "renamePolicy": "exact-content-only",
+        "limits": {
+          "maxChanges": 500,
+          "maxBlobBytes": 262144,
+          "maxTotalBytes": 2097152
+        },
+        "prMetadata": {
+          "verification": "caller-supplied-unverified",
+          "provider": "github",
+          "repository": "encode/httpx",
+          "number": 3036,
+          "url": "https://github.com/encode/httpx/pull/3036"
+        },
+        "changes": [
+          {
+            "status": "M",
+            "before": {
+              "path": ".github/workflows/publish.yml",
+              "mode": "100644",
+              "objectId": "4ceb8c69e04017299f88b840938c967daf93981a",
+              "state": "captured",
+              "byteLength": 606,
+              "sha256": "d0af2f9152ced371885aadc5b70cd9ec26c74b6bf8c42032ece5d7b31d489326",
+              "bytesBase64": "bmFtZTogUHVibGlzaAoKb246CiAgcHVzaDoKICAgIHRhZ3M6CiAgICAgIC0gJyonCgpqb2JzOgogIHB1Ymxpc2g6CiAgICBuYW1lOiAiUHVibGlzaCByZWxlYXNlIgogICAgcnVucy1vbjogInVidW50dS1sYXRlc3QiCgogICAgZW52aXJvbm1lbnQ6CiAgICAgICBuYW1lOiBkZXBsb3kKCiAgICBzdGVwczoKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9jaGVja291dEB2NCIKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9zZXR1cC1weXRob25AdjQiCiAgICAgICAgd2l0aDoKICAgICAgICAgIHB5dGhvbi12ZXJzaW9uOiAzLjgKICAgICAgLSBuYW1lOiAiSW5zdGFsbCBkZXBlbmRlbmNpZXMiCiAgICAgICAgcnVuOiAic2NyaXB0cy9pbnN0YWxsIgogICAgICAtIG5hbWU6ICJCdWlsZCBwYWNrYWdlICYgZG9jcyIKICAgICAgICBydW46ICJzY3JpcHRzL2J1aWxkIgogICAgICAtIG5hbWU6ICJQdWJsaXNoIHRvIFB5UEkgJiBkZXBsb3kgZG9jcyIKICAgICAgICBydW46ICJzY3JpcHRzL3B1Ymxpc2giCiAgICAgICAgZW52OgogICAgICAgICAgVFdJTkVfVVNFUk5BTUU6IF9fdG9rZW5fXwogICAgICAgICAgVFdJTkVfUEFTU1dPUkQ6ICR7eyBzZWNyZXRzLlBZUElfVE9LRU4gfX0K"
+            },
+            "after": {
+              "path": ".github/workflows/publish.yml",
+              "mode": "100644",
+              "objectId": "2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+              "state": "captured",
+              "byteLength": 606,
+              "sha256": "9e5b75be0d18b01710a0aaa5cf9c9c74b2e5a9b6769642c95ad847f1d898dcc9",
+              "bytesBase64": "bmFtZTogUHVibGlzaAoKb246CiAgcHVzaDoKICAgIHRhZ3M6CiAgICAgIC0gJyonCgpqb2JzOgogIHB1Ymxpc2g6CiAgICBuYW1lOiAiUHVibGlzaCByZWxlYXNlIgogICAgcnVucy1vbjogInVidW50dS1sYXRlc3QiCgogICAgZW52aXJvbm1lbnQ6CiAgICAgICBuYW1lOiBkZXBsb3kKCiAgICBzdGVwczoKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9jaGVja291dEB2NCIKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9zZXR1cC1weXRob25AdjUiCiAgICAgICAgd2l0aDoKICAgICAgICAgIHB5dGhvbi12ZXJzaW9uOiAzLjgKICAgICAgLSBuYW1lOiAiSW5zdGFsbCBkZXBlbmRlbmNpZXMiCiAgICAgICAgcnVuOiAic2NyaXB0cy9pbnN0YWxsIgogICAgICAtIG5hbWU6ICJCdWlsZCBwYWNrYWdlICYgZG9jcyIKICAgICAgICBydW46ICJzY3JpcHRzL2J1aWxkIgogICAgICAtIG5hbWU6ICJQdWJsaXNoIHRvIFB5UEkgJiBkZXBsb3kgZG9jcyIKICAgICAgICBydW46ICJzY3JpcHRzL3B1Ymxpc2giCiAgICAgICAgZW52OgogICAgICAgICAgVFdJTkVfVVNFUk5BTUU6IF9fdG9rZW5fXwogICAgICAgICAgVFdJTkVfUEFTU1dPUkQ6ICR7eyBzZWNyZXRzLlBZUElfVE9LRU4gfX0K"
+            }
+          },
+          {
+            "status": "M",
+            "before": {
+              "path": ".github/workflows/test-suite.yml",
+              "mode": "100644",
+              "objectId": "c3ad08f14544d976a2520a74578ed41feb6fda71",
+              "state": "captured",
+              "byteLength": 795,
+              "sha256": "9dd92b4f6b1da94c634eff9b97d78f3c2e006faee544435f66567a96a62b53ed",
+              "bytesBase64": "LS0tCm5hbWU6IFRlc3QgU3VpdGUKCm9uOgogIHB1c2g6CiAgICBicmFuY2hlczogWyJtYXN0ZXIiXQogIHB1bGxfcmVxdWVzdDoKICAgIGJyYW5jaGVzOiBbIm1hc3RlciJdCgpqb2JzOgogIHRlc3RzOgogICAgbmFtZTogIlB5dGhvbiAke3sgbWF0cml4LnB5dGhvbi12ZXJzaW9uIH19IgogICAgcnVucy1vbjogInVidW50dS1sYXRlc3QiCgogICAgc3RyYXRlZ3k6CiAgICAgIG1hdHJpeDoKICAgICAgICBweXRob24tdmVyc2lvbjogWyIzLjgiLCAiMy45IiwgIjMuMTAiLCAiMy4xMSIsICIzLjEyIl0KCiAgICBzdGVwczoKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9jaGVja291dEB2NCIKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9zZXR1cC1weXRob25AdjQiCiAgICAgICAgd2l0aDoKICAgICAgICAgIHB5dGhvbi12ZXJzaW9uOiAiJHt7IG1hdHJpeC5weXRob24tdmVyc2lvbiB9fSIKICAgICAgICAgIGFsbG93LXByZXJlbGVhc2VzOiB0cnVlCiAgICAgIC0gbmFtZTogIkluc3RhbGwgZGVwZW5kZW5jaWVzIgogICAgICAgIHJ1bjogInNjcmlwdHMvaW5zdGFsbCIKICAgICAgLSBuYW1lOiAiUnVuIGxpbnRpbmcgY2hlY2tzIgogICAgICAgIHJ1bjogInNjcmlwdHMvY2hlY2siCiAgICAgIC0gbmFtZTogIkJ1aWxkIHBhY2thZ2UgJiBkb2NzIgogICAgICAgIHJ1bjogInNjcmlwdHMvYnVpbGQiCiAgICAgIC0gbmFtZTogIlJ1biB0ZXN0cyIKICAgICAgICBydW46ICJzY3JpcHRzL3Rlc3QiCiAgICAgIC0gbmFtZTogIkVuZm9yY2UgY292ZXJhZ2UiCiAgICAgICAgcnVuOiAic2NyaXB0cy9jb3ZlcmFnZSIK"
+            },
+            "after": {
+              "path": ".github/workflows/test-suite.yml",
+              "mode": "100644",
+              "objectId": "0bb570cedb51dbc57b08f097523c5e9aa245f854",
+              "state": "captured",
+              "byteLength": 795,
+              "sha256": "423ca34ed0426a83f90abdafc98ffffdfa2b63e59f9124b06549fc7fa8221844",
+              "bytesBase64": "LS0tCm5hbWU6IFRlc3QgU3VpdGUKCm9uOgogIHB1c2g6CiAgICBicmFuY2hlczogWyJtYXN0ZXIiXQogIHB1bGxfcmVxdWVzdDoKICAgIGJyYW5jaGVzOiBbIm1hc3RlciJdCgpqb2JzOgogIHRlc3RzOgogICAgbmFtZTogIlB5dGhvbiAke3sgbWF0cml4LnB5dGhvbi12ZXJzaW9uIH19IgogICAgcnVucy1vbjogInVidW50dS1sYXRlc3QiCgogICAgc3RyYXRlZ3k6CiAgICAgIG1hdHJpeDoKICAgICAgICBweXRob24tdmVyc2lvbjogWyIzLjgiLCAiMy45IiwgIjMuMTAiLCAiMy4xMSIsICIzLjEyIl0KCiAgICBzdGVwczoKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9jaGVja291dEB2NCIKICAgICAgLSB1c2VzOiAiYWN0aW9ucy9zZXR1cC1weXRob25AdjUiCiAgICAgICAgd2l0aDoKICAgICAgICAgIHB5dGhvbi12ZXJzaW9uOiAiJHt7IG1hdHJpeC5weXRob24tdmVyc2lvbiB9fSIKICAgICAgICAgIGFsbG93LXByZXJlbGVhc2VzOiB0cnVlCiAgICAgIC0gbmFtZTogIkluc3RhbGwgZGVwZW5kZW5jaWVzIgogICAgICAgIHJ1bjogInNjcmlwdHMvaW5zdGFsbCIKICAgICAgLSBuYW1lOiAiUnVuIGxpbnRpbmcgY2hlY2tzIgogICAgICAgIHJ1bjogInNjcmlwdHMvY2hlY2siCiAgICAgIC0gbmFtZTogIkJ1aWxkIHBhY2thZ2UgJiBkb2NzIgogICAgICAgIHJ1bjogInNjcmlwdHMvYnVpbGQiCiAgICAgIC0gbmFtZTogIlJ1biB0ZXN0cyIKICAgICAgICBydW46ICJzY3JpcHRzL3Rlc3QiCiAgICAgIC0gbmFtZTogIkVuZm9yY2UgY292ZXJhZ2UiCiAgICAgICAgcnVuOiAic2NyaXB0cy9jb3ZlcmFnZSIK"
+            }
+          }
+        ],
+        "coverage": {
+          "changedPaths": 2,
+          "capturedSides": 4,
+          "excludedSides": 0,
+          "capturedBytes": 2802,
+          "scope": "changed-entries-only"
+        }
+      },
+      "pull": {
+        "id": 1661167257,
+        "number": 3036,
+        "repository": "encode/httpx",
+        "url": "https://github.com/encode/httpx/pull/3036",
+        "title": "Bump actions/setup-python from 4 to 5",
+        "body": "Bumps [actions/setup-python](https://github.com/actions/setup-python) from 4 to 5.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/actions/setup-python/releases\">actions/setup-python's releases</a>.</em></p>\n<blockquote>\n<h2>v5.0.0</h2>\n<h2>What's Changed</h2>\n<p>In scope of this release, we update node version runtime from node16 to node20 (<a href=\"https://redirect.github.com/actions/setup-python/pull/772\">actions/setup-python#772</a>). Besides, we update dependencies to the latest versions.</p>\n<p><strong>Full Changelog</strong>: <a href=\"https://github.com/actions/setup-python/compare/v4.8.0...v5.0.0\">https://github.com/actions/setup-python/compare/v4.8.0...v5.0.0</a></p>\n<h2>v4.8.0</h2>\n<h2>What's Changed</h2>\n<p>In scope of this release we added support for GraalPy (<a href=\"https://redirect.github.com/actions/setup-python/pull/694\">actions/setup-python#694</a>). You can use this snippet to set up GraalPy:</p>\n<pre lang=\"yaml\"><code>steps:\n- uses: actions/checkout@v4\n- uses: actions/setup-python@v4 \n  with:\n    python-version: 'graalpy-22.3' \n- run: python my_script.py\n</code></pre>\n<p>Besides, the release contains such changes as:</p>\n<ul>\n<li>Trim python version when reading from file by <a href=\"https://github.com/FerranPares\"><code>@​FerranPares</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/628\">actions/setup-python#628</a></li>\n<li>Use non-deprecated versions in examples by <a href=\"https://github.com/jeffwidman\"><code>@​jeffwidman</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/724\">actions/setup-python#724</a></li>\n<li>Change deprecation comment to past tense by <a href=\"https://github.com/jeffwidman\"><code>@​jeffwidman</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/723\">actions/setup-python#723</a></li>\n<li>Bump <code>@​babel/traverse</code> from 7.9.0 to 7.23.2 by <a href=\"https://github.com/dependabot\"><code>@​dependabot</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/743\">actions/setup-python#743</a></li>\n<li>advanced-usage.md: Encourage the use actions/checkout@v4 by <a href=\"https://github.com/cclauss\"><code>@​cclauss</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/729\">actions/setup-python#729</a></li>\n<li>Examples now use checkout@v4 by <a href=\"https://github.com/simonw\"><code>@​simonw</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/738\">actions/setup-python#738</a></li>\n<li>Update actions/checkout to v4 by <a href=\"https://github.com/dmitry-shibanov\"><code>@​dmitry-shibanov</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/761\">actions/setup-python#761</a></li>\n</ul>\n<h2>New Contributors</h2>\n<ul>\n<li><a href=\"https://github.com/FerranPares\"><code>@​FerranPares</code></a> made their first contribution in <a href=\"https://redirect.github.com/actions/setup-python/pull/628\">actions/setup-python#628</a></li>\n<li><a href=\"https://github.com/timfel\"><code>@​timfel</code></a> made their first contribution in <a href=\"https://redirect.github.com/actions/setup-python/pull/694\">actions/setup-python#694</a></li>\n<li><a href=\"https://github.com/jeffwidman\"><code>@​jeffwidman</code></a> made their first contribution in <a href=\"https://redirect.github.com/actions/setup-python/pull/724\">actions/setup-python#724</a></li>\n</ul>\n<p><strong>Full Changelog</strong>: <a href=\"https://github.com/actions/setup-python/compare/v4...v4.8.0\">https://github.com/actions/setup-python/compare/v4...v4.8.0</a></p>\n<h2>v4.7.1</h2>\n<h2>What's Changed</h2>\n<ul>\n<li>Bump word-wrap from 1.2.3 to 1.2.4 by <a href=\"https://github.com/dependabot\"><code>@​dependabot</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/702\">actions/setup-python#702</a></li>\n<li>Add range validation for toml files by <a href=\"https://github.com/dmitry-shibanov\"><code>@​dmitry-shibanov</code></a> in <a href=\"https://redirect.github.com/actions/setup-python/pull/726\">actions/setup-python#726</a></li>\n</ul>\n<p><strong>Full Changelog</strong>: <a href=\"https://github.com/actions/setup-python/compare/v4...v4.7.1\">https://github.com/actions/setup-python/compare/v4...v4.7.1</a></p>\n<h2>v4.7.0</h2>\n<p>In scope of this release, the support for reading python version from pyproject.toml was added (<a href=\"https://redirect.github.com/actions/setup-python/pull/669\">actions/setup-python#669</a>).</p>\n<pre lang=\"yaml\"><code>      - name: Setup Python\n        uses: actions/setup-python@v4\n&lt;/tr&gt;&lt;/table&gt; \n</code></pre>\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/actions/setup-python/commit/0a5c61591373683505ea898e09a3ea4f39ef2b9c\"><code>0a5c615</code></a> Update action to node20 (<a href=\"https://redirect.github.com/actions/setup-python/issues/772\">#772</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/0ae58361cdfd39e2950bed97a1e26aa20c3d8955\"><code>0ae5836</code></a> Add example of GraalPy to docs (<a href=\"https://redirect.github.com/actions/setup-python/issues/773\">#773</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/b64ffcaf5b410884ad320a9cfac8866006a109aa\"><code>b64ffca</code></a> update actions/checkout to v4 (<a href=\"https://redirect.github.com/actions/setup-python/issues/761\">#761</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/8d2896179abf658742de432b3f203d2c2d86a587\"><code>8d28961</code></a> Examples now use checkout@v4 (<a href=\"https://redirect.github.com/actions/setup-python/issues/738\">#738</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/7bc6abb01e0555719edc2dbca70a2fde309e5e56\"><code>7bc6abb</code></a> advanced-usage.md: Encourage the use actions/checkout@v4 (<a href=\"https://redirect.github.com/actions/setup-python/issues/729\">#729</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/e8111cec9d3dc15220d8a3b638f08419f57b906a\"><code>e8111ce</code></a> Bump <code>@​babel/traverse</code> from 7.9.0 to 7.23.2 (<a href=\"https://redirect.github.com/actions/setup-python/issues/743\">#743</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/a00ea43da65e7c04d2bdae58b3afecd77057eb9e\"><code>a00ea43</code></a> add fix for graalpy ci (<a href=\"https://redirect.github.com/actions/setup-python/issues/741\">#741</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/8635b1ccc5934e73ed3510980fd2e7790b85839b\"><code>8635b1c</code></a> Change deprecation comment to past tense (<a href=\"https://redirect.github.com/actions/setup-python/issues/723\">#723</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/f6cc428f535856f9c23558d01765a42a4d6cf758\"><code>f6cc428</code></a> Use non-deprecated versions in examples (<a href=\"https://redirect.github.com/actions/setup-python/issues/724\">#724</a>)</li>\n<li><a href=\"https://github.com/actions/setup-python/commit/5f2af211d616f86005883b44826180b21abb4060\"><code>5f2af21</code></a> Add GraalPy support (<a href=\"https://redirect.github.com/actions/setup-python/issues/694\">#694</a>)</li>\n<li>Additional commits viewable in <a href=\"https://github.com/actions/setup-python/compare/v4...v5\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=actions/setup-python&package-manager=github_actions&previous-version=4&new-version=5)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot merge` will merge this PR after your CI passes on it\n- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it\n- `@dependabot cancel merge` will cancel a previously requested merge and block automerging\n- `@dependabot reopen` will reopen this PR if it is closed\n- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\n\n\n</details>",
+        "author": {
+          "id": 49699333,
+          "login": "dependabot[bot]"
+        },
+        "state": "closed",
+        "draft": false,
+        "merged": true,
+        "createdAt": "2024-01-01T16:43:19Z",
+        "updatedAt": "2024-01-03T05:36:17Z",
+        "closedAt": "2024-01-03T05:36:16Z",
+        "mergedAt": "2024-01-03T05:36:16Z",
+        "baseRef": "master",
+        "baseTip": "ea3071642d12ed546d901861a5901da6fad37073",
+        "headRef": "dependabot/github_actions/actions/setup-python-5",
+        "head": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "headRepository": "encode/httpx",
+        "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+        "reportedChangedFiles": 2,
+        "reportedIssueComments": 0,
+        "reportedReviewComments": 0
+      },
+      "source": {
+        "provider": "github",
+        "apiOrigin": "https://api.github.com",
+        "observation": "current-api-state",
+        "historicalReviewCheckpoint": false,
+        "ancestry": "provider-declared",
+        "inventory": "provider-declared-compare",
+        "repositoryContext": "changed-paths-only",
+        "discussionConsistency": "non-atomic-current-observation",
+        "discussionCoverage": "all-pages-returned-within-limits",
+        "compareFileCount": 2,
+        "sourceStatements": "untrusted-not-ground-truth-or-feedback"
+      },
+      "discussions": {
+        "issueComments": [],
+        "reviews": [
+          {
+            "id": 1801399625,
+            "url": "https://github.com/encode/httpx/pull/3036#pullrequestreview-1801399625",
+            "author": {
+              "id": 92274156,
+              "login": "karpetrosyan"
+            },
+            "body": "",
+            "submittedAt": "2024-01-03T05:36:10Z",
+            "state": "APPROVED",
+            "commitId": "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+          }
+        ],
+        "reviewComments": []
+      }
+    },
+    "receipt": {
+      "kind": "github-api-observation",
+      "startedAt": "2026-10-03T22:40:00.943Z",
+      "completedAt": "2026-10-03T22:40:07.423Z",
+      "authentication": "none",
+      "transport": "@octokit/rest@22.0.1",
+      "verification": "live-api-observation-not-verified-history",
+      "requestLimit": 21,
+      "requests": 19,
+      "decodedResponseBytes": 96400,
+      "observations": [
+        {
+          "endpoint": "GET /repos/encode/httpx/pulls/3036",
+          "observedAt": "2026-10-03T22:40:01.637Z",
+          "dataDigest": "024f782ba7cfe0cdabaea2a8718a9a5db266d4059ac120f796154bfb2ebc9bf9",
+          "requestId": "46E1:1CB7C9:4E0723C:B96D2F2:6AC18440",
+          "serverDate": "Sat, 03 Oct 2026 22:40:01 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/compare/ea3071642d12ed546d901861a5901da6fad37073...7f4c512fe9db5eb0876adc2bff4153c04541006b?page=1&per_page=1",
+          "observedAt": "2026-10-03T22:40:02.245Z",
+          "dataDigest": "7c792ea1da5c0af2b48bdf646cb60892e020e61d05eb39bed244df0a78e19173",
+          "requestId": "43EE:2A9F30:2A02B81:6D8BDF0:6AC18440",
+          "serverDate": "Sat, 03 Oct 2026 22:40:02 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+          "observedAt": "2026-10-03T22:40:02.526Z",
+          "dataDigest": "fcb6f092aef13a71a5dad21873660ef240533e403ecf7a75d193d8195fd9a9a2",
+          "requestId": "FF31:13CBE2:2C4C37C:729EC54:6AC1843F",
+          "serverDate": "Sat, 03 Oct 2026 22:40:02 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/commits/7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "observedAt": "2026-10-03T22:40:02.812Z",
+          "dataDigest": "5176e35fa628a2d73e313dc61a9e3f4c36d9876ad2266bacc841f877524550fe",
+          "requestId": "46E1:1CB7C9:4E07A97:B96ED13:6AC18441",
+          "serverDate": "Sat, 03 Oct 2026 22:40:02 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046",
+          "observedAt": "2026-10-03T22:40:03.056Z",
+          "dataDigest": "cc73524d82a78db698083184824ef514580765f5f635342c3d48eeaff2c231ed",
+          "requestId": "46E1:1CB7C9:4E07BEA:B96F187:6AC18442",
+          "serverDate": "Sat, 03 Oct 2026 22:40:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+          "observedAt": "2026-10-03T22:40:03.334Z",
+          "dataDigest": "98271420c0d5b6cb2bcbcef4b650eccc32ef59f24a1e8839fb5d7bf984489b07",
+          "requestId": "FF31:13CBE2:2C4C712:729F782:6AC18442",
+          "serverDate": "Sat, 03 Oct 2026 22:40:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/553b774b00d05d8a3ecac95e247d7b12f08709ee",
+          "observedAt": "2026-10-03T22:40:03.621Z",
+          "dataDigest": "5720d4b961341082f58d82cde5a8af18d4cf107001b4078e14959d44d091cb54",
+          "requestId": "46E1:1CB7C9:4E07E96:B96F985:6AC18443",
+          "serverDate": "Sat, 03 Oct 2026 22:40:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+          "observedAt": "2026-10-03T22:40:03.957Z",
+          "dataDigest": "c384676b9030ee00c99918155a5406615a20348e35f7f9097c267f271c34a245",
+          "requestId": "46E1:1CB7C9:4E07FE9:B96FE5C:6AC18443",
+          "serverDate": "Sat, 03 Oct 2026 22:40:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+          "observedAt": "2026-10-03T22:40:04.286Z",
+          "dataDigest": "4aa099f170d710197976dc52de89ec6e51634f52170ae6d038f16ad40ba88a39",
+          "requestId": "FF31:13CBE2:2C4CAF5:72A03DA:6AC18443",
+          "serverDate": "Sat, 03 Oct 2026 22:40:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/trees/bfb37b945315859fbf8086e3601ebd331c873c7b",
+          "observedAt": "2026-10-03T22:40:04.559Z",
+          "dataDigest": "5064c25b1f55bb8e422c1867873b5b2c208e816364f195d105fc135f5575bc9f",
+          "requestId": "46E1:1CB7C9:4E08315:B97083B:6AC18443",
+          "serverDate": "Sat, 03 Oct 2026 22:40:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/blobs/4ceb8c69e04017299f88b840938c967daf93981a",
+          "observedAt": "2026-10-03T22:40:04.806Z",
+          "dataDigest": "6c74e41e6b628bae264c3261288283dcd63b17bb12d31e3c47ade08035654a52",
+          "requestId": "46E1:1CB7C9:4E08451:B970D01:6AC18444",
+          "serverDate": "Sat, 03 Oct 2026 22:40:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/blobs/2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+          "observedAt": "2026-10-03T22:40:05.060Z",
+          "dataDigest": "8839e87d1543acf17748591657ab429bd51aa0f8dacfb17597bbe0360701400b",
+          "requestId": "46E1:1CB7C9:4E0859B:B971085:6AC18444",
+          "serverDate": "Sat, 03 Oct 2026 22:40:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/blobs/c3ad08f14544d976a2520a74578ed41feb6fda71",
+          "observedAt": "2026-10-03T22:40:05.340Z",
+          "dataDigest": "84d3fed8da06429bb06126d0e80e6d228cca1af1ffc4d34afebb6962233ab84c",
+          "requestId": "46E1:1CB7C9:4E086E2:B971458:6AC18445",
+          "serverDate": "Sat, 03 Oct 2026 22:40:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/git/blobs/0bb570cedb51dbc57b08f097523c5e9aa245f854",
+          "observedAt": "2026-10-03T22:40:05.583Z",
+          "dataDigest": "b485760ebae3cf9b9adce27636cc5f6fa525c63be1502f7742dbcca3e060d2de",
+          "requestId": "EAC2:399CF0:4DA3BA7:B97BB59:6AC18440",
+          "serverDate": "Sat, 03 Oct 2026 22:40:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/contents/LICENSE.md?ref=7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "observedAt": "2026-10-03T22:40:05.825Z",
+          "dataDigest": "cbc3ffec12b69703b2a320fd1398b9db0b8cab4e4c8463a70bf17cdb745d3fc1",
+          "requestId": "46E1:1CB7C9:4E089A2:B971D3B:6AC18445",
+          "serverDate": "Sat, 03 Oct 2026 22:40:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/issues/3036/comments?page=1&per_page=100",
+          "observedAt": "2026-10-03T22:40:06.104Z",
+          "dataDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "requestId": "43EE:2A9F30:2A03C4E:6D8F50C:6AC18442",
+          "serverDate": "Sat, 03 Oct 2026 22:40:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/pulls/3036/reviews?page=1&per_page=100",
+          "observedAt": "2026-10-03T22:40:06.748Z",
+          "dataDigest": "747147451dbfb2259774e3d265c044d3a6ca6fb1d5a300832eaeb542fec736dd",
+          "requestId": "FF31:13CBE2:2C4D35D:72A1FDB:6AC18444",
+          "serverDate": "Sat, 03 Oct 2026 22:40:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/pulls/3036/comments?page=1&per_page=100",
+          "observedAt": "2026-10-03T22:40:07.018Z",
+          "dataDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "requestId": "46E1:1CB7C9:4E08F1E:B972F2D:6AC18445",
+          "serverDate": "Sat, 03 Oct 2026 22:40:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/encode/httpx/pulls/3036",
+          "observedAt": "2026-10-03T22:40:07.420Z",
+          "dataDigest": "024f782ba7cfe0cdabaea2a8718a9a5db266d4059ac120f796154bfb2ebc9bf9",
+          "requestId": "561F:2BDDD7:48B6AE7:B2C53C5:6AC1843C",
+          "serverDate": "Sat, 03 Oct 2026 22:40:07 GMT"
+        }
+      ]
+    }
+  },
+  "acquisition": {
+    "maxGetRequests": 50,
+    "requests": 19,
+    "observations": [
+      {
+        "endpoint": "GET /repos/encode/httpx/pulls/3036",
+        "observedAt": "2026-10-03T22:40:01.637Z",
+        "dataDigest": "024f782ba7cfe0cdabaea2a8718a9a5db266d4059ac120f796154bfb2ebc9bf9"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/compare/ea3071642d12ed546d901861a5901da6fad37073...7f4c512fe9db5eb0876adc2bff4153c04541006b?page=1&per_page=1",
+        "observedAt": "2026-10-03T22:40:02.245Z",
+        "dataDigest": "7c792ea1da5c0af2b48bdf646cb60892e020e61d05eb39bed244df0a78e19173"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+        "observedAt": "2026-10-03T22:40:02.526Z",
+        "dataDigest": "fcb6f092aef13a71a5dad21873660ef240533e403ecf7a75d193d8195fd9a9a2"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/commits/7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "observedAt": "2026-10-03T22:40:02.812Z",
+        "dataDigest": "5176e35fa628a2d73e313dc61a9e3f4c36d9876ad2266bacc841f877524550fe"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046",
+        "observedAt": "2026-10-03T22:40:03.056Z",
+        "dataDigest": "cc73524d82a78db698083184824ef514580765f5f635342c3d48eeaff2c231ed"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+        "observedAt": "2026-10-03T22:40:03.334Z",
+        "dataDigest": "98271420c0d5b6cb2bcbcef4b650eccc32ef59f24a1e8839fb5d7bf984489b07"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/553b774b00d05d8a3ecac95e247d7b12f08709ee",
+        "observedAt": "2026-10-03T22:40:03.621Z",
+        "dataDigest": "5720d4b961341082f58d82cde5a8af18d4cf107001b4078e14959d44d091cb54"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "observedAt": "2026-10-03T22:40:03.957Z",
+        "dataDigest": "c384676b9030ee00c99918155a5406615a20348e35f7f9097c267f271c34a245"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+        "observedAt": "2026-10-03T22:40:04.286Z",
+        "dataDigest": "4aa099f170d710197976dc52de89ec6e51634f52170ae6d038f16ad40ba88a39"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/trees/bfb37b945315859fbf8086e3601ebd331c873c7b",
+        "observedAt": "2026-10-03T22:40:04.559Z",
+        "dataDigest": "5064c25b1f55bb8e422c1867873b5b2c208e816364f195d105fc135f5575bc9f"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/blobs/4ceb8c69e04017299f88b840938c967daf93981a",
+        "observedAt": "2026-10-03T22:40:04.806Z",
+        "dataDigest": "6c74e41e6b628bae264c3261288283dcd63b17bb12d31e3c47ade08035654a52"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/blobs/2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+        "observedAt": "2026-10-03T22:40:05.060Z",
+        "dataDigest": "8839e87d1543acf17748591657ab429bd51aa0f8dacfb17597bbe0360701400b"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/blobs/c3ad08f14544d976a2520a74578ed41feb6fda71",
+        "observedAt": "2026-10-03T22:40:05.340Z",
+        "dataDigest": "84d3fed8da06429bb06126d0e80e6d228cca1af1ffc4d34afebb6962233ab84c"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/git/blobs/0bb570cedb51dbc57b08f097523c5e9aa245f854",
+        "observedAt": "2026-10-03T22:40:05.583Z",
+        "dataDigest": "b485760ebae3cf9b9adce27636cc5f6fa525c63be1502f7742dbcca3e060d2de"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/contents/LICENSE.md?ref=7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "observedAt": "2026-10-03T22:40:05.825Z",
+        "dataDigest": "cbc3ffec12b69703b2a320fd1398b9db0b8cab4e4c8463a70bf17cdb745d3fc1"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/issues/3036/comments?page=1&per_page=100",
+        "observedAt": "2026-10-03T22:40:06.104Z",
+        "dataDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/pulls/3036/reviews?page=1&per_page=100",
+        "observedAt": "2026-10-03T22:40:06.748Z",
+        "dataDigest": "747147451dbfb2259774e3d265c044d3a6ca6fb1d5a300832eaeb542fec736dd"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/pulls/3036/comments?page=1&per_page=100",
+        "observedAt": "2026-10-03T22:40:07.018Z",
+        "dataDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "endpoint": "GET /repos/encode/httpx/pulls/3036",
+        "observedAt": "2026-10-03T22:40:07.420Z",
+        "dataDigest": "024f782ba7cfe0cdabaea2a8718a9a5db266d4059ac120f796154bfb2ebc9bf9"
+      }
+    ]
+  },
+  "sourceIdentities": {
+    "baseTip": {
+      "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+      "observation": {
+        "endpoint": "GET /repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+        "observedAt": "2026-10-03T22:40:02.526Z",
+        "dataDigest": "fcb6f092aef13a71a5dad21873660ef240533e403ecf7a75d193d8195fd9a9a2",
+        "data": {
+          "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+          "node_id": "C_kwDOCrLX_doAKGVhMzA3MTY0MmQxMmVkNTQ2ZDkwMTg2MWE1OTAxZGE2ZmFkMzcwNzM",
+          "url": "https://api.github.com/repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+          "html_url": "https://github.com/encode/httpx/commit/ea3071642d12ed546d901861a5901da6fad37073",
+          "author": {
+            "name": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "date": "2024-01-03T05:14:26Z"
+          },
+          "committer": {
+            "name": "GitHub",
+            "email": "noreply@github.com",
+            "date": "2024-01-03T05:14:26Z"
+          },
+          "tree": {
+            "sha": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046"
+          },
+          "message": "Bump ruff from 0.1.6 to 0.1.9 (#3031)\n\nBumps [ruff](https://github.com/astral-sh/ruff) from 0.1.6 to 0.1.9.\r\n- [Release notes](https://github.com/astral-sh/ruff/releases)\r\n- [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md)\r\n- [Commits](https://github.com/astral-sh/ruff/compare/v0.1.6...v0.1.9)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: ruff\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\r\nCo-authored-by: Kar Petrosyan <92274156+karpetrosyan@users.noreply.github.com>",
+          "parents": [
+            {
+              "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+              "url": "https://api.github.com/repos/encode/httpx/git/commits/b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+              "html_url": "https://github.com/encode/httpx/commit/b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+            }
+          ],
+          "verification": {
+            "verified": true,
+            "reason": "valid",
+            "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJllO0yCRBK7hj4Ov3rIwAA8VYIAI0IvUcqYJ0YnDNpIhgLt9YV\nrOXyLLM/lXdJVoADbVy3ybS7vvkqgNxSy4Y4t39MqeDEuDwiJuLxfI+7Xy8zIC6d\nNr507vBneal9QpQO/a/EE13uwo3JhmB+SdrGPTNYQ95B8XXDjzKY8MbSasGNkzzP\n3ZkEz5evvumozSVFQ3+UgdqAOnKQo3etLMor0rpJv1bf/l3tLhshEA/UKrGUAT0W\n+Qq98CYVaX9viGWyUGbDkvOzPSFbTI+ZWZyjDBaT8TKrfVou/YKbXquzNeCFlfpz\nUd4IgFItKIDFoDUAU7JYHfyQYRl/MvaUFNJj2sdvj7McG9eXI9xLR3W7CN7r/Is=\n=1vB0\n-----END PGP SIGNATURE-----\n",
+            "payload": "tree 9ca547def2324e42cc626f9ffc23ee66a26c7046\nparent b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> 1704258866 +0400\ncommitter GitHub <noreply@github.com> 1704258866 +0400\n\nBump ruff from 0.1.6 to 0.1.9 (#3031)\n\nBumps [ruff](https://github.com/astral-sh/ruff) from 0.1.6 to 0.1.9.\r\n- [Release notes](https://github.com/astral-sh/ruff/releases)\r\n- [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md)\r\n- [Commits](https://github.com/astral-sh/ruff/compare/v0.1.6...v0.1.9)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: ruff\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\r\nCo-authored-by: Kar Petrosyan <92274156+karpetrosyan@users.noreply.github.com>",
+            "verified_at": "2024-11-04T21:35:35Z"
+          }
+        }
+      },
+      "role": "current-tip-metadata-only-not-source"
+    },
+    "mergeBase": {
+      "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+      "observation": {
+        "endpoint": "GET /repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+        "observedAt": "2026-10-03T22:40:02.526Z",
+        "dataDigest": "fcb6f092aef13a71a5dad21873660ef240533e403ecf7a75d193d8195fd9a9a2",
+        "data": {
+          "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+          "node_id": "C_kwDOCrLX_doAKGVhMzA3MTY0MmQxMmVkNTQ2ZDkwMTg2MWE1OTAxZGE2ZmFkMzcwNzM",
+          "url": "https://api.github.com/repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+          "html_url": "https://github.com/encode/httpx/commit/ea3071642d12ed546d901861a5901da6fad37073",
+          "author": {
+            "name": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "date": "2024-01-03T05:14:26Z"
+          },
+          "committer": {
+            "name": "GitHub",
+            "email": "noreply@github.com",
+            "date": "2024-01-03T05:14:26Z"
+          },
+          "tree": {
+            "sha": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046"
+          },
+          "message": "Bump ruff from 0.1.6 to 0.1.9 (#3031)\n\nBumps [ruff](https://github.com/astral-sh/ruff) from 0.1.6 to 0.1.9.\r\n- [Release notes](https://github.com/astral-sh/ruff/releases)\r\n- [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md)\r\n- [Commits](https://github.com/astral-sh/ruff/compare/v0.1.6...v0.1.9)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: ruff\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\r\nCo-authored-by: Kar Petrosyan <92274156+karpetrosyan@users.noreply.github.com>",
+          "parents": [
+            {
+              "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+              "url": "https://api.github.com/repos/encode/httpx/git/commits/b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+              "html_url": "https://github.com/encode/httpx/commit/b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+            }
+          ],
+          "verification": {
+            "verified": true,
+            "reason": "valid",
+            "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJllO0yCRBK7hj4Ov3rIwAA8VYIAI0IvUcqYJ0YnDNpIhgLt9YV\nrOXyLLM/lXdJVoADbVy3ybS7vvkqgNxSy4Y4t39MqeDEuDwiJuLxfI+7Xy8zIC6d\nNr507vBneal9QpQO/a/EE13uwo3JhmB+SdrGPTNYQ95B8XXDjzKY8MbSasGNkzzP\n3ZkEz5evvumozSVFQ3+UgdqAOnKQo3etLMor0rpJv1bf/l3tLhshEA/UKrGUAT0W\n+Qq98CYVaX9viGWyUGbDkvOzPSFbTI+ZWZyjDBaT8TKrfVou/YKbXquzNeCFlfpz\nUd4IgFItKIDFoDUAU7JYHfyQYRl/MvaUFNJj2sdvj7McG9eXI9xLR3W7CN7r/Is=\n=1vB0\n-----END PGP SIGNATURE-----\n",
+            "payload": "tree 9ca547def2324e42cc626f9ffc23ee66a26c7046\nparent b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5\nauthor dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> 1704258866 +0400\ncommitter GitHub <noreply@github.com> 1704258866 +0400\n\nBump ruff from 0.1.6 to 0.1.9 (#3031)\n\nBumps [ruff](https://github.com/astral-sh/ruff) from 0.1.6 to 0.1.9.\r\n- [Release notes](https://github.com/astral-sh/ruff/releases)\r\n- [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md)\r\n- [Commits](https://github.com/astral-sh/ruff/compare/v0.1.6...v0.1.9)\r\n\r\n---\r\nupdated-dependencies:\r\n- dependency-name: ruff\r\n  dependency-type: direct:production\r\n  update-type: version-update:semver-patch\r\n...\r\n\r\nSigned-off-by: dependabot[bot] <support@github.com>\r\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\r\nCo-authored-by: Kar Petrosyan <92274156+karpetrosyan@users.noreply.github.com>",
+            "verified_at": "2024-11-04T21:35:35Z"
+          }
+        }
+      }
+    },
+    "head": {
+      "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+      "observation": {
+        "endpoint": "GET /repos/encode/httpx/git/commits/7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "observedAt": "2026-10-03T22:40:02.812Z",
+        "dataDigest": "5176e35fa628a2d73e313dc61a9e3f4c36d9876ad2266bacc841f877524550fe",
+        "data": {
+          "sha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "node_id": "C_kwDOCrLX_doAKDdmNGM1MTJmZTlkYjVlYjA4NzZhZGMyYmZmNDE1M2MwNDU0MTAwNmI",
+          "url": "https://api.github.com/repos/encode/httpx/git/commits/7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "html_url": "https://github.com/encode/httpx/commit/7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "author": {
+            "name": "Kar Petrosyan",
+            "email": "92274156+karpetrosyan@users.noreply.github.com",
+            "date": "2024-01-03T05:22:14Z"
+          },
+          "committer": {
+            "name": "GitHub",
+            "email": "noreply@github.com",
+            "date": "2024-01-03T05:22:14Z"
+          },
+          "tree": {
+            "sha": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712"
+          },
+          "message": "Merge branch 'master' into dependabot/github_actions/actions/setup-python-5",
+          "parents": [
+            {
+              "sha": "04e73f8d821f84b4067aaa7c660d998d029eb236",
+              "url": "https://api.github.com/repos/encode/httpx/git/commits/04e73f8d821f84b4067aaa7c660d998d029eb236",
+              "html_url": "https://github.com/encode/httpx/commit/04e73f8d821f84b4067aaa7c660d998d029eb236"
+            },
+            {
+              "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+              "url": "https://api.github.com/repos/encode/httpx/git/commits/ea3071642d12ed546d901861a5901da6fad37073",
+              "html_url": "https://github.com/encode/httpx/commit/ea3071642d12ed546d901861a5901da6fad37073"
+            }
+          ],
+          "verification": {
+            "verified": true,
+            "reason": "valid",
+            "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJllO8GCRBK7hj4Ov3rIwAATekIAFmagssEeFRiK/z3elsPFAEC\n/xXtvPDB2Zjw/RvOCFreV5QRv0mUcninRX7gEybJ9QAoqp6Xm2g3SOW5XzJyDnw/\n4YQUEjCgxFlaDvvmGZ7t+iw2OcwfxDWCx7ou0lzNQlwg/kPwKLFhYKd/zEnmKQ3y\nD+o7OyuRNY6fAee+vKSwsXJIyE+7cVUy/3RMqcYNXN9BQGedccyucpBRP5gKYdat\ncc2mVgVCRIoguiKaeuJ8k4vb5jvu6df3IRm4qTbc/WDbenb8u6al+qeBFYlXEZhw\n7nWNKhsK8y2zwLFRCH4ORnVKP0G+qZFFlSw5HBSw92lMJ1N1SPcAleCedxFuZF4=\n=AbqN\n-----END PGP SIGNATURE-----\n",
+            "payload": "tree 58c8dffae1c39b3954b68d13041d024d45e6f712\nparent 04e73f8d821f84b4067aaa7c660d998d029eb236\nparent ea3071642d12ed546d901861a5901da6fad37073\nauthor Kar Petrosyan <92274156+karpetrosyan@users.noreply.github.com> 1704259334 +0400\ncommitter GitHub <noreply@github.com> 1704259334 +0400\n\nMerge branch 'master' into dependabot/github_actions/actions/setup-python-5",
+            "verified_at": "2024-01-16T19:59:59Z"
+          }
+        }
+      }
+    }
+  },
+  "sourceTrees": [
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046",
+      "observedAt": "2026-10-03T22:40:03.056Z",
+      "dataDigest": "cc73524d82a78db698083184824ef514580765f5f635342c3d48eeaff2c231ed",
+      "data": {
+        "sha": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/9ca547def2324e42cc626f9ffc23ee66a26c7046",
+        "tree": [
+          {
+            "path": ".github",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/eedf9e5ab50664d1962c3c39d7a839fdce7d293e"
+          },
+          {
+            "path": ".gitignore",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4",
+            "size": 120,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4"
+          },
+          {
+            "path": "CHANGELOG.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c895f688145f985051eddb6beaab90283b9db7fb",
+            "size": 50922,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c895f688145f985051eddb6beaab90283b9db7fb"
+          },
+          {
+            "path": "LICENSE.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+            "size": 1508,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ab79d16a3f4c6c894c028d1f7431811e8711b42b"
+          },
+          {
+            "path": "README.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "62fb295d17bc59a76a8f924e852c73b34b5ae064",
+            "size": 4856,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/62fb295d17bc59a76a8f924e852c73b34b5ae064"
+          },
+          {
+            "path": "README_chinese.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ad20c5a1bfe8aa3bcfc79a8572667abafc717a71",
+            "size": 4584,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ad20c5a1bfe8aa3bcfc79a8572667abafc717a71"
+          },
+          {
+            "path": "docs",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "dc9e061708224c8187e1e057afea5e32da8e8f76",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/dc9e061708224c8187e1e057afea5e32da8e8f76"
+          },
+          {
+            "path": "httpx",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "101efac178f147db2f7ea5e54897cd079e75b5aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/101efac178f147db2f7ea5e54897cd079e75b5aa"
+          },
+          {
+            "path": "mkdocs.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c0ccd805661d4092bfaf3195d7c243da415913d3",
+            "size": 1441,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c0ccd805661d4092bfaf3195d7c243da415913d3"
+          },
+          {
+            "path": "pyproject.toml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "4f7a848f8350ae392979d173631f27db6c6f7fd5",
+            "size": 3620,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/4f7a848f8350ae392979d173631f27db6c6f7fd5"
+          },
+          {
+            "path": "requirements.txt",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "af1caa5c5ae055a8f62e1bd0a924957846d9523e",
+            "size": 679,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/af1caa5c5ae055a8f62e1bd0a924957846d9523e"
+          },
+          {
+            "path": "scripts",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "278e0056f1a0af74899c43cb41aea759bfb505aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/278e0056f1a0af74899c43cb41aea759bfb505aa"
+          },
+          {
+            "path": "tests",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f"
+          }
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+      "observedAt": "2026-10-03T22:40:03.334Z",
+      "dataDigest": "98271420c0d5b6cb2bcbcef4b650eccc32ef59f24a1e8839fb5d7bf984489b07",
+      "data": {
+        "sha": "eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/eedf9e5ab50664d1962c3c39d7a839fdce7d293e",
+        "tree": [
+          {
+            "path": "CONTRIBUTING.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "e1a953dc97e76c0cb138e14e1bd1f0681822c047",
+            "size": 8314,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/e1a953dc97e76c0cb138e14e1bd1f0681822c047"
+          },
+          {
+            "path": "FUNDING.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "2f87d94ca10327497ac0f4c0093930826ff76642",
+            "size": 15,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/2f87d94ca10327497ac0f4c0093930826ff76642"
+          },
+          {
+            "path": "ISSUE_TEMPLATE",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "8f9ff41084a965159612db5ca7d2259325763a75",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/8f9ff41084a965159612db5ca7d2259325763a75"
+          },
+          {
+            "path": "PULL_REQUEST_TEMPLATE.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "f19bf3c1f830f7ac31dfbc5ac27cf8a9ad4db088",
+            "size": 543,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/f19bf3c1f830f7ac31dfbc5ac27cf8a9ad4db088"
+          },
+          {
+            "path": "dependabot.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "32fd80e7ba2025ecc13465961f9fc06c38cccb56",
+            "size": 206,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/32fd80e7ba2025ecc13465961f9fc06c38cccb56"
+          },
+          {
+            "path": "workflows",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "553b774b00d05d8a3ecac95e247d7b12f08709ee",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/553b774b00d05d8a3ecac95e247d7b12f08709ee"
+          }
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/553b774b00d05d8a3ecac95e247d7b12f08709ee",
+      "observedAt": "2026-10-03T22:40:03.621Z",
+      "dataDigest": "5720d4b961341082f58d82cde5a8af18d4cf107001b4078e14959d44d091cb54",
+      "data": {
+        "sha": "553b774b00d05d8a3ecac95e247d7b12f08709ee",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/553b774b00d05d8a3ecac95e247d7b12f08709ee",
+        "tree": [
+          {
+            "path": "publish.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "4ceb8c69e04017299f88b840938c967daf93981a",
+            "size": 606,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/4ceb8c69e04017299f88b840938c967daf93981a"
+          },
+          {
+            "path": "test-suite.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c3ad08f14544d976a2520a74578ed41feb6fda71",
+            "size": 795,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c3ad08f14544d976a2520a74578ed41feb6fda71"
+          }
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+      "observedAt": "2026-10-03T22:40:03.957Z",
+      "dataDigest": "c384676b9030ee00c99918155a5406615a20348e35f7f9097c267f271c34a245",
+      "data": {
+        "sha": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "tree": [
+          {
+            "path": ".github",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8"
+          },
+          {
+            "path": ".gitignore",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4",
+            "size": 120,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4"
+          },
+          {
+            "path": "CHANGELOG.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c895f688145f985051eddb6beaab90283b9db7fb",
+            "size": 50922,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c895f688145f985051eddb6beaab90283b9db7fb"
+          },
+          {
+            "path": "LICENSE.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+            "size": 1508,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ab79d16a3f4c6c894c028d1f7431811e8711b42b"
+          },
+          {
+            "path": "README.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "62fb295d17bc59a76a8f924e852c73b34b5ae064",
+            "size": 4856,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/62fb295d17bc59a76a8f924e852c73b34b5ae064"
+          },
+          {
+            "path": "README_chinese.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ad20c5a1bfe8aa3bcfc79a8572667abafc717a71",
+            "size": 4584,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ad20c5a1bfe8aa3bcfc79a8572667abafc717a71"
+          },
+          {
+            "path": "docs",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "dc9e061708224c8187e1e057afea5e32da8e8f76",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/dc9e061708224c8187e1e057afea5e32da8e8f76"
+          },
+          {
+            "path": "httpx",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "101efac178f147db2f7ea5e54897cd079e75b5aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/101efac178f147db2f7ea5e54897cd079e75b5aa"
+          },
+          {
+            "path": "mkdocs.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c0ccd805661d4092bfaf3195d7c243da415913d3",
+            "size": 1441,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c0ccd805661d4092bfaf3195d7c243da415913d3"
+          },
+          {
+            "path": "pyproject.toml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "4f7a848f8350ae392979d173631f27db6c6f7fd5",
+            "size": 3620,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/4f7a848f8350ae392979d173631f27db6c6f7fd5"
+          },
+          {
+            "path": "requirements.txt",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "af1caa5c5ae055a8f62e1bd0a924957846d9523e",
+            "size": 679,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/af1caa5c5ae055a8f62e1bd0a924957846d9523e"
+          },
+          {
+            "path": "scripts",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "278e0056f1a0af74899c43cb41aea759bfb505aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/278e0056f1a0af74899c43cb41aea759bfb505aa"
+          },
+          {
+            "path": "tests",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f"
+          }
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+      "observedAt": "2026-10-03T22:40:04.286Z",
+      "dataDigest": "4aa099f170d710197976dc52de89ec6e51634f52170ae6d038f16ad40ba88a39",
+      "data": {
+        "sha": "ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+        "tree": [
+          {
+            "path": "CONTRIBUTING.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "e1a953dc97e76c0cb138e14e1bd1f0681822c047",
+            "size": 8314,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/e1a953dc97e76c0cb138e14e1bd1f0681822c047"
+          },
+          {
+            "path": "FUNDING.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "2f87d94ca10327497ac0f4c0093930826ff76642",
+            "size": 15,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/2f87d94ca10327497ac0f4c0093930826ff76642"
+          },
+          {
+            "path": "ISSUE_TEMPLATE",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "8f9ff41084a965159612db5ca7d2259325763a75",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/8f9ff41084a965159612db5ca7d2259325763a75"
+          },
+          {
+            "path": "PULL_REQUEST_TEMPLATE.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "f19bf3c1f830f7ac31dfbc5ac27cf8a9ad4db088",
+            "size": 543,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/f19bf3c1f830f7ac31dfbc5ac27cf8a9ad4db088"
+          },
+          {
+            "path": "dependabot.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "32fd80e7ba2025ecc13465961f9fc06c38cccb56",
+            "size": 206,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/32fd80e7ba2025ecc13465961f9fc06c38cccb56"
+          },
+          {
+            "path": "workflows",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "bfb37b945315859fbf8086e3601ebd331c873c7b",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/bfb37b945315859fbf8086e3601ebd331c873c7b"
+          }
+        ],
+        "truncated": false
+      }
+    },
+    {
+      "endpoint": "GET /repos/encode/httpx/git/trees/bfb37b945315859fbf8086e3601ebd331c873c7b",
+      "observedAt": "2026-10-03T22:40:04.559Z",
+      "dataDigest": "5064c25b1f55bb8e422c1867873b5b2c208e816364f195d105fc135f5575bc9f",
+      "data": {
+        "sha": "bfb37b945315859fbf8086e3601ebd331c873c7b",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/bfb37b945315859fbf8086e3601ebd331c873c7b",
+        "tree": [
+          {
+            "path": "publish.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+            "size": 606,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4"
+          },
+          {
+            "path": "test-suite.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "0bb570cedb51dbc57b08f097523c5e9aa245f854",
+            "size": 795,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/0bb570cedb51dbc57b08f097523c5e9aa245f854"
+          }
+        ],
+        "truncated": false
+      }
+    }
+  ],
+  "license": {
+    "sourceRef": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+    "path": "LICENSE.md",
+    "text": "Copyright © 2019, [Encode OSS Ltd](https://www.encode.io/).\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\n\n* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\n\n* Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
+    "blobSha1": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+    "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+    "observation": {
+      "endpoint": "GET /repos/encode/httpx/contents/LICENSE.md?ref=7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "observedAt": "2026-10-03T22:40:05.825Z",
+      "dataDigest": "cbc3ffec12b69703b2a320fd1398b9db0b8cab4e4c8463a70bf17cdb745d3fc1",
+      "data": {
+        "name": "LICENSE.md",
+        "path": "LICENSE.md",
+        "sha": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+        "size": 1508,
+        "url": "https://api.github.com/repos/encode/httpx/contents/LICENSE.md?ref=7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "html_url": "https://github.com/encode/httpx/blob/7f4c512fe9db5eb0876adc2bff4153c04541006b/LICENSE.md",
+        "git_url": "https://api.github.com/repos/encode/httpx/git/blobs/ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+        "download_url": "https://raw.githubusercontent.com/encode/httpx/7f4c512fe9db5eb0876adc2bff4153c04541006b/LICENSE.md",
+        "type": "file",
+        "content": "Q29weXJpZ2h0IMKpIDIwMTksIFtFbmNvZGUgT1NTIEx0ZF0oaHR0cHM6Ly93\nd3cuZW5jb2RlLmlvLykuCkFsbCByaWdodHMgcmVzZXJ2ZWQuCgpSZWRpc3Ry\naWJ1dGlvbiBhbmQgdXNlIGluIHNvdXJjZSBhbmQgYmluYXJ5IGZvcm1zLCB3\naXRoIG9yIHdpdGhvdXQgbW9kaWZpY2F0aW9uLCBhcmUgcGVybWl0dGVkIHBy\nb3ZpZGVkIHRoYXQgdGhlIGZvbGxvd2luZyBjb25kaXRpb25zIGFyZSBtZXQ6\nCgoqIFJlZGlzdHJpYnV0aW9ucyBvZiBzb3VyY2UgY29kZSBtdXN0IHJldGFp\nbiB0aGUgYWJvdmUgY29weXJpZ2h0IG5vdGljZSwgdGhpcyBsaXN0IG9mIGNv\nbmRpdGlvbnMgYW5kIHRoZSBmb2xsb3dpbmcgZGlzY2xhaW1lci4KCiogUmVk\naXN0cmlidXRpb25zIGluIGJpbmFyeSBmb3JtIG11c3QgcmVwcm9kdWNlIHRo\nZSBhYm92ZSBjb3B5cmlnaHQgbm90aWNlLCB0aGlzIGxpc3Qgb2YgY29uZGl0\naW9ucyBhbmQgdGhlIGZvbGxvd2luZyBkaXNjbGFpbWVyIGluIHRoZSBkb2N1\nbWVudGF0aW9uIGFuZC9vciBvdGhlciBtYXRlcmlhbHMgcHJvdmlkZWQgd2l0\naCB0aGUgZGlzdHJpYnV0aW9uLgoKKiBOZWl0aGVyIHRoZSBuYW1lIG9mIHRo\nZSBjb3B5cmlnaHQgaG9sZGVyIG5vciB0aGUgbmFtZXMgb2YgaXRzIGNvbnRy\naWJ1dG9ycyBtYXkgYmUgdXNlZCB0byBlbmRvcnNlIG9yIHByb21vdGUgcHJv\nZHVjdHMgZGVyaXZlZCBmcm9tIHRoaXMgc29mdHdhcmUgd2l0aG91dCBzcGVj\naWZpYyBwcmlvciB3cml0dGVuIHBlcm1pc3Npb24uCgpUSElTIFNPRlRXQVJF\nIElTIFBST1ZJREVEIEJZIFRIRSBDT1BZUklHSFQgSE9MREVSUyBBTkQgQ09O\nVFJJQlVUT1JTICJBUyBJUyIgQU5EIEFOWSBFWFBSRVNTIE9SIElNUExJRUQg\nV0FSUkFOVElFUywgSU5DTFVESU5HLCBCVVQgTk9UIExJTUlURUQgVE8sIFRI\nRSBJTVBMSUVEIFdBUlJBTlRJRVMgT0YgTUVSQ0hBTlRBQklMSVRZIEFORCBG\nSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBUkUgRElTQ0xBSU1F\nRC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFIENPUFlSSUdIVCBIT0xERVIgT1Ig\nQ09OVFJJQlVUT1JTIEJFIExJQUJMRSBGT1IgQU5ZIERJUkVDVCwgSU5ESVJF\nQ1QsIElOQ0lERU5UQUwsIFNQRUNJQUwsIEVYRU1QTEFSWSwgT1IgQ09OU0VR\nVUVOVElBTCBEQU1BR0VTIChJTkNMVURJTkcsIEJVVCBOT1QgTElNSVRFRCBU\nTywgUFJPQ1VSRU1FTlQgT0YgU1VCU1RJVFVURSBHT09EUyBPUiBTRVJWSUNF\nUzsgTE9TUyBPRiBVU0UsIERBVEEsIE9SIFBST0ZJVFM7IE9SIEJVU0lORVNT\nIElOVEVSUlVQVElPTikgSE9XRVZFUiBDQVVTRUQgQU5EIE9OIEFOWSBUSEVP\nUlkgT0YgTElBQklMSVRZLCBXSEVUSEVSIElOIENPTlRSQUNULCBTVFJJQ1Qg\nTElBQklMSVRZLCBPUiBUT1JUIChJTkNMVURJTkcgTkVHTElHRU5DRSBPUiBP\nVEhFUldJU0UpIEFSSVNJTkcgSU4gQU5ZIFdBWSBPVVQgT0YgVEhFIFVTRSBP\nRiBUSElTIFNPRlRXQVJFLCBFVkVOIElGIEFEVklTRUQgT0YgVEhFIFBPU1NJ\nQklMSVRZIE9GIFNVQ0ggREFNQUdFLgo=\n",
+        "encoding": "base64",
+        "_links": {
+          "self": "https://api.github.com/repos/encode/httpx/contents/LICENSE.md?ref=7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "git": "https://api.github.com/repos/encode/httpx/git/blobs/ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+          "html": "https://github.com/encode/httpx/blob/7f4c512fe9db5eb0876adc2bff4153c04541006b/LICENSE.md"
+        }
+      }
+    },
+    "treeObservation": {
+      "endpoint": "GET /repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+      "observedAt": "2026-10-03T22:40:03.957Z",
+      "dataDigest": "c384676b9030ee00c99918155a5406615a20348e35f7f9097c267f271c34a245",
+      "data": {
+        "sha": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "url": "https://api.github.com/repos/encode/httpx/git/trees/58c8dffae1c39b3954b68d13041d024d45e6f712",
+        "tree": [
+          {
+            "path": ".github",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "ca875bbc57507706ecc45e98e6650cbfc4a5b3d8",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/ca875bbc57507706ecc45e98e6650cbfc4a5b3d8"
+          },
+          {
+            "path": ".gitignore",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4",
+            "size": 120,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/49e14ccc8ddce6b1390b122f4a9cdc18cd1a41b4"
+          },
+          {
+            "path": "CHANGELOG.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c895f688145f985051eddb6beaab90283b9db7fb",
+            "size": 50922,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c895f688145f985051eddb6beaab90283b9db7fb"
+          },
+          {
+            "path": "LICENSE.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+            "size": 1508,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ab79d16a3f4c6c894c028d1f7431811e8711b42b"
+          },
+          {
+            "path": "README.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "62fb295d17bc59a76a8f924e852c73b34b5ae064",
+            "size": 4856,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/62fb295d17bc59a76a8f924e852c73b34b5ae064"
+          },
+          {
+            "path": "README_chinese.md",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "ad20c5a1bfe8aa3bcfc79a8572667abafc717a71",
+            "size": 4584,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/ad20c5a1bfe8aa3bcfc79a8572667abafc717a71"
+          },
+          {
+            "path": "docs",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "dc9e061708224c8187e1e057afea5e32da8e8f76",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/dc9e061708224c8187e1e057afea5e32da8e8f76"
+          },
+          {
+            "path": "httpx",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "101efac178f147db2f7ea5e54897cd079e75b5aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/101efac178f147db2f7ea5e54897cd079e75b5aa"
+          },
+          {
+            "path": "mkdocs.yml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "c0ccd805661d4092bfaf3195d7c243da415913d3",
+            "size": 1441,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/c0ccd805661d4092bfaf3195d7c243da415913d3"
+          },
+          {
+            "path": "pyproject.toml",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "4f7a848f8350ae392979d173631f27db6c6f7fd5",
+            "size": 3620,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/4f7a848f8350ae392979d173631f27db6c6f7fd5"
+          },
+          {
+            "path": "requirements.txt",
+            "mode": "100644",
+            "type": "blob",
+            "sha": "af1caa5c5ae055a8f62e1bd0a924957846d9523e",
+            "size": 679,
+            "url": "https://api.github.com/repos/encode/httpx/git/blobs/af1caa5c5ae055a8f62e1bd0a924957846d9523e"
+          },
+          {
+            "path": "scripts",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "278e0056f1a0af74899c43cb41aea759bfb505aa",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/278e0056f1a0af74899c43cb41aea759bfb505aa"
+          },
+          {
+            "path": "tests",
+            "mode": "040000",
+            "type": "tree",
+            "sha": "c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f",
+            "url": "https://api.github.com/repos/encode/httpx/git/trees/c8c5d245b0e3e93af806b32ce8b43e2bbcb2ba3f"
+          }
+        ],
+        "truncated": false
+      }
+    }
+  }
+}

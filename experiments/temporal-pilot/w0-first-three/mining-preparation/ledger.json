@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline-w0-mining-preparation",
+  "createdAt": "2026-10-03T22:52:07Z",
+  "inputCommit": "04155f2d4fafa7063e55caedaa3f2353b85fc268",
+  "upstreamRequestsThisStep": 0,
+  "cumulativeUpstreamRequests": 48,
+  "additionalUpstreamRequestsPlanned": 0,
+  "store": "fresh-isolated-local-pglite",
+  "reopenedAndVerified": true,
+  "idempotenceVerified": true,
+  "counts": {
+    "qe_github_pr_evidence": 3,
+    "qe_pr_mining_requests": 3,
+    "qe_problem_cases": 8,
+    "qe_pr_mining_candidates": 0,
+    "qe_rule_bundles": 0,
+    "qe_feedback": 0,
+    "qe_semantic_review_feedback": 0
+  },
+  "modelExecution": "not_run",
+  "configuredModel": null,
+  "humanLabels": 0,
+  "candidates": 0,
+  "evaluationReady": false,
+  "scope": "User-authorized offline exploratory request preparation; original capture receipts remain immutable.",
+  "items": [
+    {
+      "number": 3035,
+      "packageSha256": "a0e1de76143154a1fd8f021c8be9f9a778a161986e5d5d03fc50e1ca92a92883",
+      "evidenceDigest": "ab4dad128cb8124d0c1de63e6ea55fc40557965749d9595fb2a84affa2a10c54",
+      "requestDigest": "d82c439e53ff66f157dea5c040e3936d3787e906720937e1e389f0730b484a85",
+      "sourceCapture": "captured",
+      "changeType": "docs-tool-dependency-bump",
+      "exploratoryIntent": "mkdocs-material 9.4.14 to 9.5.3",
+      "formalSemanticEligibility": "unknown",
+      "defectRuleSupport": "not_established",
+      "exploratoryRuleProposals": 0,
+      "zeroYieldMeaning": "Offline assistant reading found no sufficiently supported defect rule; not an executed mining outcome or gold label.",
+      "mining": "not_run",
+      "fullRepositoryAvailable": false,
+      "missingEvidence": [
+        "full repository checkout",
+        "documentation configuration",
+        "build results",
+        "project-specific defect evidence"
+      ],
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "labels": "unknown-only",
+      "beforeCommit": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "afterCommit": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+      "context": "selected-changed-sides-only",
+      "selectedSourceSides": 2,
+      "selectedStatements": [
+        "pull"
+      ],
+      "nativeAgentAudit": "exploratory-only-not-independent-human-labels",
+      "evaluationReady": false
+    },
+    {
+      "number": 3031,
+      "packageSha256": "41f3209e3209d8790127149d5928c27910048e3515cf60e786ccfd30b2247c7a",
+      "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+      "requestDigest": "649b2693c8fab5d2a76adc4aa0c98f801aca71af089258b531f19bf339497723",
+      "sourceCapture": "captured",
+      "changeType": "lint-tool-dependency-bump",
+      "exploratoryIntent": "ruff 0.1.6 to 0.1.9",
+      "formalSemanticEligibility": "unknown",
+      "defectRuleSupport": "not_established",
+      "exploratoryRuleProposals": 0,
+      "zeroYieldMeaning": "Offline assistant reading found no sufficiently supported defect rule; not an executed mining outcome or gold label.",
+      "mining": "not_run",
+      "fullRepositoryAvailable": false,
+      "missingEvidence": [
+        "full repository checkout",
+        "lint configuration",
+        "violation examples",
+        "before/after lint results"
+      ],
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "labels": "unknown-only",
+      "beforeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "afterCommit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+      "context": "selected-changed-sides-only",
+      "selectedSourceSides": 2,
+      "selectedStatements": [
+        "pull"
+      ],
+      "nativeAgentAudit": "exploratory-only-not-independent-human-labels",
+      "evaluationReady": false
+    },
+    {
+      "number": 3036,
+      "packageSha256": "9eb899563bd26d08fbd03d8b0fe0d4323243f5b20fd663d0969d81d877840ffd",
+      "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+      "requestDigest": "fceffa2a78a53080329a357218a05664a2cd261bc99cfe6d2f731cd3ddde40f1",
+      "sourceCapture": "captured",
+      "changeType": "ci-action-bump",
+      "exploratoryIntent": "setup-python v4 to v5 in publish and test workflows",
+      "formalSemanticEligibility": "unknown",
+      "defectRuleSupport": "not_established",
+      "exploratoryRuleProposals": 0,
+      "zeroYieldMeaning": "Offline assistant reading found no sufficiently supported defect rule; not an executed mining outcome or gold label.",
+      "mining": "not_run",
+      "fullRepositoryAvailable": false,
+      "missingEvidence": [
+        "full repository checkout",
+        "action implementation",
+        "workflow run results",
+        "compatibility verification"
+      ],
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "labels": "unknown-only",
+      "beforeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "afterCommit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "context": "selected-changed-sides-only",
+      "selectedSourceSides": 4,
+      "selectedStatements": [
+        "pull"
+      ],
+      "nativeAgentAudit": "exploratory-only-not-independent-human-labels",
+      "evaluationReady": false
+    }
+  ]
+}

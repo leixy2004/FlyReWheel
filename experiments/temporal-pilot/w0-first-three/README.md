@@ -10,7 +10,15 @@ read-only recheck of that same connection succeeded. The plan was then pushed
 and its remote branch fetched before the first upstream request. This ordering
 is a recorded operational sequence, not independent research preregistration.
 
-## Actual acquisition result
+## Latest bounded attempt
+
+The existing environment proxy was enabled only for the Node process after its
+plan was published. Diagnostic HTTP 200 unlocked the fixed three-PR capture;
+all three packages passed offline and independent native-agent audits. Total
+upstream usage is 48/50 GETs. See `proxy-attempt-1/README.md` and its manifest.
+These packages remain quarantined, with no labels or rule-mining result.
+
+## Earlier failed acquisition (preserved)
 
 `capture-run/run.json` records one attempted GET:
 `GET /repos/encode/httpx/pulls/3035`. It failed with `GITHUB_READ_FAILED`; no
@@ -48,9 +56,10 @@ head in the schema, with its own commit/root-tree observation. A root license
 must be bound to the captured head, its tree entry and exact content bytes. That
 check does not interpret license terms or establish coverage of before-source.
 
-The existing capture adapter does not yet emit the required identity/license
-sidecars. This remains an explicit acquisition implementation gap. An ordinary
-collector package must fail complete source-package validation until it is filled.
+The capture adapter now requires actual identity/license sidecars from the existing
+collector and validates each full package before acceptance. Missing or inconsistent
+sidecars fail closed. See `docs/w0-source-producer.md` for the producer and the
+specific diagnostic input needed before another real attempt.
 All current-observation content (including title/body/head/discussion) stays
 quarantined and cannot become rule input merely because acquisition succeeded.
 No W1/W2 source, diff, discussion, labels or model-output endpoint is authorized.
@@ -59,9 +68,8 @@ No independent human annotations, mining or real models were executed.
 The prepared validator also requires a bounded acquisition audit linking original
 receipt events and every added identity/license observation. Passing it means
 consistency of the supplied records, not proof of actual network activity. The
-initial endpoint allowlist supports the declared commit/root-tree/blob objects;
-uncatalogued nested tree traversals are rejected until their identities can be
-retained explicitly. The current failed run cannot pass this complete-package
+endpoint allowlist supports declared commits, root trees, reachable retained
+subtrees and changed blobs. Unretained or unreachable trees are rejected. The current failed run cannot pass this complete-package
 validator and must not be converted into a synthetic success artifact.
 
 Final targeted verification: 2 files / 34 tests passed (9 capture-control tests,

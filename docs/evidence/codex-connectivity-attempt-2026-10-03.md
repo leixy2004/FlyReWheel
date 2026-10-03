@@ -164,3 +164,183 @@ moved, and no app-server listener or additional model-capable process was starte
 A future diagnostic should identify the required writable state path while
 preserving the existing read-only credential location, rather than copy credentials
 or weaken filesystem permissions.
+
+## Path-level root cause: initialize-only diagnostics
+
+The coordinator then authorized filesystem-path diagnostics and non-inference
+initialization checks only. The existing `strace 6.13` was used; nothing was
+installed. The syscall allowlist was exactly `open,openat,mkdir,mkdirat,rename,
+renameat,unlink,unlinkat,link,linkat,symlink,symlinkat`, with `status=failed`.
+No read/write syscall buffers, execve arguments/environment arrays, auth-file
+contents or token values were traced. Reports retained failed paths and errno.
+
+Both runs used official CLI 0.159.2 `--no-daemon app-server --stdio`, the existing
+original authentication location, an empty temporary working directory and the
+same legal tool/search-disable controls. They sent only the JSON-RPC `initialize`
+request, under a 10-second diagnostic deadline. Neither reached a response or
+sent thread/turn/login methods. Stdio creates no TCP/WebSocket listener. These
+are initialization diagnostics, not additional model calls.
+
+### First required write: SQLite
+
+The baseline failed in 0.096 seconds on this exact syscall:
+
+```text
+open("/run/codex-environment/codex-home/state_5.sqlite",
+     O_RDWR|O_CREAT|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC, 0644) = -1 EROFS
+```
+
+The explicit app-server error identified failure to initialize SQLite under the
+original Codex home. This is stronger evidence than the prior generic exec error.
+
+### Supported partial fix, then second required write
+
+A second initialize-only run added the documented setting
+`-c 'sqlite_home="<task-owned-temporary-state-directory>"'`. This preserved the
+original HOME/CODEX_HOME and credential source. The setting was accepted by the
+actual installed CLI: SQLite state/queue/memory/goal/log files were created in the
+new directory. Their names were listed; their contents were not read or copied.
+
+Startup then failed in 0.343 seconds at:
+
+```text
+open("/run/codex-environment/codex-home/installation_id",
+     O_RDWR|O_CREAT|O_LARGEFILE|O_CLOEXEC, 0644) = -1 EROFS
+```
+
+A relative `openat(4, "uid_map", O_RDWR|O_CLOEXEC) = -1 EROFS` was also observed.
+Its absolute path and necessity were not established. It is not substituted for
+the confirmed installation-ID failure or claimed as an independently solved gate.
+
+The exact official release source corroborates the fatal installation-ID path:
+`rust-v0.159.2` resolves via annotated tag `8b9fa496bbf2c47aebd62e85a080b9a522a455b5`
+to commit `ff6aec96948b70d94983af2641a6b67c94faeff5`.
+[installation_id.rs:19-31](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/core/src/installation_id.rs#L19)
+constructs the path below codex_home and opens it read/write/create before reading
+or validating an existing ID.
+[app-server startup:769](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/app-server/src/lib.rs#L769)
+propagates that resolver error. These files were fetched read-only from GitHub;
+no upstream changes or comments were made.
+
+### Concrete capability gap
+
+The supported `sqlite_home` override solves the first state-directory write but
+is insufficient for a fresh nested CLI/app-server under this read-only original
+Codex home. No documented independent installation-ID path or read-only resolver
+mode was found. Changing `log_dir` cannot relocate this source-coded path, and
+normal ephemeral/no-history options do not bypass this startup resolver.
+
+Thus the **tested standalone nested CLI 0.159.2 route cannot initialize in the
+current filesystem boundary while preserving that unchanged credential home**.
+This is not a universal claim that every nested-CLI architecture is impossible,
+and is not a login, model, subscription or network failure. Resolution needs an
+environment-supported host app-server that is already initialized outside this
+boundary, or an officially supported CLI/environment fix for read-only identity
+state. No such capability was verified here. Do not grant broader host writes,
+relocate/link credentials, invent providers or patch/vendor Codex to claim success.
+
+For reproduction, send only an `initialize` JSON-RPC request on stdin to the
+version-pinned `app-server --stdio` command under the restricted strace allowlist
+above. First retain the original environment; then set only `sqlite_home` to a
+new task-owned directory. Bound each process to 10 seconds and terminate its
+process group if needed. Do not send `thread/start`, `turn/start`, login or token
+methods. The two exact failing writes above are sufficient to reproduce the
+observed initialization gates; no model prompt is required.
+
+Original sanitized diagnostic receipts:
+
+```json
+{
+  "operation": "stdio-initialize-only-path-diagnostic",
+  "exitCode": 1,
+  "elapsedSeconds": 0.096,
+  "timedOut": false,
+  "requestMethods": [
+    "initialize"
+  ],
+  "responseMetadata": [],
+  "failedFilesystemCalls": [
+    "5209  open(\"/run/codex-environment/codex-home/state_5.sqlite\", O_RDWR|O_CREAT|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC, 0644) = -1 EROFS (Read-only file system)"
+  ],
+  "errorLines": [
+    "WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30)",
+    "Error: failed to initialize sqlite state runtime under /run/codex-environment/codex-home: failed to initialize state runtime at /run/codex-environment/codex-home"
+  ],
+  "noModelTurnSubmitted": true
+}
+```
+
+```json
+{
+  "operation": "stdio-initialize-only-sqlite-override",
+  "exitCode": 1,
+  "elapsedSeconds": 0.343,
+  "initialized": false,
+  "stopReason": null,
+  "requestMethods": [
+    "initialize"
+  ],
+  "responseMetadata": [],
+  "failedFilesystemCalls": [
+    "5290  openat(4, \"uid_map\", O_RDWR|O_CLOEXEC) = -1 EROFS (Read-only file system)",
+    "5276  open(\"/run/codex-environment/codex-home/installation_id\", O_RDWR|O_CREAT|O_LARGEFILE|O_CLOEXEC, 0644) = -1 EROFS (Read-only file system)"
+  ],
+  "errorLines": [
+    "WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30)",
+    "Error: Read-only file system (os error 30)"
+  ],
+  "stateFiles": [
+    "queue_1.sqlite-wal",
+    "queue_1.sqlite",
+    "memories_1.sqlite",
+    "goals_1.sqlite",
+    "logs_2.sqlite-shm",
+    "logs_2.sqlite-wal",
+    "logs_2.sqlite",
+    "state_5.sqlite-shm",
+    "state_5.sqlite-wal",
+    "state_5.sqlite"
+  ],
+  "sqliteHome": "/tmp/flyrewheel-init-sqlite-ayutyk3_/state",
+  "originalAuthHomeUnchanged": true,
+  "noThreadOrTurnSubmitted": true
+}
+```
+
+No diagnostic process remained after completion. The original filesystem
+permissions/authentication source were unchanged. The separately owned compiled
+entrypoint fix is still assigned to the main session; this diagnostic made no
+runtime-source or container-recipe changes.
+
+## Independent authentication-source review (no further startup/model attempt)
+
+A separate read-only review checked whether authentication could stay at its
+existing read-only source while only non-credential CODEX_HOME moved to temporary
+writable storage. This rules out a different hypothesis from installation_id
+configuration alone. Pinned official rust-v0.159.2 commit:
+`ff6aec96948b70d94983af2641a6b67c94faeff5`.
+
+- File storage fixes the path to `codex_home/auth.json`, with no independent auth
+  path parameter in the reviewed load path.
+  [storage.rs:154](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/storage.rs#L154)
+- Direct keyring record keys derive from canonical CODEX_HOME, so changing it
+  selects a different record.
+  [storage.rs:238](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/storage.rs#L238)
+- Secrets keyring uses both encrypted files under that home and a home-derived
+  keyring key; it does not independently redirect to the existing auth source.
+  [local.rs:165](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/secrets/src/local.rs#L165),
+  [lib.rs:184](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/secrets/src/lib.rs#L184)
+- Official environment authentication exists, but presence-only checks found
+  `CODEX_ACCESS_TOKEN` and `CODEX_API_KEY` absent in this environment. No values
+  were read, and existing credentials were not extracted to populate them.
+  Ephemeral storage has no persistent fallback.
+  [manager.rs:1488](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/manager.rs#L1488)
+- `credential_broker` in the schema belongs to network proxy configuration, not
+  CLI authentication-file redirection.
+  [config.schema.json:2953](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/core/config.schema.json#L2953)
+
+Under the current no-copy/no-link/no-new-authorization constraints, these official
+mechanisms do not allow a writable temporary CODEX_HOME to reuse the existing
+read-only authentication source. A platform-provided broker or independently
+supplied authorized authentication mechanism remains required. No guessed auth
+path flag, credential read, startup retry or model invocation was performed.
