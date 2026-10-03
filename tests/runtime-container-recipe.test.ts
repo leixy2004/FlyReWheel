@@ -4,12 +4,13 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 // The verifier exports pure guards without opening Docker/network on import.
 // @ts-expect-error standalone operational .mjs has no declaration file
-import { budgetBytes, GiB, parseArgs, requireSpace, measurePublicCache, ownedContainerIds } from '../scripts/verify-worker-container.mjs';
+import { budgetBytes, GiB, parseArgs, requireSpace, measurePublicCache, ownedContainerIds, main } from '../scripts/verify-worker-container.mjs';
 
 describe('bounded container verification admission', () => {
   it('refuses malformed/unpinned inputs and ambiguous options before execution', () => {
     for (const args of [[], ['--base', 'node:22'], ['--base', `node@sha256:${'a'.repeat(64)}`, '--cache', '/tmp/public', '--cache-bytes', '-1'],
-      ['--base', `node@sha256:${'a'.repeat(64)}`, '--cache', '/tmp/public', '--cache-bytes', '100', '--base', 'node:22'], ['--unknown', 'yes']]) {
+      ['--base', `node@sha256:${'a'.repeat(64)}`, '--cache', '/tmp/public', '--cache-bytes', '100', '--base', 'node:22'], ['--unknown', 'yes'], ['--image', 'mutable:tag', '--image-source', 'a'.repeat(40)],
+      ['--image', `sha256:${'a'.repeat(64)}`, '--image-source', 'a'.repeat(40), '--cache', '/tmp/public']]) {
       expect(() => parseArgs(args)).toThrow();
     }
     expect(parseArgs(['--base', `node@sha256:${'a'.repeat(64)}`, '--cache', '/tmp/public', '--cache-bytes', '1024']).cacheBytes).toBe(1024);
@@ -27,6 +28,7 @@ describe('bounded container verification admission', () => {
       await mkdir(join(directory, '_cacache'));
       await writeFile(join(directory, '_cacache', 'public-package'), 'abc');
       expect(await measurePublicCache(directory)).toBe(3);
+      await expect(main(['--base', `node@sha256:${'a'.repeat(64)}`, '--cache', directory, '--cache-bytes', '1'])).rejects.toThrow('below measured');
       await writeFile(join(directory, '.npmrc'), 'authored-non-secret-fixture');
       await expect(measurePublicCache(directory)).rejects.toThrow('only public _cacache');
       await rm(join(directory, '.npmrc'));

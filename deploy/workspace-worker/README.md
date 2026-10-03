@@ -1,6 +1,6 @@
 # OpenSandbox workspace-worker image recipe
 
-This is a **build recipe**, not a published image or a verified deployment. It packages the fixed worker entrypoint used by the [OpenSandbox adapter](../../docs/opensandbox-workspace-adapter.md). The checked-in gateway profile is deliberately blocked. No image build, registry pull/push, live OpenSandbox/k3s run, gateway authentication, or model inference has been performed for this recipe.
+This is a **build recipe**, not a published image or a verified deployment. It packages the fixed worker entrypoint used by the [OpenSandbox adapter](../../docs/opensandbox-workspace-adapter.md). The checked-in gateway profile is deliberately blocked. The separate bounded VFS variant has now been built and exercised in local no-model runc checks; see the [2026-10-03 evidence](../../docs/evidence/worker-container-bounded-2026-10-03.md). No image was published, and no live OpenSandbox/k3s run, gateway authentication or model inference was verified.
 
 The existing root `Dockerfile` and `deploy/base` worker are a different service. Do not substitute their account-authenticated image, credential mounts, or settings for this credential-free workspace worker.
 
@@ -99,7 +99,7 @@ sh -n deploy/workspace-worker/workspace-worker
 
 These check input validation, lockfile pins, config defaults and static recipe/wrapper contracts. They are **not container execution tests**. Also run the repository's typecheck, build, worker/adapter tests and full regression suite against the final source.
 
-Before production, actually build and inspect the image, verify SDK/CLI assets and ownership as UID 10001, confirm the blocked profile refuses model execution, and exercise exact-SHA/branch/history/cleanliness and hostile-repository failures with the real image. Then independently test the gateway and all lifecycle/storage/network controls above in the chosen self-hosted deployment, including interrupted/late allocations and cleanup failures. None of those live image/deployment checks has been performed by adding this recipe. The adapter must remain fail-closed until they are satisfied.
+Before production, actually build and inspect the image, verify SDK/CLI assets and ownership as UID 10001, confirm the blocked profile refuses model execution, and exercise exact-SHA/branch/history/cleanliness and hostile-repository failures with the real image. Then independently test the gateway and all lifecycle/storage/network controls above in the chosen self-hosted deployment, including interrupted/late allocations and cleanup failures. The bounded variant has local image/checkout smoke evidence linked above; the live deployment/gateway/lifecycle checks remain open. The adapter must remain fail-closed until they are satisfied.
 
 ## Bounded VFS build and local container smoke
 
@@ -154,3 +154,20 @@ authentication, production isolation or a model review loop. The blocked profile
 returns before request inspection, so that check does not validate protected
 request-file ownership. Existing effective-settings evidence is maintained in
 [the separate configuration report](../../docs/codex-effective-config-readiness.md).
+
+To rerun only the smoke against an already built local image, supply its immutable
+ID and the recorded build source SHA (both from the original build evidence):
+
+```sh
+node scripts/verify-worker-container.mjs \
+  --image "$WORKSPACE_WORKER_IMAGE_ID" \
+  --image-source "$RECORDED_BUILD_SOURCE_SHA"
+```
+
+Reuse compares all admitted source/recipe inputs against that Git revision and
+refuses changed inputs; it does not pull or rebuild. The source/image association
+is caller-supplied evidence, not cryptographic attestation. The script transfers a
+bounded Git bundle through stdin into container tmpfs as UID 10001, then creates
+the required `attempt/runtime--smoke` branch at the exact checked source SHA.
+Docker `cp` cannot populate the read-only rootfs in this environment, so it is
+not used. This smoke transfer is not the production protected-request ingress.
