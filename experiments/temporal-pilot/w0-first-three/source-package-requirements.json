@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_source_package_requirements",
+  "selectionCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
+  "selectionFile": "selection.json",
+  "selectionSha256": "ed908425462c155e2f84b7bd2ba55797a4077b0ce770c8933b2b83ce8971be43",
+  "selectionPublicStatus": "pushed_after_initial_auth_recovery_before_first_upstream_request",
+  "selectedPrNumbers": [
+    3035,
+    3031,
+    3036
+  ],
+  "maxGetRequests": 50,
+  "requestAccounting": "All capture, identity and license requests including failures must share this budget. No retry or alternate transport after failure.",
+  "futureBoundary": "No W1/W2 PR/source/diff/discussion/labels/model-output endpoints. Current observations on selected W0 PRs remain wholly quarantined.",
+  "dataClasses": {
+    "authoredFixture": "Synthetic tests only; cannot be accepted as live acquisition.",
+    "liveApiObservation": "Requires acquisition receipt, full identity/license evidence and internal hash checks; does not prove historical availability or authenticity independently."
+  },
+  "requiredEvidence": [
+    "Validated original PR package with live API receipt matching fixed selection",
+    "Distinct baseTip, mergeBase and head commit/root-tree observations; no substitution of mergeBase for baseTip",
+    "Pinned head root tree membership for a root LICENSE/LICENCE/COPYING blob",
+    "License original text, blob SHA1, SHA256, exact pinned source ref and provider response observations",
+    "Shared acquisition audit binds main receipt and sidecar observations, rejects over-budget or out-of-scope endpoints."
+  ],
+  "rejectMissing": [
+    "license",
+    "baseTip root-tree identity",
+    "mergeBase root-tree identity",
+    "head root-tree identity",
+    "live receipt",
+    "fixed selection match"
+  ],
+  "releaseState": "quarantine_only_not_rule_input_not_publication_authorization",
+  "remainingAcquisitionWork": [
+    "Capture adapter does not yet emit required identity/license sidecars.",
+    "First original collector request failed; no raw source or discussion package exists."
+  ],
+  "evaluationReady": false,
+  "modelCalls": 0,
+  "independentLabels": 0,
+  "requirementsTiming": "Prepared after the first request failed with zero evidence bytes; this is not a pre-acquisition preregistration."
+}

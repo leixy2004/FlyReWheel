@@ -1,20 +1,67 @@
 {
-  "kind": "w0_acquisition_preflight_status",
-  "status": "blocked_before_acquisition",
-  "planCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
-  "planPushed": false,
-  "blocker": "Existing cloud GitHub connection returned HTTP 401 Bad credentials; no credential or transport fallback attempted.",
-  "upstreamGetRequests": 0,
+  "kind": "w0_acquisition_status",
+  "status": "stopped_on_first_upstream_read",
+  "previousPreflight": {
+    "kind": "w0_acquisition_preflight_status",
+    "status": "blocked_before_acquisition",
+    "planCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
+    "planPushed": false,
+    "blocker": "Existing cloud GitHub connection returned HTTP 401 Bad credentials; no credential or transport fallback attempted.",
+    "upstreamGetRequests": 0,
+    "items": [
+      {
+        "number": 3035,
+        "status": "unattempted"
+      },
+      {
+        "number": 3031,
+        "status": "unattempted"
+      },
+      {
+        "number": 3036,
+        "status": "unattempted"
+      }
+    ],
+    "cliGate": "PLAN_PUSH_NOT_VERIFIED_NETWORK_CAPTURE_DISABLED",
+    "offlineTests": {
+      "command": "npx vitest run tests/w0-first-three.test.ts --maxWorkers=2",
+      "passed": 9
+    },
+    "licenseAcquisition": "not_implemented",
+    "rootTreeIdentityRetention": "not_implemented",
+    "independentLabels": 0,
+    "mining": "not_run",
+    "modelCalls": 0
+  },
+  "connectionRecheck": {
+    "tool": "gh api user --jq .login",
+    "result": "leixy2004",
+    "credentialsModified": false
+  },
+  "planPushed": true,
+  "publishedPlanCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
+  "captureRun": "capture-run/run.json",
+  "upstreamGetRequests": 1,
   "items": [
-    {"number": 3035, "status": "unattempted"},
-    {"number": 3031, "status": "unattempted"},
-    {"number": 3036, "status": "unattempted"}
+    {
+      "number": 3035,
+      "status": "failed",
+      "requests": 1,
+      "failure": "GITHUB_READ_FAILED"
+    },
+    {
+      "number": 3031,
+      "status": "unattempted"
+    },
+    {
+      "number": 3036,
+      "status": "unattempted"
+    }
   ],
-  "cliGate": "PLAN_PUSH_NOT_VERIFIED_NETWORK_CAPTURE_DISABLED",
-  "offlineTests": {"command": "npx vitest run tests/w0-first-three.test.ts --maxWorkers=2", "passed": 9},
-  "licenseAcquisition": "not_implemented",
-  "rootTreeIdentityRetention": "not_implemented",
+  "acceptedEvidenceBytes": 0,
+  "failureInterpretation": "GITHUB_READ_FAILED without retained HTTP response diagnostic. Octokit console 500/UNKNOWN is not evidence of an actual HTTP 500 response.",
+  "retryOrAlternateTransport": false,
+  "modelCalls": 0,
   "independentLabels": 0,
-  "mining": "not_run",
-  "modelCalls": 0
+  "mining": "not_run"
 }
