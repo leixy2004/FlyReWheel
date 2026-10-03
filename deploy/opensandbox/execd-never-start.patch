@@ -1,0 +1,24 @@
+--- a/server/opensandbox_server/services/docker/runtime.py
++++ b/server/opensandbox_server/services/docker/runtime.py
+@@ -82,16 +82,15 @@
+                         "name": f"sandbox-execd-{uuid4()}",
+                         "detach": True,
+                         "auto_remove": False,
++                        # Local hardening: archive extraction never starts a process.
++                        "network_mode": "none",
++                        "cap_drop": ["ALL"],
++                        "security_opt": ["no-new-privileges"],
++                        "read_only": True,
+                     }
+                     if docker_platform is not None:
+                         create_kwargs["platform"] = docker_platform
+                     container = self.docker_client.containers.create(**create_kwargs)
+-                with self._docker_operation("execd cache start container", "execd-cache"):
+-                    container.start()
+-                    container.reload()
+-                    logger.info(
+-                        f"Created sandbox execd archive for container {container.id}"
+-                    )
+             except TypeError as exc:
+                 if docker_platform is not None:
+                     raise HTTPException(

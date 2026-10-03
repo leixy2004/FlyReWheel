@@ -1,0 +1,7 @@
+{
+  "upstreamCommit": "c7dc78a4090e5de2b9119e9bd93952cae24f87bd",
+  "path": "server/opensandbox_server/services/docker/runtime.py",
+  "originalSha256": "84222fb1e69257ec433469efa0c5da8eaad220e9ed971e907677cbff2ae499be",
+  "patchedSha256": "6b2037ccb1be25b0c3fb8e7a1de56d4e84030326250b1d81c208e3675a8142db",
+  "status": "local modification; not upstream release"
+}
