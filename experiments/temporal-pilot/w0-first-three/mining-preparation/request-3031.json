@@ -1,0 +1,82 @@
+{
+  "digest": "649b2693c8fab5d2a76adc4aa0c98f801aca71af089258b531f19bf339497723",
+  "request": {
+    "schemaVersion": 1,
+    "kind": "pr-rule-mining-request",
+    "input": {
+      "id": "w0-exploratory-3031",
+      "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+      "sources": [
+        {
+          "side": "before",
+          "path": "requirements.txt"
+        },
+        {
+          "side": "after",
+          "path": "requirements.txt"
+        }
+      ],
+      "statements": [
+        {
+          "kind": "pull"
+        }
+      ],
+      "requestedRule": {
+        "ruleId": "httpx-w0-3031",
+        "version": "exploratory-1",
+        "parentDigest": null
+      },
+      "objective": "Assess whether the selected changed sources support a reusable semantic invariant. Preserve unknowns; return insufficient_evidence when support is missing. Merge, approvals, version bumps and third-party release notes are not defect or correctness labels.",
+      "actor": "assistant-offline-exploratory-preparation-not-human-labeler",
+      "source": "supplied",
+      "createdAt": "2026-10-03T22:52:07Z"
+    },
+    "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+    "sourceBindings": [
+      {
+        "caseId": "pr-case_24a98554a5b29606432914e4cf9b605c0128be68ad70dd147d44e8a8f741ce16",
+        "repository": "github:encode/httpx",
+        "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "path": "requirements.txt",
+        "sourceDigest": "0b7c3e6d7fe920aad5c2dd067ad3c2967c670773c4650191653fcb0a8e516fb4",
+        "side": "before",
+        "objectId": "c3619d2d8bc3efd2e3766fccf2dbe5d30ecd4885",
+        "mode": "100644",
+        "byteLength": 679,
+        "caseDigest": "b662e1e03029113e82bc72b53a9f1737d341b977d53ae5076efc323f0e22f6a2"
+      },
+      {
+        "caseId": "pr-case_cadf11d1e6de32ec00abb81983c8ca88847aa82b75b2fd0fcfee61c7c0082b66",
+        "repository": "github:encode/httpx",
+        "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "path": "requirements.txt",
+        "sourceDigest": "fbd729cad0494610f007ae83311cf168613db51bb216df7b98799906d7668ece",
+        "side": "after",
+        "objectId": "af1caa5c5ae055a8f62e1bd0a924957846d9523e",
+        "mode": "100644",
+        "byteLength": 679,
+        "caseDigest": "47c5c45abf440b082e69f90fbae1d91141850f3cf2917a5e2c13180f7e9b291e"
+      }
+    ],
+    "statementBindings": [
+      {
+        "selection": {
+          "kind": "pull"
+        },
+        "digest": "d3400d5ba2fb9872851e720ac213d9ea9aa8c82368788efb40714c0d3f3e6fcc"
+      }
+    ],
+    "status": "pending",
+    "synthesis": "not_run",
+    "trust": {
+      "evidence": "package-integrity-only",
+      "observation": "current-api-state",
+      "historicalReviewCheckpoint": false,
+      "statements": "untrusted-not-ground-truth-or-feedback",
+      "labels": "unknown-only",
+      "identity": "caller-declared-unverified",
+      "context": "selected-changed-sides-only",
+      "certification": "none"
+    }
+  }
+}

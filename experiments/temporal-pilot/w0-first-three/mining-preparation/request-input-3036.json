@@ -1,0 +1,36 @@
+{
+  "id": "w0-exploratory-3036",
+  "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+  "sources": [
+    {
+      "side": "before",
+      "path": ".github/workflows/publish.yml"
+    },
+    {
+      "side": "after",
+      "path": ".github/workflows/publish.yml"
+    },
+    {
+      "side": "before",
+      "path": ".github/workflows/test-suite.yml"
+    },
+    {
+      "side": "after",
+      "path": ".github/workflows/test-suite.yml"
+    }
+  ],
+  "statements": [
+    {
+      "kind": "pull"
+    }
+  ],
+  "requestedRule": {
+    "ruleId": "httpx-w0-3036",
+    "version": "exploratory-1",
+    "parentDigest": null
+  },
+  "objective": "Assess whether the selected changed sources support a reusable semantic invariant. Preserve unknowns; return insufficient_evidence when support is missing. Merge, approvals, version bumps and third-party release notes are not defect or correctness labels.",
+  "actor": "assistant-offline-exploratory-preparation-not-human-labeler",
+  "source": "supplied",
+  "createdAt": "2026-10-03T22:52:07Z"
+}
