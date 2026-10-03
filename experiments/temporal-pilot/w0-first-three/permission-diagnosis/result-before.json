@@ -1,0 +1,75 @@
+{
+  "side": "before",
+  "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+  "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+  "imageId": "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+  "imageBytes": 169332904,
+  "binary": {
+    "name": "ruff-before",
+    "wheel": {
+      "file": "ruff-0.1.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "bytes": 6295145,
+      "sha256": "3a0cd909d25f227ac5c36d4e7e681577275fb74ba3b11d288aff7ec47e3ae745"
+    },
+    "member": "ruff-0.1.6.data/scripts/ruff",
+    "archiveMode": "0o100755",
+    "extractedMode": "0555",
+    "bytes": 16175600,
+    "sha256": "bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c",
+    "magic": "7f454c46"
+  },
+  "sourceFileCount": 114,
+  "createArgs": [
+    "docker",
+    "create",
+    "--pull=never",
+    "--name",
+    "flyrewheel-w0-readonly-ruff-before",
+    "--user",
+    "65534:65534",
+    "--network=none",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges:true",
+    "--pids-limit=64",
+    "--cpus=1",
+    "--memory=512m",
+    "--memory-swap=512m",
+    "--tmpfs=/tmp:rw,noexec,nosuid,nodev,size=128m,mode=1777",
+    "--workdir=/source",
+    "--entrypoint=/usr/local/bin/python",
+    "--mount",
+    "type=bind,src=/tmp/flyrewheel-w0-permission-attempt-1/run-before/source,dst=/source,readonly",
+    "--mount",
+    "type=bind,src=/tmp/flyrewheel-w0-permission-attempt-1/run-before/harness,dst=/harness,readonly",
+    "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+    "-I",
+    "/harness/runner.py",
+    "before",
+    "bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c"
+  ],
+  "createExit": 0,
+  "createStderr": "",
+  "isolation": {
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges:true"
+    ],
+    "Memory": 536870912,
+    "MemorySwap": 536870912,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 64,
+    "Tmpfs": {
+      "/tmp": "rw,noexec,nosuid,nodev,size=128m,mode=1777"
+    }
+  },
+  "containerExit": 0,
+  "stdout": "{\"kind\": \"preflight\", \"uid\": 65534, \"toolHash\": \"bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c\", \"toolMode\": \"0o100555\", \"tmpMount\": \"135 126 0:57 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=131072k\", \"sourceFilesVerified\": 114, \"python\": \"3.11.17 (main, Oct  1 2026, 21:51:14) [GCC 14.2.0]\"}\n{\"kind\": \"command\", \"command\": [\"/opt/ruff/before\", \"--version\"], \"exitCode\": 0, \"stdout\": \"ruff 0.1.6\\n\", \"stderr\": \"\"}\n{\"kind\": \"command\", \"command\": [\"/opt/ruff/before\", \"format\", \"httpx\", \"tests\", \"--diff\"], \"exitCode\": 0, \"stdout\": \"\", \"stderr\": \"60 files left unchanged\\n\"}\n{\"kind\": \"command\", \"command\": [\"/opt/ruff/before\", \"check\", \"httpx\", \"tests\"], \"exitCode\": 0, \"stdout\": \"\", \"stderr\": \"\"}\n{\"kind\": \"postflight\", \"sourceBytesUnchanged\": true}\n",
+  "stderr": "",
+  "removed": true,
+  "elapsedSeconds": 1.358
+}
