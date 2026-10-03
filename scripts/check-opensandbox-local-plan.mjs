@@ -10,7 +10,7 @@ const GiB = 1024 ** 3;
 const Plan = z.object({
   serverHost: z.literal('127.0.0.1'),
   publishHost: z.literal('127.0.0.1'),
-  networkMode: z.enum(['bridge', 'none']),
+  networkMode: z.enum(['internal-bridge', 'bridge', 'none']),
   executionTransport: z.enum(['official-sdk', 'docker-exec']),
   useServerProxy: z.literal(true),
   proxyResolveInternal: z.literal(false),
@@ -36,7 +36,7 @@ const Plan = z.object({
 }).strict();
 
 export const proposedPlan = {
-  serverHost: '127.0.0.1', publishHost: '127.0.0.1', networkMode: 'bridge',
+  serverHost: '127.0.0.1', publishHost: '127.0.0.1', networkMode: 'internal-bridge',
   executionTransport: 'official-sdk', useServerProxy: true, proxyResolveInternal: false,
   execdExtractionHelper: 'pinned-local-patch-never-started',
   noNewPrivileges: true, dropCapabilities: ['ALL'], pidsLimit: 64, networkPolicy: null,
@@ -68,7 +68,7 @@ export function checkPlan(input) {
     blockers,
     limitation: plan.executionTransport === 'docker-exec'
       ? 'Docker exec is an out-of-band command check, not SDK execd verification'
-      : 'bridge without policy does not prove deny-default egress or production isolation',
+      : 'internal bridge blocks direct external routing but retains host/gateway reachability; production isolation is unproven',
   };
 }
 

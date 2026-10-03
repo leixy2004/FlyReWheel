@@ -146,16 +146,28 @@ def validate(options):
     if public_command(["docker", "ps", "-aq"]).strip():
         raise ValueError("existing Docker containers; refuse startup restoration")
     public_command(["docker", "image", "inspect", options.execd_image, "--format", "{{.Id}}"])
+    network = json.loads(public_command(["docker", "network", "inspect", options.network]))[0]
+    validate_internal_network(network, options.network, options.network_owner)
     return source, python
 
 
-def build_config(task, key):
+def validate_internal_network(network, name, owner):
+    if not owner or network.get("Name") != name or network.get("Driver") != "bridge" or network.get("Internal") is not True:
+        raise ValueError("task-owned internal bridge required")
+    if network.get("Labels", {}).get("flyrewheel.lifecycle-owner") != owner or network.get("Containers"):
+        raise ValueError("network ownership or empty inventory mismatch")
+    allowed = {"com.docker.network.bridge.host_binding_ipv4": "127.0.0.1"}
+    if network.get("Options") != allowed or network.get("EnableIPv6") or network.get("Scope") != "local":
+        raise ValueError("unexpected internal network options")
+
+
+def build_config(task, key, network="bridge"):
     """Pure configuration construction; callers choose real or nonsensitive fixture key."""
     return (f'[server]\nhost="127.0.0.1"\napi_key={json.dumps(key)}\n'
                   f'[runtime]\ntype="docker"\nexecd_image={json.dumps(EXECD_IMAGE)}\n'
                   f'[store]\ntype="sqlite"\npath={json.dumps(str(task / "state.db"))}\n'
                   '[proxy]\nresolve_internal=false\n'
-                  '[docker]\nnetwork_mode="bridge"\npublish_host="127.0.0.1"\n'
+                  f'[docker]\nnetwork_mode={json.dumps(network)}\npublish_host="127.0.0.1"\n'
                   'port_range_min=49000\nport_range_max=49100\n'
                   'drop_capabilities=["ALL"]\nno_new_privileges=true\npids_limit=64\n'
                   '[storage]\nallowed_host_paths=["/nonexistent/flyrewheel-denied"]\n'
@@ -190,7 +202,7 @@ def run_supervisor(options):
                "PYTHONDONTWRITEBYTECODE": "1", "SANDBOX_CONFIG_PATH": str(task / "config.toml")}
         key = secrets.token_urlsafe(32)
         private_file(task / "api-key", key.encode())
-        config = build_config(task, key)
+        config = build_config(task, key, options.network)
         private_file(task / "config.toml", config.encode())
         public_command(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
                         "-keyout", str(task / "tls.key.new"), "-out", str(task / "tls.crt.new"),
@@ -250,16 +262,18 @@ def main(argv=None):
     parser.add_argument("--python")
     parser.add_argument("--execd-image")
     parser.add_argument("--dedicated-daemon", action="store_true")
+    parser.add_argument("--network")
+    parser.add_argument("--network-owner")
     parser.add_argument("--supervisor", action="store_true", help=argparse.SUPPRESS)
     options = parser.parse_args(argv)
     if not options.execute:
         publish(status="dry-run", upstream=UPSTREAM, runtimeSha256=PATCHED, deadlineSeconds=DEADLINE,
                 execdImage=EXECD_IMAGE, startupFreeBytes=7 * GiB, stopFreeBytes=6 * GiB,
                 required=["explicit execute", "parent approval reference", "preinstalled venv", "pinned patched source",
-                          "preloaded execd image digest", "dedicated idle Docker daemon"],
+                          "preloaded execd image digest", "dedicated idle Docker daemon", "empty task-owned internal bridge"],
                 scope="control-plane-process-only", permissionReceipt=False)
         return 0
-    if not all((options.approval_ref, options.source, options.python, options.execd_image, options.dedicated_daemon)):
+    if not all((options.approval_ref, options.source, options.python, options.execd_image, options.dedicated_daemon, options.network, options.network_owner)):
         parser.error("execute requires all explicit preparation and approval inputs")
     if options.supervisor:
         run_supervisor(options)

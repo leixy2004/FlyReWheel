@@ -1,5 +1,10 @@
 # Prepared environment — awaiting API-key/TLS/startup approval
 
+**Later outcome:** approval was received and one actual SDK allocation was attempted.
+TLS/auth passed, readiness timed out, and all live resources were independently
+verified removed. See [the live evidence](evidence/opensandbox-live-2026-10-03/README.md).
+The pending/next-step language below records the earlier preparation stage.
+
 No API key, certificate, listening service or model request was created. The
 previous helper asset test was not repeated. This preparation is distinct from
 an actual OpenSandbox server or SDK lifecycle receipt.

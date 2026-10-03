@@ -37,7 +37,8 @@ of future SDK allocations.
 After actual user approval, explicit execution requires `--execute`, an
 `--approval-ref` audit reference, `--source` pointing to the exact patched upstream
 checkout, `--python` pointing to an already installed venv outside that checkout,
-`--execd-image` with the exact tested digest, and `--dedicated-daemon`. The approval
+`--execd-image` with the exact tested digest, `--dedicated-daemon`, and an empty
+task-owned internal bridge identified by `--network` and `--network-owner`. The approval
 reference is operator-supplied context, **not a fabricated permission receipt**.
 The executor refuses dirty/untracked source beyond the pinned patch, an unexpected
 image, any existing Docker container, insufficient space, or a non-pipe supervisor
@@ -78,3 +79,8 @@ submodel validation is not a full server configuration/startup test. They create
 start no OpenSandbox service. Five separate archive-verifier tests cover Docker
 error/ownership classification. The real five-asset archive test remains separate
 from these fake failure-path tests and from an actual patched-server startup.
+
+The [authorized live outcome](../../docs/evidence/opensandbox-live-2026-10-03/README.md)
+records verified TLS/authentication and one allocation, followed by SDK readiness
+timeout and independently verified cleanup. It does not establish command/pause
+or complete lifecycle readiness. No further allocation is authorized by this file.

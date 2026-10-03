@@ -35,6 +35,17 @@ class ControlPlaneTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             schema.DockerConfig.model_validate({**config["docker"], "port_range_max": 49009})
 
+    def test_network_admission_requires_owned_internal_bridge(self):
+        network = {"Name": "task-net", "Driver": "bridge", "Internal": True,
+                   "Labels": {"flyrewheel.lifecycle-owner": "owner"}, "Containers": {},
+                   "Options": {"com.docker.network.bridge.host_binding_ipv4": "127.0.0.1"},
+                   "EnableIPv6": False, "Scope": "local"}
+        control.validate_internal_network(network, "task-net", "owner")
+        for change in ({"Internal": False}, {"Driver": "host"}, {"Labels": {}},
+                       {"Containers": {"other": {}}}, {"Options": {}}, {"EnableIPv6": True}):
+            with self.assertRaises(ValueError):
+                control.validate_internal_network({**network, **change}, "task-net", "owner")
+
     def test_default_dry_run_has_no_resource_effects(self):
         output = io.StringIO()
         with patch.object(control, "validate", side_effect=AssertionError("validation I/O")), \

@@ -1,5 +1,10 @@
 # Minimal local OpenSandbox control plane — pending, not executed
 
+**Later outcome:** approval was received and one actual SDK allocation was attempted.
+TLS/auth passed, readiness timed out, and all live resources were independently
+verified removed. See [the live evidence](evidence/opensandbox-live-2026-10-03/README.md).
+The pending/next-step language below records the earlier preparation stage.
+
 **Current disposition:** the separately authorized never-started Docker archive
 experiment succeeded. The [pinned local patch](../deploy/opensandbox/README.md)
 removes helper execution, so the former default-root/network helper exception
