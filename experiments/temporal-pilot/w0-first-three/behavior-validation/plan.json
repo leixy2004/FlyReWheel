@@ -73,5 +73,11 @@
     "retries": 0
   },
   "claims": "W0 availability/behavior only; no independent human labels, semantic oracle, model execution or effectiveness claims; retain no-test/zero-yield/unknown and all failures",
-  "approval": "If additional approval is required stop the blocked action; no isolation or TLS weakening."
+  "approval": "If additional approval is required stop the blocked action; no isolation or TLS weakening.",
+  "amendment": {
+    "reason": "First container could not read assistant-owned harness (permission denied before Ruff ran). Preserve failure; correct staging readability only. No upstream source/assertion, uid, network, mount or resource changes.",
+    "infrastructureRetries": 1,
+    "toolCompatibilityRetries": 0,
+    "maxContainersStarted": 3
+  }
 }
