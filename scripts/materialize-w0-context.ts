@@ -182,6 +182,10 @@ export async function runMaterialization(stage: string) {
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { values } = parseArgs({ options: { worker: { type: 'string' }, stage: { type: 'string' } } });
   if (values.worker) await worker(resolve(values.worker));
-  else if (values.stage) console.log(JSON.stringify(await runMaterialization(resolve(values.stage)), null, 2));
+  else if (values.stage) {
+    const report = await runMaterialization(resolve(values.stage));
+    console.log(JSON.stringify(report, null, 2));
+    if (report.status !== 'completed') process.exitCode = 1;
+  }
   else throw new Error('Specify --stage NEW_ABSOLUTE_DIRECTORY; no automatic retries');
 }
