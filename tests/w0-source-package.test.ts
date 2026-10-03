@@ -1,52 +1,44 @@
-import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { expect, it } from 'vitest';
 import { validateW0SourcePackage, W0SourcePackageSchema } from '../scripts/validate-w0-source-package.js';
-import { DEFAULT_SNAPSHOT_LIMITS, validateChangeSnapshot } from '../src/change-snapshot.js';
-import { validateGithubPrEvidence } from '../src/github-pr-evidence.js';
 import { digestOf } from '../src/core/identity.js';
+import { w0SourceFixture as fixture } from './helpers/w0-source-fixture.js';
 
-// All data below is authored synthetic test input in memory. A live-shaped declaration
-// exercises consistency rules only; it is never a real acquisition artifact or saved dataset.
-function fixture(): any {
-  const number = 3035, repository = 'encode/httpx', timestamp = '2026-10-03T00:00:00Z';
-  const mergedAt = '2024-01-03T05:11:45Z', mergeCommit = 'b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5';
-  const baseTip = '1'.repeat(40), mergeBase = '2'.repeat(40), head = '3'.repeat(40), url = `https://github.com/${repository}/pull/${number}`;
-  const snapshot = validateChangeSnapshot({ schemaVersion: 1, kind: 'git-change-snapshot',
-    repository: { id: `github:${repository}`, identityVerification: 'caller-supplied-unverified', objectFormat: 'sha1' },
-    baseTip, mergeBase, head, comparison: 'merge-base-to-head', renamePolicy: 'exact-content-only', limits: DEFAULT_SNAPSHOT_LIMITS,
-    prMetadata: { verification: 'caller-supplied-unverified', provider: 'github', repository, number, url }, changes: [],
-    coverage: { changedPaths: 0, capturedSides: 0, excludedSides: 0, capturedBytes: 0, scope: 'changed-entries-only' } });
-  const evidence = validateGithubPrEvidence({ schemaVersion: 1, kind: 'github-pr-evidence', snapshotDigest: snapshot.digest, snapshot: snapshot.snapshot,
-    pull: { id: number, number, repository, url, title: 'SYNTHETIC TEST ONLY', body: null, author: null,
-      state: 'closed', draft: false, merged: true, createdAt: mergedAt, updatedAt: mergedAt, closedAt: mergedAt, mergedAt,
-      baseRef: 'main', baseTip, headRef: 'fixture', head, headRepository: repository, mergeCommit,
-      reportedChangedFiles: 0, reportedIssueComments: 0, reportedReviewComments: 0 },
-    source: { provider: 'github', apiOrigin: 'https://api.github.com', observation: 'current-api-state', historicalReviewCheckpoint: false,
-      ancestry: 'provider-declared', inventory: 'provider-declared-compare', repositoryContext: 'changed-paths-only',
-      discussionConsistency: 'non-atomic-current-observation', discussionCoverage: 'all-pages-returned-within-limits', compareFileCount: 0,
-      sourceStatements: 'untrusted-not-ground-truth-or-feedback' }, discussions: { issueComments: [], reviews: [], reviewComments: [] } });
-  const prefix = 'GET /repos/encode/httpx';
-  const observation = (endpoint: string, data: object) => ({ endpoint, observedAt: timestamp, dataDigest: digestOf(data), data });
-  const identity = (commit: string, tree: string) => ({ commit, tree, observation: observation(`${prefix}/git/commits/${commit}`, { sha: commit, tree: { sha: tree } }) });
-  const sourceIdentities = { baseTip: { ...identity(baseTip, '4'.repeat(40)), role: 'current-tip-metadata-only-not-source' },
-    mergeBase: identity(mergeBase, '5'.repeat(40)), head: identity(head, '6'.repeat(40)) };
-  const text = 'SYNTHETIC LICENSE FIXTURE: no real license rights established.\n', bytes = Buffer.from(text);
-  const blobSha1 = createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
-  const path = 'LICENSE.md';
-  const result = { schemaVersion: 1, kind: 'w0-source-package', provenance: 'live-api-observation',
-    planSha256: '9b024e81a3886794d4b50fb44767cd53a10a794ffbaf881e4305c6cfd648898a',
-    evidence: { ...evidence, receipt: { kind: 'github-api-observation', startedAt: timestamp, completedAt: timestamp,
-      authentication: 'none', transport: '@octokit/rest@22.0.1', verification: 'live-api-observation-not-verified-history',
-      requestLimit: 50, requests: 1, decodedResponseBytes: 0, observations: [{ endpoint: `${prefix}/pulls/${number}`, observedAt: timestamp, dataDigest: digestOf({}) }] } },
-    sourceIdentities, license: { sourceRef: head, path, text, blobSha1, sha256: createHash('sha256').update(bytes).digest('hex'),
-      observation: observation(`${prefix}/contents/${path}?ref=${head}`, { type: 'file', path, sha: blobSha1, size: bytes.length, encoding: 'base64', content: bytes.toString('base64') }),
-      treeObservation: observation(`${prefix}/git/trees/${sourceIdentities.head.tree}`, { sha: sourceIdentities.head.tree, truncated: false,
-        tree: [{ path, mode: '100644', type: 'blob', sha: blobSha1, size: bytes.length }] }) } };
-  const observations = [...result.evidence.receipt.observations, ...Object.values(sourceIdentities).map(identity => identity.observation),
-    result.license.observation, result.license.treeObservation].map(({ endpoint, observedAt, dataDigest }) => ({ endpoint, observedAt, dataDigest }));
-  return { ...result, acquisition: { maxGetRequests: 50, requests: observations.length, observations } };
+function refreshObservation(value: any, observation: any) {
+  const previous = observation.dataDigest;
+  observation.dataDigest = digestOf(observation.data);
+  for (const list of [value.acquisition.observations, value.evidence.receipt.observations])
+    for (const row of list) if (row.endpoint === observation.endpoint && row.dataDigest === previous) row.dataDigest = observation.dataDigest;
 }
+function appendTree(value: any, sha: string, tree: any[]) {
+  const data = { sha, truncated: false, tree };
+  const observation = { endpoint: `GET /repos/encode/httpx/git/trees/${sha}`,
+    observedAt: value.license.treeObservation.observedAt, dataDigest: digestOf(data), data };
+  value.sourceTrees.push(observation);
+  const { data: _body, ...event } = observation;
+  value.acquisition.observations.push(structuredClone(event)); value.acquisition.requests++;
+  value.evidence.receipt.observations.push(structuredClone(event)); value.evidence.receipt.requests++;
+  return observation;
+}
+function nestedFixture() {
+  const value = fixture(), bytes = Buffer.from('synthetic nested source\n');
+  const objectId = execFileSync('git', ['hash-object', '--stdin'], { input: bytes, encoding: 'utf8', timeout: 5000 }).trim();
+  const evidence = value.evidence.evidence;
+  evidence.snapshot.changes = [{ status: 'A', before: { state: 'absent' }, after: { state: 'captured',
+    path: 'pkg/file.py', mode: '100644', objectId, byteLength: bytes.length,
+    sha256: createHash('sha256').update(bytes).digest('hex'), bytesBase64: bytes.toString('base64') } }];
+  evidence.snapshot.coverage = { changedPaths: 1, capturedSides: 1, excludedSides: 0, capturedBytes: bytes.length, scope: 'changed-entries-only' };
+  evidence.snapshotDigest = digestOf(evidence.snapshot);
+  evidence.pull.reportedChangedFiles = 1; evidence.source.compareFileCount = 1;
+  value.evidence.digest = digestOf(evidence);
+  value.license.treeObservation.data.tree.push({ path: 'pkg', mode: '040000', type: 'tree', sha: '7'.repeat(40) });
+  refreshObservation(value, value.license.treeObservation);
+  appendTree(value, value.sourceIdentities.mergeBase.tree, []);
+  const nestedTree = appendTree(value, '7'.repeat(40), [{ path: 'file.py', mode: '100644', type: 'blob', sha: objectId, size: bytes.length }]);
+  return { value, nestedTree };
+}
+
 
 it('checks synthetic live-shaped consistency without certifying authenticity, history or license rights', () => {
   const value = fixture();
@@ -68,6 +60,7 @@ it('accepts GitHub base64 with actual newline wrapping', () => {
   observation.data.content = observation.data.content.match(/.{1,20}/g).join('\n') + '\n';
   observation.dataDigest = digestOf(observation.data);
   value.acquisition.observations.find((row: any) => row.dataDigest === previous).dataDigest = observation.dataDigest;
+  value.evidence.receipt.observations.find((row: any) => row.dataDigest === previous).dataDigest = observation.dataDigest;
   expect(() => validateW0SourcePackage(value)).not.toThrow();
 });
 
@@ -110,4 +103,22 @@ it.each(['2024-04-06T06:30:16Z', '2024-07-23T14:43:47Z'])('rejects W1/W2 merge d
   const value = fixture(); value.evidence.evidence.pull.mergedAt = mergedAt;
   value.evidence.digest = digestOf(value.evidence.evidence);
   expect(() => validateW0SourcePackage(value)).toThrow('NOT_FROZEN_W0_MEMBER');
+});
+
+it('accepts a changed nested path with retained root-to-child trees and bound source bytes', () => {
+  const { value } = nestedFixture();
+  expect(() => validateW0SourcePackage(value)).not.toThrow();
+});
+
+it('rejects an unreachable retained source tree even when its response is included in both audits', () => {
+  const value = fixture();
+  appendTree(value, '8'.repeat(40), []);
+  expect(() => validateW0SourcePackage(value)).toThrow('UNREACHABLE_SOURCE_TREE');
+});
+
+it('rejects changed source bytes that disagree with the reachable tree despite refreshed observation digests', () => {
+  const { value, nestedTree } = nestedFixture();
+  nestedTree.data.tree[0].sha = '8'.repeat(40);
+  refreshObservation(value, nestedTree);
+  expect(() => validateW0SourcePackage(value)).toThrow('SOURCE_BYTES_TREE_MISMATCH');
 });

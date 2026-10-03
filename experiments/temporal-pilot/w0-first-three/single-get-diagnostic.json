@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_single_get_diagnostic",
+  "endpoint": "GET /repos/encode/httpx/pulls/3035",
+  "transport": "@octokit/rest@22.0.1",
+  "authentication": "none",
+  "startedAt": "2026-10-03T22:26:54.289Z",
+  "originalRunRequests": 1,
+  "requestBudget": 50,
+  "automaticRetries": 0,
+  "sourceProducer": "implemented_offline_verified",
+  "realSourcePackages": 0,
+  "sourceOrDiscussionFollowupRequests": 0,
+  "modelCalls": 0,
+  "completedAt": "2026-10-03T22:26:54.371Z",
+  "requests": 1,
+  "totalRequestsUsed": 2,
+  "status": "failed",
+  "httpStatus": null,
+  "classification": {
+    "category": "network-connection",
+    "code": "ECONNREFUSED"
+  },
+  "errorChain": [
+    {
+      "name": "HttpError"
+    },
+    {
+      "name": "TypeError"
+    },
+    {
+      "name": "Error",
+      "code": "ECONNREFUSED"
+    }
+  ],
+  "originalRunSha256": "20c0657b8c305dab41723504566a415dd6509a5416c791b37e3d887463957208"
+}

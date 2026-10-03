@@ -50,9 +50,44 @@ export function githubHttpFailureDiagnostic(error: unknown): GithubHttpFailureDi
   };
 }
 
+export type GithubReadFailureClassification = {
+  category: 'http-authentication' | 'http-forbidden' | 'http-rate-limit' | 'http-api' |
+    'tls' | 'network-dns' | 'network-connection' | 'network-timeout' | 'transport-unknown';
+  code?: string;
+};
+const transportCodes: Record<string, GithubReadFailureClassification['category']> = {
+  CERT_HAS_EXPIRED: 'tls', DEPTH_ZERO_SELF_SIGNED_CERT: 'tls', SELF_SIGNED_CERT_IN_CHAIN: 'tls',
+  UNABLE_TO_VERIFY_LEAF_SIGNATURE: 'tls', UNABLE_TO_GET_ISSUER_CERT_LOCALLY: 'tls',
+  ERR_TLS_CERT_ALTNAME_INVALID: 'tls', ERR_TLS_CERT_SIGNATURE_ALGORITHM_UNSUPPORTED: 'tls',
+  ENOTFOUND: 'network-dns', EAI_AGAIN: 'network-dns',
+  ECONNREFUSED: 'network-connection', ECONNRESET: 'network-connection', ENETUNREACH: 'network-connection',
+  EHOSTUNREACH: 'network-connection', UND_ERR_SOCKET: 'network-connection',
+  ETIMEDOUT: 'network-timeout', UND_ERR_CONNECT_TIMEOUT: 'network-timeout',
+  UND_ERR_HEADERS_TIMEOUT: 'network-timeout', UND_ERR_BODY_TIMEOUT: 'network-timeout',
+};
+/** Only fixed code enums from at most three own data-property cause links are inspected.
+ * Transport-code inspection never invokes getters or reads messages, URLs or headers.
+ * HTTP metadata selection uses the existing response diagnostic helper; raw causes are never emitted.
+ * An SDK status without a real response does not establish an HTTP failure.
+ */
+export function classifyGithubReadFailure(error: unknown,
+  http: GithubHttpFailureDiagnostic | undefined = githubHttpFailureDiagnostic(error)): GithubReadFailureClassification {
+  if (http) return { category: http.status === 401 ? 'http-authentication' :
+    http.status === 429 || http.status === 403 && http.rateLimitRemaining === 0 ? 'http-rate-limit' :
+    http.status === 403 ? 'http-forbidden' : 'http-api' };
+  let current = record(error);
+  for (let depth = 0; current && depth < 3; depth++) {
+    const code = Object.getOwnPropertyDescriptor(current, 'code')?.value;
+    if (typeof code === 'string' && Object.hasOwn(transportCodes, code)) return { category: transportCodes[code], code };
+    current = record(Object.getOwnPropertyDescriptor(current, 'cause')?.value);
+  }
+  return { category: 'transport-unknown' };
+}
+
 /** Deliberately drops the raw provider error, including credential-bearing causes. */
 export class GithubReadError extends Error {
-  constructor(endpoint: string, public readonly diagnostic?: GithubHttpFailureDiagnostic) {
+  constructor(endpoint: string, public readonly diagnostic?: GithubHttpFailureDiagnostic,
+    public readonly classification: GithubReadFailureClassification = classifyGithubReadFailure(undefined, diagnostic)) {
     super(`GitHub read failed for ${endpoint}${diagnostic ? ` (HTTP ${diagnostic.status})` : ''}; no evidence produced`);
     this.name = 'GithubReadError';
   }
