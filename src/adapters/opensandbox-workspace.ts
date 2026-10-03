@@ -117,7 +117,14 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
   private async withSignal<T>(signal: AbortSignal, action: () => Promise<T>): Promise<T> {
     const abort = () => this.abort.abort();
     signal.addEventListener('abort', abort, { once: true }); if (signal.aborted) abort();
-    try { this.assertActive(); return await action(); }
+    try {
+      this.assertActive();
+      const result = await action();
+      // An SDK promise may fulfill after abort/fencing even when it emitted no
+      // further events. Keep the listener until result acceptance is checked.
+      this.assertActive();
+      return result;
+    }
     finally { signal.removeEventListener('abort', abort); }
   }
   private async prepareOwned(): Promise<RuntimeObservation> {
@@ -153,6 +160,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       // full history, ignored/untracked/index state without reading repository config.
       const checked = await this.command([this.config.workerExecutable, 'verify', this.request.expectedSha,
         this.workspace.branch, this.request.historyPolicy, ...(this.request.evaluation ? [JSON.stringify(this.request.evaluation)] : [])], ROOT);
+      this.assertActive();
       if (checked.exitCode !== 0) throw new Error('OpenSandbox checkout verification failed');
       const observation = Observation.parse(JSON.parse(checked.stdout));
       if (observation.expectedSha !== this.request.expectedSha || observation.headSha !== this.request.expectedSha
@@ -173,6 +181,7 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       await this.sandbox!.files.writeFiles([{ path: INPUT, data: input, mode: 600 }]);
       this.assertActive();
       const output = await this.command([this.config.workerExecutable, 'run', INPUT], ROOT);
+      this.assertActive();
       if (output.exitCode !== 0) throw new Error('OpenSandbox worker failed');
       return JSON.parse(output.stdout) as unknown;
     }).catch(() => { throw new Error('OpenSandbox worker failed or exceeded its bounds'); });
@@ -195,6 +204,8 @@ class OpenSandboxRuntime implements CodexWorkspaceRuntime {
       } else if (event.type === 'error') { error = true; }
       else if (!['init', 'execution_count', 'result'].includes(event.type)) throw new Error('Unexpected OpenSandbox command event');
     }
+    // EOF itself can arrive late without yielding an event for the loop's guard.
+    this.assertActive();
     if (!complete && !error) throw new Error('Missing OpenSandbox completion');
     return { stdout, stderr, exitCode: error ? 1 : 0 };
   }
