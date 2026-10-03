@@ -1,8 +1,7 @@
 /** Offline deployment-plan checks; optional HTTPS /health probe never allocates. */
 import assert from 'node:assert/strict';
 import https from 'node:https';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { readFile, realpath } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
@@ -130,7 +129,9 @@ async function main(args) {
   }
   throw new Error('Use no arguments, --plan JSON_FILE, or --health https://127.0.0.1:PORT/health [--ca-file PUBLIC_CERT]');
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Module URLs resolve symlinks while argv can retain the launch alias.
+const launchPath = process.argv[1] ? await realpath(process.argv[1]).catch(() => undefined) : undefined;
+if (launchPath && launchPath === await realpath(fileURLToPath(import.meta.url))) {
   main(process.argv.slice(2)).then(result => {
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
     if (result.ok === false) process.exitCode = 1;

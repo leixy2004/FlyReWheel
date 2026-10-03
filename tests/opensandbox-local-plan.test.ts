@@ -1,7 +1,47 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { execFile } from 'node:child_process';
+import { mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, relative } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { promisify } from 'node:util';
 import net from 'node:net';
 // @ts-expect-error Standalone operational script has no declaration file.
 import { checkPlan, healthUrl, proposedPlan, probeHealth, classifyHealth } from '../scripts/check-opensandbox-local-plan.mjs';
+
+describe('offline plan CLI entrypoint', () => {
+  const exec = promisify(execFile);
+  const script = fileURLToPath(new URL('../scripts/check-opensandbox-local-plan.mjs', import.meta.url));
+  let directory: string, alias: string, invalidPlan: string;
+  beforeAll(async () => {
+    directory = await mkdtemp(join(tmpdir(), 'flyrewheel-plan-entrypoint-'));
+    alias = join(directory, 'plan alias #.mjs');
+    invalidPlan = join(directory, 'invalid.json');
+    await symlink(script, alias);
+    await writeFile(invalidPlan, '{}');
+  });
+  afterAll(async () => { await rm(directory, { recursive: true, force: true }); });
+  it.each(['direct', 'relative-direct', 'file-symlink', 'relative-file-symlink'] as const)
+  ('rejects an invalid plan on %s launch', async launch => {
+    const target = launch.includes('symlink') ? alias : script;
+    const path = launch.startsWith('relative-') ? relative(directory, target) : target;
+    await expect(exec(process.execPath, [path, '--plan', invalidPlan], { cwd: directory, timeout: 5000 }))
+      .rejects.toMatchObject({ code: 1, stdout: '', stderr: expect.any(String) });
+    await expect(exec(process.execPath, [path, '--plan', join(directory, 'missing.json')], { cwd: directory, timeout: 5000 }))
+      .rejects.toMatchObject({ code: 1, stdout: '', stderr: expect.any(String) });
+    const result = await exec(process.execPath, [path], { cwd: directory, timeout: 5000 });
+    expect(result.stderr).toBe('');
+    expect(JSON.parse(result.stdout)).toEqual(checkPlan(proposedPlan));
+  });
+  it.each(['eval', 'harness'] as const)('does not automatically execute on %s import', async mode => {
+    const code = `await import(${JSON.stringify(pathToFileURL(script).href)}); process.stdout.write('import-only');`;
+    const harness = join(directory, 'import-only.mjs');
+    if (mode === 'harness') await writeFile(harness, code);
+    const args = mode === 'eval' ? ['--input-type=module', '--eval', code] : [harness, '--plan', invalidPlan];
+    const result = await exec(process.execPath, args, { cwd: directory, timeout: 5000 });
+    expect(result).toMatchObject({ stdout: 'import-only', stderr: '' });
+  });
+});
 
 async function fixture(action: (socket: net.Socket) => void) {
   const sockets = new Set<net.Socket>();
