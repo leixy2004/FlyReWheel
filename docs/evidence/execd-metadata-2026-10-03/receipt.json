@@ -1,0 +1,100 @@
+{
+  "tag": "opensandbox/execd:v1.1.0",
+  "indexDigest": "sha256:6cf7dba2f21f0b536e100563d841ac58a9f31c2b0a081b7ac76796a24d6f47e2",
+  "platform": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:9b856dad9c73488660522361abfaaa1ddbb9032169bcfb44c83348f46bc1cd9a",
+    "size": 2768,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "configDigest": "sha256:e12d3de4b28e820bc966fe875484b35a5fad9322c4ef8a5b6751873da03bd214",
+  "compressedLayerBytes": 60314718,
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:55afa1ecc21d2bb5e5045f32dafee56272ffd89860bac26f6c32123439af26a4",
+      "size": 3846391
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:e9379e9c5bf3ec2b59cd8244a57bad8e3a002cbf644e20fd8936b88b2f4d9062",
+      "size": 302978
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:285c8284320af3d8ba3c4974b4fdfacca054b3b996b29dea2401d5952743c72c",
+      "size": 6991
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:f2b0c317ea1905c6b5a1d655680e834ffe731addfff9a0129d48506b98c655aa",
+      "size": 6958
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:1ab18f3c989621c41ad0ea7c6a8800acb8a7f4859b88af475a95eb9907ff0804",
+      "size": 26007
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:6532fb5a4f8aa93daac7ed90d780b6ad363e696444e98b2e51fb76fa33bbc095",
+      "size": 25964
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:4e4876e79a6a42483c076e4204c1274493088f85c192b40258e1342bd90e3088",
+      "size": 17310760
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:013c67c3e1bed4abb1bca289b4aa0d821b8ec29e3010fa995064426a1469f2f8",
+      "size": 17094516
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:cf0cd2e17f9489d6e8cebe3d6bf7d3a70bf3f525ad48ee8ff4f98ddd728f1fb8",
+      "size": 3524771
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:1605f940e1247f3f44990b94a42be12796b56b1fce3530134cef258e2c5671ac",
+      "size": 18159828
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:83cd3a30cae101522426c4bea3c0ec12abf8ac09c90e0372a9b0fd073fcd0c11",
+      "size": 6661
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:9f9501e079dedb798b9701de8b8c7abaa783174c79df3d20163567bc57ec8177",
+      "size": 1445
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:4c233aa180f659b82ee9e0760933bd44202704606f9ebf88ddc77e5d0271c002",
+      "size": 1448
+    }
+  ],
+  "diffIds": [
+    "sha256:34884abbe92863fce933ed7c39c0e045631af0ed86d5cc0dfbdf9fdca426ce3c",
+    "sha256:febbf7681db0e9b62ed0ac10c798b85ff77d7b78676b5072be18cbb92615acbf",
+    "sha256:f760215efc9aad4a6cf7ad30d07cec1837a67a6eb1a8fded7241ecbbcfe516b2",
+    "sha256:41ce6587428c8f1c3533ad1d47a69605f8d68947b03cfc7250ac4471c75043a3",
+    "sha256:2a83a740beca02a9e1f41bf9b8b520b413ae86ba1f508e0a908b0dea82abd47e",
+    "sha256:a0fd2901cff171ab503b66347ddcf0ae0c48a8d6a897f0179aeb6acaa88187cd",
+    "sha256:4dfb50c8542f53daac5b4dd1e3f457f926ee4de57ad2a9f92b323aa8cef3c3b1",
+    "sha256:6e95cd8228f54d6c142e6fbde0b1b2e216d68c118c6c5f8c22ef478136b650a3",
+    "sha256:ba9ea783011cd65db068d05a6461dec013e4dc7501bacae1de6540a71036440b",
+    "sha256:5f7604ea881ceba4a26f0ce801015f7615bbcf32224e47a5dc5a17476710c207",
+    "sha256:9e61240bf3e667f4a599f216498cc7a6f2ed2ae48fece20580ea55bf1810438b",
+    "sha256:0fbf288519ee6225225751a8229ebf1054bfff65479eaeed3acdd436807b1e70",
+    "sha256:f5fa57a42e29c3073773c5602019d3833c6e705d4fc820d8dd744efa092b8336"
+  ],
+  "imageUser": null,
+  "volumes": null,
+  "historyEntries": 15
+}
