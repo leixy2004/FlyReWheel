@@ -31,7 +31,7 @@ class ControlPlaneTests(unittest.TestCase):
         self.assertEqual(validated.port_range_max - validated.port_range_min, 100)
         self.assertEqual(validated.publish_host, "127.0.0.1")
         self.assertEqual(validated.drop_capabilities, ["ALL"])
-        self.assertFalse(config["proxy"]["resolve_internal"])
+        self.assertTrue(config["proxy"]["resolve_internal"])
         with self.assertRaises(ValueError):
             schema.DockerConfig.model_validate({**config["docker"], "port_range_max": 49009})
 

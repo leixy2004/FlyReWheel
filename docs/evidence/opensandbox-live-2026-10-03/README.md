@@ -120,8 +120,8 @@ counter corroborated by the sole Docker worker create/start sequence; do not rel
 it as a newly measured dispatch counter. The preallocation receipt's earlier zero
 counter had the documented method-detection limitation.
 
-Read-only source review found no unique root cause for readiness timeout: named
-internal bridge is not rejected by the inspected server code, proxy host stays
-127.0.0.1 without an explicit `docker.host_ip`, and UID 10001 does not perform archive
-injection. Future diagnosis needs narrowly captured readiness errors/worker logs,
-not a claim that internal networking or UID is already proven faulty.
+The initial source review did not establish a root cause. Subsequent
+[offline diagnosis](offline-readiness-diagnosis.md) identified a definite mismatch
+between internal Docker networking and the configured host-port proxy path, and
+fixed the local control-plane configuration. No further allocation was performed;
+execd startup and lifecycle behavior remain unverified.

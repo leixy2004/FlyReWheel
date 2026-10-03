@@ -163,10 +163,12 @@ def validate_internal_network(network, name, owner):
 
 def build_config(task, key, network="bridge"):
     """Pure configuration construction; callers choose real or nonsensitive fixture key."""
+    # Internal Docker bridges do not publish host ports. The host-side server
+    # must reach execd by container IP; clients still use its HTTPS API proxy.
     return (f'[server]\nhost="127.0.0.1"\napi_key={json.dumps(key)}\n'
                   f'[runtime]\ntype="docker"\nexecd_image={json.dumps(EXECD_IMAGE)}\n'
                   f'[store]\ntype="sqlite"\npath={json.dumps(str(task / "state.db"))}\n'
-                  '[proxy]\nresolve_internal=false\n'
+                  '[proxy]\nresolve_internal=true\n'
                   f'[docker]\nnetwork_mode={json.dumps(network)}\npublish_host="127.0.0.1"\n'
                   'port_range_min=49000\nport_range_max=49100\n'
                   'drop_capabilities=["ALL"]\nno_new_privileges=true\npids_limit=64\n'
