@@ -1,0 +1,7 @@
+Workspace worker entrypoint checkpoint, 2026-10-02, baseline 12acf64
+Implementer final run: 399 tests across 36 files, maxWorkers=2, passed
+9 offline image-recipe checks; typecheck; build; deployment validation passed
+Source and compiled CLI tests used authored fixtures
+Parent git diff --check passed
+No container image build, live authentication, model, or cluster test
+Production control-storage/request-ownership and gateway/lifecycle prerequisites remain

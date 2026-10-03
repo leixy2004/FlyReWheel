@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-01",
+  "runtime": "compiled dist/cli.js in separate processes",
+  "storage": "fresh local PGlite",
+  "passed": true,
+  "ruleDigest": "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed",
+  "snapshotDigest": "389df7f9513bf2f2076f0038748594b4ff25e53250db3a82707a9841e4fcc673",
+  "reviewId": "review_f83b6ef8b2d5e5d03ae0a5f0be2a6865c369e93551a28988162c94997800d718",
+  "findingId": "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+  "nativeOccurrences": 2,
+  "aggregatedFindings": 1,
+  "semanticOrigin": "fixture",
+  "humanVerdict": "Unknown",
+  "feedbackSource": "fixture",
+  "feedbackKind": "note",
+  "feedbackLabel": null,
+  "requestDigest": "5b5a3ecf82d416a86e14311a74cbfdf369420cddc83e2fb4edc19be1ff9057db",
+  "requestStatus": "pending",
+  "synthesis": "not_run",
+  "ruleVersionCountAfterRequests": 1,
+  "verified": [
+    "idempotent demo and reopened reads",
+    "explicit fixture review",
+    "exact whitespace-preserved feedback",
+    "frozen pending request",
+    "no request-created rule version"
+  ],
+  "limitations": [
+    "Synthetic input; no verified Git history or authenticated human approval",
+    "Changed-entry context only; introduction and notification eligibility unverified",
+    "No live model, auth, sandbox, provider publication or remote PostgreSQL verification"
+  ]
+}

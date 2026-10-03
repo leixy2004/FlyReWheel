@@ -1,0 +1,949 @@
+{
+  "description": "Pre-operator-policy authored fixture captured from the unchanged v1 implementation. No live model, credentials, or provider calls.",
+  "graph": {
+    "request": {
+      "digest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+      "request": {
+        "id": "pending-request",
+        "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+        "requestedRuleVersion": "generated",
+        "feedbackIds": [
+          "selected-fp"
+        ],
+        "requestedChange": "Propose a guard exception; leave unrelated violations intact",
+        "actor": "authored-fixture",
+        "source": "fixture",
+        "createdAt": "2026-10-02T00:00:00Z",
+        "schemaVersion": 1,
+        "kind": "rule-revision-request",
+        "status": "pending",
+        "feedbackBindings": [
+          {
+            "id": "selected-fp",
+            "digest": "4aa6e7f815cc17ce72ba442953acccab1130121c1af78d768f1a1cfe5cbeaba1"
+          }
+        ],
+        "synthesis": "not_run"
+      }
+    },
+    "baseRule": {
+      "digest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+      "rule": {
+        "schemaVersion": 2,
+        "ruleId": "generated-revision-rule",
+        "version": "base",
+        "semantics": {
+          "title": "Danger needs a guard",
+          "mechanism": "Missing guard",
+          "invariant": "Use a guard",
+          "applicability": [
+            "Danger calls"
+          ],
+          "exceptions": [],
+          "requiredContext": [],
+          "expectedBehavior": "Preserve uncertainty"
+        },
+        "scope": {
+          "repositories": [
+            "fixture:revision-generation"
+          ],
+          "paths": {
+            "include": [
+              "src"
+            ],
+            "exclude": []
+          }
+        },
+        "detectionAssets": [
+          {
+            "id": "danger",
+            "detector": {
+              "kind": "ast-grep",
+              "language": "typescript",
+              "pattern": "danger($ARG)"
+            }
+          }
+        ],
+        "regressionCases": [
+          {
+            "caseId": "positive-case",
+            "role": "positive"
+          },
+          {
+            "caseId": "safe-case",
+            "role": "negative"
+          }
+        ],
+        "provenance": {
+          "sourceCases": [
+            {
+              "caseId": "positive-case",
+              "repository": "fixture:revision-generation",
+              "commit": "4893f16a2cc87b9cbcd7dae45ad9284b37f24f6e",
+              "path": "src/positive.ts",
+              "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7"
+            }
+          ],
+          "parentDigest": null,
+          "author": "authored-fixture",
+          "createdAt": "2026-10-02T00:00:00Z",
+          "rationale": "Authored offline rule"
+        }
+      }
+    },
+    "cases": [
+      {
+        "id": "positive-case",
+        "lineageId": "positive-case",
+        "split": "training",
+        "expected": "violation",
+        "title": "Authored regression case",
+        "repository": "fixture:revision-generation",
+        "commit": "4893f16a2cc87b9cbcd7dae45ad9284b37f24f6e",
+        "path": "src/positive.ts",
+        "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:revision-generation",
+          "reviewedBy": null,
+          "derivedFromCaseId": null
+        }
+      },
+      {
+        "id": "safe-case",
+        "lineageId": "safe-case",
+        "split": "training",
+        "expected": "safe",
+        "title": "Authored regression case",
+        "repository": "fixture:revision-generation",
+        "commit": "4893f16a2cc87b9cbcd7dae45ad9284b37f24f6e",
+        "path": "src/safe.ts",
+        "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+        "provenance": {
+          "kind": "synthetic",
+          "reference": "fixture:revision-generation",
+          "reviewedBy": null,
+          "derivedFromCaseId": null
+        }
+      }
+    ],
+    "feedback": [
+      {
+        "feedback": {
+          "id": "selected-fp",
+          "findingId": "review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b",
+          "reviewId": "review_0322a47dc2b2d854c9509113efb7cc07feaf645e28958b201495e34afef7139c",
+          "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+          "ruleVersion": "base",
+          "source": "fixture",
+          "actor": "authored-fixture",
+          "kind": "label",
+          "label": "FP",
+          "reason": "Guard is present at this anchor",
+          "createdAt": "2026-10-02T00:00:00Z"
+        },
+        "finding": {
+          "id": "review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b",
+          "reviewId": "review_0322a47dc2b2d854c9509113efb7cc07feaf645e28958b201495e34afef7139c",
+          "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+          "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+          "ruleId": "generated-revision-rule",
+          "ruleVersion": "base",
+          "targetId": "ffdd05bf190f2c3d18601e173e9e58bdbca5d639fe37d2e4b86a20c2fd518407",
+          "anchor": {
+            "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+            "side": "after",
+            "path": "src/safe.ts",
+            "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+            "span": {
+              "start": {
+                "line": 1,
+                "column": 13,
+                "offset": 12
+              },
+              "end": {
+                "line": 1,
+                "column": 24,
+                "offset": 23
+              }
+            }
+          },
+          "occurrenceIds": [
+            "41e498e577fa69f001ff16a3c833da9b30a546495ef030c2f6f2ad94a5c9cf90"
+          ],
+          "status": "violation",
+          "origin": "fixture",
+          "reasoning": "Authored judgment only",
+          "evidenceRefs": [
+            "9ed05f2a32501c1776638d5ea7e65cf103a824023e4e76feb5ac1d661394dc15"
+          ],
+          "introduction": "unverified",
+          "notificationEligibility": "unverified"
+        },
+        "review": {
+          "schemaVersion": 1,
+          "kind": "semantic-snapshot-review",
+          "id": "review_0322a47dc2b2d854c9509113efb7cc07feaf645e28958b201495e34afef7139c",
+          "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+          "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+          "config": {
+            "runtime": "semantic-snapshot-review-v1",
+            "scanner": "ast-grep@0.45.3",
+            "mode": "offline_fixture",
+            "fixtureDigest": "fe896d2e3b9ddfc7eb01eb71a2f97e1b32015bd7271a44b28435c0d03feea20d",
+            "attempt": "initial"
+          },
+          "fixtures": {
+            "schemaVersion": 1,
+            "kind": "semantic-review-offline-fixtures",
+            "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+            "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+            "evidence": [
+              {
+                "id": "b907c98ece6cd11ad881077db471a6ddff85f1ade9a03f68ff58ddb3179e0839",
+                "kind": "captured-source",
+                "anchor": {
+                  "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                  "side": "after",
+                  "path": "src/positive.ts",
+                  "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                  "span": {
+                    "start": {
+                      "line": 1,
+                      "column": 1,
+                      "offset": 0
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12,
+                      "offset": 11
+                    }
+                  }
+                },
+                "content": "danger(one)"
+              },
+              {
+                "id": "9ed05f2a32501c1776638d5ea7e65cf103a824023e4e76feb5ac1d661394dc15",
+                "kind": "captured-source",
+                "anchor": {
+                  "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                  "side": "after",
+                  "path": "src/safe.ts",
+                  "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                  "span": {
+                    "start": {
+                      "line": 1,
+                      "column": 13,
+                      "offset": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24,
+                      "offset": 23
+                    }
+                  }
+                },
+                "content": "danger(one)"
+              }
+            ],
+            "judgments": [
+              {
+                "targetId": "f83f2eb66bc40e8f49cdd4de4eddb3e4e2c11e8d7ea12dceea16b12bf93ceab8",
+                "decision": "violation",
+                "reasoning": "Authored judgment only",
+                "evidenceRefs": [
+                  "b907c98ece6cd11ad881077db471a6ddff85f1ade9a03f68ff58ddb3179e0839"
+                ],
+                "findingAnchors": [
+                  {
+                    "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                    "side": "after",
+                    "path": "src/positive.ts",
+                    "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                    "span": {
+                      "start": {
+                        "line": 1,
+                        "column": 1,
+                        "offset": 0
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 12,
+                        "offset": 11
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "targetId": "ffdd05bf190f2c3d18601e173e9e58bdbca5d639fe37d2e4b86a20c2fd518407",
+                "decision": "violation",
+                "reasoning": "Authored judgment only",
+                "evidenceRefs": [
+                  "9ed05f2a32501c1776638d5ea7e65cf103a824023e4e76feb5ac1d661394dc15"
+                ],
+                "findingAnchors": [
+                  {
+                    "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                    "side": "after",
+                    "path": "src/safe.ts",
+                    "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                    "span": {
+                      "start": {
+                        "line": 1,
+                        "column": 13,
+                        "offset": 12
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 24,
+                        "offset": 23
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "coverage": {
+            "scope": "changed-entries-only",
+            "snapshotVerification": "package-integrity-only",
+            "repositoryContext": "incomplete",
+            "introduction": "unverified",
+            "targets": [
+              {
+                "id": "f83f2eb66bc40e8f49cdd4de4eddb3e4e2c11e8d7ea12dceea16b12bf93ceab8",
+                "changeIndex": 0,
+                "path": "src/positive.ts",
+                "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                "disposition": "captured",
+                "reason": null,
+                "scans": [
+                  {
+                    "assetId": "danger",
+                    "engine": "ast-grep",
+                    "state": "scanned",
+                    "candidateCount": 1,
+                    "reason": null
+                  }
+                ],
+                "semantic": {
+                  "state": "violation",
+                  "reasoning": "Authored judgment only",
+                  "missingContext": []
+                }
+              },
+              {
+                "id": "ffdd05bf190f2c3d18601e173e9e58bdbca5d639fe37d2e4b86a20c2fd518407",
+                "changeIndex": 1,
+                "path": "src/safe.ts",
+                "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                "disposition": "captured",
+                "reason": null,
+                "scans": [
+                  {
+                    "assetId": "danger",
+                    "engine": "ast-grep",
+                    "state": "scanned",
+                    "candidateCount": 1,
+                    "reason": null
+                  }
+                ],
+                "semantic": {
+                  "state": "violation",
+                  "reasoning": "Authored judgment only",
+                  "missingContext": []
+                }
+              },
+              {
+                "id": "652b659d87a639f34788e31459fb186db34488883422a137d75f2498a73078f2",
+                "changeIndex": 2,
+                "path": "src/unselected.ts",
+                "sourceDigest": "fd8a10c38693a33b7f87300f2628dbbb7f18a88f391e41f1e7ecb99fe17f0ed7",
+                "disposition": "captured",
+                "reason": null,
+                "scans": [
+                  {
+                    "assetId": "danger",
+                    "engine": "ast-grep",
+                    "state": "scanned",
+                    "candidateCount": 0,
+                    "reason": null
+                  }
+                ],
+                "semantic": {
+                  "state": "not_run",
+                  "reasoning": "No explicit semantic fixture judgment was supplied; structural hits or silence do not establish semantic safety.",
+                  "missingContext": []
+                }
+              }
+            ]
+          },
+          "occurrences": [
+            {
+              "id": "7b1c08e2750cf6749d8b54a99887d32c695482b6a163320d95ac450dd374edaf",
+              "targetId": "f83f2eb66bc40e8f49cdd4de4eddb3e4e2c11e8d7ea12dceea16b12bf93ceab8",
+              "assetId": "danger",
+              "candidateId": "d3b4550e865bc9d2d889fc9330a9e0995e98ed7d66c2a3fe86f53b5016211120",
+              "engine": "ast-grep",
+              "language": "typescript",
+              "anchor": {
+                "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                "side": "after",
+                "path": "src/positive.ts",
+                "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "column": 1,
+                    "offset": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12,
+                    "offset": 11
+                  }
+                }
+              }
+            },
+            {
+              "id": "41e498e577fa69f001ff16a3c833da9b30a546495ef030c2f6f2ad94a5c9cf90",
+              "targetId": "ffdd05bf190f2c3d18601e173e9e58bdbca5d639fe37d2e4b86a20c2fd518407",
+              "assetId": "danger",
+              "candidateId": "28def21e7d6b8116b7a2ae4ac679d81c0c368cceaddeba7f0a8f0a71a1abc4da",
+              "engine": "ast-grep",
+              "language": "typescript",
+              "anchor": {
+                "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                "side": "after",
+                "path": "src/safe.ts",
+                "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "column": 13,
+                    "offset": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24,
+                    "offset": 23
+                  }
+                }
+              }
+            }
+          ],
+          "findings": [
+            {
+              "id": "review_finding_2ccea81ec4a4b07151c985e93be53963417b17681d7557f487dfc5dcc672d313",
+              "reviewId": "review_0322a47dc2b2d854c9509113efb7cc07feaf645e28958b201495e34afef7139c",
+              "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+              "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+              "ruleId": "generated-revision-rule",
+              "ruleVersion": "base",
+              "targetId": "f83f2eb66bc40e8f49cdd4de4eddb3e4e2c11e8d7ea12dceea16b12bf93ceab8",
+              "anchor": {
+                "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                "side": "after",
+                "path": "src/positive.ts",
+                "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "column": 1,
+                    "offset": 0
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12,
+                    "offset": 11
+                  }
+                }
+              },
+              "occurrenceIds": [
+                "7b1c08e2750cf6749d8b54a99887d32c695482b6a163320d95ac450dd374edaf"
+              ],
+              "status": "violation",
+              "origin": "fixture",
+              "reasoning": "Authored judgment only",
+              "evidenceRefs": [
+                "b907c98ece6cd11ad881077db471a6ddff85f1ade9a03f68ff58ddb3179e0839"
+              ],
+              "introduction": "unverified",
+              "notificationEligibility": "unverified"
+            },
+            {
+              "id": "review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b",
+              "reviewId": "review_0322a47dc2b2d854c9509113efb7cc07feaf645e28958b201495e34afef7139c",
+              "ruleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+              "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+              "ruleId": "generated-revision-rule",
+              "ruleVersion": "base",
+              "targetId": "ffdd05bf190f2c3d18601e173e9e58bdbca5d639fe37d2e4b86a20c2fd518407",
+              "anchor": {
+                "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+                "side": "after",
+                "path": "src/safe.ts",
+                "sourceDigest": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                "span": {
+                  "start": {
+                    "line": 1,
+                    "column": 13,
+                    "offset": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24,
+                    "offset": 23
+                  }
+                }
+              },
+              "occurrenceIds": [
+                "41e498e577fa69f001ff16a3c833da9b30a546495ef030c2f6f2ad94a5c9cf90"
+              ],
+              "status": "violation",
+              "origin": "fixture",
+              "reasoning": "Authored judgment only",
+              "evidenceRefs": [
+                "9ed05f2a32501c1776638d5ea7e65cf103a824023e4e76feb5ac1d661394dc15"
+              ],
+              "introduction": "unverified",
+              "notificationEligibility": "unverified"
+            }
+          ],
+          "notification": "not_performed"
+        }
+      }
+    ],
+    "snapshots": [
+      {
+        "digest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd",
+        "snapshot": {
+          "schemaVersion": 1,
+          "kind": "git-change-snapshot",
+          "repository": {
+            "id": "fixture:revision-generation",
+            "identityVerification": "caller-supplied-unverified",
+            "objectFormat": "sha1"
+          },
+          "baseTip": "9d4f18fd52f029bad39d02f383a65e44acebbbe4",
+          "mergeBase": "9d4f18fd52f029bad39d02f383a65e44acebbbe4",
+          "head": "4893f16a2cc87b9cbcd7dae45ad9284b37f24f6e",
+          "comparison": "merge-base-to-head",
+          "renamePolicy": "exact-content-only",
+          "limits": {
+            "maxChanges": 500,
+            "maxBlobBytes": 262144,
+            "maxTotalBytes": 2097152
+          },
+          "changes": [
+            {
+              "status": "A",
+              "before": {
+                "state": "absent"
+              },
+              "after": {
+                "path": "src/positive.ts",
+                "mode": "100644",
+                "objectId": "78a666c0c9389edc834fa071f0a02cfadd449801",
+                "state": "captured",
+                "byteLength": 13,
+                "sha256": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7",
+                "bytesBase64": "ZGFuZ2VyKG9uZSk7Cg=="
+              }
+            },
+            {
+              "status": "A",
+              "before": {
+                "state": "absent"
+              },
+              "after": {
+                "path": "src/safe.ts",
+                "mode": "100644",
+                "objectId": "d7dbd87a22e7524248ec579de947679fc4d0cbc3",
+                "state": "captured",
+                "byteLength": 25,
+                "sha256": "3d04125809fc565dc249a0d00ed7ffef69bbd5869ed94df8e5080612f2d15c78",
+                "bytesBase64": "Z3VhcmQob25lKTsgZGFuZ2VyKG9uZSk7Cg=="
+              }
+            },
+            {
+              "status": "A",
+              "before": {
+                "state": "absent"
+              },
+              "after": {
+                "path": "src/unselected.ts",
+                "mode": "100644",
+                "objectId": "242912fe690944d0e3eb805aa826a46d9c565410",
+                "state": "captured",
+                "byteLength": 28,
+                "sha256": "fd8a10c38693a33b7f87300f2628dbbb7f18a88f391e41f1e7ecb99fe17f0ed7",
+                "bytesBase64": "ZXhwb3J0IGNvbnN0IHVucmVsYXRlZCA9IDA7Cg=="
+              }
+            }
+          ],
+          "coverage": {
+            "changedPaths": 3,
+            "capturedSides": 3,
+            "excludedSides": 0,
+            "capturedBytes": 66,
+            "scope": "changed-entries-only"
+          }
+        }
+      }
+    ]
+  },
+  "input": {
+    "id": "generated-candidate",
+    "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+    "rule": {
+      "schemaVersion": 2,
+      "ruleId": "generated-revision-rule",
+      "version": "generated",
+      "semantics": {
+        "title": "Danger needs a guard",
+        "mechanism": "Missing guard",
+        "invariant": "Use a guard",
+        "applicability": [
+          "Danger calls"
+        ],
+        "exceptions": [
+          "An explicit applicable guard precedes the call"
+        ],
+        "requiredContext": [],
+        "expectedBehavior": "Preserve uncertainty"
+      },
+      "scope": {
+        "repositories": [
+          "fixture:revision-generation"
+        ],
+        "paths": {
+          "include": [
+            "src"
+          ],
+          "exclude": []
+        }
+      },
+      "detectionAssets": [
+        {
+          "id": "danger",
+          "detector": {
+            "kind": "ast-grep",
+            "language": "typescript",
+            "pattern": "danger($ARG)"
+          }
+        }
+      ],
+      "regressionCases": [
+        {
+          "caseId": "positive-case",
+          "role": "positive"
+        },
+        {
+          "caseId": "safe-case",
+          "role": "negative"
+        }
+      ],
+      "provenance": {
+        "sourceCases": [
+          {
+            "caseId": "positive-case",
+            "repository": "fixture:revision-generation",
+            "commit": "4893f16a2cc87b9cbcd7dae45ad9284b37f24f6e",
+            "path": "src/positive.ts",
+            "sourceDigest": "953e5abe42eedadadcc339919c33617d40ccc3ca9b4cce5923ef05814b1859c7"
+          }
+        ],
+        "parentDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+        "author": "authored-test:authored-runtime",
+        "createdAt": "2026-10-02T00:00:00Z",
+        "rationale": "Authored proposal only; must be compared before any decision"
+      }
+    },
+    "executionReceipt": {
+      "schemaVersion": 1,
+      "kind": "rule-revision-workspace-execution",
+      "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+      "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+      "inputDigest": "68afab0dd05876286c0640c66f87f1e8cf64d910a947889ee3aeae9683de73d7",
+      "generationDigest": "27e5b1543b64c5fbd0e23bc8a64ea31945e4e4d8ede1429d8387ee19b1363515",
+      "promptDigest": "8ade13094703b050f4599dba26a9c6a615ba00930b64504c372d46df8279c661",
+      "responseDigest": "616307c36c35b1bafd4fc40882fb9524cd6c06284f59a872e5709924aff3d2ef",
+      "workspaceRequestDigest": "771ddd2443d0deede0d5f3b8eaeff27108ffbc5369687982c72acf163238a04b",
+      "runtimeResultDigest": "e16348fb7e1dae2c6977a70ba27b9f585af877d7f616a0242d931d7c4cffb962",
+      "model": "authored-no-live-model",
+      "modelIdentity": "requested-configuration-not-provider-attested",
+      "runtimeId": "authored-runtime",
+      "context": {
+        "kind": "selected-evidence-no-tools",
+        "workspace": {
+          "repoPath": "/tmp/revision-generation-fixture-2pJUp4/repo",
+          "runId": "revision",
+          "attemptId": "authored"
+        },
+        "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd"
+      },
+      "generationLimits": {
+        "maxInputBytes": 262144,
+        "maxOutputBytes": 131072,
+        "timeoutMs": 30000
+      },
+      "workspaceLimits": {
+        "maxInputBytes": 262144,
+        "maxOutputBytes": 131072,
+        "maxArtifactBytes": 4096,
+        "maxArtifacts": 2,
+        "timeoutMs": 3000,
+        "cleanupTimeoutMs": 1500
+      },
+      "execution": "completed",
+      "modelExecution": "not_run",
+      "cleanup": "verified",
+      "completedAt": "2026-10-02T03:24:00.878Z",
+      "lifecycle": [
+        "lease-acquired",
+        "host-workspace-verified",
+        "runtime-reserved",
+        "runtime-workspace-verified",
+        "worker-started",
+        "worker-completed",
+        "stop-verified",
+        "evidence-collected",
+        "destroy-verified",
+        "lease-released"
+      ],
+      "artifacts": [],
+      "workerResult": {
+        "protocolVersion": 2,
+        "value": {
+          "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+          "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+          "requestedRuleVersion": "generated",
+          "result": {
+            "status": "candidate",
+            "semantics": {
+              "title": "Danger needs a guard",
+              "mechanism": "Missing guard",
+              "invariant": "Use a guard",
+              "applicability": [
+                "Danger calls"
+              ],
+              "exceptions": [
+                "An explicit applicable guard precedes the call"
+              ],
+              "requiredContext": [],
+              "expectedBehavior": "Preserve uncertainty"
+            },
+            "paths": {
+              "include": [
+                "src"
+              ],
+              "exclude": []
+            },
+            "detectionAssets": [
+              {
+                "id": "danger",
+                "detector": {
+                  "kind": "ast-grep",
+                  "language": "typescript",
+                  "pattern": "danger($ARG)"
+                }
+              }
+            ],
+            "rationale": "Authored proposal only; must be compared before any decision",
+            "evidenceRefs": [
+              "rule:7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+              "feedback:selected-fp",
+              "finding:review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b"
+            ],
+            "diagnoses": [
+              {
+                "feedbackId": "selected-fp",
+                "category": "boundary",
+                "reasoning": "The guarded boundary may explain this anchored FP",
+                "missingEvidence": [],
+                "evidenceRefs": [
+                  "feedback:selected-fp",
+                  "finding:review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b"
+                ],
+                "claim": "proposal-not-established-fact"
+              }
+            ]
+          }
+        },
+        "usage": {
+          "input_tokens": 0,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 0,
+          "reasoning_output_tokens": 0
+        },
+        "sessionId": "authored-session",
+        "processEvidence": {
+          "reason": "completed",
+          "exitCode": 0,
+          "stdoutBytes": 0,
+          "stderrBytes": 0,
+          "forwardedBytes": 0,
+          "processGroupStopped": true
+        },
+        "boundary": "authored-test-no-isolation",
+        "outputContract": "rule-revision-v1"
+      },
+      "trust": "trusted-runtime-receipt-not-cryptographic-attestation"
+    }
+  },
+  "stored": {
+    "digest": "022c429eff7eed82165786cde8b346048d869a5b50c193d843f192c1fa087ec3",
+    "candidate": {
+      "schemaVersion": 1,
+      "kind": "generated-rule-revision-candidate",
+      "id": "generated-candidate",
+      "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+      "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+      "ruleDigest": "2715708d6b6b935d313fc1f960522401ba65340f4844b56e65bf9ba8ea388b8f",
+      "source": "fixture",
+      "status": "candidate_requires_review",
+      "synthesis": "not_run",
+      "validation": "schema-and-exact-provenance-only",
+      "diagnosis": "model-proposal-not-ground-truth",
+      "semanticValidation": "not_run",
+      "regressionExecution": "not_run",
+      "activation": "not_performed",
+      "certification": "none",
+      "executionReceipt": {
+        "schemaVersion": 1,
+        "kind": "rule-revision-workspace-execution",
+        "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+        "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+        "inputDigest": "68afab0dd05876286c0640c66f87f1e8cf64d910a947889ee3aeae9683de73d7",
+        "generationDigest": "27e5b1543b64c5fbd0e23bc8a64ea31945e4e4d8ede1429d8387ee19b1363515",
+        "promptDigest": "8ade13094703b050f4599dba26a9c6a615ba00930b64504c372d46df8279c661",
+        "responseDigest": "616307c36c35b1bafd4fc40882fb9524cd6c06284f59a872e5709924aff3d2ef",
+        "workspaceRequestDigest": "771ddd2443d0deede0d5f3b8eaeff27108ffbc5369687982c72acf163238a04b",
+        "runtimeResultDigest": "e16348fb7e1dae2c6977a70ba27b9f585af877d7f616a0242d931d7c4cffb962",
+        "model": "authored-no-live-model",
+        "modelIdentity": "requested-configuration-not-provider-attested",
+        "runtimeId": "authored-runtime",
+        "context": {
+          "kind": "selected-evidence-no-tools",
+          "workspace": {
+            "repoPath": "/tmp/revision-generation-fixture-2pJUp4/repo",
+            "runId": "revision",
+            "attemptId": "authored"
+          },
+          "snapshotDigest": "76fd235b140be35613162f7cd136c4444f87cbe4352b3dc5237c3d8a937d05cd"
+        },
+        "generationLimits": {
+          "maxInputBytes": 262144,
+          "maxOutputBytes": 131072,
+          "timeoutMs": 30000
+        },
+        "workspaceLimits": {
+          "maxInputBytes": 262144,
+          "maxOutputBytes": 131072,
+          "maxArtifactBytes": 4096,
+          "maxArtifacts": 2,
+          "timeoutMs": 3000,
+          "cleanupTimeoutMs": 1500
+        },
+        "execution": "completed",
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "completedAt": "2026-10-02T03:24:00.878Z",
+        "lifecycle": [
+          "lease-acquired",
+          "host-workspace-verified",
+          "runtime-reserved",
+          "runtime-workspace-verified",
+          "worker-started",
+          "worker-completed",
+          "stop-verified",
+          "evidence-collected",
+          "destroy-verified",
+          "lease-released"
+        ],
+        "artifacts": [],
+        "workerResult": {
+          "protocolVersion": 2,
+          "value": {
+            "requestDigest": "055d0b62f9fb004aa9e729d800b40732150ee178845c6ff43976f37c9b881935",
+            "baseRuleDigest": "7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+            "requestedRuleVersion": "generated",
+            "result": {
+              "status": "candidate",
+              "semantics": {
+                "title": "Danger needs a guard",
+                "mechanism": "Missing guard",
+                "invariant": "Use a guard",
+                "applicability": [
+                  "Danger calls"
+                ],
+                "exceptions": [
+                  "An explicit applicable guard precedes the call"
+                ],
+                "requiredContext": [],
+                "expectedBehavior": "Preserve uncertainty"
+              },
+              "paths": {
+                "include": [
+                  "src"
+                ],
+                "exclude": []
+              },
+              "detectionAssets": [
+                {
+                  "id": "danger",
+                  "detector": {
+                    "kind": "ast-grep",
+                    "language": "typescript",
+                    "pattern": "danger($ARG)"
+                  }
+                }
+              ],
+              "rationale": "Authored proposal only; must be compared before any decision",
+              "evidenceRefs": [
+                "rule:7756121bac47cba79c7e083761ee5cf813246eaa3f0c1a9c74b6b9a6d7bcbd65",
+                "feedback:selected-fp",
+                "finding:review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b"
+              ],
+              "diagnoses": [
+                {
+                  "feedbackId": "selected-fp",
+                  "category": "boundary",
+                  "reasoning": "The guarded boundary may explain this anchored FP",
+                  "missingEvidence": [],
+                  "evidenceRefs": [
+                    "feedback:selected-fp",
+                    "finding:review_finding_6f9762495a316252b4e6b906a325d402883eb04c926ec7f79dcc22ee24d1437b"
+                  ],
+                  "claim": "proposal-not-established-fact"
+                }
+              ]
+            }
+          },
+          "usage": {
+            "input_tokens": 0,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_output_tokens": 0
+          },
+          "sessionId": "authored-session",
+          "processEvidence": {
+            "reason": "completed",
+            "exitCode": 0,
+            "stdoutBytes": 0,
+            "stderrBytes": 0,
+            "forwardedBytes": 0,
+            "processGroupStopped": true
+          },
+          "boundary": "authored-test-no-isolation",
+          "outputContract": "rule-revision-v1"
+        },
+        "trust": "trusted-runtime-receipt-not-cryptographic-attestation"
+      }
+    }
+  }
+}

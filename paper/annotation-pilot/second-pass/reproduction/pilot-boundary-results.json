@@ -1,0 +1,3008 @@
+{
+  "schema_version": 1,
+  "purpose": "offline source-bound authored local method reproduction, not independent research labels or a benchmark",
+  "baseline_commit_prefix": "4d87dda",
+  "runtime": {
+    "python_implementation": "CPython",
+    "python_version": "3.12.14",
+    "isolated_mode": true
+  },
+  "script": {
+    "file": "paper/reproduce-pilot-boundaries.py",
+    "sha256": "73b05e7e7dd5bc65e2e7e65500ff14369f1b23c7076dfb1dcb380489ffaf926d"
+  },
+  "manifest": {
+    "file": "paper/pilot-materials-manifest.json",
+    "sha256": "27b43233a80add0e9ccb85df9068b33416700f4935b30299566d90d4e17bf229"
+  },
+  "verified_materials": [
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+      "materialKind": "captured_upstream_source",
+      "bytes": 12375,
+      "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+      "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+      "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+      "matchesPriorIntegrityRecord": true,
+      "side": "before",
+      "staticInspectionLineRanges": [
+        [
+          103,
+          118
+        ],
+        [
+          139,
+          159
+        ],
+        [
+          160,
+          194
+        ]
+      ]
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+      "materialKind": "captured_upstream_source",
+      "bytes": 12417,
+      "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+      "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+      "gitBlobSha1": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+      "matchesPriorIntegrityRecord": true,
+      "side": "after",
+      "staticInspectionLineRanges": [
+        [
+          103,
+          118
+        ],
+        [
+          139,
+          159
+        ],
+        [
+          160,
+          194
+        ]
+      ]
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py",
+      "materialKind": "captured_upstream_test_not_executed",
+      "bytes": 289,
+      "sha256": "19a383f0c516f69fafa6387207cff46b000074d4acd90598a7ea867f997c3ee8",
+      "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_sampling_params.py",
+      "gitBlobSha1": "01cbe0c997f298a9cf86d342244f9122e38cdcc2",
+      "matchesPriorIntegrityRecord": true
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_regression.py",
+      "materialKind": "captured_upstream_test_not_executed",
+      "bytes": 1310,
+      "sha256": "5d7187c6812a07f7ba53176324d283aceedf887dc8d28930646f1b96a1f6e633",
+      "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_regression.py",
+      "gitBlobSha1": "c48e474bd889f407a0c8c56dc198828211cd92ec",
+      "matchesPriorIntegrityRecord": true
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570-summary.json",
+      "materialKind": "selected_current_pr_metadata_and_patches",
+      "bytes": 2621,
+      "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570-merge-commit.json",
+      "materialKind": "selected_immutable_commit_metadata_and_patches",
+      "bytes": 3868,
+      "sha256": "81ea6e74f6010e6c6bba6881c97b21669b40fe088d4fd0d237536098eb0ac36a"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/LICENSE",
+      "materialKind": "captured_upstream_license",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/LICENSE",
+      "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "matchesPriorIntegrityRecord": true
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+      "materialKind": "captured_upstream_source",
+      "bytes": 54777,
+      "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+      "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+      "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+      "matchesPriorIntegrityRecord": true,
+      "side": "before",
+      "staticInspectionLineRanges": [
+        [
+          516,
+          536
+        ]
+      ]
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+      "materialKind": "captured_upstream_source",
+      "bytes": 54832,
+      "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+      "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+      "gitBlobSha1": "728445cb4b5458282a371f720e96dbffb8ed9352",
+      "matchesPriorIntegrityRecord": true,
+      "side": "after",
+      "staticInspectionLineRanges": [
+        [
+          516,
+          539
+        ]
+      ]
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+      "materialKind": "captured_upstream_test_not_executed",
+      "bytes": 3701,
+      "sha256": "6baf9d0f8899d705bbd96b52697988313faee4fd4810932962510582f3097bcc",
+      "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests/entrypoints/openai/test_chunked_prompt.py",
+      "gitBlobSha1": "61d66365130c74f41da0e85d8b84f5ed15dc3ef4",
+      "matchesPriorIntegrityRecord": true
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034-summary.json",
+      "materialKind": "selected_current_pr_metadata_and_patches",
+      "bytes": 7091,
+      "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034-merge-commit.json",
+      "materialKind": "selected_immutable_commit_metadata_and_patches",
+      "bytes": 8638,
+      "sha256": "f22c0f39342156fa9892d60bcdaf243a0cfeed54271087ab809e9dd6568daff3"
+    },
+    {
+      "file": "experiments/vllm/evidence/issue-summaries.json",
+      "materialKind": "researcher_issue_summary_not_raw_issue",
+      "bytes": 1078,
+      "sha256": "8cefe43931fe8c5477796c871c36163256112011907d599a2d96a0ff420116c9",
+      "issueNumber": 8988
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/LICENSE",
+      "materialKind": "captured_upstream_license",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/LICENSE",
+      "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "matchesPriorIntegrityRecord": true
+    }
+  ],
+  "source_method_bindings": {
+    "9034_before": [
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L516-L535",
+        "class": "Sequence",
+        "method": "get_output_token_ids_to_return",
+        "lines": [
+          516,
+          535
+        ],
+        "raw_method_sha256": "f5f751216bd995c0714bcb4b58a05e8ff3a9e36a7e76d163675234846ba76a37",
+        "authored_method_sha256": "8841397198230e76ad389c92779129dbdeaa2fbe6b5ec4d8755f1edacc39f951",
+        "body_ast_sha256": "cb0b41fc2a1bda26c0e6c696b693a1fe1b73639bfed57506720707f475fef8fc",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": true
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L211-L215",
+        "class": "SequenceData",
+        "method": "_update_cached_all_tokens",
+        "lines": [
+          211,
+          215
+        ],
+        "raw_method_sha256": "fe41551d4221c34c86c5263f8f248b4b6a83e617b59ae0dabf8017a756495589",
+        "authored_method_sha256": "a045b6f755457d7a1d443924cb6996e529ce4286fb092c63c4c116ad2ac1970a",
+        "body_ast_sha256": "5ce8bb6b5ad20565e56e85a5a21dd935224b4815aad253ca7b8542d2000b1dfc",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L239-L240",
+        "class": "SequenceData",
+        "method": "output_token_ids",
+        "lines": [
+          239,
+          240
+        ],
+        "raw_method_sha256": "89c3e4400c43b0bb60f79a70576a758480d9215900d209339e37fc809263752c",
+        "authored_method_sha256": "5025be8ec3d87de053bf4393b7196c3d5b25a3417c1c5c8f884face3a76710a5",
+        "body_ast_sha256": "089f6d3bc9653431c9fa955b1e72ce7d07e633aa4fcb5ca5ee39a2c848b05075",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [
+            "property"
+          ],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L278-L279",
+        "class": "SequenceData",
+        "method": "get_output_len",
+        "lines": [
+          278,
+          279
+        ],
+        "raw_method_sha256": "ba9279f1105b78f902b98b5a39a53ce5d6e6cd2070885c5b38498e5057cab1e3",
+        "authored_method_sha256": "50e0d6207ff06380bfc292f91853b35a6d17dc13f8f2bae750618d6077987f4f",
+        "body_ast_sha256": "d3efabac5ef53e1888761187dd246146063769ff0eb470dfc3fea32f3c6a927a",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L332-L333",
+        "class": "SequenceData",
+        "method": "get_output_token_ids",
+        "lines": [
+          332,
+          333
+        ],
+        "raw_method_sha256": "c64980599356bc773bf2ec8cb5e2e8978be6810fb76f2e1257fdc6c096481c92",
+        "authored_method_sha256": "997ee5983d36a81da96b249ca7e1f1e49c0c8663eda1cf9e1588ef8590b14f27",
+        "body_ast_sha256": "0d12ef773f72a856575e401c9b7d18dc6a63f4f83e4edde0d91725c74897fd58",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L566-L567",
+        "class": "Sequence",
+        "method": "get_output_len",
+        "lines": [
+          566,
+          567
+        ],
+        "raw_method_sha256": "7f3ac6f7672b635d5e05683a3327196d7622c326d4272045e4cf293beb51ae4a",
+        "authored_method_sha256": "5e7fa30d8e3ac56d8de231995aecf3f69a0b8eb2be5ab0f1686505e8092e1c91",
+        "body_ast_sha256": "ce3a4af4fd0fdffc732fb17338fcb6930690c4bab2ee5ff5c8aa5e03632caedb",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+        "source_sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+        "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "source_url": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py#L578-L579",
+        "class": "Sequence",
+        "method": "get_output_token_ids",
+        "lines": [
+          578,
+          579
+        ],
+        "raw_method_sha256": "6a1d00eb9b7a07bd509e73ede477068b112cdc14b0053aca5c961122e2fcf980",
+        "authored_method_sha256": "a43369c0cac7933596e16b94736c792c21a0a1077196f1e63a9cb8a8313c39f3",
+        "body_ast_sha256": "ebcb5669ca98432df5d09a2a87e3b0d3736f84194258de464c568ce6c13309be",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      }
+    ],
+    "2570_before": [
+      {
+        "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+        "source_sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+        "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+        "source_url": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py#L160-L194",
+        "class": "SamplingParams",
+        "method": "_verify_args",
+        "lines": [
+          160,
+          194
+        ],
+        "raw_method_sha256": "0b824d27739a4c3bc67adf941bab7f911eaf38bea3b5844f08206002fb22ef46",
+        "authored_method_sha256": "3f95412e12f28490022d4bf8b7b5a3442ed18dbfa4a3d1ce6bce822ef47f1831",
+        "body_ast_sha256": "243c543f2984d09b56e5ab8758790209ed8e584a11d4b45f055b0a8f9b8d403d",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      }
+    ],
+    "9034_after": [
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L516-L538",
+        "class": "Sequence",
+        "method": "get_output_token_ids_to_return",
+        "lines": [
+          516,
+          538
+        ],
+        "raw_method_sha256": "d7bb256a8b50f0e471bbc20758daa83989a05c97fb16daef9ac0bf899d692c03",
+        "authored_method_sha256": "7a0a560ad3629b500164c82781fb60759a4248f9d8a44e144b9a6dfe218674c7",
+        "body_ast_sha256": "c002d93b9970b92058f0ddfaa36521d9be7d9343e80ad50a9a1cfb5426d09e8c",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": true
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L211-L215",
+        "class": "SequenceData",
+        "method": "_update_cached_all_tokens",
+        "lines": [
+          211,
+          215
+        ],
+        "raw_method_sha256": "fe41551d4221c34c86c5263f8f248b4b6a83e617b59ae0dabf8017a756495589",
+        "authored_method_sha256": "a045b6f755457d7a1d443924cb6996e529ce4286fb092c63c4c116ad2ac1970a",
+        "body_ast_sha256": "5ce8bb6b5ad20565e56e85a5a21dd935224b4815aad253ca7b8542d2000b1dfc",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L239-L240",
+        "class": "SequenceData",
+        "method": "output_token_ids",
+        "lines": [
+          239,
+          240
+        ],
+        "raw_method_sha256": "89c3e4400c43b0bb60f79a70576a758480d9215900d209339e37fc809263752c",
+        "authored_method_sha256": "5025be8ec3d87de053bf4393b7196c3d5b25a3417c1c5c8f884face3a76710a5",
+        "body_ast_sha256": "089f6d3bc9653431c9fa955b1e72ce7d07e633aa4fcb5ca5ee39a2c848b05075",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [
+            "property"
+          ],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L278-L279",
+        "class": "SequenceData",
+        "method": "get_output_len",
+        "lines": [
+          278,
+          279
+        ],
+        "raw_method_sha256": "ba9279f1105b78f902b98b5a39a53ce5d6e6cd2070885c5b38498e5057cab1e3",
+        "authored_method_sha256": "50e0d6207ff06380bfc292f91853b35a6d17dc13f8f2bae750618d6077987f4f",
+        "body_ast_sha256": "d3efabac5ef53e1888761187dd246146063769ff0eb470dfc3fea32f3c6a927a",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L332-L333",
+        "class": "SequenceData",
+        "method": "get_output_token_ids",
+        "lines": [
+          332,
+          333
+        ],
+        "raw_method_sha256": "c64980599356bc773bf2ec8cb5e2e8978be6810fb76f2e1257fdc6c096481c92",
+        "authored_method_sha256": "997ee5983d36a81da96b249ca7e1f1e49c0c8663eda1cf9e1588ef8590b14f27",
+        "body_ast_sha256": "0d12ef773f72a856575e401c9b7d18dc6a63f4f83e4edde0d91725c74897fd58",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L569-L570",
+        "class": "Sequence",
+        "method": "get_output_len",
+        "lines": [
+          569,
+          570
+        ],
+        "raw_method_sha256": "7f3ac6f7672b635d5e05683a3327196d7622c326d4272045e4cf293beb51ae4a",
+        "authored_method_sha256": "5e7fa30d8e3ac56d8de231995aecf3f69a0b8eb2be5ab0f1686505e8092e1c91",
+        "body_ast_sha256": "ce3a4af4fd0fdffc732fb17338fcb6930690c4bab2ee5ff5c8aa5e03632caedb",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      },
+      {
+        "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+        "source_sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "source_url": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py#L581-L582",
+        "class": "Sequence",
+        "method": "get_output_token_ids",
+        "lines": [
+          581,
+          582
+        ],
+        "raw_method_sha256": "6a1d00eb9b7a07bd509e73ede477068b112cdc14b0053aca5c961122e2fcf980",
+        "authored_method_sha256": "a43369c0cac7933596e16b94736c792c21a0a1077196f1e63a9cb8a8313c39f3",
+        "body_ast_sha256": "ebcb5669ca98432df5d09a2a87e3b0d3736f84194258de464c568ce6c13309be",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      }
+    ],
+    "2570_after": [
+      {
+        "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+        "source_sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+        "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+        "source_url": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py#L160-L194",
+        "class": "SamplingParams",
+        "method": "_verify_args",
+        "lines": [
+          160,
+          194
+        ],
+        "raw_method_sha256": "b1f571bbe1c5e4da9f99632decb6074b010e4b8c091421634c20838b1d7125ee",
+        "authored_method_sha256": "5661b81f34804583cb954a1956627cc41cda65400b8288c672e564b3197ec845",
+        "body_ast_sha256": "0d0d5101c29cc11b13b5895fb780a2c03949862cd02778e447d2f33d32d7d5a8",
+        "adaptation": {
+          "removed_class_indent_spaces": 4,
+          "removed_decorators": [],
+          "annotations_or_signature_changed": false,
+          "executable_statements_changed": false,
+          "docstring_indentation_dedented": false
+        }
+      }
+    ]
+  },
+  "sampling_constructor_static_bindings": {
+    "before": {
+      "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+      "source_sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+      "constructor_lines": [
+        93,
+        158
+      ],
+      "max_tokens_annotation": "int",
+      "default_fields_checked": {
+        "n": 1,
+        "best_of": 1,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "repetition_penalty": 1.0,
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "top_k": -1,
+        "min_p": 0.0,
+        "max_tokens": 16,
+        "logprobs": null,
+        "prompt_logprobs": null
+      },
+      "constructor_executed": false,
+      "adaptation": "SimpleNamespace initialized with these verified defaults; explicit per-case overrides; no constructor or subsequent beam/greedy checks"
+    },
+    "after": {
+      "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+      "source_sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+      "constructor_lines": [
+        93,
+        158
+      ],
+      "max_tokens_annotation": "Optional[int]",
+      "default_fields_checked": {
+        "n": 1,
+        "best_of": 1,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+        "repetition_penalty": 1.0,
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "top_k": -1,
+        "min_p": 0.0,
+        "max_tokens": 16,
+        "logprobs": null,
+        "prompt_logprobs": null
+      },
+      "constructor_executed": false,
+      "adaptation": "SimpleNamespace initialized with these verified defaults; explicit per-case overrides; no constructor or subsequent beam/greedy checks"
+    }
+  },
+  "authored_counterfactual": {
+    "name": "authored_truthy_guard",
+    "source_sha256": "1764981d1ee35a7495129002c5d70dfaa7305ee425ecadb6a73ba99b7af6c6a9",
+    "derivation": "after _verify_args: replace self.max_tokens is not None and with self.max_tokens and once",
+    "historical_variant": false
+  },
+  "scope": {
+    "compiled_captured_modules": false,
+    "upstream_imports": [],
+    "upstream_constructors_executed": false,
+    "upstream_tests_executed": false,
+    "dependencies_installed": false,
+    "network_used": false,
+    "model_calls": 0,
+    "ray_runtime_executed": false,
+    "sequence_state_adapter": "Authored classes, array(l) storage, literal offset; six exact source-bound cache/getter helpers; property decorator reapplied. State construction is not upstream Sequence/SequenceData initialization.",
+    "sampling_state_adapter": "SimpleNamespace with statically verified constructor defaults and explicit input overrides; execute full source-bound _verify_args only.",
+    "oracle": "Literal expected type/value/error rows authored separately from executable method text; offset and no-mutation assertions; expectations visible after fix, not independent annotations.",
+    "coverage_limit": [
+      "No whole-class lifecycle, append/reset/replacement callers, server streaming or other PR9034 production patches",
+      "No full SamplingParams constructor, beam/greedy validators or generation meaning of None",
+      "Unsupported offsets/cache states/types are boundary probes, not claims of reachable runtime states or legal inputs",
+      "No #2664 actor execution; source card remains static until a suitable Ray runtime",
+      "No review-checkpoint reconstruction, independent later PR, rule-update episode or model-effect evaluation"
+    ]
+  },
+  "vllm_pr_9034": {
+    "input_rows": [
+      {
+        "id": "zero_empty_cache",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [],
+          "output": [],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "zero_prompt_only",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11
+              ]
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "zero_after_output",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 3,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11,
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11,
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "zero_no_prompt",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [],
+          "output": [
+            20,
+            21
+          ],
+          "previous_offset": 2,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              20,
+              21
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              20,
+              21
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "one_initial",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20
+          ],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [
+              10,
+              11,
+              20
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [
+              10,
+              11,
+              20
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "one_suffix",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 2,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 22
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 22
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 22
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 22
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "two_suffix",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 1,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                21,
+                22
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                21,
+                22
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "all_three_outputs",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "two_without_prompt",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [],
+          "output": [
+            20,
+            21
+          ],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              20,
+              21
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              20,
+              21
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "non_delta_empty_output",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [],
+          "previous_offset": 0,
+          "delta": false,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": []
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": []
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "non_delta_initial",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 0,
+          "delta": false,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 0,
+            "expected_offset_after": 0,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "non_delta_existing_offset",
+        "domain": "contract_domain",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 2,
+          "delta": false,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "tuple",
+              "value": [
+                20,
+                21,
+                22
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21,
+              22
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "offset_ahead_by_one",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21
+          ],
+          "previous_offset": 3,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "offset_far_ahead",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21
+          ],
+          "previous_offset": 9,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "offset_negative",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21
+          ],
+          "previous_offset": -1,
+          "delta": true,
+          "cache_override": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                11,
+                20,
+                21
+              ]
+            },
+            "offset_after": 2,
+            "expected_offset_after": 2,
+            "cache_after": [
+              10,
+              11,
+              20,
+              21
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "cache_short_multiple",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20,
+            21,
+            22
+          ],
+          "previous_offset": 1,
+          "delta": true,
+          "cache_override": [
+            999
+          ]
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              999
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "offset_after": 3,
+            "expected_offset_after": 3,
+            "cache_after": [
+              999
+            ],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "cache_empty_single",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20
+          ],
+          "previous_offset": 0,
+          "delta": true,
+          "cache_override": []
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "IndexError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "IndexError",
+              "exception_message": "list index out of range"
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "IndexError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "IndexError",
+              "exception_message": "list index out of range"
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [],
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "cache_stale_zero",
+        "domain": "unsupported_state_probe",
+        "input": {
+          "prompt": [
+            10,
+            11
+          ],
+          "output": [
+            20
+          ],
+          "previous_offset": 1,
+          "delta": true,
+          "cache_override": [
+            999
+          ]
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                999
+              ]
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [
+              999
+            ],
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 1,
+            "expected_offset_after": 1,
+            "cache_after": [
+              999
+            ],
+            "expectation_passed": true
+          }
+        }
+      }
+    ],
+    "repeated_delta_call": {
+      "prompt": [
+        10,
+        11
+      ],
+      "output": [
+        20
+      ],
+      "initial_offset": 0,
+      "runs": {
+        "before": [
+          {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "offset_after": 1,
+            "expectation_passed": true
+          },
+          {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11,
+                20
+              ]
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": [
+                10,
+                11,
+                20
+              ]
+            },
+            "offset_after": 1,
+            "expectation_passed": true
+          }
+        ],
+        "after": [
+          {
+            "expected": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "actual": {
+              "status": "return",
+              "type": "int",
+              "value": 20
+            },
+            "offset_after": 1,
+            "expectation_passed": true
+          },
+          {
+            "expected": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "actual": {
+              "status": "return",
+              "type": "list",
+              "value": []
+            },
+            "offset_after": 1,
+            "expectation_passed": true
+          }
+        ]
+      }
+    },
+    "summary": {
+      "snapshot_inputs": 18,
+      "contract_domain_snapshot_inputs": 12,
+      "unsupported_snapshot_inputs": 6,
+      "repeated_call_scenarios": 1,
+      "primary_method_calls": 40,
+      "expected_checks_passed": 40,
+      "before_after_changed_snapshot_ids": [
+        "zero_prompt_only",
+        "zero_after_output",
+        "zero_no_prompt",
+        "cache_stale_zero"
+      ]
+    }
+  },
+  "vllm_pr_2570": {
+    "input_rows": [
+      {
+        "id": "none",
+        "domain": "declared_optional_sentinel",
+        "max_tokens_python_type": "NoneType",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": null,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'NoneType' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "negative_one",
+        "domain": "declared_integer_rejection",
+        "max_tokens_python_type": "int",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": -1,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "zero",
+        "domain": "declared_integer_rejection",
+        "max_tokens_python_type": "int",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 0,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "one",
+        "domain": "declared_positive_integer",
+        "max_tokens_python_type": "int",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 1,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "default_sixteen",
+        "domain": "declared_positive_integer",
+        "max_tokens_python_type": "int",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 16,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "none_upstream_test_parameters",
+        "domain": "declared_optional_sentinel",
+        "max_tokens_python_type": "NoneType",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 0.01,
+          "top_p": 0.1,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": null,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'NoneType' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "none_earlier_n_invalid",
+        "domain": "validation_order_probe",
+        "max_tokens_python_type": "NoneType",
+        "input_fields": {
+          "n": 0,
+          "best_of": 0,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": null,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "n must be at least 1, got 0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "none_later_logprobs_invalid",
+        "domain": "validation_order_probe",
+        "max_tokens_python_type": "NoneType",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": null,
+          "logprobs": -1,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'NoneType' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "logprobs must be non-negative, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "logprobs must be non-negative, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "logprobs must be non-negative, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "logprobs must be non-negative, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "one_later_prompt_logprobs_invalid",
+        "domain": "validation_order_probe",
+        "max_tokens_python_type": "int",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 1,
+          "logprobs": null,
+          "prompt_logprobs": -1
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "prompt_logprobs must be non-negative, got -1."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "float_negative",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "float",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": -1.0,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got -1.0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "float_zero",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "float",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 0.0,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.0."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.0."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "float_fraction",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "float",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 0.5,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got 0.5."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "float_above_one",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "float",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": 1.5,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "boolean_false",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "bool",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": false,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got False."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got False."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got False."
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "ValueError",
+              "exception_message": "max_tokens must be at least 1, got False."
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "boolean_true",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "bool",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": true,
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "string_one",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "str",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": "1",
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'str' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'str' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'str' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      },
+      {
+        "id": "empty_list",
+        "domain": "unsupported_type_probe",
+        "max_tokens_python_type": "list",
+        "input_fields": {
+          "n": 1,
+          "best_of": 1,
+          "presence_penalty": 0.0,
+          "frequency_penalty": 0.0,
+          "repetition_penalty": 1.0,
+          "temperature": 1.0,
+          "top_p": 1.0,
+          "top_k": -1,
+          "min_p": 0.0,
+          "max_tokens": [],
+          "logprobs": null,
+          "prompt_logprobs": null
+        },
+        "runs": {
+          "before": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'list' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "after": {
+            "expected": {
+              "status": "raise",
+              "exception_type": "TypeError"
+            },
+            "actual": {
+              "status": "raise",
+              "exception_type": "TypeError",
+              "exception_message": "'<' not supported between instances of 'list' and 'int'"
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          },
+          "authored_truthy_guard": {
+            "expected": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "actual": {
+              "status": "return",
+              "type": "NoneType",
+              "value": null
+            },
+            "state_unchanged": true,
+            "expectation_passed": true
+          }
+        }
+      }
+    ],
+    "summary": {
+      "snapshot_inputs": 17,
+      "unsupported_type_inputs": 8,
+      "primary_method_calls": 51,
+      "expected_checks_passed": 51,
+      "before_after_changed_snapshot_ids": [
+        "none",
+        "none_upstream_test_parameters",
+        "none_later_logprobs_invalid"
+      ],
+      "after_truthy_guard_difference_ids": [
+        "zero",
+        "float_zero",
+        "boolean_false",
+        "empty_list"
+      ]
+    }
+  },
+  "summary": {
+    "status": "passed",
+    "real_prs": 2,
+    "authored_snapshot_inputs": 35,
+    "primary_method_calls": 91,
+    "expected_checks_passed": 91,
+    "helper_calls_not_counted": true,
+    "independent_case_or_label_count_established": false
+  }
+}

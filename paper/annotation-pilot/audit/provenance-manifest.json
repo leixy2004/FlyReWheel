@@ -1,0 +1,1355 @@
+{
+  "schema_version": 1,
+  "kind": "developmental_annotation_training_packet",
+  "baseline_commit": "08bc3a8edc652a3397c2f8b05cd9cd0855b55213",
+  "new_human_annotations": 0,
+  "historical_as_of_established": false,
+  "independent_future_targets": 0,
+  "formal_holdout": false,
+  "input_pins_sha256": "8ac83e5ad6e197dacf0fcee5615671c5cd1d5609fb0d03f37f26fe17ecf7df35",
+  "generator_sha256": "3d0b8269ab4d1013b3ced2882b2322ea6efdc3d5a510f81c7406ce99256afde3",
+  "inputs": [
+    {
+      "file": ".flyrewheel/github-pr8568.json",
+      "bytes": 112720,
+      "sha256": "4c153cd4bd2ef95db4be6d5f1185fc3559ffafaf7feb85df8e57ac549e1cc356"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570-summary.json",
+      "bytes": 2621,
+      "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_regression.py",
+      "bytes": 1310,
+      "sha256": "5d7187c6812a07f7ba53176324d283aceedf887dc8d28930646f1b96a1f6e633"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py",
+      "bytes": 289,
+      "sha256": "19a383f0c516f69fafa6387207cff46b000074d4acd90598a7ea867f997c3ee8"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2664-summary.json",
+      "bytes": 1802,
+      "sha256": "450d06f2b96b8b49759da97b457107aa78abaab19e46532b9e70b69297679ed2"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034-summary.json",
+      "bytes": 7091,
+      "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+      "bytes": 3701,
+      "sha256": "6baf9d0f8899d705bbd96b52697988313faee4fd4810932962510582f3097bcc"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+      "bytes": 12417,
+      "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+      "bytes": 12375,
+      "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+      "bytes": 24481,
+      "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+      "bytes": 24172,
+      "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-8568/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+      "bytes": 54832,
+      "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+      "bytes": 54777,
+      "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2"
+    },
+    {
+      "file": "paper/developmental-case-vllm-8568.md",
+      "bytes": 22117,
+      "sha256": "434563f74416c30b1fbea42796ee2702010aa4272616e2761e2858eb843c525f"
+    },
+    {
+      "file": "paper/pilot-boundary-reproduction.md",
+      "bytes": 8979,
+      "sha256": "b6abb07030c680b28499711bdfaa28c258f3daa80236736799b84df2447a257d"
+    },
+    {
+      "file": "paper/pilot-boundary-results.json",
+      "bytes": 90908,
+      "sha256": "8849a0f54a8014526eeed4d35aa112de3cc210925ddfd32f9f3980e6e8105aed"
+    },
+    {
+      "file": "paper/pilot-boundary-verification.json",
+      "bytes": 3181,
+      "sha256": "836c11d86b320cc1e779a0a1834778f35553117eb5508d3bc5e089bbefb761f6"
+    },
+    {
+      "file": "paper/pilot-case-cards.md",
+      "bytes": 11113,
+      "sha256": "7f908552f66e4406c8da0d2383486e632936377fb87ccad3ab396e2ebc3b806f"
+    },
+    {
+      "file": "paper/pilot-materials-manifest.json",
+      "bytes": 45624,
+      "sha256": "27b43233a80add0e9ccb85df9068b33416700f4935b30299566d90d4e17bf229"
+    },
+    {
+      "file": "paper/vllm-8568-behavior-findings.md",
+      "bytes": 7466,
+      "sha256": "c43e4f57b28523d9e0e1788d72c575f854363f87fcd34facc5ea8b61a9fb7b5e"
+    },
+    {
+      "file": "paper/vllm-8568-behavior-results.json",
+      "bytes": 173853,
+      "sha256": "244fa08967073de853e4b5e96c64a98f0d2ada92f6c680be45f7b021ee921aa9"
+    }
+  ],
+  "cases": [
+    {
+      "neutral_case_id": "A",
+      "upstream_pr": 8568,
+      "source_identity": {
+        "beforeCommit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "beforeRole": "captured_pr_base",
+        "afterCommit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "afterRole": "captured_final_pr_head",
+        "originalPrBaseShaAsReported": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "originalPrHeadShaAsReported": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingBasis": "saved capture snapshot fields and verified embedded blobs; not seed merge metadata"
+      },
+      "exact_source_records": {
+        "before": {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/before",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "before",
+          "bytes": 31505,
+          "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+          "gitBlobSha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+          "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa"
+        },
+        "after": {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/after",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "after",
+          "bytes": 31507,
+          "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+          "gitBlobSha1": "359012611a34a7dc86be5e54ef890633f50bc8da",
+          "commit": "eae161c33f47a0b760701769f56fc249563f8ed0"
+        }
+      },
+      "selection": "already_inspected_convenience_development_case",
+      "historical_as_of": "not_established",
+      "source_observation": {
+        "provider": "github",
+        "apiOrigin": "https://api.github.com",
+        "observation": "current-api-state",
+        "historicalReviewCheckpoint": false,
+        "ancestry": "provider-declared",
+        "inventory": "provider-declared-compare",
+        "repositoryContext": "changed-paths-only",
+        "discussionConsistency": "non-atomic-current-observation",
+        "discussionCoverage": "all-pages-returned-within-limits",
+        "compareFileCount": 2,
+        "sourceStatements": "untrusted-not-ground-truth-or-feedback"
+      },
+      "capture_observation_interval": {
+        "started_at": "2026-10-01T09:30:22.253Z",
+        "completed_at": "2026-10-01T09:30:56.570Z"
+      },
+      "historical_visibility_limit": "Current non-atomic API capture; earlier review source only a hunk; edited bodies and final head cannot be backdated.",
+      "raw_review_stream_supplied": true,
+      "formal_holdout_eligible": false
+    },
+    {
+      "neutral_case_id": "B",
+      "upstream_pr": 2664,
+      "source_identity": {
+        "beforeCommit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+        "originalPrHeadShaAsReported": "c5c755eeea3ac6552b01d2fcc765c6f684110a2b",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "exact_source_records": {
+        "before": {
+          "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24172,
+          "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+          "commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "2885aab9f31611813dcd2e44674f20119058baa2",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              462
+            ]
+          ]
+        },
+        "after": {
+          "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24481,
+          "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf",
+          "commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "a63d48016b83c366207752f86f1728eda512100a",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              474
+            ]
+          ]
+        }
+      },
+      "selection": "already_inspected_convenience_development_case",
+      "historical_as_of": "not_established",
+      "source_observation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      },
+      "capture_observation_interval": null,
+      "historical_visibility_limit": "Squash-parent/merge snapshots; no retained raw review stream or visibility checkpoint.",
+      "raw_review_stream_supplied": false,
+      "formal_holdout_eligible": false
+    },
+    {
+      "neutral_case_id": "C",
+      "upstream_pr": 9034,
+      "source_identity": {
+        "beforeCommit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "e9d517f27673ec8736c026f2311d3c250d5f9061",
+        "originalPrHeadShaAsReported": "8f15b82381530c9938c5a75825b5a0129afa8cc0",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "exact_source_records": {
+        "before": {
+          "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54777,
+          "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+          "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+          "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              536
+            ]
+          ]
+        },
+        "after": {
+          "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54832,
+          "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+          "gitBlobSha1": "728445cb4b5458282a371f720e96dbffb8ed9352",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              539
+            ]
+          ]
+        }
+      },
+      "selection": "already_inspected_convenience_development_case",
+      "historical_as_of": "not_established",
+      "source_observation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      },
+      "capture_observation_interval": null,
+      "historical_visibility_limit": "Squash-parent/merge snapshots; no retained raw review stream or visibility checkpoint.",
+      "raw_review_stream_supplied": false,
+      "formal_holdout_eligible": false
+    },
+    {
+      "neutral_case_id": "D",
+      "upstream_pr": 2570,
+      "source_identity": {
+        "beforeCommit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+        "originalPrHeadShaAsReported": "db93a939ac90887dff3aa5b3fbe038ed3654385f",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "exact_source_records": {
+        "before": {
+          "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12375,
+          "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+          "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+          "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        },
+        "after": {
+          "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12417,
+          "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+          "gitBlobSha1": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      },
+      "selection": "already_inspected_convenience_development_case",
+      "historical_as_of": "not_established",
+      "source_observation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      },
+      "capture_observation_interval": null,
+      "historical_visibility_limit": "Squash-parent/merge snapshots; no retained raw review stream or visibility checkpoint.",
+      "raw_review_stream_supplied": false,
+      "formal_holdout_eligible": false
+    }
+  ],
+  "outputs": [
+    {
+      "file": "first-pass/A/excerpts.txt",
+      "bytes": 4115,
+      "sha256": "ca4f5d592995be321b0f80927dbd4fc2f192a656e1db35ca5c1ce5c782e355e8",
+      "release_role": "before_source_excerpt",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/before",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "before",
+          "bytes": 31505,
+          "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+          "gitBlobSha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+          "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+          "line_ranges": [
+            [
+              147,
+              173
+            ],
+            [
+              378,
+              427
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/A/source.txt",
+      "bytes": 37556,
+      "sha256": "127c9a41cddaa15e2c1abb904fdf027c547d2fbeb2c1aa6b089f1ce159a5d040",
+      "release_role": "before_source",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/before",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "before",
+          "bytes": 31505,
+          "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+          "gitBlobSha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+          "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa"
+        }
+      ]
+    },
+    {
+      "file": "first-pass/A/task.md",
+      "bytes": 762,
+      "sha256": "bf76338df605cb282c10e7cb9d18be4ce59f495ca0c3980cf0361439e35899fe",
+      "release_role": "neutral_instruction",
+      "sources": []
+    },
+    {
+      "file": "first-pass/ATTRIBUTION.txt",
+      "bytes": 502,
+      "sha256": "6899d3b1242c8de16f1f55a6117287fb485068dfc691e61dcef59145aad043b3",
+      "release_role": "legal_notice",
+      "sources": []
+    },
+    {
+      "file": "first-pass/B/excerpts.txt",
+      "bytes": 6572,
+      "sha256": "40e33e8d0988376a52bac8e0291b8adf1fbf43bcec3d442b4b625dfe87b2cc39",
+      "release_role": "before_source_excerpt",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24172,
+          "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+          "commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "2885aab9f31611813dcd2e44674f20119058baa2",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              462
+            ]
+          ],
+          "line_ranges": [
+            [
+              205,
+              218
+            ],
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              401
+            ],
+            [
+              415,
+              465
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/B/source.txt",
+      "bytes": 28479,
+      "sha256": "650a270b2133e5d81f1ba324d414bb91fd6b377572c15acecf11c8c7ba3ff93b",
+      "release_role": "before_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24172,
+          "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+          "commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "2885aab9f31611813dcd2e44674f20119058baa2",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              462
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/B/task.md",
+      "bytes": 759,
+      "sha256": "7cd226e346670c8d3ab15508143fdf771c923acbfbac26ac3e554eb215c8261b",
+      "release_role": "neutral_instruction",
+      "sources": []
+    },
+    {
+      "file": "first-pass/C/excerpts.txt",
+      "bytes": 7592,
+      "sha256": "3e199d5054da34af6e6a702a4d63ffa175499b3a82e146d1b7f4643429d09b72",
+      "release_role": "before_source_excerpt",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54777,
+          "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+          "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+          "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              536
+            ]
+          ],
+          "line_ranges": [
+            [
+              181,
+              215
+            ],
+            [
+              238,
+              279
+            ],
+            [
+              414,
+              443
+            ],
+            [
+              482,
+              535
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/C/source.txt",
+      "bytes": 64209,
+      "sha256": "23b052cebc139c201acf074a571ed827575cfec54ddf7138fc992bad7cbfe421",
+      "release_role": "before_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54777,
+          "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+          "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+          "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              536
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/C/task.md",
+      "bytes": 761,
+      "sha256": "7344cd74ac97d92864952ff876c5e671e5777ac1450e699fb2ff27f207a957bc",
+      "release_role": "neutral_instruction",
+      "sources": []
+    },
+    {
+      "file": "first-pass/D/excerpts.txt",
+      "bytes": 9203,
+      "sha256": "f2aa8179d195f7a855131b2e84de2cb6f533637d942a412b4fffbfc6c672d0bc",
+      "release_role": "before_source_excerpt",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12375,
+          "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+          "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+          "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ],
+          "line_ranges": [
+            [
+              39,
+              90
+            ],
+            [
+              93,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/D/source.txt",
+      "bytes": 14157,
+      "sha256": "acc2572c8176f0380395c7e3a6710541ecff47e0097bb39a25869d67d91510a6",
+      "release_role": "before_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12375,
+          "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+          "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+          "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "first-pass/D/task.md",
+      "bytes": 766,
+      "sha256": "136bcabf49685c0d9de061f1eca730b0110c9b249c29e2c30150333818c39371",
+      "release_role": "neutral_instruction",
+      "sources": []
+    },
+    {
+      "file": "first-pass/LICENSE.txt",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "release_role": "legal_notice",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-8568/LICENSE",
+          "materialKind": "captured_upstream_license",
+          "bytes": 11357,
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "commit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/LICENSE",
+          "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "matchesPriorIntegrityRecord": true
+        }
+      ]
+    },
+    {
+      "file": "first-pass/START_HERE.md",
+      "bytes": 2888,
+      "sha256": "cd256fd197e8435de711a07b2f711a785a06e01156fdef75325b5abd0c92e0a2",
+      "release_role": "neutral_instruction",
+      "sources": [
+        {
+          "file": "paper/annotation-pilot/authoring/first-pass/START_HERE.md",
+          "sha256": "cd256fd197e8435de711a07b2f711a785a06e01156fdef75325b5abd0c92e0a2",
+          "status": "authored_packet_instruction"
+        }
+      ]
+    },
+    {
+      "file": "first-pass/answer-form.blank.json",
+      "bytes": 5065,
+      "sha256": "c30e9c596d09596b349e748c4d411a5a4b7a2f43c7ec24ac53203b7b8ab95d20",
+      "release_role": "unfilled_form",
+      "sources": []
+    },
+    {
+      "file": "first-pass/rubric.md",
+      "bytes": 7374,
+      "sha256": "c4a2de61be776ede110f08817d1fad3b67bc57894607e46ed161cc6338f56ced",
+      "release_role": "neutral_instruction",
+      "sources": [
+        {
+          "file": "paper/annotation-pilot/authoring/first-pass/rubric.md",
+          "sha256": "c4a2de61be776ede110f08817d1fad3b67bc57894607e46ed161cc6338f56ced",
+          "status": "authored_packet_instruction"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/change.diff",
+      "bytes": 161,
+      "sha256": "4aac7280a7b62e4a5cf0a6d2f0e141fdf98ec50648560ae9d332fd144f371afb",
+      "release_role": "pair_diff",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/before",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "before",
+          "bytes": 31505,
+          "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+          "gitBlobSha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+          "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa"
+        },
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/after",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "after",
+          "bytes": 31507,
+          "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+          "gitBlobSha1": "359012611a34a7dc86be5e54ef890633f50bc8da",
+          "commit": "eae161c33f47a0b760701769f56fc249563f8ed0"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/discussion.json",
+      "bytes": 11804,
+      "sha256": "3d5936502b57ac9160ca722513396b07eb38f12f90af6a8794dca2bf0218c6e6",
+      "release_role": "later_discussion",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/discussions"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/evidence-notes.md",
+      "bytes": 1059,
+      "sha256": "1ad6e112b69a60335ce761735284c581dd5cade3a6407a3423de21cb1c86aa57",
+      "release_role": "later_context_note",
+      "sources": [
+        {
+          "file": "paper/pilot-materials-manifest.json",
+          "case": "vllm-pr-8568"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/later-source.txt",
+      "bytes": 37558,
+      "sha256": "b2eba2485cd4bbfa2bb84936879629807b5581d6e5755011ea322fa8b6629eaa",
+      "release_role": "after_source",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/1/after",
+          "path": "vllm/entrypoints/openai/protocol.py",
+          "side": "after",
+          "bytes": 31507,
+          "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+          "gitBlobSha1": "359012611a34a7dc86be5e54ef890633f50bc8da",
+          "commit": "eae161c33f47a0b760701769f56fc249563f8ed0"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/source-report.json",
+      "bytes": 1202,
+      "sha256": "25b1c8018f2c014c4702fcf37999c8d4694de4fe9228f6a275c2278d44197cef",
+      "release_role": "later_source_report",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/pull"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/A/test-1.txt",
+      "bytes": 2511,
+      "sha256": "5c51330276f74ddb2c39bbe5e976602d05e4c96bf7f01c5311fb3a484e6ba276",
+      "release_role": "later_test_declaration",
+      "sources": [
+        {
+          "file": ".flyrewheel/github-pr8568.json",
+          "json_pointer": "/evidence/snapshot/changes/0/after",
+          "path": "tests/tool_use/test_chat_completion_request_validations.py",
+          "side": "after",
+          "bytes": 1872,
+          "sha256": "baac2223cf8d78a461bd96660ea56ddd4340232aa1015d50f7831b78496dbbd6",
+          "gitBlobSha1": "3d0fe8f06089549a46c5bf513cc53bdca055939c",
+          "commit": "eae161c33f47a0b760701769f56fc249563f8ed0"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/B/change.diff",
+      "bytes": 803,
+      "sha256": "408eba8626d638db933f6717584ffb8e4a3abb97640d97ef930e3244d66dfa6c",
+      "release_role": "pair_diff",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24172,
+          "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+          "commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "2885aab9f31611813dcd2e44674f20119058baa2",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              462
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24481,
+          "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf",
+          "commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "a63d48016b83c366207752f86f1728eda512100a",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              474
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/B/evidence-notes.md",
+      "bytes": 900,
+      "sha256": "e355088f20b3b065940d7f8384a95b75d3541ecdb8de959b5ec7cc1cf45fec0e",
+      "release_role": "later_context_note",
+      "sources": [
+        {
+          "file": "paper/pilot-materials-manifest.json",
+          "case": "vllm-pr-2664"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/B/later-source.txt",
+      "bytes": 28843,
+      "sha256": "dd57b4bd727e1fbc9eb62a97617759defc6166ae781b8169b4b2168277918347",
+      "release_role": "after_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24481,
+          "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf",
+          "commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "a63d48016b83c366207752f86f1728eda512100a",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              474
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/B/source-report.json",
+      "bytes": 1802,
+      "sha256": "450d06f2b96b8b49759da97b457107aa78abaab19e46532b9e70b69297679ed2",
+      "release_role": "later_source_report",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-2664-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 1802,
+          "sha256": "450d06f2b96b8b49759da97b457107aa78abaab19e46532b9e70b69297679ed2"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/C/change.diff",
+      "bytes": 103,
+      "sha256": "9cbfde1f4cd2e4fb1538fd2608b52b8b3074d4d3def2efcc7502b20828fa364e",
+      "release_role": "pair_diff",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54777,
+          "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+          "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+          "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              536
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54832,
+          "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+          "gitBlobSha1": "728445cb4b5458282a371f720e96dbffb8ed9352",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              539
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/C/evidence-notes.md",
+      "bytes": 916,
+      "sha256": "2b980e25bcf0fd0e2ec08cab680620b808a0a8e53fcdb139d43b084c8cfd8c86",
+      "release_role": "later_context_note",
+      "sources": [
+        {
+          "file": "paper/pilot-materials-manifest.json",
+          "case": "vllm-pr-9034"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/C/later-source.txt",
+      "bytes": 64284,
+      "sha256": "5a8611fd28ee9c94db755d7ddc859b7171ce195fefdb399c434752c4442c92ae",
+      "release_role": "after_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54832,
+          "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+          "gitBlobSha1": "728445cb4b5458282a371f720e96dbffb8ed9352",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              539
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/C/source-report.json",
+      "bytes": 7091,
+      "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9",
+      "release_role": "later_source_report",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-9034-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 7091,
+          "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/C/test-1.txt",
+      "bytes": 4702,
+      "sha256": "d1eae7fd8ccdd5240623dad33851a1911e23c522a89bdfc33318824e8ce1b864",
+      "release_role": "later_test_declaration",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 3701,
+          "sha256": "6baf9d0f8899d705bbd96b52697988313faee4fd4810932962510582f3097bcc",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests/entrypoints/openai/test_chunked_prompt.py",
+          "gitBlobSha1": "61d66365130c74f41da0e85d8b84f5ed15dc3ef4",
+          "matchesPriorIntegrityRecord": true
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/change.diff",
+      "bytes": 227,
+      "sha256": "dea9aab0ff5357ea724a68a886ed84dde590a23ebb1fc1bcfad5265203abd108",
+      "release_role": "pair_diff",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12375,
+          "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+          "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+          "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12417,
+          "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+          "gitBlobSha1": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/evidence-notes.md",
+      "bytes": 891,
+      "sha256": "c34d62f0311e012fabd9032ef91fe14287ae99b617b0b4fafcaf4fca09a7099b",
+      "release_role": "later_context_note",
+      "sources": [
+        {
+          "file": "paper/pilot-materials-manifest.json",
+          "case": "vllm-pr-2570"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/later-source.txt",
+      "bytes": 14199,
+      "sha256": "4041ac55f9182878e7d15143026ee752486980fd0c725a87c1b4ae2539c93930",
+      "release_role": "after_source",
+      "sources": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12417,
+          "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+          "gitBlobSha1": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/source-report.json",
+      "bytes": 2621,
+      "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f",
+      "release_role": "later_source_report",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-2570-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 2621,
+          "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/test-1.txt",
+      "bytes": 497,
+      "sha256": "2bfa348de18e92e3c857e524730dba4d13123b14e0eec30880118f9f09c4b216",
+      "release_role": "later_test_declaration",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 289,
+          "sha256": "19a383f0c516f69fafa6387207cff46b000074d4acd90598a7ea867f997c3ee8",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_sampling_params.py",
+          "gitBlobSha1": "01cbe0c997f298a9cf86d342244f9122e38cdcc2",
+          "matchesPriorIntegrityRecord": true
+        }
+      ]
+    },
+    {
+      "file": "second-pass/D/test-2.txt",
+      "bytes": 1695,
+      "sha256": "704ce2ce715197b86599cd160fc875194a24c35255026a30992b891280ed6ceb",
+      "release_role": "later_test_declaration",
+      "sources": [
+        {
+          "file": "experiments/vllm/evidence/pr-2570/after/tests/test_regression.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 1310,
+          "sha256": "5d7187c6812a07f7ba53176324d283aceedf887dc8d28930646f1b96a1f6e633",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_regression.py",
+          "gitBlobSha1": "c48e474bd889f407a0c8c56dc198828211cd92ec",
+          "matchesPriorIntegrityRecord": true
+        }
+      ]
+    },
+    {
+      "file": "second-pass/START_HERE.md",
+      "bytes": 1994,
+      "sha256": "ce0349d401bf3da7910295cc663d45144664e5d9688cfd04c83e8aeae8211bb8",
+      "release_role": "neutral_instruction",
+      "sources": [
+        {
+          "file": "paper/annotation-pilot/authoring/second-pass/START_HERE.md",
+          "sha256": "ce0349d401bf3da7910295cc663d45144664e5d9688cfd04c83e8aeae8211bb8",
+          "status": "authored_packet_instruction"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/answer-form.blank.json",
+      "bytes": 5065,
+      "sha256": "c994ddaee20cab5caee0faa54ed2fd472f836fd6988a91e92b21f6522041307f",
+      "release_role": "unfilled_form",
+      "sources": []
+    },
+    {
+      "file": "second-pass/evaluator-notes.md",
+      "bytes": 4728,
+      "sha256": "26523b492b6722a6d02103b55358e572a0f8cddf3ad847570d0d206fcb39f2b0",
+      "release_role": "author_evaluator_notes",
+      "sources": [
+        {
+          "file": "paper/annotation-pilot/authoring/second-pass/evaluator-notes.md",
+          "sha256": "26523b492b6722a6d02103b55358e572a0f8cddf3ad847570d0d206fcb39f2b0",
+          "status": "authored_packet_instruction"
+        }
+      ]
+    },
+    {
+      "file": "second-pass/reproduction/pilot-boundary-results.json",
+      "bytes": 90908,
+      "sha256": "8849a0f54a8014526eeed4d35aa112de3cc210925ddfd32f9f3980e6e8105aed",
+      "release_role": "author_recorded_local_execution",
+      "sources": [
+        {
+          "file": "paper/pilot-boundary-results.json",
+          "sha256": "8849a0f54a8014526eeed4d35aa112de3cc210925ddfd32f9f3980e6e8105aed",
+          "rerun_in_this_packet": false
+        }
+      ]
+    },
+    {
+      "file": "second-pass/reproduction/vllm-8568-behavior-results.json",
+      "bytes": 173853,
+      "sha256": "244fa08967073de853e4b5e96c64a98f0d2ada92f6c680be45f7b021ee921aa9",
+      "release_role": "author_recorded_local_execution",
+      "sources": [
+        {
+          "file": "paper/vllm-8568-behavior-results.json",
+          "sha256": "244fa08967073de853e4b5e96c64a98f0d2ada92f6c680be45f7b021ee921aa9",
+          "rerun_in_this_packet": false
+        }
+      ]
+    },
+    {
+      "file": "second-pass/rubric.md",
+      "bytes": 7374,
+      "sha256": "c4a2de61be776ede110f08817d1fad3b67bc57894607e46ed161cc6338f56ced",
+      "release_role": "neutral_instruction",
+      "sources": [
+        {
+          "file": "paper/annotation-pilot/authoring/first-pass/rubric.md",
+          "sha256": "c4a2de61be776ede110f08817d1fad3b67bc57894607e46ed161cc6338f56ced",
+          "status": "authored_packet_instruction"
+        }
+      ]
+    }
+  ],
+  "first_pass_allowlist": [
+    "first-pass/A/excerpts.txt",
+    "first-pass/A/source.txt",
+    "first-pass/A/task.md",
+    "first-pass/ATTRIBUTION.txt",
+    "first-pass/B/excerpts.txt",
+    "first-pass/B/source.txt",
+    "first-pass/B/task.md",
+    "first-pass/C/excerpts.txt",
+    "first-pass/C/source.txt",
+    "first-pass/C/task.md",
+    "first-pass/D/excerpts.txt",
+    "first-pass/D/source.txt",
+    "first-pass/D/task.md",
+    "first-pass/LICENSE.txt",
+    "first-pass/START_HERE.md",
+    "first-pass/answer-form.blank.json",
+    "first-pass/rubric.md"
+  ],
+  "blinding_limit": "Artifact separation only. Source, attribution, focused ranges or prior familiarity can reveal identity; no perfect-blinding or historical-as-of claim.",
+  "legal_notice_exception": "Apache-2.0 license is an outcome-free legal notice; its retained origin at a later commit is disclosed here and no later code is included in pass 1.",
+  "display_transform": "Source bytes/hashes are unchanged. Numbered empty lines omit the display separator space. Original trailing source whitespace is preserved before a visible display-only ⟦EOL⟧ marker. Pair diffs are valid zero-context unified diffs to avoid space-only context lines.",
+  "execution_scope": "Only this authored generator/validator runs. Captured code and saved result JSON are data. No upstream/reproduction execution, network, model, authentication, publication or commit."
+}

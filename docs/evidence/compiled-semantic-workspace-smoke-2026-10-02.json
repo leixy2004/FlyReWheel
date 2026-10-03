@@ -1,0 +1,35 @@
+{
+  "mode": "authored-compiled-sdk-workspace-review-smoke",
+  "liveModel": "not_run",
+  "isolation": "not_verified",
+  "ruleDigest": "2f7cd28ad962c3aecbae54758360743449e54f5807fa8a46d1271f369113b71c",
+  "snapshotDigest": "a6e07f29cb6b2db348487150f0fe81dc5dbd7e446f1d91650124af584b6f6f9e",
+  "reviewId": "review_513bebbd6f5dbea19a3fb9cf9206f825e2bf70a2f36e3b8ad2cb200e18709be9",
+  "reviewDigest": "fbe4b93607b8b49966c3e1b31dcb24100315c4050f3096e1c749db24d356ff2f",
+  "reopenedIdentically": true,
+  "protocol": "semantic-review-v1",
+  "sessionId": "authored-compiled-session",
+  "modelExecution": "not_run",
+  "snapshotCheck": "exact-local-git-recapture-matched",
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "finding": {
+    "status": "violation",
+    "origin": "fixture",
+    "humanVerdict": "Unknown",
+    "introduction": "unverified",
+    "notificationEligibility": "unverified"
+  },
+  "notification": "not_performed"
+}

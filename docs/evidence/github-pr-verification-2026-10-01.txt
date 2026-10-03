@@ -1,0 +1,17 @@
+Read-only GitHub PR capture verification (2026-10-01)
+
+PASS: npm run typecheck
+PASS: npm test: 187 tests across 23 files
+PASS: npm run build
+PASS: npm run validate:deploy (30 YAML documents; no cluster/image claim)
+PASS: git diff --check
+PASS: compiled CLI github-pr import/show and snapshots show in separate processes
+PASS: real PR8568 package is idempotent; both content identities survive import/reopen
+PASS: imported/read-back receipts are package-integrity-only; the live receipt is never promoted to verified history
+
+Live capture details: github-pr8568-capture-2026-10-01.json
+Provider contract: ../github-pr-evidence.md
+Mock tests cover byte integrity/BOM/CRLF, exact and edited renames, mode changes, binary/symlink/submodule/oversize/total-byte exclusions, empty merged comparison, source identity, incomplete/truncated data, unsafe paths, discussion pagination, duplicate IDs, ref movement, rate errors, request/response budgets, fresh receipts and stable content identities.
+
+No token/host credential reads, authentication changes, clone, repository-code execution, model calls, feedback creation, provider writes or publication were performed.
+Strict streaming wire-memory limits, historical review checkpoints, full repository context and real model efficacy are not verified or implemented by this feature.

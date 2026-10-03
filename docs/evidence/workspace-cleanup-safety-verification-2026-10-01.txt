@@ -1,0 +1,24 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  16 passed (16)
+      Tests  119 passed (119)
+   Start at  13:05:41
+   Duration  86.55s (tests 97%, import 2%)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+

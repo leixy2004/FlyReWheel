@@ -1,0 +1,8 @@
+OpenSandbox adapter implementation checkpoint, 2026-10-02
+Baseline 254a9c6, official @alibaba-group/opensandbox 1.1.0
+Implementer final post-transfer-guard run: 355 tests / 35 files passed
+29 new targeted tests passed; typecheck, build, deployment validation passed
+Parent git diff --check passed
+Independent review was not completed: review service blocked that task
+No live infrastructure, model, authentication or production deployment tested
+Production prerequisites are documented in opensandbox-workspace-adapter.md

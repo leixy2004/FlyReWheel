@@ -1,0 +1,49 @@
+PR mining execution provenance checkpoint, 2026-10-02, baseline d225c20
+
+Implemented functionality:
+- Fixed pr-mining-v1 worker schema selector and protocol-version-2 typed result
+- Trusted workspace runner -> receipt -> exact rule validator -> atomic store save
+- Immutable request/generation/prompt/response/workspace/runtime-result bindings
+- Requested model, logical runtime ID, session, supervised process and cleanup receipt
+- Opaque in-process capability for new generated persistence; plain JSON is rejected
+- Version-2 candidate payloads in the existing table, version-1 records unchanged
+
+Verification scopes:
+- Official @openai/codex-sdk with a local author-controlled executable fixture
+- Typed entrypoint in source and freshly compiled form
+- Managed local test workspaces and authored lifecycle backend only
+- PGlite atomic save, rollback/retry, exact read revalidation and disk reopen
+- Unknown-only source cases, no correctness feedback, no activation
+- Forged capability/model fields, altered digests/rules, contradictory process
+  completion, timeout/cancellation and failed cleanup rejected without persistence
+
+Limits:
+No live model, OpenSandbox runtime, gateway/authentication, deployment, image build,
+network transfer, upload, publication or credentials were exercised. No dependency
+change, new table, migration or commit. Authored runtime results are stored only as
+fixture / modelExecution:not_run / synthesis:not_run. One schema-only negative test
+constructs claimed model-completed JSON, then rejects its persistence authority.
+
+Receipts are trusted-application observations, not cryptographic attestation of
+model identity, runtime isolation, source truth or model quality. Source identities
+remain caller/provider claims. The production no-backend, blocked-gateway and
+independent lifecycle-authority requirements are unchanged.
+
+Initial focused integration test run failed because the new local Git fixture
+omitted required PR snapshot metadata. Added the same explicit fixture metadata
+used by existing PR evidence tests; validation was not weakened.
+
+Final verification:
+- npm run typecheck: passed
+- npm run build: passed
+- npm test (vitest run --maxWorkers=2): 437 tests across 37 files passed, 190.00s
+- Focused worker/runner/OpenSandbox suites: 98 tests passed before full run
+- New runtime/store suite: 29 tests included in the final full pass
+- Freshly compiled typed worker candidate/insufficient-evidence acceptance: passed
+- Compiled dist/cli.js github-pr import -> mining request -> mining supply ->
+  mining candidates using existing authored examples and a temporary disk DB:
+  passed; original schema-version-1 fixture/not_run payload and digest preserved
+- git diff --check: passed
+- Read-only focused review: three findings fixed (cleanup-time cancellation,
+  contradictory process evidence, failure execution classification); rereview
+  found no remaining concrete defect in that scope

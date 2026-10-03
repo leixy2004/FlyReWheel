@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-02",
+  "passed": true,
+  "baselineCommit": "a4f64bd7c05c56a1c6844d193d360f6a90a9f722",
+  "baseTip": "dad40e95c4d8d6d5c9140680cadb7aa7d9bb9e4e",
+  "comparedHead": "a4f64bd7c05c56a1c6844d193d360f6a90a9f722",
+  "baselineSnapshotDigest": "5b82183a95d8516d55dcbdac83c9dba5e8f9b0224c41c65311c5d2a4ca2b4923",
+  "currentSnapshotDigest": "5b82183a95d8516d55dcbdac83c9dba5e8f9b0224c41c65311c5d2a4ca2b4923",
+  "exactContentEqual": true,
+  "coverage": {
+    "changedPaths": 12,
+    "capturedSides": 17,
+    "excludedSides": 0,
+    "capturedBytes": 271462,
+    "scope": "changed-entries-only"
+  },
+  "unchangedSemanticContractFiles": [
+    {
+      "path": "src/core/semantic-review-evidence.ts",
+      "sha256": "940a7ecf048e7a1bc47a147396b046eb9fd8b4e7ac78e5007c3f6e68bda26505"
+    },
+    {
+      "path": "src/core/semantic-review.ts",
+      "sha256": "3e59250fa9b3fd0977e1318a1ef65495610369dace4d59cfa228101d0815f894"
+    },
+    {
+      "path": "src/semantic-review.ts",
+      "sha256": "58931abcbf72b21a2561f3830769f7543163688856bc488b5e2145524266a4ef"
+    },
+    {
+      "path": "src/adapters/semantic-review-model.ts",
+      "sha256": "d1e78f04f531bdc98b49979a5f5213b062114d0e2c5aad4e92a02476af9c9f54"
+    },
+    {
+      "path": "src/core/semantic-review-execution.ts",
+      "sha256": "1e6edc56329260e0d101fec3d9c3ee1e320cb2521edc14f0a2900fe4345346ed"
+    },
+    {
+      "path": "src/semantic-review-execution.ts",
+      "sha256": "15b8839e30ad5ba7b0841d54470ce9c9aaab2d639075475e347b9fb5468eca73"
+    },
+    {
+      "path": "src/revision-comparison.ts",
+      "sha256": "cc45f438a46284a72de658fe659b3a8139016c44f01bb85ee7446a5abc48c795"
+    },
+    {
+      "path": "src/adapters/semantic-review-fixture.ts",
+      "sha256": "bf2e767fc4a9ca04ffddc70ec803613664c4caaeeed68959a8e665b29f15f381"
+    }
+  ],
+  "scope": "Original HEAD change-snapshot implementation versus refactored source on the same local committed change; no target code executed"
+}

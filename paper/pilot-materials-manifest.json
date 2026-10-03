@@ -1,0 +1,998 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline_pilot_materials_inventory",
+  "date": "2026-10-02",
+  "flyrewheelBaselineCommit": "219f553821b5581d5e3dbd93e12ce19af9cc4862",
+  "purpose": "Select at most three already-inspected real-source cases for a small offline feasibility analysis; no probability sampling or empirical effect estimate.",
+  "scope": {
+    "networkRequests": 0,
+    "modelInferenceCalls": 0,
+    "newHumanAnnotations": 0,
+    "upstreamCodeExecuted": false,
+    "authChanges": false,
+    "sourceCodeEdits": false,
+    "publication": false,
+    "selectionBasis": "availability of exact local source, contrasting guard mechanisms, and retained test evidence; outcomes already visible"
+  },
+  "summary": {
+    "realPrsWithByteBoundSource": 5,
+    "additionalRealPrsBeyond8568": 4,
+    "selectedNextOfflineAnalysisPrs": [
+      2664,
+      9034,
+      2570
+    ],
+    "casesWithFullDiscussionCapture": 1,
+    "reconstructedHistoricalReviewCheckpoints": 0,
+    "establishedIndependentLaterTargets": 0,
+    "independentlyAdjudicatedCases": 0,
+    "fullSourceFilesChecked": 10,
+    "licenseFilesChecked": 5,
+    "upstreamTestFilesChecked": 4,
+    "additionalEmbeddedSourceSidesChecked": 3
+  },
+  "verification": {
+    "method": "Recomputed raw file byte lengths, SHA-256, and Git blob SHA-1; matched existing source-integrity/test-source-integrity records and local merge metadata. Decoded and checked three source sides embedded in the PR8568 capture.",
+    "result": "all_matches",
+    "limit": "Local byte integrity and stored source identifiers only; no new online authentication of provider statements, historical visibility reconstruction, semantic adjudication, or upstream runtime verification."
+  },
+  "commonMaterials": [
+    {
+      "file": "experiments/vllm/cases.json",
+      "materialKind": "mixed_source_manifest_and_authored_seed_expectations",
+      "bytes": 24134,
+      "sha256": "d567a48f1464707ae7d41fa3e99afb91e286c605855d535db5a4ab4051255acb"
+    },
+    {
+      "file": "experiments/vllm/evidence/source-integrity.json",
+      "materialKind": "prior_source_integrity_record",
+      "bytes": 4853,
+      "sha256": "fc57a4961792f8a2571618365fd8ced045c47d906b292bc00c9097103dac4bec"
+    },
+    {
+      "file": "experiments/vllm/evidence/test-source-integrity.json",
+      "materialKind": "prior_test_integrity_record",
+      "bytes": 1257,
+      "sha256": "c9705736e125b371e724e4b0658c67e6834852ac8c62160017cf5aef516e92e6"
+    },
+    {
+      "file": "experiments/vllm/SOURCE_NOTES.md",
+      "materialKind": "prior_acquisition_and_scope_notes",
+      "bytes": 5194,
+      "sha256": "c10417a988a5e04f9c5eea213ab410875c5a72a52a90b63a9f9a5ff5bec1ce70"
+    },
+    {
+      "file": "experiments/vllm/static-replay-report.json",
+      "materialKind": "prior_authored_pattern_static_replay",
+      "bytes": 11331,
+      "sha256": "e548e8539450a833e150f87efeb8676fda465c805146667f5767855705315bd9"
+    },
+    {
+      "file": "paper/phase0-annotation.synthetic.json",
+      "materialKind": "fully_fictional_schema_example_not_real_case",
+      "bytes": 3128,
+      "sha256": "3696e2595412d1e53db39a047564a3b4de1d0c1594c4efa90fa4f9976e6a5990"
+    },
+    {
+      "file": "docs/evidence/github-pr-history-batch-live-2026-10-02.json",
+      "materialKind": "failed_live_capture_record_no_new_case",
+      "bytes": 8952,
+      "sha256": "6a57603e6f747f5ba8a8ab866d4c89973fca3e8e510410e6d0912dc529a3ca42"
+    }
+  ],
+  "cases": [
+    {
+      "caseId": "vllm-pr-2570",
+      "prNumber": 2570,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2570",
+      "selectedForNextOfflineAnalysis": true,
+      "priority": 3,
+      "selectionReason": "Smallest selected source pair and a retained direct upstream unit test; useful control for separating declared contract from executed behavior.",
+      "split": "development_seed_regression",
+      "formalHoldoutEligible": false,
+      "lineageGroup": "sampling-params-optional-max-tokens",
+      "mergedAtAsReported": "2024-01-24T06:38:55Z",
+      "sourceIdentity": {
+        "beforeCommit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+        "originalPrHeadShaAsReported": "db93a939ac90887dff3aa5b3fbe038ed3654385f",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "sourceFiles": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12375,
+          "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105",
+          "commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b/vllm/sampling_params.py",
+          "gitBlobSha1": "b5710eef4ad50447830a0f94012bd7eea57d1f9e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 12417,
+          "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/vllm/sampling_params.py",
+          "gitBlobSha1": "bb7d0002c910ca5144d630d57864cfe4c2b3e03e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              103,
+              118
+            ],
+            [
+              139,
+              159
+            ],
+            [
+              160,
+              194
+            ]
+          ]
+        }
+      ],
+      "license": {
+        "file": "experiments/vllm/fixtures/pr-2570/LICENSE",
+        "materialKind": "captured_upstream_license",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+        "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/LICENSE",
+        "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "matchesPriorIntegrityRecord": true
+      },
+      "testFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 289,
+          "sha256": "19a383f0c516f69fafa6387207cff46b000074d4acd90598a7ea867f997c3ee8",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_sampling_params.py",
+          "gitBlobSha1": "01cbe0c997f298a9cf86d342244f9122e38cdcc2",
+          "matchesPriorIntegrityRecord": true
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-2570/after/tests/test_regression.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 1310,
+          "sha256": "5d7187c6812a07f7ba53176324d283aceedf887dc8d28930646f1b96a1f6e633",
+          "commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/3209b4903376fd723858b256dcfabb8420a0cc64/tests/test_regression.py",
+          "gitBlobSha1": "c48e474bd889f407a0c8c56dc198828211cd92ec",
+          "matchesPriorIntegrityRecord": true
+        }
+      ],
+      "metadataFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-2570-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 2621,
+          "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f"
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-2570-merge-commit.json",
+          "materialKind": "selected_immutable_commit_metadata_and_patches",
+          "bytes": 3868,
+          "sha256": "81ea6e74f6010e6c6bba6881c97b21669b40fe088d4fd0d237536098eb0ac36a"
+        }
+      ],
+      "changedPathsAsRecorded": [
+        "tests/test_regression.py",
+        "tests/test_sampling_params.py",
+        "vllm/sampling_params.py"
+      ],
+      "mechanismAnalysis": {
+        "possible": "bounded_static_analysis",
+        "finding": "Local optional-value validation is statically inspectable: None reaches an ordered comparison before the fix; after the fix the comparison is guarded. The retained direct test declares acceptance of None, but has not been run in this pass."
+      },
+      "boundaryCounterexample": {
+        "availability": "source_derived_candidate_only",
+        "finding": "None versus numeric zero/positive values is an available authored contrast. It is not observed feedback against an existing review rule; after-code no longer matches the exact old AST pattern.",
+        "independentHumanLabel": "unknown"
+      },
+      "realFeedback": {
+        "availability": "source_report_only_no_review_stream",
+        "historicalFeedbackCheckpoint": false,
+        "actualOldNewReviewRuleObserved": false,
+        "semanticFeedbackLabel": "unknown",
+        "note": "PR body/patch summary can preserve a source bug report; it does not supply an authenticated feedback-linked review correction or rule-maintenance episode."
+      },
+      "independentLaterCase": {
+        "availability": "not_established",
+        "caseId": null,
+        "note": "Own before/after sides, authored inputs, another mechanism, and later dates do not establish an independent later application of the same rule."
+      },
+      "authoredMaterial": {
+        "source": "experiments/vllm/cases.json",
+        "fields": [
+          "pattern",
+          "rationale",
+          "expectedCounts",
+          "semanticInputs"
+        ],
+        "status": "researcher_authored_with_fix_visible_not_ground_truth"
+      },
+      "existingStaticReplay": {
+        "file": "experiments/vllm/static-replay-report.json",
+        "counts": {
+          "before": 1,
+          "after": 0,
+          "expected": {
+            "before": 1,
+            "after": 0
+          }
+        },
+        "semanticStatus": "not_verified",
+        "rerunInThisPass": false
+      },
+      "labels": {
+        "humanIndependent": "unknown",
+        "mechanismCorrectness": "unknown",
+        "ruleApplicability": "unknown",
+        "ruleMaintenanceEpisode": "unknown"
+      },
+      "blockers": [
+        "No captured review/comment event stream or feedback-before revision checkpoint",
+        "No independently adjudicated labels or independent later same-mechanism target",
+        "Whole vLLM runtime and GPU regression unexecuted"
+      ],
+      "sourceObservation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      }
+    },
+    {
+      "caseId": "vllm-pr-2664",
+      "prNumber": 2664,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/2664",
+      "selectedForNextOfflineAnalysis": true,
+      "priority": 1,
+      "selectionReason": "Full single-file change preserves the suspicious call behind a concrete dispatch boundary; no extra source acquisition is needed for a narrow control-flow analysis.",
+      "split": "development_seed_regression",
+      "formalHoldoutEligible": false,
+      "lineageGroup": "async-engine-ray-encoding-dispatch",
+      "mergedAtAsReported": "2024-01-30T16:17:06Z",
+      "sourceIdentity": {
+        "beforeCommit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+        "originalPrHeadShaAsReported": "c5c755eeea3ac6552b01d2fcc765c6f684110a2b",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "sourceFiles": [
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24172,
+          "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3",
+          "commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ab406446691f289ef51d1abd8d1ff66760eda36f/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "2885aab9f31611813dcd2e44674f20119058baa2",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              462
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 24481,
+          "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf",
+          "commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/vllm/engine/async_llm_engine.py",
+          "gitBlobSha1": "a63d48016b83c366207752f86f1728eda512100a",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              305,
+              319
+            ],
+            [
+              347,
+              365
+            ],
+            [
+              447,
+              474
+            ]
+          ]
+        }
+      ],
+      "license": {
+        "file": "experiments/vllm/fixtures/pr-2664/LICENSE",
+        "materialKind": "captured_upstream_license",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+        "sourceUrl": "https://github.com/vllm-project/vllm/blob/d79ced3292445d8471b3c4e5ce2dbf311834ec1b/LICENSE",
+        "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "matchesPriorIntegrityRecord": true
+      },
+      "testFiles": [],
+      "metadataFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-2664-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 1802,
+          "sha256": "450d06f2b96b8b49759da97b457107aa78abaab19e46532b9e70b69297679ed2"
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-2664-merge-commit.json",
+          "materialKind": "selected_immutable_commit_metadata_and_patches",
+          "bytes": 2040,
+          "sha256": "050cbeaf27c5a682325791be908e09e68d222b911c476904e9f2331f997e627d"
+        }
+      ],
+      "changedPathsAsRecorded": [
+        "vllm/engine/async_llm_engine.py"
+      ],
+      "mechanismAnalysis": {
+        "possible": "bounded_static_analysis",
+        "finding": "The full file connects engine_use_ray to actor construction in _init_engine and to direct/remote dispatch in add_request. This supports a bounded static path analysis, not a Ray runtime result."
+      },
+      "boundaryCounterexample": {
+        "availability": "source_derived_candidate_only",
+        "finding": "The exact direct-call candidate remains at after lines 458-463 under the non-Ray else branch. This is a source-supported candidate legal neighbor to an unconditional ban on that call, not a verified false-positive label or observed rule revision.",
+        "independentHumanLabel": "unknown"
+      },
+      "realFeedback": {
+        "availability": "source_report_only_no_review_stream",
+        "historicalFeedbackCheckpoint": false,
+        "actualOldNewReviewRuleObserved": false,
+        "semanticFeedbackLabel": "unknown",
+        "note": "PR body/patch summary can preserve a source bug report; it does not supply an authenticated feedback-linked review correction or rule-maintenance episode."
+      },
+      "independentLaterCase": {
+        "availability": "not_established",
+        "caseId": null,
+        "note": "Own before/after sides, authored inputs, another mechanism, and later dates do not establish an independent later application of the same rule."
+      },
+      "authoredMaterial": {
+        "source": "experiments/vllm/cases.json",
+        "fields": [
+          "pattern",
+          "rationale",
+          "expectedCounts",
+          "semanticInputs"
+        ],
+        "status": "researcher_authored_with_fix_visible_not_ground_truth"
+      },
+      "existingStaticReplay": {
+        "file": "experiments/vllm/static-replay-report.json",
+        "counts": {
+          "before": 1,
+          "after": 1,
+          "expected": {
+            "before": 1,
+            "after": 1
+          }
+        },
+        "semanticStatus": "not_verified",
+        "rerunInThisPass": false
+      },
+      "labels": {
+        "humanIndependent": "unknown",
+        "mechanismCorrectness": "unknown",
+        "ruleApplicability": "unknown",
+        "ruleMaintenanceEpisode": "unknown"
+      },
+      "blockers": [
+        "PR error report is captured only as a summary body; no review/comment event stream",
+        "No added upstream test or locally captured version-specific Ray contract",
+        "Actor execution and event-loop integration unexecuted",
+        "No independently adjudicated labels or independent later same-mechanism target"
+      ],
+      "sourceObservation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      }
+    },
+    {
+      "caseId": "vllm-pr-8568",
+      "prNumber": 8568,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/8568",
+      "selectedForNextOfflineAnalysis": false,
+      "priority": null,
+      "selectionReason": "Retain as an already-used developmental reference, not one of the next three cases and never a formal holdout.",
+      "split": "development_seed_regression",
+      "formalHoldoutEligible": false,
+      "lineageGroup": "openai-chat-request-validation",
+      "mergedAtAsReported": "2024-09-26T23:23:17Z",
+      "sourceIdentity": {
+        "beforeCommit": "e2f6f26e8636b8a23e5c0cda533a70c40ade01ec",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "originalPrHeadShaAsReported": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "sourceFiles": [
+        {
+          "file": "experiments/vllm/fixtures/pr-8568/before/vllm/entrypoints/openai/protocol.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 31618,
+          "sha256": "febd1cdf906cb32795f7a87952609a12a73dcb5c3da4a994beb7730de1df6753",
+          "commit": "e2f6f26e8636b8a23e5c0cda533a70c40ade01ec",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/e2f6f26e8636b8a23e5c0cda533a70c40ade01ec/vllm/entrypoints/openai/protocol.py",
+          "gitBlobSha1": "40d27f984fbaac881a7f278bd56a83dcd311696a",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              378,
+              430
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-8568/after/vllm/entrypoints/openai/protocol.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 31620,
+          "sha256": "99df40b03a8fcd80494791fd49c1e2f4f6589936eb4e62b15683fd960e8ed7ea",
+          "commit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/vllm/entrypoints/openai/protocol.py",
+          "gitBlobSha1": "646aa4537999ee3f47da0b5579ff9ccfba294bfc",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              378,
+              430
+            ]
+          ]
+        }
+      ],
+      "license": {
+        "file": "experiments/vllm/fixtures/pr-8568/LICENSE",
+        "materialKind": "captured_upstream_license",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "commit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+        "sourceUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/LICENSE",
+        "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "matchesPriorIntegrityRecord": true
+      },
+      "testFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-8568/after/tests/tool_use/test_chat_completion_request_validations.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 1872,
+          "sha256": "baac2223cf8d78a461bd96660ea56ddd4340232aa1015d50f7831b78496dbbd6",
+          "commit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ee2da3e9efb38add804e2023d47e9f42f38bd638/tests/tool_use/test_chat_completion_request_validations.py",
+          "gitBlobSha1": "3d0fe8f06089549a46c5bf513cc53bdca055939c",
+          "matchesPriorIntegrityRecord": true
+        }
+      ],
+      "metadataFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-8568-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 3425,
+          "sha256": "6083d3251d2cd6aa0d218f46336442d9de644d8029c99e96f444c41a0c7a5414"
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-8568-merge-commit.json",
+          "materialKind": "selected_immutable_commit_metadata_and_patches",
+          "bytes": 4108,
+          "sha256": "e9879d37aeb96389d29972db805c0208da0984241b79b51090b27a3cbf9f7db9"
+        }
+      ],
+      "changedPathsAsRecorded": [
+        "tests/tool_use/test_chat_completion_request_validations.py",
+        "vllm/entrypoints/openai/protocol.py"
+      ],
+      "mechanismAnalysis": {
+        "possible": "bounded_static_analysis",
+        "finding": "Already analyzed and reproduced using the separately captured PR base/head function, with 35 authored inputs and two counterfactual variants; those results are developmental and isolated-function only."
+      },
+      "boundaryCounterexample": {
+        "availability": "source_derived_candidate_only",
+        "finding": "Missing versus explicit tool_choice has a source-supported boundary. The if/elif discussion has not established an observable second defect or a historical rule-boundary revision.",
+        "independentHumanLabel": "unknown"
+      },
+      "realFeedback": {
+        "availability": "current_discussion_capture",
+        "historicalFeedbackCheckpoint": false,
+        "actualOldNewReviewRuleObserved": false,
+        "semanticFeedbackLabel": "unknown",
+        "captureFile": ".flyrewheel/github-pr8568.json"
+      },
+      "independentLaterCase": {
+        "availability": "not_established",
+        "caseId": null,
+        "note": "Own before/after sides, authored inputs, another mechanism, and later dates do not establish an independent later application of the same rule."
+      },
+      "authoredMaterial": {
+        "source": "experiments/vllm/cases.json",
+        "fields": [
+          "pattern",
+          "rationale",
+          "expectedCounts",
+          "semanticInputs"
+        ],
+        "status": "researcher_authored_with_fix_visible_not_ground_truth"
+      },
+      "existingStaticReplay": {
+        "file": "experiments/vllm/static-replay-report.json",
+        "counts": {
+          "before": 1,
+          "after": 0,
+          "expected": {
+            "before": 1,
+            "after": 0
+          }
+        },
+        "semanticStatus": "not_verified",
+        "rerunInThisPass": false
+      },
+      "labels": {
+        "humanIndependent": "unknown",
+        "mechanismCorrectness": "unknown",
+        "ruleApplicability": "unknown",
+        "ruleMaintenanceEpisode": "unknown"
+      },
+      "blockers": [
+        "Early review commit 7aa40bf05fa7cc502c4648d89eeff26b8c97918e has only a discussion hunk, not a full source checkpoint",
+        "Current non-atomic discussion observation cannot establish historical visibility",
+        "No actual old/new review-rule artifacts or independent later target",
+        "PR capture base/head differs from seed squash-parent/squash versions"
+      ],
+      "sourceObservation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      }
+    },
+    {
+      "caseId": "vllm-pr-9034",
+      "prNumber": 9034,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/9034",
+      "selectedForNextOfflineAnalysis": true,
+      "priority": 2,
+      "selectionReason": "A second distinct enclosing-guard mechanism with retained integration-test source; gives a contrast to Ray dispatch without treating either fixed side as independent evaluation.",
+      "split": "development_seed_regression",
+      "formalHoldoutEligible": false,
+      "lineageGroup": "sequence-zero-token-delta-slice",
+      "mergedAtAsReported": "2024-10-15T22:40:43Z",
+      "sourceIdentity": {
+        "beforeCommit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "e9d517f27673ec8736c026f2311d3c250d5f9061",
+        "originalPrHeadShaAsReported": "8f15b82381530c9938c5a75825b5a0129afa8cc0",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "sourceFiles": [
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54777,
+          "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2",
+          "commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/22f8a69549d30b9b00464141797d274fb6b7e65f/vllm/sequence.py",
+          "gitBlobSha1": "3bb35ea955c8cafb08150f5ecb9db80acdda8379",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              536
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 54832,
+          "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/vllm/sequence.py",
+          "gitBlobSha1": "728445cb4b5458282a371f720e96dbffb8ed9352",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              516,
+              539
+            ]
+          ]
+        }
+      ],
+      "license": {
+        "file": "experiments/vllm/fixtures/pr-9034/LICENSE",
+        "materialKind": "captured_upstream_license",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+        "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/LICENSE",
+        "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "matchesPriorIntegrityRecord": true
+      },
+      "testFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+          "materialKind": "captured_upstream_test_not_executed",
+          "bytes": 3701,
+          "sha256": "6baf9d0f8899d705bbd96b52697988313faee4fd4810932962510582f3097bcc",
+          "commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/ba30942240d35eb26b503e139eb4b01ccbbeb954/tests/entrypoints/openai/test_chunked_prompt.py",
+          "gitBlobSha1": "61d66365130c74f41da0e85d8b84f5ed15dc3ef4",
+          "matchesPriorIntegrityRecord": true
+        }
+      ],
+      "metadataFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-9034-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 7091,
+          "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9"
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-9034-merge-commit.json",
+          "materialKind": "selected_immutable_commit_metadata_and_patches",
+          "bytes": 8638,
+          "sha256": "f22c0f39342156fa9892d60bcdaf243a0cfeed54271087ab809e9dd6568daff3"
+        },
+        {
+          "file": "experiments/vllm/evidence/issue-summaries.json",
+          "materialKind": "researcher_issue_summary_not_raw_issue",
+          "bytes": 1078,
+          "sha256": "8cefe43931fe8c5477796c871c36163256112011907d599a2d96a0ff420116c9",
+          "issueNumber": 8988
+        }
+      ],
+      "changedPathsAsRecorded": [
+        "tests/entrypoints/openai/test_chunked_prompt.py",
+        "vllm/entrypoints/openai/serving_chat.py",
+        "vllm/entrypoints/openai/serving_completion.py",
+        "vllm/sequence.py"
+      ],
+      "mechanismAnalysis": {
+        "possible": "bounded_static_analysis",
+        "finding": "The full selected method exposes delta handling, offset update, single-token optimization, and zero-count early return. Static inspection can separate Python -0 slicing from surrounding state assumptions."
+      },
+      "boundaryCounterexample": {
+        "availability": "source_derived_candidate_only",
+        "finding": "The same negative slice remains at after line 538 but follows the zero-count return at lines 535-536. This supports a narrow source-derived candidate legal neighbor when token counts satisfy the method assumptions; it does not establish safety of every slice or the entire PR.",
+        "independentHumanLabel": "unknown"
+      },
+      "realFeedback": {
+        "availability": "source_report_only_no_review_stream",
+        "historicalFeedbackCheckpoint": false,
+        "actualOldNewReviewRuleObserved": false,
+        "semanticFeedbackLabel": "unknown",
+        "note": "PR body/patch summary can preserve a source bug report; it does not supply an authenticated feedback-linked review correction or rule-maintenance episode."
+      },
+      "independentLaterCase": {
+        "availability": "not_established",
+        "caseId": null,
+        "note": "Own before/after sides, authored inputs, another mechanism, and later dates do not establish an independent later application of the same rule."
+      },
+      "authoredMaterial": {
+        "source": "experiments/vllm/cases.json",
+        "fields": [
+          "pattern",
+          "rationale",
+          "expectedCounts",
+          "semanticInputs"
+        ],
+        "status": "researcher_authored_with_fix_visible_not_ground_truth"
+      },
+      "existingStaticReplay": {
+        "file": "experiments/vllm/static-replay-report.json",
+        "counts": {
+          "before": 1,
+          "after": 1,
+          "expected": {
+            "before": 1,
+            "after": 1
+          }
+        },
+        "semanticStatus": "not_verified",
+        "rerunInThisPass": false
+      },
+      "labels": {
+        "humanIndependent": "unknown",
+        "mechanismCorrectness": "unknown",
+        "ruleApplicability": "unknown",
+        "ruleMaintenanceEpisode": "unknown"
+      },
+      "blockers": [
+        "Only sequence.py has full production before/after files; serving_chat.py and serving_completion.py are patch-only",
+        "Retained GPU integration test is not a direct oracle for this isolated method and was not run",
+        "Issue #8988 is a researcher summary, not a raw historical issue/comment capture",
+        "Offset lifecycle and negative-count assumptions are not fully validated",
+        "No independently adjudicated labels, review-event history, or independent later same-mechanism target"
+      ],
+      "sourceObservation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      }
+    },
+    {
+      "caseId": "vllm-pr-14352",
+      "prNumber": 14352,
+      "prUrl": "https://github.com/vllm-project/vllm/pull/14352",
+      "selectedForNextOfflineAnalysis": false,
+      "priority": null,
+      "selectionReason": "Do not select in this three-case pass: already-inspected seed sharing the conservative ChatCompletionRequest lineage with #8568; less useful than the direct-test control for diversifying feasibility evidence.",
+      "split": "development_seed_regression",
+      "formalHoldoutEligible": false,
+      "lineageGroup": "openai-chat-request-validation",
+      "mergedAtAsReported": "2025-03-18T12:50:05Z",
+      "sourceIdentity": {
+        "beforeCommit": "414919138b74ec2e654a25548e031c8fa4b02e64",
+        "beforeRole": "squash_merge_first_parent",
+        "afterCommit": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+        "afterRole": "squash_merge_commit",
+        "originalPrBaseShaAsReported": "69ff99fdcddf4d6dbcebf5f750b121dd171b86a3",
+        "originalPrHeadShaAsReported": "e62e274caab25ea5aa862b1bdc6ab0e4586803fa",
+        "historicalReviewCheckpoint": "unknown_not_reconstructed",
+        "sourceVersionMappingCheckedAgainstLocalMergeMetadata": true
+      },
+      "sourceFiles": [
+        {
+          "file": "experiments/vllm/fixtures/pr-14352/before/vllm/entrypoints/openai/protocol.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 60882,
+          "sha256": "7715007785d0ec5472ba9c8d45f8ca6bf246f5d33de675ae75b8f7bfba233847",
+          "commit": "414919138b74ec2e654a25548e031c8fa4b02e64",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/414919138b74ec2e654a25548e031c8fa4b02e64/vllm/entrypoints/openai/protocol.py",
+          "gitBlobSha1": "90076a45d414ab8032cb913e57a28e5919a4889f",
+          "matchesPriorIntegrityRecord": true,
+          "side": "before",
+          "staticInspectionLineRanges": [
+            [
+              215,
+              225
+            ],
+            [
+              537,
+              556
+            ]
+          ]
+        },
+        {
+          "file": "experiments/vllm/fixtures/pr-14352/after/vllm/entrypoints/openai/protocol.py",
+          "materialKind": "captured_upstream_source",
+          "bytes": 60903,
+          "sha256": "1fc48b2ee7d49c9c0edb8f063b9278958024d4a9161c56f63d3bb566bfe214b0",
+          "commit": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+          "sourceUrl": "https://github.com/vllm-project/vllm/blob/dd732028f59dd149cfdd4e6ca899d50c5839051e/vllm/entrypoints/openai/protocol.py",
+          "gitBlobSha1": "a96ca1f7570086c2b4100446dea43950e3b9d34e",
+          "matchesPriorIntegrityRecord": true,
+          "side": "after",
+          "staticInspectionLineRanges": [
+            [
+              215,
+              225
+            ],
+            [
+              537,
+              556
+            ]
+          ]
+        }
+      ],
+      "license": {
+        "file": "experiments/vllm/fixtures/pr-14352/LICENSE",
+        "materialKind": "captured_upstream_license",
+        "bytes": 11357,
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "commit": "dd732028f59dd149cfdd4e6ca899d50c5839051e",
+        "sourceUrl": "https://github.com/vllm-project/vllm/blob/dd732028f59dd149cfdd4e6ca899d50c5839051e/LICENSE",
+        "gitBlobSha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "matchesPriorIntegrityRecord": true
+      },
+      "testFiles": [],
+      "metadataFiles": [
+        {
+          "file": "experiments/vllm/evidence/pr-14352-summary.json",
+          "materialKind": "selected_current_pr_metadata_and_patches",
+          "bytes": 1154,
+          "sha256": "1a56d0f78ede080e87564adfe1b71f3e1decfd33da86a5810746ea07579a2c52"
+        },
+        {
+          "file": "experiments/vllm/evidence/pr-14352-merge-commit.json",
+          "materialKind": "selected_immutable_commit_metadata_and_patches",
+          "bytes": 1494,
+          "sha256": "0c51824d4866b5d95f39448718d782fa39a06cfad52cbf2ccab708f405f44cb5"
+        },
+        {
+          "file": "experiments/vllm/evidence/issue-summaries.json",
+          "materialKind": "researcher_issue_summary_not_raw_issue",
+          "bytes": 1078,
+          "sha256": "8cefe43931fe8c5477796c871c36163256112011907d599a2d96a0ff420116c9",
+          "issueNumber": 14351
+        }
+      ],
+      "changedPathsAsRecorded": [
+        "vllm/entrypoints/openai/protocol.py"
+      ],
+      "mechanismAnalysis": {
+        "possible": "bounded_static_analysis",
+        "finding": "Full file supports static inspection of top_logprobs default zero versus positive-count validation; the stored issue summary reports a serialization/revalidation failure."
+      },
+      "boundaryCounterexample": {
+        "availability": "source_derived_candidate_only",
+        "finding": "Zero versus positive top_logprobs provides a candidate domain contrast, not an observed feedback-driven rule update. No direct test source is captured.",
+        "independentHumanLabel": "unknown"
+      },
+      "realFeedback": {
+        "availability": "source_report_only_no_review_stream",
+        "historicalFeedbackCheckpoint": false,
+        "actualOldNewReviewRuleObserved": false,
+        "semanticFeedbackLabel": "unknown",
+        "note": "PR body/patch summary can preserve a source bug report; it does not supply an authenticated feedback-linked review correction or rule-maintenance episode."
+      },
+      "independentLaterCase": {
+        "availability": "not_established",
+        "caseId": null,
+        "note": "Own before/after sides, authored inputs, another mechanism, and later dates do not establish an independent later application of the same rule."
+      },
+      "authoredMaterial": {
+        "source": "experiments/vllm/cases.json",
+        "fields": [
+          "pattern",
+          "rationale",
+          "expectedCounts",
+          "semanticInputs"
+        ],
+        "status": "researcher_authored_with_fix_visible_not_ground_truth"
+      },
+      "existingStaticReplay": {
+        "file": "experiments/vllm/static-replay-report.json",
+        "counts": {
+          "before": 1,
+          "after": 0,
+          "expected": {
+            "before": 1,
+            "after": 0
+          }
+        },
+        "semanticStatus": "not_verified",
+        "rerunInThisPass": false
+      },
+      "labels": {
+        "humanIndependent": "unknown",
+        "mechanismCorrectness": "unknown",
+        "ruleApplicability": "unknown",
+        "ruleMaintenanceEpisode": "unknown"
+      },
+      "blockers": [
+        "Same conservative lineage as developmental #8568",
+        "Issue #14351 is a researcher summary, not raw reproduction/discussion bytes",
+        "No added test, review-event stream, or historical checkpoint",
+        "No independently adjudicated labels or independent later target"
+      ],
+      "sourceObservation": {
+        "retrievedOnAsRecorded": "2026-09-30",
+        "exactObservationTimestamp": null,
+        "basis": "experiments/vllm/cases.json; minimized current metadata and immutable source snapshots, not a contemporaneous review checkpoint"
+      }
+    }
+  ],
+  "separatePr8568Capture": {
+    "file": ".flyrewheel/github-pr8568.json",
+    "materialKind": "real_current_api_observation",
+    "bytes": 112720,
+    "sha256": "4c153cd4bd2ef95db4be6d5f1185fc3559ffafaf7feb85df8e57ac549e1cc356",
+    "evidenceDigestAsRecorded": "ae78e20298184fad19d0e9745aa0c50ed856d39701829e56b5bf294788e631a5",
+    "snapshotDigestAsRecorded": "94917319313ffa7b3e455b41ee335f598f18b95b55844903cf1ad467e03eb61d",
+    "observedFrom": "2026-10-01T09:30:22.253Z",
+    "observedUntil": "2026-10-01T09:30:56.570Z",
+    "historicalReviewCheckpoint": false,
+    "discussionConsistency": "non-atomic-current-observation",
+    "discussionCounts": {
+      "issueComments": 3,
+      "reviews": 7,
+      "reviewComments": 5
+    },
+    "embeddedSources": [
+      {
+        "jsonPointer": "/evidence/snapshot/changes/0/after",
+        "side": "after",
+        "upstreamPath": "tests/tool_use/test_chat_completion_request_validations.py",
+        "bytes": 1872,
+        "sha256": "baac2223cf8d78a461bd96660ea56ddd4340232aa1015d50f7831b78496dbbd6",
+        "gitBlobSha1": "3d0fe8f06089549a46c5bf513cc53bdca055939c",
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "localByteBindingVerified": true
+      },
+      {
+        "jsonPointer": "/evidence/snapshot/changes/1/before",
+        "side": "before",
+        "upstreamPath": "vllm/entrypoints/openai/protocol.py",
+        "bytes": 31505,
+        "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+        "gitBlobSha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+        "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "localByteBindingVerified": true
+      },
+      {
+        "jsonPointer": "/evidence/snapshot/changes/1/after",
+        "side": "after",
+        "upstreamPath": "vllm/entrypoints/openai/protocol.py",
+        "bytes": 31507,
+        "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+        "gitBlobSha1": "359012611a34a7dc86be5e54ef890633f50bc8da",
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "localByteBindingVerified": true
+      }
+    ],
+    "portableInGit": false
+  },
+  "exclusions": [
+    {
+      "material": "paper/phase0-annotation.synthetic.json and authored fixture/helper episodes",
+      "reason": "Fictional/authored schema and implementation tests are not real vLLM observations."
+    },
+    {
+      "material": "cases.json semanticInputs, AST patterns, and expectedCounts",
+      "reason": "Authored retrospective hypotheses; source files being real does not make these expectations independent labels."
+    },
+    {
+      "material": "2026-10-02 history preview metadata, failed batch, and rejected PR #1-#5 metadata",
+      "reason": "No additional captured source or fresh completed case. The live batch stopped on HTTP 403; the cause remains forbidden-or-rate-limited, not diagnosed here."
+    },
+    {
+      "material": "all five vLLM seeds including #8568 and #14352",
+      "reason": "Already inspected for system/rule design. No formal holdout claim; keep the two ChatCompletionRequest cases in the same conservative lineage."
+    }
+  ],
+  "nextSteps": {
+    "withoutAuth": "No acquisition is needed to prepare source-cited draft analyses for the three selected seeds. Preserve unknown labels and distinguish declared tests from executed behavior.",
+    "smallestAdditionalAcquisition": "For one selected case, obtain an already-existing public-source export of the feedback-before commit plus its parent, necessary contract/context file, raw review/comment bodies with IDs and edit/submission times, and visibility evidence. Do not infer a complete episode from a PR summary. Missing independent later targets need a separate fixed search frame.",
+    "accessBoundary": "No GitHub retry, alternate transport, token, login, or network acquisition in this pass. HTTP 403 has no further diagnosis. A future authorized capture or user-provided public export is separate work.",
+    "humanDecision": "Only if independently adjudicated labels are wanted: decide whether to arrange two independent human annotators and arbitration. Nobody has been contacted or requested automatically. Single-author feasibility may proceed without that decision but must retain unknown labels.",
+    "stoppingCondition": "Finish evidence cards for exactly the three selected seeds and list unresolved inputs; do not expand the set to manufacture feedback, later cases, or positive labels."
+  }
+}

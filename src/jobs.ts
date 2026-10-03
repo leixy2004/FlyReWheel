@@ -4,6 +4,10 @@ import { RuleBundleSchema, digestOf } from './core/index.js';
 import { AttemptSchema, ReplayDatasetSchema } from './pipeline.js';
 import { CodexExecutionConfigSchema } from './model-runtime.js';
 
+import { ApplicationJobSchema, applicationJobId, type ApplicationJob, type ApplicationJobInput } from './application-job-contract.js';
+export const APPLICATION_QUEUE = 'flyrewheel-application';
+export { ApplicationJobSchema, applicationJobId, applicationJobDigest } from './application-job-contract.js';
+
 export const REPLAY_QUEUE = 'flyrewheel-replay';
 const jobBase = {
   bundle: RuleBundleSchema, dataset: ReplayDatasetSchema,
@@ -27,14 +31,23 @@ export function replayJobId(payload: ReplayJobInput): string {
   return `${d.slice(0, 8)}-${d.slice(8, 12)}-5${d.slice(13, 16)}-a${d.slice(17, 20)}-${d.slice(20, 32)}`;
 }
 export async function openQueue(options: ConstructorOptions): Promise<PgBoss> {
-  const boss = new PgBoss(options);
+  let boss: PgBoss;
+  try { boss = new PgBoss(options); }
+  catch { throw new Error('PostgreSQL queue initialization failed; inspect secured database logs'); }
   // Error contents may contain connection strings; callers get an operational signal without secrets.
   boss.on('error', () => process.stderr.write('FlyReWheel queue database error; inspect secured database logs\n'));
-  await boss.start();
-  await boss.createQueue(REPLAY_QUEUE, QUEUE_POLICY);
-  const { policy: _policy, ...mutablePolicy } = QUEUE_POLICY;
-  await boss.updateQueue(REPLAY_QUEUE, mutablePolicy);
-  return boss;
+  try {
+    await boss.start();
+    const { policy: _policy, ...mutablePolicy } = QUEUE_POLICY;
+    for (const name of [REPLAY_QUEUE, APPLICATION_QUEUE]) {
+      await boss.createQueue(name, QUEUE_POLICY);
+      await boss.updateQueue(name, mutablePolicy);
+    }
+    return boss;
+  } catch {
+    try { await boss.stop({ graceful: true }); } catch { /* Preserve the safe initialization failure. */ }
+    throw new Error('PostgreSQL queue initialization failed; inspect secured database logs');
+  }
 }
 export async function enqueueReplay(boss: PgBoss, input: ReplayJobInput) {
   const payload = ReplayJobSchema.parse(input);
@@ -47,5 +60,19 @@ export async function workReplay(boss: PgBoss, handler: (payload: ReplayJob, sig
     const job = jobs[0];
     if (!job) return;
     return handler(ReplayJobSchema.parse(job.data), job.signal);
+  });
+}
+
+/** Workload/runtime configuration is never supplied by an application job. */
+export async function enqueueApplication(boss: PgBoss, input: ApplicationJobInput) {
+  const payload = ApplicationJobSchema.parse(input);
+  if (Buffer.byteLength(JSON.stringify(payload)) > 4096) throw new Error('Application job payload exceeds 4KB');
+  return boss.send(APPLICATION_QUEUE, payload, { id: applicationJobId(payload), group: { id: 'workspace-application-serialized' } });
+}
+export async function workApplication(boss: PgBoss, handler: (payload: ApplicationJob, signal: AbortSignal) => Promise<unknown>) {
+  return boss.work<ApplicationJob>(APPLICATION_QUEUE, { batchSize: 1, localConcurrency: 1, groupConcurrency: 1, heartbeatRefreshSeconds: 20 }, async jobs => {
+    const job = jobs[0];
+    if (!job) return;
+    return handler(ApplicationJobSchema.parse(job.data), job.signal);
   });
 }

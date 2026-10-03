@@ -1,0 +1,9 @@
+Combined database selection and optional detector revision fixes
+Baseline 38bd6e4, full frozen working-tree verification 2026-10-02
+npm test: 1162 passed across 78 files, maxWorkers=2, 716.40 seconds
+npm run typecheck: passed
+npm run build: passed
+git diff --check: passed
+Focused revision checks: 75 passed including 8 new detectorless regressions
+Compiled database selection smoke: 85 checks, zero network attempts
+No live PostgreSQL, model, deployment or credential setup was tested

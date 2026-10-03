@@ -1,0 +1,5 @@
+--- A/before
++++ A/later
+@@ -384 +384 @@
+-        if "tool_choice" not in data and "tools" in data:
++        if "tool_choice" not in data and data.get("tools"):

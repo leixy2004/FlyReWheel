@@ -1,0 +1,30 @@
+Local revision comparison verification, 2026-10-01
+Canonical checkout HEAD before edits: 536c1507774ca7e79ec89e0af5632449498774fd
+
+Commands: npm test (maxWorkers=2), npm run typecheck, npm run build, git diff --check
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  26 passed (26)
+      Tests  268 passed (268)
+   Start at  04:26:29
+   Duration  271.40s (tests 99%, import 1%)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+Final compiled demo reopened the same PGlite DB; output byte-identical.

@@ -1,0 +1,192 @@
+{
+  "mode": "compiled-offline-local-semantic-governance-smoke",
+  "namespace": "local-semantic-review",
+  "acceptedDecisionAutomaticSelection": false,
+  "rootBootstrap": "explicit-unvalidated",
+  "replacement": {
+    "explicit": true,
+    "predecessor": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+    "successor": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+    "comparisonDigest": "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+    "decisionDigest": "38a027194892952a087c1a24ded76960a24f1fd22c137e650ca59865fadbca2d"
+  },
+  "finalState": {
+    "namespace": "local-semantic-review",
+    "ruleId": "revision-comparison-demo",
+    "headDigest": "f43e026da4b7a311b38b8ba62957775d7c5b232174a1ec4e839d151fb3db47ac",
+    "sequence": 7,
+    "versions": [
+      {
+        "ruleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+        "ruleId": "revision-comparison-demo",
+        "version": "draft-base",
+        "scope": {
+          "repositories": [
+            "synthetic:revision-comparison-demo"
+          ],
+          "paths": {
+            "include": [
+              "src"
+            ],
+            "exclude": []
+          }
+        },
+        "scopeDigest": "531caf9b39003939d5ed437ca0a78b15da6a533570dae12d224dbaffca7a55f3",
+        "parentDigest": null,
+        "status": "superseded",
+        "selectionEvidence": {
+          "kind": "unvalidated-root-bootstrap"
+        }
+      },
+      {
+        "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+        "ruleId": "revision-comparison-demo",
+        "version": "draft-guard-aware",
+        "scope": {
+          "repositories": [
+            "synthetic:revision-comparison-demo"
+          ],
+          "paths": {
+            "include": [
+              "src"
+            ],
+            "exclude": []
+          }
+        },
+        "scopeDigest": "531caf9b39003939d5ed437ca0a78b15da6a533570dae12d224dbaffca7a55f3",
+        "parentDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+        "status": "retired",
+        "selectionEvidence": {
+          "kind": "accepted-local-comparison",
+          "decisionDigest": "38a027194892952a087c1a24ded76960a24f1fd22c137e650ca59865fadbca2d",
+          "comparisonDigest": "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+          "baseRuleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+          "candidateRuleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "scorer": "per-anchor-semantic-v3",
+          "decisionSource": "fixture",
+          "comparisonStatus": "compatible",
+          "observations": 4,
+          "semanticEvidence": "offline-fixture-declarations",
+          "scope": "declared-cases-and-selected-feedback-only",
+          "certification": "none"
+        }
+      }
+    ],
+    "shadowRuleDigest": null,
+    "trust": {
+      "identityVerification": "caller-declared-unverified",
+      "eligibility": "local-experimental-review-only",
+      "productionActivation": "not_performed",
+      "certification": "none"
+    }
+  },
+  "history": [
+    {
+      "digest": "c0d5b3fe10688676080c7e630693065a35fb947f71e92c7ba13594d79ba66109",
+      "sequence": 1,
+      "action": "register",
+      "previousEventDigest": null,
+      "transitions": [
+        {
+          "ruleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+          "from": null,
+          "to": "candidate"
+        }
+      ]
+    },
+    {
+      "digest": "122f076ae9f932524e6895b251dec3d4a4b201bbbd318ad38cb13d1b317c92b1",
+      "sequence": 2,
+      "action": "bootstrap-shadow",
+      "previousEventDigest": "c0d5b3fe10688676080c7e630693065a35fb947f71e92c7ba13594d79ba66109",
+      "transitions": [
+        {
+          "ruleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+          "from": "candidate",
+          "to": "local-shadow"
+        }
+      ]
+    },
+    {
+      "digest": "498949d67277ebc4e23bcf6b8af9ec1483377371b826f3e73b0a096ac7ba2183",
+      "sequence": 3,
+      "action": "register",
+      "previousEventDigest": "122f076ae9f932524e6895b251dec3d4a4b201bbbd318ad38cb13d1b317c92b1",
+      "transitions": [
+        {
+          "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "from": null,
+          "to": "candidate"
+        }
+      ]
+    },
+    {
+      "digest": "6f7605908df73d1cbc07c59106ba1ebc159262b5281a2ece42bc2350e37ba17a",
+      "sequence": 4,
+      "action": "supersede",
+      "previousEventDigest": "498949d67277ebc4e23bcf6b8af9ec1483377371b826f3e73b0a096ac7ba2183",
+      "transitions": [
+        {
+          "ruleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+          "from": "local-shadow",
+          "to": "superseded"
+        },
+        {
+          "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "from": "candidate",
+          "to": "local-shadow"
+        }
+      ]
+    },
+    {
+      "digest": "1b5d46f406f45ce29fac23af64e42209632d5b8860d8ed34949da14942aad75a",
+      "sequence": 5,
+      "action": "suspend",
+      "previousEventDigest": "6f7605908df73d1cbc07c59106ba1ebc159262b5281a2ece42bc2350e37ba17a",
+      "transitions": [
+        {
+          "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "from": "local-shadow",
+          "to": "suspended"
+        }
+      ]
+    },
+    {
+      "digest": "96fe307cc8de40fcdcd43033fdcc73ee042518a1ec31ad86e58fa0fd33cbc16b",
+      "sequence": 6,
+      "action": "select-shadow",
+      "previousEventDigest": "1b5d46f406f45ce29fac23af64e42209632d5b8860d8ed34949da14942aad75a",
+      "transitions": [
+        {
+          "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "from": "suspended",
+          "to": "local-shadow"
+        }
+      ]
+    },
+    {
+      "digest": "f43e026da4b7a311b38b8ba62957775d7c5b232174a1ec4e839d151fb3db47ac",
+      "sequence": 7,
+      "action": "retire",
+      "previousEventDigest": "96fe307cc8de40fcdcd43033fdcc73ee042518a1ec31ad86e58fa0fd33cbc16b",
+      "transitions": [
+        {
+          "ruleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+          "from": "local-shadow",
+          "to": "retired"
+        }
+      ]
+    }
+  ],
+  "durableReopen": "passed",
+  "retryAfterHeadAdvance": "passed",
+  "explicitHistoricalReviewRead": "passed",
+  "v1ActiveRegistry": "unchanged",
+  "externalCalls": 0,
+  "certification": "none",
+  "productionActivation": "not_performed",
+  "limitations": [
+    "Authored fixtures test plumbing and guards; they do not establish model quality or authenticated human approval.",
+    "PGlite transactions were exercised; a live PostgreSQL server was not used."
+  ]
+}

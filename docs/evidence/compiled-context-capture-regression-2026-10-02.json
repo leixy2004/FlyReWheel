@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-02",
+  "mode": "compiled-offline-selected-repository-context",
+  "passed": true,
+  "baseTip": "fb87b7ede6d066492baf1f85605730145a842e9f",
+  "head": "bd3d9331547200692d3e8ce683e201b866a00264",
+  "future": "2326af639abfecfe02f8d097ec7007c3ad1052b0",
+  "snapshotDigest": "f21bcab595056e529fe5a7ca7bd9b976d3f4fb0a5c53d172d848e81095974f78",
+  "contextDigest": "581eca0e32c50806a2ea35a73a477f27d1eea4fb11f5978622eafbbefb49754f",
+  "evidenceId": "44803531b2603e1dc16f46c47771ebda79474eaa2819954022ef8e98f8f49c12",
+  "coverage": {
+    "selectedPaths": 3,
+    "capturedPaths": 2,
+    "excludedPaths": 0,
+    "missingPaths": 1,
+    "capturedBytes": 45,
+    "scope": "selected-paths-only",
+    "historicalAvailability": "unproven"
+  },
+  "captureVerification": "local-git-check",
+  "importedVerification": "package-integrity-only",
+  "semanticReviewAcceptance": "semantic-snapshot-review-v3",
+  "verified": [
+    "unchanged contract/test bytes at exact review head",
+    "future-head rejection",
+    "idempotent capture",
+    "fresh local Git re-verification",
+    "typed exact-source citation",
+    "import receipt downgrade",
+    "reopen/cite without repository",
+    "bounded summary pagination",
+    "tamper rejection"
+  ],
+  "limits": [
+    "Authored local fixture only",
+    "Caller-supplied repository identity",
+    "Historical availability unproven",
+    "This capture-only smoke does not execute semantic review or model inference",
+    "No deployment, upload, publication or target-code execution"
+  ]
+}

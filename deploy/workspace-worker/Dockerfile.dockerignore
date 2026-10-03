@@ -1,0 +1,24 @@
+# Dockerfile-specific allowlist; overrides the root Dockerfile's context rules.
+**
+!package.json
+!package-lock.json
+!tsconfig.json
+!src/
+!src/**
+!deploy/
+!deploy/tsconfig.build.json
+!deploy/workspace-worker/
+!deploy/workspace-worker/Dockerfile
+!deploy/workspace-worker/Dockerfile.dockerignore
+!deploy/workspace-worker/prepare-image.mjs
+!deploy/workspace-worker/workspace-worker
+!deploy/workspace-worker/workspace-worker.json
+# Defense in depth: never package ambient auth, local data, or repositories.
+**/.env*
+**/.npmrc
+**/auth.json
+**/.codex
+**/.aws
+**/node_modules
+**/*.log
+**/.git

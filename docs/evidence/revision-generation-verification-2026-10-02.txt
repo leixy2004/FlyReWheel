@@ -1,0 +1,49 @@
+Feedback-driven revision generation verification, 2026-10-02
+
+Scope: local application/API integration and authored fixture verification.
+No live model/backend/authentication/deployment/upload/publication/dependency install/repository commit.
+Blocked OpenSandbox review route was not retried. HEAD remains a1d5ea6.
+
+PASS npm test (package script: vitest run --maxWorkers=2)
+  Test Files 40 passed (40)
+  Tests 569 passed (569)
+  Duration 287.30s
+  Includes 39 new revision-generation tests and all 530 existing tests.
+PASS npm run typecheck
+PASS npm run build
+PASS node scripts/smoke-revision-generation.mjs
+  Compiled dist modules, real temporary Git capture and prepared head workspace,
+  actual pinned Codex SDK with authored executable, fixed rule-revision-v1 output,
+  configured shell/unified-exec disabled and read-only SDK mode,
+  capability-gated atomic candidate/rule persistence, identical database reopen,
+  preserved-positive/corrected-negative comparison, explicit local fixture accept,
+  separately regressed-positive comparison with acceptance blocked,
+  modelExecution:not_run, source:fixture, human verdict Unknown, no activation,
+  successful bounded lifecycle and verified cleanup.
+  See compiled-revision-generation-smoke-2026-10-02.json.
+PASS node scripts/smoke-semantic-workspace.mjs (existing compiled regression smoke)
+PASS npm run validate:deploy
+  30 YAML documents parsed; local references, offline defaults, secret-free
+  templates, workload hardening and single-runner invariants verified.
+PASS git diff --check
+
+New coverage includes exact request/base/version/provenance/regression and
+candidate metadata bindings; selected-only prompt bytes; late feedback exclusion;
+Unknown/Disputed and repeated finding feedback; typed diagnoses and forbidden
+model-authored fields; forged/copied persistence capabilities; receipt tampering;
+read rederivation; atomic rollback/retry; insufficient evidence; raw/output bounds;
+worker boundary/process/stop/lifecycle checks; cancellation during cleanup;
+cleanup retention; and unexpected SDK command-event rejection.
+
+Holdout coverage: registered consumed aliases fail; previously unregistered
+consumed source identities are reserved before generation, even for failed runs;
+late holdout import is rejected; concurrent holdout registration and reservation
+cannot both succeed; unrelated unconsumed snapshot content can later become
+holdout without retroactively invalidating a saved candidate. Reservations record
+source use, never whole-file safety or a new feedback-derived ProblemCase.
+
+Selected-evidence SDK policy is not an isolation attestation. Application receipts
+bind accepted bytes/configuration/lifecycle but do not certify model identity,
+semantic truth, detector quality, or a temporal evaluation split. Full-repository
+revision synthesis is a planned extension with an explicit context/split design.
+Production still needs independently verified backend/isolation/gateway/auth.

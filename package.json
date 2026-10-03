@@ -8,21 +8,27 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --maxWorkers=2",
     "typecheck": "tsc --noEmit",
     "demo": "node --import tsx src/cli.ts demo",
     "cli": "node --import tsx src/cli.ts",
     "worker": "node --import tsx src/worker.ts",
     "experiment:vllm": "node --import tsx experiments/vllm/replay.ts",
-    "validate:deploy": "node deploy/validate.mjs"
+    "experiment:matched": "node --import tsx experiments/matched-revision/replay.ts",
+    "validate:deploy": "node deploy/validate.mjs",
+    "build": "tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs"
   },
   "dependencies": {
+    "@ai-hero/sandcastle": "0.12.0",
+    "@alibaba-group/opensandbox": "1.1.0",
     "@ast-grep/lang-python": "0.0.6",
     "@ast-grep/napi": "0.45.3",
     "@aws-sdk/client-s3": "3.1143.0",
     "@electric-sql/pglite": "0.5.8",
+    "@octokit/rest": "22.0.1",
     "@openai/codex-sdk": "0.159.2",
     "commander": "15.0.0",
+    "node-pg-migrate": "9.0.0",
     "openai": "7.25.0",
     "pg": "8.23.1",
     "pg-boss": "12.35.0",
@@ -35,5 +41,6 @@
     "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.0.3"
-  }
+  },
+  "license": "Apache-2.0"
 }

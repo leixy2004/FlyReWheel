@@ -1,0 +1,50 @@
+v24.19.0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  16 passed (16)
+      Tests  114 passed (114)
+   Start at  11:48:54
+   Duration  73.58s (tests 97%, import 2%, transform 1%)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+
+--- Canonical npm test after bounding default workers to two ---
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  16 passed (16)
+      Tests  114 passed (114)
+   Start at  11:50:39
+   Duration  81.41s (tests 98%, import 2%)
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs

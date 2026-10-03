@@ -85,7 +85,7 @@ kubectl -n flyrewheel rollout status deployment/flyrewheel-worker --timeout=300s
 
 Dev PostgreSQL 使用官方 `postgres:17.11-bookworm`，沿用官方 entrypoint，数据目录为 `/var/lib/postgresql/data/pgdata`，Unix socket 与临时文件有独立可写 `emptyDir`。`POSTGRES_USER=qual_evo` 创建的是**开发超级用户**，不能沿用作生产最小权限账号。密码/初始化变量只在空数据目录第一次初始化时起作用；改 Secret 不等于轮换数据库中已存在的密码。[官方镜像说明](https://github.com/docker-library/docs/tree/master/postgres)、[已核对的镜像版本](https://github.com/docker-library/official-images/blob/master/library/postgres)
 
-当前 worker 启动会初始化领域表与 pg-boss schema，因此所提供角色必须拥有相应 DDL 权限。生产应规划独立迁移步骤、数据库角色和授权；当前实现只有一个显式 `DATABASE_URL`，不能宣称运行时与迁移账号已经拆分。pg-boss 与领域事实共用 PostgreSQL，不需要 Redis。
+当前 worker 启动会校验领域迁移历史，只执行尚未应用的 SQL；pg-boss 独立管理队列表。因此首次启动或升级时所提供角色仍需相应 DDL 权限。旧版本无迁移账本的数据库须先按[迁移与旧库接管流程](database-migrations.md)备份、审查并显式接管，不能直接重放全部 SQL。生产应规划独立迁移步骤、数据库角色和授权；当前实现只有一个显式 `DATABASE_URL`，不能宣称运行时与迁移账号已经拆分。pg-boss 与领域事实共用 PostgreSQL，不需要 Redis。
 
 Dev SeaweedFS 使用固定 `chrislusf/seaweedfs:4.48` 与已核对的官方命令 `weed mini -dir=/data`。清单直接调用 `/usr/bin/weed`、以镜像的非 root UID 1000 运行，关闭不需要的 WebDAV、Admin UI、Iceberg/Lance 端口。单进程内部以 loopback 通信，仅为 S3 的 8333 端口建立 ClusterIP 服务和访问策略。Master/Filer 内部监听不向其他 Pod 放行。必填的环境凭据启用 S3 身份验证，`S3_BUCKET` 在首次启动准备 `flyrewheel-artifacts` 桶。[官方 mini 文档](https://github.com/seaweedfs/seaweedfs/wiki/Quick-Start-with-weed-mini)、[4.48 命令源代码](https://github.com/seaweedfs/seaweedfs/blob/4.48/weed/command/mini.go)、[4.48 镜像定义](https://github.com/seaweedfs/seaweedfs/blob/4.48/docker/Dockerfile.local)
 
@@ -186,3 +186,15 @@ PVC 分别声明 Codex 1Gi、Postgres 10Gi、SeaweedFS 20Gi。**local-path 的 P
 - Codex 目标环境登录、账号额度、外部推理、长期令牌刷新或付费操作
 
 `node deploy/validate.mjs` 明确只做静态检查；它不会伪装成 Kubernetes 校验器。将未执行项作为目标环境上线门槛逐项验证。
+
+
+## Workspace application jobs
+
+The base worker now registers both the legacy replay queue and a bounded workspace
+application queue. The checked-in executable reports application runtime `blocked`
+until a reviewed bootstrap injects a trusted backend, enabled model configuration,
+and logical workspace resolver. No manifest environment variable enables a fixture
+fallback. `/readyz` covers the queue service and includes `applicationRuntime`; it
+is not a workspace-execution readiness attestation. See [application jobs](application-jobs.md)
+for enqueue/status commands, atomic outcome persistence, retry/cleanup fencing, and
+the production lifecycle/gateway components still required.

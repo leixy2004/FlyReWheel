@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "classification": "development-fixture",
+  "mode": "compiled-exact-head-object-closure-smoke",
+  "policy": "exact-allowed-head-closure-v1",
+  "requestDigest": "0ac09e8a4da73d40460d8803e1f9ae38c6ac948cdf75f81833055155ef92c950",
+  "recordDigest": "b8ec193d4ca43615e5ddf7e7b877a5044c4faea179f607913f52a74c655e2f1a",
+  "inventory": {
+    "count": 6,
+    "expandedBytes": 434,
+    "digest": "babdd8ee6edd57f4bcd741765332cbed480eb7aee4146bf2712f13ddda1342a0"
+  },
+  "allowedHeads": [
+    "bd9cf5d0bdbb64dfa4e4f90f78521d340e19492f"
+  ],
+  "refs": [
+    {
+      "name": "refs/heads/allowed-bd9cf5d0bdbb64dfa4e4f90f78521d340e19492f",
+      "sha": "bd9cf5d0bdbb64dfa4e4f90f78521d340e19492f"
+    }
+  ],
+  "fullSourceAndTestTree": "verified-without-execution",
+  "forbiddenFutureObjectLookups": "all-rejected",
+  "sourceRefs": "unchanged",
+  "apiInspectAndRerun": "identical",
+  "compiledCliInspect": "identical",
+  "hiddenDotGitFileTampering": "rejected",
+  "fetchBoundaryCalls": 0,
+  "modelExecution": "not_run",
+  "targetCodeExecution": "not_run",
+  "productionTransferPolicy": "unchanged-all-local-refs-v1",
+  "historicalPublicAvailability": "unproven",
+  "timestampsEstablishVisibility": false,
+  "limitations": [
+    "Authored development fixture, not an empirical evaluation or historical availability proof.",
+    "Object/ref isolation is not a filesystem or runtime sandbox; isolate the source store from any evaluation runner.",
+    "Record metadata hash is export-instance specific; request and logical object inventory digests are path-independent."
+  ]
+}

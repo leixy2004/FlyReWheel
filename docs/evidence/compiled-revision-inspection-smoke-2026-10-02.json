@@ -1,0 +1,72 @@
+{
+  "mode": "compiled-authored-sdk-revision-generation",
+  "sourceRepositoryRemovedBeforeReopen": false,
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "requestDigest": "1b78f6951aa1299c1b304bf9570b833919d61335ce054a674963f12160a0077e",
+  "candidateDigest": "0dc465c0ec302b92128ba2838a572b3e1801ead2e7ce83cd71e14650ee150604",
+  "ruleDigest": "7ee81eeadfd61970ed15d8546b605c5ed10da6017df7eeab8f2e9d756176ff8e",
+  "source": "fixture",
+  "protocol": "rule-revision-v2",
+  "sessionId": "compiled-revision-sdk",
+  "policyVersion": "diagnosis-operators-v1",
+  "operator": "boundary_update",
+  "persistedNonMutationOperators": [
+    "retain_rule",
+    "request_context",
+    "abstain"
+  ],
+  "diagnosisMutationMismatch": "rejected",
+  "protectedBoundaryEdit": "rejected",
+  "diagnosis": "model-proposal-not-ground-truth",
+  "comparison": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regression": {
+    "status": "regressed",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 1,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regressionAcceptance": "blocked",
+  "localDecision": "accept",
+  "humanVerdict": "Unknown",
+  "activation": "not_performed",
+  "reopenedIdentically": true,
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "inspectionVerification": {
+    "checks": 67,
+    "candidates": 1,
+    "outcomes": 3,
+    "repeatedJson": "byte-identical",
+    "outFiles": "byte-identical",
+    "filtersAndPagination": "passed",
+    "malformedAndMissingSelectors": "rejected",
+    "linkedComparisons": "exact-request-and-candidate-rule",
+    "recordsUnchanged": true,
+    "authoredExecutableRemoved": true,
+    "runtimeExecutionsDuringInspection": 0,
+    "networkAttempts": 0,
+    "modelExecution": "not_run",
+    "certification": "none"
+  }
+}

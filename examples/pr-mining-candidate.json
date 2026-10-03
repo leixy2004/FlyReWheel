@@ -1,0 +1,68 @@
+{
+  "id": "candidate-fixture-mining-request",
+  "requestDigest": "e64b8946a101044412f8969c218ad800cf69d9fd04cdfa44fbfbd2d8d83b314a",
+  "source": "fixture",
+  "rule": {
+    "schemaVersion": 2,
+    "ruleId": "fixture-mined-rule",
+    "version": "draft-1",
+    "semantics": {
+      "title": "Privileged reads need policy context",
+      "mechanism": "A privileged read can expose restricted content.",
+      "invariant": "Respect the read policy.",
+      "applicability": [
+        "Privileged reads"
+      ],
+      "exceptions": [
+        "Explicitly public reads"
+      ],
+      "requiredContext": [
+        "local-policy"
+      ],
+      "expectedBehavior": "Require policy evidence or return Unknown."
+    },
+    "scope": {
+      "repositories": [
+        "github:fixture/project"
+      ],
+      "paths": {
+        "include": [
+          "src"
+        ],
+        "exclude": []
+      }
+    },
+    "regressionCases": [
+      {
+        "caseId": "pr-case_76adae8963957baa4c1f66bbacfd0af4f36d63a554b0e4444f4ac344d85b05bc",
+        "role": "positive"
+      },
+      {
+        "caseId": "pr-case_95095509e0029b3a407692d9aefc5f8fa3899c001403beb7f334ba9373aa420a",
+        "role": "fixed"
+      }
+    ],
+    "provenance": {
+      "sourceCases": [
+        {
+          "caseId": "pr-case_76adae8963957baa4c1f66bbacfd0af4f36d63a554b0e4444f4ac344d85b05bc",
+          "repository": "github:fixture/project",
+          "commit": "1111111111111111111111111111111111111111",
+          "path": "src/sample.ts",
+          "sourceDigest": "5a84b2dd9b18190526e77184af36c886029beb495fe4310167617d2a9896d410"
+        },
+        {
+          "caseId": "pr-case_95095509e0029b3a407692d9aefc5f8fa3899c001403beb7f334ba9373aa420a",
+          "repository": "github:fixture/project",
+          "commit": "2222222222222222222222222222222222222222",
+          "path": "src/sample.ts",
+          "sourceDigest": "97e569e8a65fe237af40d5b020da31fe10c654715ed22ddbcd7f8533650b2c93"
+        }
+      ],
+      "parentDigest": null,
+      "author": "synthetic-fixture",
+      "createdAt": "2026-10-01T00:00:00Z",
+      "rationale": "Explicit supplied fixture, not model synthesis or a verified defect."
+    }
+  }
+}

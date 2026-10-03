@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-01",
+  "runtime": "v24.19.0",
+  "backend": "local PGlite",
+  "data": "explicit synthetic unassessed example",
+  "commands": [
+    "node dist/cli.js rules import --rule examples/semantic-rule-v2.json --cases examples/semantic-rule-cases.json --db <temporary>/db",
+    "node dist/cli.js rules show --digest 610c2b5535fecb3cecbdfc5ba4c55b3e00992264ec88357ac12130bd22c7e459 --db <temporary>/db",
+    "node dist/cli.js rules list --rule-id effective-wait-deadline-semantic --db <temporary>/db",
+    "node dist/cli.js rules import --rule examples/semantic-rule-v2.json --db <temporary>/db",
+    "node dist/cli.js rules import --rule <temporary>/child.json --db <temporary>/db",
+    "node dist/cli.js rules show --digest 610c2b5535fecb3cecbdfc5ba4c55b3e00992264ec88357ac12130bd22c7e459 --db <temporary>/db",
+    "node dist/cli.js demo --db <temporary>/db",
+    "node dist/cli.js rules list --db <temporary>/db"
+  ],
+  "semanticOnlyImport": true,
+  "separateProcessShowAndList": true,
+  "idempotentReimport": true,
+  "parentDigest": "610c2b5535fecb3cecbdfc5ba4c55b3e00992264ec88357ac12130bd22c7e459",
+  "childDigest": "30e451bac5c0e222a492a776349ee5a5f6db6ad967626864edd0cd9e58d29053",
+  "unchangedParent": true,
+  "mixedSchemaVersions": [
+    1,
+    2,
+    2
+  ],
+  "oldDemo": {
+    "cases": 6,
+    "executionErrors": 0,
+    "resolveVerdict": "Unknown"
+  },
+  "semanticSourceLabel": "unknown",
+  "semanticSourceReviewer": null,
+  "semanticRuleActive": false,
+  "legacyV2ReadRejected": true,
+  "modelInvoked": false,
+  "sandboxInvoked": false,
+  "published": false
+}

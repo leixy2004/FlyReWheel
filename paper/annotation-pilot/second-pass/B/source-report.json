@@ -1,0 +1,16 @@
+{
+  "url": "https://github.com/vllm-project/vllm/pull/2664",
+  "title": "Fix 'Actor methods cannot be called directly' when using `--engine-use-ray`",
+  "body": "When requesting a model serving with `--engine-use-ray`, the request will fail with status code 500, and the vLLM server will raise an error: `TypeError: Actor methods cannot be called directly. Instead of running 'object.encode_request_async()', try 'object.encode_request_async.remote'.`\r\n\r\n",
+  "createdAt": "2024-01-30T11:35:12Z",
+  "mergedAt": "2024-01-30T16:17:06Z",
+  "baseSha": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+  "headSha": "c5c755eeea3ac6552b01d2fcc765c6f684110a2b",
+  "mergeCommitSha": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+  "patches": [
+    {
+      "filename": "vllm/engine/async_llm_engine.py",
+      "patch": "@@ -447,11 +447,19 @@ async def add_request(\n \n         if arrival_time is None:\n             arrival_time = time.time()\n-        prompt_token_ids = await self.engine.encode_request_async(\n-            request_id=request_id,\n-            prompt=prompt,\n-            prompt_token_ids=prompt_token_ids,\n-            lora_request=lora_request)\n+\n+        if self.engine_use_ray:\n+            prompt_token_ids = await self.engine.encode_request_async.remote(\n+                request_id=request_id,\n+                prompt=prompt,\n+                prompt_token_ids=prompt_token_ids,\n+                lora_request=lora_request)\n+        else:\n+            prompt_token_ids = await self.engine.encode_request_async(\n+                request_id=request_id,\n+                prompt=prompt,\n+                prompt_token_ids=prompt_token_ids,\n+                lora_request=lora_request)\n \n         stream = self._request_tracker.add_request(\n             request_id,"
+    }
+  ]
+}

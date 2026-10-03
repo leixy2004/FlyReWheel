@@ -1,0 +1,129 @@
+Diagnosis-aware revision operator verification, 2026-10-02
+
+Scope: local working-tree extension on baseline commit
+000c50d670ac2bbd007eca2bdecde0bf53093c84; no source commit created.
+Contract: docs/rule-revision-generation.md
+Methods: paper/method-draft.md
+Compiled evidence: docs/evidence/compiled-revision-operators-smoke-2026-10-02.json
+
+Final frozen-source checks:
+- npm run typecheck: PASS
+- npm run build: PASS
+- node scripts/smoke-revision-generation.mjs: PASS, compiled v2 worker contract
+- npx vitest run tests/revision-operators.test.ts tests/local-closed-loop.test.ts
+  --maxWorkers=2: PASS, 13 tests in 2 files, 23.30 seconds
+- npm test (vitest run --maxWorkers=2): PASS, 663 tests in 46 files, 351.23 seconds
+- git diff --check: PASS
+
+Verified structural behavior (authored fixtures):
+- New generation always uses rule-revision-v2 and diagnosis-operators-v1.
+  A legacy worker response cannot downgrade the new adapter's policy.
+- Judgment diagnoses retain the rule; context diagnoses request context without
+  editing a rule/finding. Mixed diagnoses, insufficient evidence, selected non-label
+  or Unknown/Disputed feedback, and conflicting TP/FP labels at one finding prohibit
+  mutation. Voluntary abstention remains possible. Context requests can retain
+  declared missing context; other categories with missing evidence abstain.
+- Boundary proposals can edit applicability, exceptions, and literal path scope only.
+  Mechanism, invariant, title, required context, expected behavior and detection
+  assets are preserved exactly. Protected-field edits and no-op versions fail.
+- Contract replacements require an actual edit, exact prior digest, supplied base
+  and selected finding references, distinct old/new contract descriptions and
+  proposed_requires_review retirement/applicability declarations. Original source
+  and regression declarations remain unchanged; no retirement/activation is executed.
+- No-rule-change outcomes persist and reopen with diagnoses, next steps, and exact
+  execution receipts, without creating a candidate/rule version or changing findings.
+  Forged capabilities, immutable ID conflicts, tampering and heldout sources fail;
+  failed transactions roll back and the same capability can be retried.
+- A pre-change authored v1 record rederives to its original digest and can be reopened
+  through the current store, without acquiring a new policy claim. The archived
+  fixture was captured before this implementation changed the v1 generation path.
+- Compiled SDK/authored-executable smoke persists a boundary candidate, compares it
+  through the existing semantic gates, records a local accept, and blocks regression
+  acceptance. It also persists/reopens retain_rule, request_context and abstain,
+  rejecting judgment/context/mixed mutation mismatches and an invariant rewrite.
+
+Earlier diagnostics:
+- The first focused run exposed two outdated expectations: legacy insufficient_evidence
+  status and unrestricted mixed-diagnosis rewriting. Fixtures now use no_rule_change
+  and require abstention; rejection assertions are preserved.
+- An initial complete run overlapped prompt/validator/test edits and ended 661/663,
+  with a receipt-binding mismatch between separately loaded modules and an assertion
+  paired with a cached pre-edit validator. It is not the verification checkpoint.
+  The two affected files passed 13/13 on the frozen source, followed by the clean
+  663/663 run above. No source changes occurred during that final sequence.
+
+Limits:
+- These checks use authored semantic judgments, diagnoses, labels and model outputs.
+  Model execution is not_run; isolation is not_verified. They establish structural
+  enforcement and persistence behavior, not diagnostic truth or causal benefit.
+- Exact protected-field preservation does not prove logical narrowing, minimality,
+  semantic consistency, or preservation of useful detections. Comparisons remain
+  separate; a contract transition's semantic support and timing are not verified.
+- Contract applicability/retirement is reviewable prose, not executable version routing.
+  Judgment repair and missing-context acquisition are not executed by this slice.
+- Mixed selections may legitimately need multiple interventions; the initial policy
+  conservatively abstains rather than claiming a complete taxonomy/controller.
+- Selected-evidence/no-tools, incomplete repository evidence and all-local-refs-v1
+  limits remain. No independent future evaluation or effectiveness claim is made.
+- No live model/backend/authentication, external call, upload, publication, deployment,
+  new dependency or blocked OpenSandbox retry occurred. Existing local tests create
+  disposable synthetic Git histories; no project commit was created.
+
+Changed source/test/script SHA256 values after final checks:
+ac7159862c11c36336dfe1a81461f7cc60e257478e7be03f22139a417458fc06  scripts/smoke-revision-generation.mjs
+9d455fdec2d31ab46b649496ef8b0c9b9ee516d8209fd8823ed5a3870a9da1f7  src/adapters/codex-workspace-worker.ts
+e480b3876a7b635a57b2a8e9a0251cd26a3996bff891b74c2fb0ea928d07965f  src/adapters/revision-model.ts
+588995cf9c48a237813f4eabafe9d060a453f2272ff69f854e29dc4c6038f09a  src/core/revision-generation.ts
+56b9f0f5246495f32958d0a4a99425c30b726a416db9bd0031a04adb7d241020  src/core/revision-model.ts
+2af48945a84470761fd969ead68852ad134e55c19db6decaf373e55a793f250f  src/local-closed-loop.ts
+40d0771120ac1359a2fd3edbde2df8c48fdd84556c007b5d0b322dcdee16d03d  src/revision-generation.ts
+03d5b59bb1e8af7640cf2768f9feb204631491e3787323ef43ab30fefe8cd2f0  src/rule-revision.ts
+a291efa27b3d7afc4becce72a3e88f27cab29ce5dd2595a79b31b33fe07f3e57  src/storage/migrations/010_revision_outcomes.sql
+0ec33bd6030efb047fe7ec2f20800014a04fcc099a2dd2aa87ab0bcb25015634  src/storage/store.ts
+cb9bc2e46baa03c2f2904e96635dd59ca11fc7ae903ede318ba4b2b123ac8ce1  src/workspace-worker-entrypoint.ts
+1c26304033cbe72525d84df1ccb9ec677ea2b37e5df60e4589c0ba3dee36dd7f  src/workspace/codex-runner.ts
+b3ca20c92239818d9c5776071ff03e8b2e0388728f253ed84ee13562fdc1c50f  src/workspace/worker-protocol.ts
+5997fb479807ec3f266bb8155766f3e3449313edc052651ecb91a7ba3a74325e  tests/fixtures/revision-v1-record.json
+99efbc45d70a47e0c8653b7e2b5fe9630b63d971a2bf8996e81d2471b74e77cf  tests/helpers/revision-generation-fixture.ts
+ebf13b2cff4e70de93a6a37cd7fcaaba954504ad023866e1ce94f1dc3e7b1986  tests/local-closed-loop.test.ts
+3f664705cc5e1d277b042d31cdcce1f1565da2ec1e3ae6d0a8585ba27a233120  tests/revision-generation.test.ts
+edf8ecdc8cbda3c4339f80790686343b1ee06f06e177292c9a3cc91db999ba00  tests/revision-no-mutation.storage.test.ts
+8b97a7b2568b1ca279fff25602b8103f0165d6b3966c208d2985b8a9c1e013b5  tests/revision-operators.test.ts
+
+Selected compiled-module SHA256 values:
+59c558b2c53382b2fc4d0efaf0e28755c6f0dac1b1f452354222d49b9da3338e  dist/core/revision-model.js
+1b00edd91ec9f5f39116da513ff7428aac86f91c3cb704bde0125c30fb7dd77a  dist/core/revision-generation.js
+2dd6f72eeb3b339d291f05a4ed7a595c94d999cd2a88c773ae5c097ad00dfd20  dist/revision-generation.js
+dc8479d31caccc174a0891cbb71b8bda253d0c9f95e09bd833da862cf4eded45  dist/adapters/revision-model.js
+0e106fc9db4d74bcab300c161ac61859c95637794c76e155c48426decbf80f63  dist/rule-revision.js
+58a41b153313f199ced773c6d5ea74ff31c936e6efe088c8351f4113979072e3  dist/storage/store.js
+b736322e73706328000459a0b1157aa853852c79731bc08d351657b5fb9fd45d  dist/workspace/worker-protocol.js
+d5b951fe67afe3456feec2d29af101fc8289239b7a17cf66ffe7d485bfc4a161  dist/workspace-worker-entrypoint.js
+a291efa27b3d7afc4becce72a3e88f27cab29ce5dd2595a79b31b33fe07f3e57  dist/storage/migrations/010_revision_outcomes.sql
+
+Final focused output:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  2 passed (2)
+      Tests  13 passed (13)
+   Start at  12:40:30
+   Duration  23.30s (tests 98%, transform 1%, import 1%)
+
+
+Final complete-suite output:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  46 passed (46)
+      Tests  663 passed (663)
+   Start at  12:40:54
+   Duration  351.23s (tests 99%, import 1%)

@@ -1,0 +1,6 @@
+--- C/before
++++ C/later
+@@ -533,0 +534,3 @@
++
++        if num_new_tokens == 0:
++            return []

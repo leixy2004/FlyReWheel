@@ -1,0 +1,74 @@
+Retained upstream test source: tests/tool_use/test_chat_completion_request_validations.py
+Not executed by this packet. Original line numbers follow.
+
+0001 | import pytest
+0002 |
+0003 | from vllm.entrypoints.openai.protocol import ChatCompletionRequest
+0004 |
+0005 |
+0006 | def test_chat_completion_request_with_no_tools():
+0007 |     # tools key is not present
+0008 |     request = ChatCompletionRequest.model_validate({
+0009 |         'messages': [{
+0010 |             'role': 'user',
+0011 |             'content': 'Hello'
+0012 |         }],
+0013 |         'model':
+0014 |         'facebook/opt-125m',
+0015 |     })
+0016 |     assert request.tool_choice == 'none'
+0017 |
+0018 |     # tools key is None
+0019 |     request = ChatCompletionRequest.model_validate({
+0020 |         'messages': [{
+0021 |             'role': 'user',
+0022 |             'content': 'Hello'
+0023 |         }],
+0024 |         'model':
+0025 |         'facebook/opt-125m',
+0026 |         'tools':
+0027 |         None
+0028 |     })
+0029 |     assert request.tool_choice == 'none'
+0030 |
+0031 |     # tools key present but empty
+0032 |     request = ChatCompletionRequest.model_validate({
+0033 |         'messages': [{
+0034 |             'role': 'user',
+0035 |             'content': 'Hello'
+0036 |         }],
+0037 |         'model':
+0038 |         'facebook/opt-125m',
+0039 |         'tools': []
+0040 |     })
+0041 |     assert request.tool_choice == 'none'
+0042 |
+0043 |
+0044 | def test_chat_completion_request_with_tool_choice_but_no_tools():
+0045 |     with pytest.raises(ValueError,
+0046 |                        match="When using `tool_choice`, `tools` must be set."):
+0047 |         ChatCompletionRequest.model_validate({
+0048 |             'messages': [{
+0049 |                 'role': 'user',
+0050 |                 'content': 'Hello'
+0051 |             }],
+0052 |             'model':
+0053 |             'facebook/opt-125m',
+0054 |             'tool_choice':
+0055 |             'auto'
+0056 |         })
+0057 |
+0058 |     with pytest.raises(ValueError,
+0059 |                        match="When using `tool_choice`, `tools` must be set."):
+0060 |         ChatCompletionRequest.model_validate({
+0061 |             'messages': [{
+0062 |                 'role': 'user',
+0063 |                 'content': 'Hello'
+0064 |             }],
+0065 |             'model':
+0066 |             'facebook/opt-125m',
+0067 |             'tool_choice':
+0068 |             'auto',
+0069 |             'tools':
+0070 |             None
+0071 |         })

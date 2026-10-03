@@ -1,0 +1,60 @@
+Governed local semantic review verification — 2026-10-02
+
+Repository base: e53d43c (working-tree implementation; no commit)
+Scope: frozen governance selection -> bounded trusted semantic review jobs.
+
+Checks on final source/tests:
+- npm run typecheck: PASS
+- npm run build: PASS (compiled TypeScript and copied migrations)
+- Focused governed/CLI regression run: 17 tests in 3 files passed, 55.68 seconds
+- Existing semantic-review CLI compatibility: 3 tests passed, 34.46 seconds
+- Earlier governance and new lifecycle focused run: 30 tests in 4 files passed
+- node scripts/smoke-governed-semantic-reviews.mjs: PASS, 16 checks, zero network attempts
+- node dist/worker.js --check: PASS, applicationRuntime=blocked without trusted bootstrap
+- npm run validate:deploy: PASS, 30 YAML documents (static checks only)
+- git diff --check: PASS
+
+Full frozen source/test suite:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  80 passed (80)
+      Tests  1177 passed (1177)
+   Start at  18:29:56
+   Duration  715.38s (tests 99%, import 1%)
+
+
+No source or test files were changed during or after the full-suite run.
+Documentation/evidence was finalized after completion.
+
+Meaningful authored coverage:
+- Exact snapshot repository/path binding, frozen complete registry heads/exclusions
+- Root bootstrap -> governed review -> suspend -> comparison-backed supersession -> successor review
+- Actual asynchronous pg-boss callbacks and existing trusted SDK/worker adapters
+- Exact plan membership; substituted rules, snapshots, workspace, attempt and export rejected
+- Stale preflight and post-workspace/pre-adapter checks; no runtime reservation on rejection
+- Admission linearization, concurrent claim fencing and later-transition historical completion
+- Cleanup-safe retries with fresh admissions; transient DB failures remain retryable
+- Lost acknowledgement dedup and durable reopen without rerunning completed inference
+- Empty eligibility, 20-job and 2MB bounds, immutable normalized plan input IDs
+- Historical readers consume only frozen prefixes, not later evidence/read budget
+- Completion without durable admission rolls back domain persistence
+- Existing domain identities, no automatic feedback labels, no v1 activation or notification
+- Explicit digest replay remains possible and clearly labeled non-governed in CLI output
+
+Review: independent read-only review found two P2 issues, both fixed and rechecked:
+1. Historical selection now validates only its exact immutable history prefix.
+2. Known invalid/stale input is terminal; operational database failures retry safely.
+No further blockers reported.
+
+Limits: local authored fixtures/PGlite only; no live PostgreSQL server, authentication,
+real model/backend, dependencies, network, deployment, upload, publication or commit.
+Admission is not continuous authorization: later governance does not cancel already
+admitted operations. All-head staleness is conservative, including unrelated rules.
+Default CLI worker remains blocked without trusted runtime/resolver configuration.

@@ -1,0 +1,42 @@
+Context-aware semantic review final source-frozen verification, 2026-10-02
+Base HEAD: c553122058b9fbffa0296cf0876ebd914b3db34b
+Source/test/script/deploy tree SHA-256 before: fc2d870bfae3243113998fc555e271e957a2b94e79d47d6f63fa80c86c61d1ad
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 validate:deploy
+> node deploy/validate.mjs
+
+PASS: 30 YAML documents parsed; local references, offline defaults, secret-free templates, workload hardening and single-runner invariants verified.
+NOT VERIFIED HERE: Kustomize rendering, Kubernetes API schemas/admission, image builds, cluster startup, network enforcement, live credentials/inference, backups or crash recovery.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  68 passed (68)
+      Tests  954 passed (954)
+   Start at  16:05:37
+   Duration  557.92s (tests 99%, import 1%)
+
+Compiled context-aware SDK/store/reopen/comparison smoke passed
+Legacy compiled semantic workspace smoke passed
+Legacy compiled revision-generation smoke passed
+Legacy compiled paired-evaluation smoke passed
+Compiled context capture/CLI regression smoke passed
+Source/test/script/deploy tree SHA-256 after: fc2d870bfae3243113998fc555e271e957a2b94e79d47d6f63fa80c86c61d1ad
+Frozen tree match passed; no source/test/script/deploy edits during final aggregate
+Boundary: authored local application checks only. No live model, credentials, deployment, new dependencies, upload, publication, or commit. Historical availability/semantic truth remain unverified.

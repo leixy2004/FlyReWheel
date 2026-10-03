@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-01T08:53:59.387Z",
+  "runtime": "v24.19.0",
+  "scope": "synthetic local compiled CLI only",
+  "snapshotDigest": "8982e8f1e5aa44f915d80d23cef2ddc5cfa5984e4265899240b5b2e146d568f6",
+  "baseTip": "abc832b9c7d0dc3b1ad87b08a8fb316d9a46d483",
+  "mergeBase": "abc832b9c7d0dc3b1ad87b08a8fb316d9a46d483",
+  "head": "c1c2e03f9f870de653e76d3fecce97b117db0be5",
+  "coverage": {
+    "changedPaths": 2,
+    "capturedSides": 2,
+    "excludedSides": 1,
+    "capturedBytes": 15,
+    "scope": "changed-entries-only"
+  },
+  "checks": {
+    "capture": true,
+    "repeatContentIdempotent": true,
+    "showAfterReopen": true,
+    "importWithoutSourceRepository": true,
+    "importReceiptDowngraded": true,
+    "idempotentReimport": true,
+    "paginatedList": true,
+    "tamperRejected": true,
+    "v2ImportSameDatabase": true
+  },
+  "notRun": [
+    "provider ingestion",
+    "model inference",
+    "full PR review",
+    "feedback evolution",
+    "remote services"
+  ]
+}

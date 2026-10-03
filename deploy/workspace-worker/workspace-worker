@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+umask 077
+# Fixed interpreter and module path; no PATH lookup, NODE_OPTIONS or ambient auth.
+exec /usr/bin/env -i \
+  NODE_ENV=production HOME=/nonexistent PATH=/usr/local/bin:/usr/bin:/bin \
+  TMPDIR=/tmp LANG=C LC_ALL=C \
+  /usr/local/bin/node /opt/flyrewheel/dist/workspace-worker-entrypoint.js "$@"

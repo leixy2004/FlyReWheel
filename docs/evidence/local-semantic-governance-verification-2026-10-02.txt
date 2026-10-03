@@ -1,0 +1,48 @@
+FlyReWheel local semantic-v2 governance verification
+Date: 2026-10-02
+Base commit: b438d77
+Working-tree changes only; no repository commit, push, deployment, publication or upload.
+
+Scope
+- Separate local-semantic-review namespace; immutable per-logical-rule events and transactional CAS head
+- Exact rule-version/scope bindings; explicit registration, unvalidated root bootstrap, evidence-gated revised selection, suspension, retirement and atomic supersession
+- Current accepted comparison evidence required for revised selection; no implicit activation from acceptance, generated candidates or proposed replacement contracts
+- Literal scope-filtered opt-in selection and inactive/out-of-scope exclusions; explicit digest-pinned historical review remains available
+- Existing v1 active registry, immutable rules and source feedback remain unchanged
+
+Completed checks
+- Focused storage: 11/11 passed
+- Focused transition/evidence guards: 2/2 passed
+- Focused limit/integrity regressions: 6/6 passed
+- Durable CLI workflow: 4/4 passed
+- npm run typecheck: PASS
+- npm run build: PASS
+- node scripts/smoke-local-semantic-governance.mjs: PASS
+- npm run validate:deploy: PASS (30 YAML documents; static checks only)
+- git diff --check: PASS
+
+Aggregate verification on final source
+- PASS npm test (vitest run --maxWorkers=2): 745 tests across 52 files, 419.67 seconds, exit 0
+- PASS final typecheck and build rerun
+- PASS compiled governance smoke repeat is byte-identical to the recorded artifact
+- PASS static deployment revalidation and final diff check
+- PASS documentation relative targets: 278 across all 33 repository Markdown files
+
+Additional edge-case coverage
+- An orphaned event stream cannot be silently omitted from selection
+- The 101st logical-rule registration is rejected atomically while existing-stream actions and exact retries remain usable
+- The final (250th) event cannot leave a shadow selected; suspension or retirement can consume that slot safely
+- Invalid or obsolete comparison evidence cannot be used as current selection eligibility
+- Changed event payloads, rule hashes, scope hashes, head hashes and command content fail closed
+- Terminal retired/superseded states cannot be revived under another command ID
+
+Compiled evidence
+- docs/evidence/compiled-local-semantic-governance-smoke-2026-10-02.json
+- Artifact SHA256: 17df745f6c06c27f4fa2b0b5062b01c320ec3e95b8d656a8b0a0bb098db9a6a4
+
+Trust and coverage limits
+- Semantic judgments, expectations, feedback and acceptances in these checks are authored fixtures, not empirical model quality or authenticated human approval.
+- Root bootstrap deliberately records unvalidated local eligibility; all states remain experimental, with certification none and production activation not_performed.
+- Accepted comparison evidence covers only declared cases and selected feedback anchors, not repository-wide or held-out certification.
+- Concurrency/rollback exercised with PGlite transactions, competing promises and an injected final-CAS failure. PostgreSQL locking was reviewed statically; no live PostgreSQL server was used.
+- No live model/backend, account login, credentials, external service mutations, security changes, dependency additions, cluster/image deployment or provider publication was performed.

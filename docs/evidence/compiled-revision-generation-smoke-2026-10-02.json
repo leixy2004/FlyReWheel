@@ -1,0 +1,46 @@
+{
+  "mode": "compiled-authored-sdk-revision-generation",
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "requestDigest": "83338623e5636177c7b103ba8a9191e3a536093b719bd88d0192aea610097094",
+  "candidateDigest": "c4f3a223f554e3cef37e1afc1a7b486628f606f82e16371f9e4f91e0594edc3e",
+  "ruleDigest": "3939bd48d37f77dd832470aea1a99b68c2e6e289bc7ac4d957f1fb76057c0b68",
+  "source": "fixture",
+  "protocol": "rule-revision-v1",
+  "sessionId": "compiled-revision-sdk",
+  "diagnosis": "model-proposal-not-ground-truth",
+  "comparison": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regression": {
+    "status": "regressed",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 1,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regressionAcceptance": "blocked",
+  "localDecision": "accept",
+  "humanVerdict": "Unknown",
+  "activation": "not_performed",
+  "reopenedIdentically": true,
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FlyReWheel Phase 0 research annotation record",
+  "description": "Research-only contract. Field values are declarations, not verified history or runtime-importable feedback. A record is not a substitute for the full PR sampling frame or coverage matrix.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_id", "origin", "analysis_set", "analysis_eligible", "exclusion_reasons", "sampling", "rule", "target", "evidence", "source_statements", "judgments", "adjudication", "notes"],
+  "properties": {
+    "schema_version": {"const": "phase0-v1"},
+    "record_id": {"type": "string", "minLength": 1},
+    "origin": {"enum": ["empirical", "synthetic"]},
+    "analysis_set": {"enum": ["probability_sample", "development", "enriched_case_study"]},
+    "analysis_eligible": {"type": "boolean"},
+    "exclusion_reasons": {"$ref": "#/$defs/strings"},
+    "sampling": {
+      "type": "object", "additionalProperties": false,
+      "required": ["frame_id", "repository", "month_stratum", "inclusion_probability", "selection_manifest_sha256"],
+      "properties": {
+        "frame_id": {"type": ["string", "null"]},
+        "repository": {"type": "string", "minLength": 1},
+        "month_stratum": {"type": ["string", "null"], "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"},
+        "inclusion_probability": {"type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 1},
+        "selection_manifest_sha256": {"$ref": "#/$defs/sha256_or_null"}
+      }
+    },
+    "rule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["family_id", "version_id", "frozen_sha256", "source_pr_ids", "available_at", "statement", "repository_specific_premise", "support_status", "evidence_refs"],
+      "properties": {
+        "family_id": {"type": "string", "minLength": 1},
+        "version_id": {"type": "string", "minLength": 1},
+        "frozen_sha256": {"$ref": "#/$defs/sha256_or_null"},
+        "source_pr_ids": {"$ref": "#/$defs/strings"},
+        "available_at": {"$ref": "#/$defs/time_or_null"},
+        "statement": {"type": "string", "minLength": 1},
+        "repository_specific_premise": {"type": ["string", "null"]},
+        "support_status": {"enum": ["supported", "provisional", "unlabelled"]},
+        "evidence_refs": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pr_id", "instance_id", "lineage_id", "checkpoint_at", "base_sha", "head_sha", "checkpoint_status", "checkpoint_evidence_refs", "coverage_status", "coverage_missing"],
+      "properties": {
+        "pr_id": {"type": "string", "minLength": 1},
+        "instance_id": {"type": "string", "minLength": 1},
+        "lineage_id": {"type": ["string", "null"]},
+        "checkpoint_at": {"$ref": "#/$defs/time_or_null"},
+        "base_sha": {"$ref": "#/$defs/sha1_or_null"},
+        "head_sha": {"$ref": "#/$defs/sha1_or_null"},
+        "checkpoint_status": {"enum": ["reconstructable", "unreconstructable", "unlabelled"]},
+        "checkpoint_evidence_refs": {"$ref": "#/$defs/strings"},
+        "coverage_status": {"enum": ["complete_for_declared_scope", "partial", "not_started"]},
+        "coverage_missing": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "evidence": {
+      "type": "array", "items": {"$ref": "#/$defs/evidence"}
+    },
+    "source_statements": {
+      "type": "array", "items": {"$ref": "#/$defs/source_statement"}
+    },
+    "judgments": {
+      "type": "array", "items": {"$ref": "#/$defs/judgment"}
+    },
+    "adjudication": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "adjudicator_id", "input_judgment_ids", "labels", "correction", "evidence_refs", "rationale", "supersedes"],
+      "properties": {
+        "status": {"enum": ["pending", "adjudicated", "disputed"]},
+        "adjudicator_id": {"type": ["string", "null"]},
+        "input_judgment_ids": {"$ref": "#/$defs/strings"},
+        "labels": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/labels"}]},
+        "correction": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/correction"}]},
+        "evidence_refs": {"$ref": "#/$defs/strings"},
+        "rationale": {"type": ["string", "null"]},
+        "supersedes": {"type": ["string", "null"]}
+      },
+      "allOf": [{
+        "if": {"properties": {"status": {"enum": ["adjudicated", "disputed"]}}},
+        "then": {
+          "properties": {
+            "adjudicator_id": {"type": "string", "minLength": 1},
+            "input_judgment_ids": {"minItems": 2},
+            "labels": {"$ref": "#/$defs/labels"},
+            "rationale": {"type": "string", "minLength": 1}
+          }
+        }
+      }]
+    },
+    "notes": {"$ref": "#/$defs/strings"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"origin": {"const": "synthetic"}}},
+      "then": {"properties": {"analysis_eligible": {"const": false}, "analysis_set": {"const": "development"}, "exclusion_reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {"properties": {"analysis_eligible": {"const": true}}},
+      "then": {
+        "properties": {
+          "origin": {"const": "empirical"},
+          "analysis_set": {"const": "probability_sample"},
+          "exclusion_reasons": {"maxItems": 0},
+          "sampling": {"properties": {"frame_id": {"type": "string", "minLength": 1}, "inclusion_probability": {"type": "number"}, "selection_manifest_sha256": {"type": "string"}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"adjudication": {"properties": {"status": {"enum": ["adjudicated", "disputed"]}}}}},
+      "then": {"properties": {"judgments": {"minItems": 2}}}
+    }
+  ],
+  "$defs": {
+    "strings": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "time_or_null": {"type": ["string", "null"], "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"},
+    "sha256_or_null": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+    "sha1_or_null": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$"},
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "locator", "sha256", "event_at", "edited_at", "available_at", "observed_at", "visibility_basis", "input_role", "limitations"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["code", "contract", "visibility_event", "comment", "review", "test_result", "rule_text", "other"]},
+        "locator": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256_or_null"},
+        "event_at": {"$ref": "#/$defs/time_or_null"},
+        "edited_at": {"$ref": "#/$defs/time_or_null"},
+        "available_at": {"$ref": "#/$defs/time_or_null"},
+        "observed_at": {"$ref": "#/$defs/time_or_null"},
+        "visibility_basis": {"enum": ["versioned_event", "provider_statement", "unverified", "synthetic"]},
+        "input_role": {"enum": ["history_asof", "target_asof", "label_only", "unknown"]},
+        "limitations": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "source_statement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "evidence_ref", "actor_source_id", "statement_type", "text", "correctness_label"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "evidence_ref": {"type": "string", "minLength": 1},
+        "actor_source_id": {"type": ["string", "null"]},
+        "statement_type": {"enum": ["question", "claims_violation", "claims_safe", "proposes_change", "claims_adoption", "administrative", "unknown"]},
+        "text": {"type": "string", "minLength": 1},
+        "correctness_label": {"type": "null", "description": "Raw statements never automatically supply a verified correctness label."}
+      }
+    },
+    "labels": {
+      "type": "object", "additionalProperties": false,
+      "required": ["relevance", "state", "rule_dependency", "change_relation", "independence", "actual_reuse", "context_need", "support_route", "would_require_boundary_update"],
+      "properties": {
+        "relevance": {"enum": ["relevant", "not_relevant", "unknown"]},
+        "state": {"enum": ["violation", "safe_applicable", "legal_neighbor", "contract_changed", "not_applicable", "unknown"]},
+        "rule_dependency": {"enum": ["repository_specific", "generic", "unknown"]},
+        "change_relation": {"enum": ["introduced", "modified", "newly_relevant", "preexisting", "unknown"]},
+        "independence": {"enum": ["independent", "same_lineage", "unknown"]},
+        "actual_reuse": {"enum": ["documented", "not_documented", "unknown"]},
+        "context_need": {"enum": ["diff_sufficient", "repository_context_required", "external_context_required", "unknown"]},
+        "support_route": {"enum": ["executable", "manual_contract_argument", "both", "insufficient"]},
+        "would_require_boundary_update": {"type": ["boolean", "null"]}
+      }
+    },
+    "correction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["episode_id", "target", "attribution", "old_state_evidence_refs", "feedback_statement_ids", "new_state_evidence_refs", "order_verified", "semantic_correction_verified", "actual_rule_revision", "alternative_explanations", "later_independent_instance_ids"],
+      "properties": {
+        "episode_id": {"type": "string", "minLength": 1},
+        "target": {"enum": ["code", "finding", "rule_boundary", "rule_contract", "tests_only", "none", "unknown"]},
+        "attribution": {"enum": ["no_observed_change", "temporal_only", "explicit_attribution", "unknown"]},
+        "old_state_evidence_refs": {"$ref": "#/$defs/strings"},
+        "feedback_statement_ids": {"$ref": "#/$defs/strings"},
+        "new_state_evidence_refs": {"$ref": "#/$defs/strings"},
+        "order_verified": {"type": ["boolean", "null"]},
+        "semantic_correction_verified": {"type": ["boolean", "null"]},
+        "actual_rule_revision": {"type": ["boolean", "null"]},
+        "alternative_explanations": {"$ref": "#/$defs/strings"},
+        "later_independent_instance_ids": {"$ref": "#/$defs/strings"}
+      }
+    },
+    "judgment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "annotator_id", "annotator_kind", "stage", "locked_at", "labels", "correction", "evidence_refs", "rationale", "minutes_spent"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "annotator_id": {"type": "string", "minLength": 1},
+        "annotator_kind": {"const": "human"},
+        "stage": {"enum": ["asof_blinded", "retrospective"]},
+        "locked_at": {"allOf": [{"$ref": "#/$defs/time_or_null"}, {"type": "string"}]},
+        "labels": {"$ref": "#/$defs/labels"},
+        "correction": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/correction"}]},
+        "evidence_refs": {"$ref": "#/$defs/strings"},
+        "rationale": {"type": "string", "minLength": 1},
+        "minutes_spent": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

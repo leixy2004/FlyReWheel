@@ -1,0 +1,59 @@
+{
+  "form_version": 1,
+  "purpose": "developmental_training_adjudication_only",
+  "coordinator_id": null,
+  "adjudicator_id": null,
+  "session_date": null,
+  "source_response_files_and_sha256": [],
+  "independent_passes_frozen_before_discussion": null,
+  "answer_key_released_at_utc": null,
+  "timing": {
+    "discussion_active_minutes": null,
+    "coordinator_setup_minutes": null,
+    "adjudication_minutes": null
+  },
+  "cases": [
+    {
+      "case_id": "A",
+      "disagreements": [],
+      "material_citations": [],
+      "resolution": null,
+      "resolution_rationale": null,
+      "unresolved_questions": [],
+      "blind_claim_disqualified_by_familiarity_or_exposure": null,
+      "rubric_usability_notes": null
+    },
+    {
+      "case_id": "B",
+      "disagreements": [],
+      "material_citations": [],
+      "resolution": null,
+      "resolution_rationale": null,
+      "unresolved_questions": [],
+      "blind_claim_disqualified_by_familiarity_or_exposure": null,
+      "rubric_usability_notes": null
+    },
+    {
+      "case_id": "C",
+      "disagreements": [],
+      "material_citations": [],
+      "resolution": null,
+      "resolution_rationale": null,
+      "unresolved_questions": [],
+      "blind_claim_disqualified_by_familiarity_or_exposure": null,
+      "rubric_usability_notes": null
+    },
+    {
+      "case_id": "D",
+      "disagreements": [],
+      "material_citations": [],
+      "resolution": null,
+      "resolution_rationale": null,
+      "unresolved_questions": [],
+      "blind_claim_disqualified_by_familiarity_or_exposure": null,
+      "rubric_usability_notes": null
+    }
+  ],
+  "claims_or_metrics_proposed": null,
+  "claims_or_metrics_limitations": null
+}

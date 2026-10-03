@@ -1,0 +1,13 @@
+{
+  "mode": "compiled-offline-database-selection-smoke",
+  "checks": 85,
+  "explicitSelectors": "passed",
+  "validationBeforeAcquisition": "passed",
+  "localCrossProcessPersistence": "passed",
+  "ambientDatabaseUrlIsolation": "passed",
+  "inMemoryDefaults": "passed",
+  "closedLoopLocalOnly": "passed",
+  "workerCheck": "service-free",
+  "networkAttempts": 0,
+  "livePostgres": "not_used"
+}

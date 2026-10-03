@@ -1,0 +1,82 @@
+Evaluation workspace integration verification — 2026-10-02
+
+Classification: authored development fixtures only; no empirical model/paper result.
+Base commit (unchanged): afa174f300091ca58834b4fe7aa28fd43fb58fbc
+Status: uncommitted working-tree implementation, not deployed or published.
+
+Implemented scope
+- Explicit optional exact-allowed-head-closure-v1 input policy.
+- Immutable verified export -> fresh independently packed Git repository -> existing Sandcastle worktree/runner/lifecycle.
+- Path-free export binding in request, runtime input/observation, all three application adapter contexts/receipts and logical-ID job resolution/persistence.
+- Host launch and transfer revalidation plus received-runtime all-object/ref/tree verification and immediate pre-worker revalidation.
+- Extra reachable/unreachable objects, arbitrary refs, indirect/shared storage, unindexed orphan packs and corrupt reverse indexes rejected without repair.
+- Offline paired scoring preserves the verified receipt policy and rejects contradictory declarations.
+- Legacy all-local-refs default shapes remain unchanged; existing caps, receipts, capabilities and recovery rules retained.
+
+Final frozen verification
+PASS npm test: 72 test files, 999 tests, maxWorkers=2, 606.45 seconds.
+PASS npm run typecheck.
+PASS npm run build.
+PASS node scripts/smoke-evaluation-workspace.mjs (compiled dist imports, real Sandcastle bundle, authored standalone runtime clone).
+PASS node scripts/smoke-evaluation-checkout.mjs (compiled export API/CLI regression).
+PASS git diff --check.
+
+The src/tests TypeScript content-list hash was identical before and after final aggregate/build/smoke checks:
+6b5b9c4912a22ae32c7c0fec2f4e9cdd5436ad658e5e7148247d0922b5d1c193
+Computed in repository root with:
+find src tests -type f -name '*.ts' -print0 | sort -z | xargs -0 sha256sum | sha256sum
+No source/test/script edits were made during or after this aggregate run. Only documentation/evidence was completed afterward.
+
+New focused coverage
+- tests/evaluation-workspace.test.ts: 14 authored actual-bundle/runtime tests.
+- tests/evaluation-storage.test.ts: 6 physical-storage/compatibility regressions.
+- tests/application-evaluation-binding.test.ts: 7 application, package, job, persistence and legacy identity tests.
+- OpenSandbox-shaped client tests preserve verifier/worker binding and reject old observations.
+- Paired-report regressions preserve evaluation history policy and a legacy report digest golden.
+- Existing mining/review generation/prompt/request hash goldens remain unchanged.
+
+Compiled smoke result
+See compiled-evaluation-workspace-smoke-2026-10-02.json.
+- Future commit, annotated tag and dangling-object lookups: all rejected in received runtime.
+- Immutable baseline bytes across preparation, execution and cleanup: identical.
+- Source refs: unchanged.
+- Full committed source/test tree: verified, not executed.
+- Existing lifecycle: completed with verified authored stop/collection/destroy/release.
+- fetchBoundaryCalls: 0.
+- modelExecution, liveBackend and targetCodeExecution: not_run.
+
+Limits and nonclaims
+Historical public availability remains unproven; timestamps do not establish visibility.
+The policy admits a caller-justified Git closure, not historical truth about prompts, annotations, comments or model training knowledge.
+The local authored runtime is not an isolation boundary. Actual OpenSandbox use remains blocked without independently verified deployment authority, compatible immutable worker image and credential-isolated gateway.
+Concurrent hostile filesystem writers are outside the cooperative trusted-store contract. Export/derived/runtime inputs remain Linux/SHA-1 and bounded to supported regular-file trees.
+No external network, live authentication, model, live backend, dependency install/change, deployment, publication, upload or commit was performed.
+
+Raw full-suite terminal output
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  72 passed (72)
+      Tests  999 passed (999)
+   Start at  17:15:26
+   Duration  606.45s (tests 99%, import 1%)
+
+
+Raw final typecheck/build/check output
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+6b5b9c4912a22ae32c7c0fec2f4e9cdd5436ad658e5e7148247d0922b5d1c193  -

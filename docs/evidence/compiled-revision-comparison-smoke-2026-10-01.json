@@ -1,0 +1,133 @@
+{
+  "mode": "synthetic_offline_revision_demo",
+  "baseRuleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+  "snapshotDigest": "1724386189f743acaa99eb36d7c0074c5f665c05b32e72783a0b95420b49e532",
+  "compatible": {
+    "digest": "fa87106f3f2452e7687256db7522d2b3e3339045335832d48e9ace93775166cd",
+    "summary": {
+      "status": "compatible",
+      "preserved": 2,
+      "corrected": 2,
+      "regressed": 0,
+      "stillFailing": 0,
+      "inconclusive": 0
+    },
+    "decision": {
+      "id": "revision-demo-compatible-decision",
+      "comparisonDigest": "fa87106f3f2452e7687256db7522d2b3e3339045335832d48e9ace93775166cd",
+      "choice": "accept",
+      "actor": "synthetic-fixture",
+      "source": "fixture",
+      "reason": "Fixture-only acceptance: preserved positive and corrected safe negative under authored judgments.",
+      "createdAt": "2026-10-01T00:00:00Z",
+      "schemaVersion": 1,
+      "kind": "local-rule-revision-decision",
+      "requestDigest": "74560c7a9d9d641a9fc17ac908715441b5b0b111f75c95bd0320994807b2f99e",
+      "candidateRuleDigest": "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+      "comparisonStatus": "compatible",
+      "identityVerification": "caller-declared-unverified",
+      "activation": "not_performed",
+      "certification": "none"
+    }
+  },
+  "regressed": {
+    "digest": "a0477b1c6600bbfa031460f23e285d941bff6eebbda4b7eff62cbbd1768d5d9d",
+    "summary": {
+      "status": "regressed",
+      "preserved": 0,
+      "corrected": 2,
+      "regressed": 2,
+      "stillFailing": 0,
+      "inconclusive": 0
+    },
+    "decision": {
+      "id": "revision-demo-regressed-decision",
+      "comparisonDigest": "a0477b1c6600bbfa031460f23e285d941bff6eebbda4b7eff62cbbd1768d5d9d",
+      "choice": "reject",
+      "actor": "synthetic-fixture",
+      "source": "fixture",
+      "reason": "Fixture-only rejection: the explicitly safe positive loses the expected violation.",
+      "createdAt": "2026-10-01T00:00:00Z",
+      "schemaVersion": 1,
+      "kind": "local-rule-revision-decision",
+      "requestDigest": "31bcfd147ef8d29c4ed9595b8162f830a77ae23965e54eb34a60f2ce6358bac5",
+      "candidateRuleDigest": "932ded3ecb7c51fc72977fe2c90ec0f25f5ce76316d4f33835bc1c2f925704fb",
+      "comparisonStatus": "regressed",
+      "identityVerification": "caller-declared-unverified",
+      "activation": "not_performed",
+      "certification": "none"
+    }
+  },
+  "requests": [
+    {
+      "id": "revision-demo-compatible-request",
+      "baseRuleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+      "requestedRuleVersion": "draft-guard-aware",
+      "feedbackIds": [
+        "revision-demo-positive-label",
+        "revision-demo-negative-label"
+      ],
+      "requestedChange": "Fixture request: recognize the explicit guard without losing the unguarded positive.",
+      "actor": "synthetic-fixture",
+      "source": "fixture",
+      "createdAt": "2026-10-01T00:00:00Z",
+      "schemaVersion": 1,
+      "kind": "rule-revision-request",
+      "status": "pending",
+      "feedbackBindings": [
+        {
+          "id": "revision-demo-positive-label",
+          "digest": "b1ae89af4b23eaecffa944a382cd589979212970186f6f65d48fed61dd04bb0e"
+        },
+        {
+          "id": "revision-demo-negative-label",
+          "digest": "4291c653d75835026223e1946e38ef9112664acc4143a719630356ea58a18761"
+        }
+      ],
+      "synthesis": "not_run"
+    },
+    {
+      "id": "revision-demo-regressed-request",
+      "baseRuleDigest": "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf",
+      "requestedRuleVersion": "draft-lost-positive",
+      "feedbackIds": [
+        "revision-demo-positive-label",
+        "revision-demo-negative-label"
+      ],
+      "requestedChange": "Fixture request: demonstrate a candidate that loses the unguarded positive.",
+      "actor": "synthetic-fixture",
+      "source": "fixture",
+      "createdAt": "2026-10-01T00:00:00Z",
+      "schemaVersion": 1,
+      "kind": "rule-revision-request",
+      "status": "pending",
+      "feedbackBindings": [
+        {
+          "id": "revision-demo-positive-label",
+          "digest": "b1ae89af4b23eaecffa944a382cd589979212970186f6f65d48fed61dd04bb0e"
+        },
+        {
+          "id": "revision-demo-negative-label",
+          "digest": "4291c653d75835026223e1946e38ef9112664acc4143a719630356ea58a18761"
+        }
+      ],
+      "synthesis": "not_run"
+    }
+  ],
+  "findingVerdicts": [
+    {
+      "findingId": "review_finding_89e2d5ed53cbf877046aa88e83e20c8fd7af021aab8d795cc93d9769c290180d",
+      "verdict": "Unknown"
+    },
+    {
+      "findingId": "review_finding_abf656a656c4d01947af56950383d27e0264dd819b79e02fe1d97b5b82942a4a",
+      "verdict": "Unknown"
+    }
+  ],
+  "limitations": [
+    "All semantic judgments, case expectations, feedback labels and decisions are authored synthetic fixtures, not model results or human approval.",
+    "Snapshots and synthetic Git commit declarations have package-integrity-only trust, not verified repository history.",
+    "Comparisons cover only declared regression cases and exact selected feedback anchors; they are not full-repository safety or quality certification.",
+    "Both immutable requests remain pending with synthesis not_run; candidates were imported explicitly, and neither decision activates or promotes a rule."
+  ]
+}

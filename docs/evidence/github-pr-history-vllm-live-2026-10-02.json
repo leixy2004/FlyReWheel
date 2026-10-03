@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-live-github-pr-history-provider-validation",
+  "date": "2026-10-02",
+  "result": "blocked-at-preview-failed-closed",
+  "purpose": "Developmental provider smoke; not a representative paper sample or historical review checkpoint",
+  "repository": "vllm-project/vllm",
+  "execution": {
+    "cli": "node dist/cli.js github-pr history",
+    "flyReWheelCommit": "f12d108b95e796fd83a2e0037acfd898ab97f41b",
+    "compiledCliSha256": "c2a38e025a05a2ba1b50cd5d12df1f6c502da400cf7911cb2037c5f6d67bb8bb",
+    "compiledHistoryModuleSha256": "57c0288e112840afaa2992ca333b56faf3f0984933e3b8bd0496639b382de157",
+    "transport": "@octokit/rest@22.0.1",
+    "transportObservation": "Real native fetch, with a local pass-through audit wrapper; no mocked responses",
+    "authentication": "none"
+  },
+  "filter": {
+    "createdFrom": "2024-09-18T15:17:18Z",
+    "createdBefore": "2024-09-18T16:17:18Z",
+    "status": "merged",
+    "maxPulls": 2,
+    "maxPages": 1
+  },
+  "bounds": {
+    "maxAggregateGetAttempts": 50,
+    "maxSelectedPulls": 2,
+    "maxCaptureAttempts": 2,
+    "previewPagesPerInvocation": 1,
+    "independentAuthFallbacks": 0
+  },
+  "actual": {
+    "previewInvocations": 2,
+    "aggregateGetAttempts": 2,
+    "successfulHttpResponses": 2,
+    "httpStatuses": [
+      200,
+      200
+    ],
+    "selectedPullNumbers": [],
+    "captureAttempts": 0,
+    "freshCaptureReceipts": [],
+    "modelCalls": 0,
+    "targetRepositoryExecutions": 0,
+    "githubWrites": 0
+  },
+  "search": {
+    "q": "repo:vllm-project/vllm is:pr created:>=2024-09-18T15:17:18Z created:<2024-09-18T16:17:18Z is:merged",
+    "sort": "created",
+    "order": "asc",
+    "perPage": 5,
+    "page": 1,
+    "observedReportedTotal": 22309,
+    "incompleteResults": false,
+    "rejectedRows": [
+      {
+        "number": 1,
+        "url": "https://github.com/vllm-project/vllm/pull/1",
+        "createdAt": "2023-02-25T00:27:11Z",
+        "state": "closed",
+        "mergedAt": "2023-02-25T00:29:37Z"
+      },
+      {
+        "number": 2,
+        "url": "https://github.com/vllm-project/vllm/pull/2",
+        "createdAt": "2023-02-28T08:40:38Z",
+        "state": "closed",
+        "mergedAt": "2023-03-21T20:45:43Z"
+      },
+      {
+        "number": 3,
+        "url": "https://github.com/vllm-project/vllm/pull/3",
+        "createdAt": "2023-03-01T21:40:49Z",
+        "state": "closed",
+        "mergedAt": "2023-03-01T23:02:20Z"
+      },
+      {
+        "number": 4,
+        "url": "https://github.com/vllm-project/vllm/pull/4",
+        "createdAt": "2023-03-02T05:05:56Z",
+        "state": "closed",
+        "mergedAt": "2023-03-02T05:13:08Z"
+      },
+      {
+        "number": 5,
+        "url": "https://github.com/vllm-project/vllm/pull/5",
+        "createdAt": "2023-03-03T04:18:38Z",
+        "state": "closed",
+        "mergedAt": "2023-03-06T18:05:27Z"
+      }
+    ]
+  },
+  "failure": {
+    "phase": "preview",
+    "exitCode": 1,
+    "message": "FlyReWheel: Search returned an out-of-filter PR",
+    "evidence": "The second pass-through diagnostic response returned PRs #1\u2013#5 from 2023, outside the explicit one-hour September 2024 creation window. Both previews returned the same fail-closed CLI diagnostic.",
+    "causeStatus": "Query/provider compatibility is unresolved; duplicate creation qualifiers are a hypothesis, not an established root cause.",
+    "planPersisted": false,
+    "databaseCreated": false
+  },
+  "stageResults": {
+    "preview": "failed closed on out-of-filter live response",
+    "import": "not_run_no_plan",
+    "capture": "not_run_no_plan",
+    "separateProcessDatabaseReopen": "not_run_no_database",
+    "zeroGetCompletedResume": "not_run_no_captured_batch",
+    "localMiningRequest": "not_run_no_captured_batch"
+  },
+  "windowSeedOnly": {
+    "url": "https://github.com/vllm-project/vllm/pull/8568",
+    "number": 8568,
+    "createdAt": "2024-09-18T15:17:18Z",
+    "origin": "Previously captured public package from 2026-10-01, read locally only to choose the time window; not a new capture in this run",
+    "evidenceDigest": "ae78e20298184fad19d0e9745aa0c50ed856d39701829e56b5bf294788e631a5",
+    "snapshotDigest": "94917319313ffa7b3e455b41ee335f598f18b95b55844903cf1ad467e03eb61d",
+    "sourceShas": {
+      "baseTip": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+      "mergeBase": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+      "head": "eae161c33f47a0b760701769f56fc249563f8ed0"
+    }
+  },
+  "localEvidence": {
+    "directory": ".flyrewheel/vllm-history-live-2026-10-02",
+    "ledgerSha256": "0b8537d71cb3763f7961c44af4d3dcee364f0ae348d56bc9c0d72c39e6b8f639",
+    "auditWrapperSha256": "4a48d019d59425313543aada10b9e7ea816643a47a2fc4f42956140ea0c931e2",
+    "ledgerContains": "Request URL/method/authentication-absence assertion, response status, and compact search-row metadata only; no bodies or credentials",
+    "checks": [
+      "Exactly two attempted GETs",
+      "HTTP 200 on both attempts",
+      "No authorization headers",
+      "No redirects",
+      "All requests target the fixed GitHub search endpoint",
+      "No plan or database produced",
+      "No source code changes or commits"
+    ]
+  },
+  "nextGap": "Diagnose the live search-window query against a supported single bounded range, retain strict local filter rejection, add a regression for this actual provider response shape, then repeat the bounded preview \u2192 capture \u2192 reopen/resume \u2192 mining-request smoke.",
+  "limitations": [
+    "No successful repository-history discovery or fresh PR capture was validated.",
+    "Database reopen, capture resume, zero-GET completed resume, and mining linkage remain untested with this live batch.",
+    "Seed digests and source SHAs describe only prior #8568 evidence, never fresh receipts for this attempt.",
+    "The second preview was a single explicit diagnostic repetition after HTTP 200 validation failure; there was no authentication fallback, rate-limit retry, pagination, or broader crawl.",
+    "Returned PR #1\u2013#5 metadata was rejected and not selected or captured.",
+    "HTTP success plus wrapper logs are application observations, not signed provider attestations or wire-byte receipts."
+  ]
+}

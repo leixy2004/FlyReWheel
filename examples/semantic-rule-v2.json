@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 2,
+  "ruleId": "effective-wait-deadline-semantic",
+  "version": "draft-1",
+  "semantics": {
+    "title": "A wait needs an effective deadline",
+    "mechanism": "An unbounded readiness wait can retain a request indefinitely when the worker never becomes ready.",
+    "invariant": "A readiness wait must have an effective local or propagated deadline.",
+    "applicability": [
+      "Readiness waits whose completion is not guaranteed by the API contract"
+    ],
+    "exceptions": [
+      "An outer deadline demonstrably propagates cancellation to this wait"
+    ],
+    "requiredContext": [
+      "Caller deadline and cancellation propagation contract"
+    ],
+    "expectedBehavior": "Confirm that expiry terminates the pending wait; if caller context is missing, return Unknown."
+  },
+  "scope": {
+    "repositories": [
+      "synthetic:semantic-rule-example"
+    ],
+    "paths": {
+      "include": [
+        "src"
+      ],
+      "exclude": [
+        "src/generated"
+      ]
+    }
+  },
+  "regressionCases": [],
+  "provenance": {
+    "sourceCases": [
+      {
+        "repository": "synthetic:semantic-rule-example",
+        "commit": "0000000000000000000000000000000000000001",
+        "path": "src/worker.ts",
+        "sourceDigest": "c7811385786fdcd4bc6c98fe396cf344d321fa9f6968b4c3fd8bf308a3c036b8",
+        "caseId": "semantic-fixture-source"
+      }
+    ],
+    "parentDigest": null,
+    "author": "synthetic-example-author",
+    "createdAt": "2026-10-01T00:00:00Z",
+    "rationale": "Demonstrate semantic-only storage with explicit synthetic, unassessed source provenance; not mined or validated by a model."
+  }
+}

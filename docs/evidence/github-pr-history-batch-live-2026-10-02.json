@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-live-github-pr-history-batch-verification",
+  "date": "2026-10-02",
+  "result": "blocked-at-first-capture-get-failed-closed",
+  "purpose": "Developmental batch acquisition and persistence smoke only; not representative paper sampling or a historical review checkpoint",
+  "execution": {
+    "flyReWheelCommit": "e0e6c380d710434f4d0541b1a238784045130db8",
+    "sourceChanges": false,
+    "commitsCreated": 0,
+    "transport": "@octokit/rest@22.0.1",
+    "authentication": "none",
+    "transportObservation": "Native fetch pass-through; fixed GET-only endpoint family for one PR, serial-only and persistent 47-GET guard; no mocked responses",
+    "importCli": "node --import ./.flyrewheel/history-batch-verification-2026-10-02/audit-fetch.mjs dist/cli.js github-pr history import --file .flyrewheel/history-range-verification-2026-10-02/live-plan.json --db .flyrewheel/history-batch-verification-2026-10-02/db --out .flyrewheel/history-batch-verification-2026-10-02/imported.json",
+    "captureCli": "FRW_AUDIT_MODE=live-capture node --import ./.flyrewheel/history-batch-verification-2026-10-02/audit-fetch.mjs dist/cli.js github-pr history capture --batch 7e4aa5524e17d05f42819e5e0049cfbebd2383e66d7219ae1b8eec9c9e83099d --db .flyrewheel/history-batch-verification-2026-10-02/db --max-pulls 1 --max-requests 47 --max-requests-per-pull 47 --timeout-ms 120000 --out .flyrewheel/history-batch-verification-2026-10-02/capture.json"
+  },
+  "selection": {
+    "planDigest": "7e4aa5524e17d05f42819e5e0049cfbebd2383e66d7219ae1b8eec9c9e83099d",
+    "repository": "vllm-project/vllm",
+    "filter": {
+      "repository": "vllm-project/vllm",
+      "createdFrom": "2024-09-18T15:17:18Z",
+      "createdBefore": "2024-09-18T16:17:18Z",
+      "status": "merged",
+      "maxPulls": 2,
+      "maxPages": 1
+    },
+    "selectedPullNumbers": [
+      8568
+    ],
+    "planImportedWithoutRediscovery": true,
+    "importReceipt": {
+      "kind": "package-integrity-only"
+    }
+  },
+  "budget": {
+    "maximumAggregateGetAttempts": 50,
+    "priorQueryFailureGetAttempts": 2,
+    "priorCorrectedPreviewGetAttempts": 1,
+    "remainingGetAllowanceAtCaptureStart": 47,
+    "captureGetAttempts": 1,
+    "aggregateGetAttempts": 4,
+    "unusedGetAllowance": 46,
+    "maximumAuthorizedCaptureAttempts": 2,
+    "actualCaptureAttempts": 1,
+    "dependentNetworkStopped": true
+  },
+  "priorQueryHistory": {
+    "preservedFailure": {
+      "file": "docs/evidence/github-pr-history-vllm-live-2026-10-02.json",
+      "sha256": "36877fb9dfdb3201293a92498b0364341929616b22d62911bf702a533d568051",
+      "result": "blocked-at-preview-failed-closed",
+      "attemptedGets": 2
+    },
+    "correctedPreview": {
+      "file": "docs/evidence/github-pr-history-range-live-2026-10-02.json",
+      "sha256": "79180b2a5ae0b2907506810db5f7006aa2df5af712988a7e8b483e0f98076654",
+      "result": "corrected-preview-passed",
+      "attemptedGets": 1
+    },
+    "separation": "Prior preview records are preserved unchanged. This record covers only subsequent plan import, capture attempt and local persistence checks."
+  },
+  "liveCapture": {
+    "exitCode": 2,
+    "httpStatus": 403,
+    "classification": "forbidden-or-rate-limited",
+    "causeLimit": "HTTP 403 does not distinguish access denial from a rate limit in this observation; no additional network diagnosis was attempted",
+    "run": {
+      "attempted": 1,
+      "requests": 1,
+      "stopReason": "forbidden-or-rate-limited",
+      "acceptedEvidenceBytes": 0,
+      "bounds": {
+        "maxPulls": 1,
+        "maxRequests": 47,
+        "maxRequestsPerPull": 47,
+        "timeoutMs": 120000,
+        "retryFailed": false,
+        "recoverInterrupted": false
+      },
+      "freshCaptures": []
+    },
+    "batchReceipt": {
+      "kind": "package-integrity-only"
+    },
+    "item": {
+      "number": 8568,
+      "status": "failed",
+      "attempts": 1,
+      "lastAttemptAt": "2026-10-02T02:46:41.451Z",
+      "failure": "forbidden-or-rate-limited",
+      "evidenceDigest": null,
+      "snapshotDigest": null,
+      "miningRequestDigests": []
+    },
+    "observation": [
+      {
+        "event": "attempt",
+        "ordinal": 1,
+        "at": "2026-10-02T02:46:41.476Z",
+        "mode": "live-capture",
+        "method": "GET",
+        "url": "https://api.github.com/repos/vllm-project/vllm/pulls/8568",
+        "authorizationPresent": false,
+        "redirect": "error"
+      },
+      {
+        "event": "response",
+        "ordinal": 1,
+        "at": "2026-10-02T02:46:53.026Z",
+        "status": 403
+      }
+    ]
+  },
+  "stageResults": {
+    "import": "passed; exactly one pending PR persisted with attempts zero",
+    "capture": "stopped after first HTTP 403; one failed item persisted",
+    "separateProcessReopen": "passed; exact failure, attempt count and null evidence identifiers retained",
+    "failedItemWithoutRetry": "passed; separate capture invocation exited 2 with zero attempts, zero GETs and no fresh receipts",
+    "list": "passed; exactly one failed PR, zero captured PRs",
+    "completedCaptureZeroGetResume": "not_run_no_completed_capture",
+    "localMiningRequest": "not_run_no_captured_evidence",
+    "unknownLabelCaseCreation": "not_run_no_captured_source_sides"
+  },
+  "localVerification": {
+    "separateCliProcesses": 3,
+    "networkMode": "Network prohibited by audit wrapper for reopen, failed-no-retry invocation and list",
+    "networkLedgerAfterLocalChecks": "byte-for-byte unchanged",
+    "priorFailureFileUnchanged": true,
+    "priorCorrectedPreviewFileUnchanged": true,
+    "sourceDiff": "empty",
+    "fullSuite": "not rerun; no implementation change in this continuation",
+    "checks": [
+      "reopened persisted failure unchanged",
+      "failed item without explicit retry makes zero GETs",
+      "attempt count remains one",
+      "fresh receipts remain empty",
+      "list reports exactly one failed PR",
+      "network ledger byte-for-byte unchanged"
+    ]
+  },
+  "safety": {
+    "newSearches": 0,
+    "automaticRetries": 0,
+    "authenticationChanges": 0,
+    "modelCalls": 0,
+    "targetRepositoryExecutions": 0,
+    "githubWrites": 0,
+    "uploads": 0,
+    "newlyCapturedBlobs": 0,
+    "freshCaptureReceipts": [],
+    "evidenceDigest": null,
+    "snapshotDigest": null,
+    "miningRequestDigests": []
+  },
+  "localEvidence": {
+    "directory": ".flyrewheel/history-batch-verification-2026-10-02",
+    "database": ".flyrewheel/history-batch-verification-2026-10-02/db",
+    "sha256": {
+      ".flyrewheel/history-range-verification-2026-10-02/live-plan.json": "9f7ac88b25aee9707e79fc80e21f0c5b38bec3b6a8446a1e6a9d949a044aa5e2",
+      ".flyrewheel/history-batch-verification-2026-10-02/audit-fetch.mjs": "745a54c65c74f0201855b825fcd2213c45b79f3b2901d461b20a3205b86471b5",
+      ".flyrewheel/history-batch-verification-2026-10-02/network-ledger.jsonl": "f0fdc1b927ed03959f60c807c5a368358834e175d3385b439ab43f9133033bf1",
+      ".flyrewheel/history-batch-verification-2026-10-02/imported.json": "461fcfb11a0398e12e47a948bb67dd98f57f4484835a94df4a70c58d05254bfd",
+      ".flyrewheel/history-batch-verification-2026-10-02/capture.json": "5bb33d1ded727cd9f169420f87560e47d6fd0c5968df7be34df6d17692373a2f",
+      ".flyrewheel/history-batch-verification-2026-10-02/reopened.json": "d648da8d8c05261c719c5bfb52eaa44765faf8009ca377539a851134eaa3dc9e",
+      ".flyrewheel/history-batch-verification-2026-10-02/failed-no-retry.json": "f29f78606c5163e7f30b2d69acab2d667592613971be12c4be96a03525106845",
+      ".flyrewheel/history-batch-verification-2026-10-02/listed.json": "ffda7f49e9fe215d3b7ea4a7ef7fa82c0fa96ffa901f9a20a3b18eb8cd137fc5",
+      ".flyrewheel/history-batch-verification-2026-10-02/local-checks.json": "82556eee5de792267989e5b6476a0a9ebc2662ba0bb71ec0f3659dc08357c64e",
+      "dist/cli.js": "c2a38e025a05a2ba1b50cd5d12df1f6c502da400cf7911cb2037c5f6d67bb8bb",
+      "dist/github-pr-history.js": "c74b87507bfa16339a04fe5613414cc37cc21d281560113021dabe7a215f7986",
+      "dist/github-pr-history-batch.js": "4ce3ec5b0b6b6f9e5a43f82d2884acc67a3ac102207af78357e32781f0ac4da3",
+      "dist/github-pr.js": "52b963dba6dcbafb6a05d7f065d9d687de519ea24ec5d7b010196d20dd47edd7"
+    }
+  },
+  "limitations": [
+    "No successful fresh capture, completed-item resume or exact mining link was established for this live batch.",
+    "The previous standalone PR package was not imported or substituted into this batch; its identifiers are not fresh results.",
+    "Zero-GET failed-item skipping verifies failure persistence only; it is not zero-GET reuse of a completed capture.",
+    "No labels, candidate rules, semantic conclusions, historical checkpoint or paper evaluation cohort were created.",
+    "HTTP status and audit logs are application observations, not signed provider attestations or wire-byte receipts.",
+    "The provider stop was respected despite unused numeric request allowance; no retry or alternate authentication/transport was attempted."
+  ]
+}

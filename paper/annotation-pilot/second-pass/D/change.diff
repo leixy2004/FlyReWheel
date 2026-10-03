@@ -1,0 +1,8 @@
+--- D/before
++++ D/later
+@@ -111 +111 @@
+-        max_tokens: int = 16,
++        max_tokens: Optional[int] = 16,
+@@ -186 +186 @@
+-        if self.max_tokens < 1:
++        if self.max_tokens is not None and self.max_tokens < 1:

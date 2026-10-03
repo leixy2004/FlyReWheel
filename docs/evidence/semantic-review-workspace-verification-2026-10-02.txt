@@ -1,0 +1,36 @@
+Semantic-v2 supervised workspace review verification, 2026-10-02
+
+Scope: local application/API integration and authored fixture validation only.
+No live model/backend/authentication/deployment/upload/publication/dependency install/commit.
+Production gateway/isolation prerequisites remain blocked and unverified.
+
+PASS npm run typecheck
+PASS npm run build
+PASS npm test (package script: vitest run --maxWorkers=2)
+  Test Files 39 passed (39)
+  Tests 530 passed (530)
+  Duration 239.94s
+PASS node scripts/smoke-semantic-workspace.mjs
+  Compiled dist modules, real temporary Git capture and head workspace,
+  actual pinned Codex SDK with an authored executable, typed semantic worker,
+  capability-gated immutable persistence, identical database reopen,
+  fixture-origin finding, modelExecution:not_run, human verdict Unknown,
+  exact-local-git-recapture-matched and verified cleanup.
+  See compiled-semantic-workspace-smoke-2026-10-02.json.
+PASS npm run validate:deploy
+  30 YAML documents parsed; local references, offline defaults, secret-free
+  templates, workload hardening and single-runner invariants verified.
+PASS git diff --check
+
+New tests: 12 success/integrity/continuity cases and 81 fail-closed cases.
+Coverage includes exact rule/snapshot/head/scope/anchors, BOM/Unicode/CRLF,
+missing-context propagation, typed protocol isolation, counterfeit capabilities,
+receipt tampering, atomic rollback/retry, reopening, unchanged human verdicts,
+cancellation/cleanup recovery, old fixture gap compatibility and downstream
+revision comparison receipt provenance. Shared mining execution checks retain
+existing behavior; the previous mining and generic worker suites also pass.
+
+Application receipts are not cryptographic backend/model/truth attestation.
+Workspace-only uncaptured evidence remains unavailable for accepted judgments.
+Introduction and notification eligibility stay unverified; nothing is published.
+The shipped CLI remains structural/offline-fixture review only.

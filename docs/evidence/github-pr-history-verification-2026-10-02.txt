@@ -1,0 +1,32 @@
+PR-history ingestion verification — 2026-10-02
+Base commit: ba315d5 (changes intentionally uncommitted for review)
+
+Final source-frozen checks:
+- npm run typecheck: PASS
+- npm test (vitest run --maxWorkers=2): PASS, 615 tests / 43 files, 331.35 seconds
+- npm run build: PASS; migration 009 copied into dist/storage/migrations
+- node scripts/smoke-github-pr-history.mjs: PASS
+  See compiled-github-pr-history-smoke-2026-10-02.json
+  23 authored mocked GET responses, 0 external network requests
+  Separate compiled CLI processes verify preview/import, partial exit 2,
+  database reopen/resume, exact mining link, show/list, zero-read completed resume
+- npm run validate:deploy: PASS, 30 YAML documents (existing stated deployment limits remain)
+- git diff --check: PASS
+
+Added tests: 42 across two test files. Coverage includes explicit filters/time
+windows, deterministic observed ordering, search pagination/caps/incompleteness,
+foreign or duplicate results, input/response limits, rate/forbidden errors,
+aggregate and per-PR request/deadline ceilings, accepted-evidence byte ceiling,
+durable retry/interruption recovery, CAS conflicts, captured-reference integrity,
+20-link rollback, atomic existing mining derivation and imported trust claims.
+
+An earlier full run overlapped a final diagnostic edit and used Vitest's stale
+schema transform for HTTP403; it was discarded. The source-frozen rerun above
+passed all 615 tests. The implementation was not changed during that rerun.
+
+The official pinned Octokit client is tested through authored transport fixtures.
+No live GitHub/vLLM search or capture, authentication/login, model inference,
+external writes/publication/upload, dependency installation or commit occurred.
+The PR sample/current-API limitations are documented; this does not validate
+probability sampling, historical review checkpoints, semantic ground truth,
+production PostgreSQL multi-process operation or live GitHub behavior.

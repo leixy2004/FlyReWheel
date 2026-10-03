@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  14 passed (14)
+      Tests  95 passed (95)
+   Start at  10:29:10
+   Duration  44.78s (tests 95%, import 3%, transform 2%)
+

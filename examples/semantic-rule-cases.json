@@ -1,0 +1,19 @@
+[
+  {
+    "id": "semantic-fixture-source",
+    "lineageId": "semantic-fixture-lineage",
+    "split": "training",
+    "expected": "unknown",
+    "title": "Synthetic provenance example; correctness has not been assessed",
+    "repository": "synthetic:semantic-rule-example",
+    "commit": "0000000000000000000000000000000000000001",
+    "path": "src/worker.ts",
+    "sourceDigest": "c7811385786fdcd4bc6c98fe396cf344d321fa9f6968b4c3fd8bf308a3c036b8",
+    "provenance": {
+      "kind": "synthetic",
+      "reference": "fixture:semantic-rule-example",
+      "reviewedBy": null,
+      "derivedFromCaseId": null
+    }
+  }
+]

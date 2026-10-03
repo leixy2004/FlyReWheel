@@ -1,0 +1,14 @@
+FlyReWheel
+
+FlyReWheel's original project code is provided under the Apache License,
+Version 2.0. See LICENSE.
+
+This project uses third-party packages under their respective licenses.
+In particular, @ai-hero/sandcastle is MIT-licensed; its license is included
+in the installed package. The read-only GitHub evidence provider uses the
+MIT-licensed official @octokit/rest client. Dependency identities are recorded in package-lock.json.
+
+The unchanged vLLM source snapshots under experiments/vllm/fixtures retain
+their upstream headers and Apache-2.0 license copies. Their provenance and
+scope are documented in experiments/vllm/SOURCE_NOTES.md. This NOTICE does
+not replace or remove any upstream copyright or license notices.

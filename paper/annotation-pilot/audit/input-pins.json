@@ -1,0 +1,131 @@
+{
+  "baseline_commit": "08bc3a8edc652a3397c2f8b05cd9cd0855b55213",
+  "purpose": "Local immutable input pins for a developmental training packet; no remote authentication.",
+  "files": [
+    {
+      "file": ".flyrewheel/github-pr8568.json",
+      "bytes": 112720,
+      "sha256": "4c153cd4bd2ef95db4be6d5f1185fc3559ffafaf7feb85df8e57ac549e1cc356"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570-summary.json",
+      "bytes": 2621,
+      "sha256": "49140cfe75a3f927cc98b9c5e4dd4b93b7455a3392812d3284dfd96aa7f5a61f"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_regression.py",
+      "bytes": 1310,
+      "sha256": "5d7187c6812a07f7ba53176324d283aceedf887dc8d28930646f1b96a1f6e633"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py",
+      "bytes": 289,
+      "sha256": "19a383f0c516f69fafa6387207cff46b000074d4acd90598a7ea867f997c3ee8"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-2664-summary.json",
+      "bytes": 1802,
+      "sha256": "450d06f2b96b8b49759da97b457107aa78abaab19e46532b9e70b69297679ed2"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034-summary.json",
+      "bytes": 7091,
+      "sha256": "63cc0ac77337afcec32b82cb6e112ae8166696b1062e2d4d86438f2aea275ca9"
+    },
+    {
+      "file": "experiments/vllm/evidence/pr-9034/after/tests/entrypoints/openai/test_chunked_prompt.py",
+      "bytes": 3701,
+      "sha256": "6baf9d0f8899d705bbd96b52697988313faee4fd4810932962510582f3097bcc"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py",
+      "bytes": 12417,
+      "sha256": "d40c83c10c879f0b5305e645bb51f4c5d5d2fe3cfa4a550bbb88885dc1ad567c"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py",
+      "bytes": 12375,
+      "sha256": "448b80c4259c77f34587c7c125fb3c37f25f4ebbe3d2517542caab3548248105"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/after/vllm/engine/async_llm_engine.py",
+      "bytes": 24481,
+      "sha256": "95217426d8a17a15bc7e111c4cd7ccccf886480a9610529d2efef082f98984bf"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-2664/before/vllm/engine/async_llm_engine.py",
+      "bytes": 24172,
+      "sha256": "77199913ae4fd9b679a89c8ac163bf392f920571b2bb2b953cc2bb6be223caf3"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-8568/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py",
+      "bytes": 54832,
+      "sha256": "f19824c581ffe08c82ab2e1027ba330d0831190a5d44900739a41e1657d5f99a"
+    },
+    {
+      "file": "experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py",
+      "bytes": 54777,
+      "sha256": "676938ba1175d9280dd1a1149bfd67fa068ff756c34bc96c52ad1fefc3ce97c2"
+    },
+    {
+      "file": "paper/developmental-case-vllm-8568.md",
+      "bytes": 22117,
+      "sha256": "434563f74416c30b1fbea42796ee2702010aa4272616e2761e2858eb843c525f"
+    },
+    {
+      "file": "paper/pilot-boundary-reproduction.md",
+      "bytes": 8979,
+      "sha256": "b6abb07030c680b28499711bdfaa28c258f3daa80236736799b84df2447a257d"
+    },
+    {
+      "file": "paper/pilot-boundary-results.json",
+      "bytes": 90908,
+      "sha256": "8849a0f54a8014526eeed4d35aa112de3cc210925ddfd32f9f3980e6e8105aed"
+    },
+    {
+      "file": "paper/pilot-boundary-verification.json",
+      "bytes": 3181,
+      "sha256": "836c11d86b320cc1e779a0a1834778f35553117eb5508d3bc5e089bbefb761f6"
+    },
+    {
+      "file": "paper/pilot-case-cards.md",
+      "bytes": 11113,
+      "sha256": "7f908552f66e4406c8da0d2383486e632936377fb87ccad3ab396e2ebc3b806f"
+    },
+    {
+      "file": "paper/pilot-materials-manifest.json",
+      "bytes": 45624,
+      "sha256": "27b43233a80add0e9ccb85df9068b33416700f4935b30299566d90d4e17bf229"
+    },
+    {
+      "file": "paper/vllm-8568-behavior-findings.md",
+      "bytes": 7466,
+      "sha256": "c43e4f57b28523d9e0e1788d72c575f854363f87fcd34facc5ea8b61a9fb7b5e"
+    },
+    {
+      "file": "paper/vllm-8568-behavior-results.json",
+      "bytes": 173853,
+      "sha256": "244fa08967073de853e4b5e96c64a98f0d2ada92f6c680be45f7b021ee921aa9"
+    }
+  ]
+}

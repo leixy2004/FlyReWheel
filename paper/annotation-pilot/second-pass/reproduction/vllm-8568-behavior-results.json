@@ -1,0 +1,5964 @@
+{
+  "schema_version": 1,
+  "purpose": "offline, author-side developmental behavior reproduction; not benchmark/model efficacy/human labels",
+  "runtime": {
+    "python_implementation": "CPython",
+    "python_version": "3.12.14",
+    "isolated_mode": true
+  },
+  "script_sha256": "7867c351b980805345e6ea17b037e4ba5be6f2a255624d07b18fdc682e04d415",
+  "capture": {
+    "repository_relative_path": ".flyrewheel/github-pr8568.json",
+    "sha256": "4c153cd4bd2ef95db4be6d5f1185fc3559ffafaf7feb85df8e57ac549e1cc356",
+    "commits": {
+      "base": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+      "head": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "review_hunk_original": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    "source_record_bindings": [
+      {
+        "path": "tests/tool_use/test_chat_completion_request_validations.py",
+        "side": "after",
+        "byte_length": 1872,
+        "sha256": "baac2223cf8d78a461bd96660ea56ddd4340232aa1015d50f7831b78496dbbd6",
+        "git_blob_sha1": "3d0fe8f06089549a46c5bf513cc53bdca055939c"
+      },
+      {
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "side": "before",
+        "byte_length": 31505,
+        "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+        "git_blob_sha1": "7e9f53b1816d1e74755af62d704d4e295da0e814"
+      },
+      {
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "side": "after",
+        "byte_length": 31507,
+        "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+        "git_blob_sha1": "359012611a34a7dc86be5e54ef890633f50bc8da"
+      }
+    ],
+    "application_evidence_digest_recomputed": false
+  },
+  "captured_function_bindings": {
+    "base": {
+      "source_function_lines": [
+        380,
+        427
+      ],
+      "decorator_lines": [
+        378,
+        379
+      ],
+      "source_function_sha256": "ea498cddf4356aba7b18700387264d578f3614342c02c0f710a2006e0d886cec",
+      "adapted_function_sha256": "ad7c896fe0a28272d8de1785a5ed463ddf801150637e25a347b4a66c207d2414",
+      "body_ast_sha256": "5cbbc294735d329f03aec8d3f00c4bf10b11332d7ed30b680af0ca2169dd7fa7",
+      "adaptation": {
+        "removed_decorators": [
+          "model_validator(mode='before')",
+          "classmethod"
+        ],
+        "removed_class_indent_spaces": 4,
+        "signature_changed": false,
+        "signature": "check_tool_usage(cls, data)",
+        "cls_argument": null,
+        "imports_executed_from_capture": [],
+        "field_default_applied_by_harness": false
+      }
+    },
+    "head": {
+      "source_function_lines": [
+        380,
+        427
+      ],
+      "decorator_lines": [
+        378,
+        379
+      ],
+      "source_function_sha256": "4cf081c0ab5cb2c8ffacd7a77c92da5ad146dec558875b5915401a4da345e15b",
+      "adapted_function_sha256": "5e7209d5e48ba628eb55c062074098129c2e0d17a6bc166c9571278ed04fc651",
+      "body_ast_sha256": "ab74a68543162414bb8b78e6db94821a42696d42e5d7a56b15d330efed6773d8",
+      "adaptation": {
+        "removed_decorators": [
+          "model_validator(mode='before')",
+          "classmethod"
+        ],
+        "removed_class_indent_spaces": 4,
+        "signature_changed": false,
+        "signature": "check_tool_usage(cls, data)",
+        "cls_argument": null,
+        "imports_executed_from_capture": [],
+        "field_default_applied_by_harness": false
+      }
+    }
+  },
+  "review_hunk_binding": {
+    "comment_id": 1766097849,
+    "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766097849",
+    "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+    "diff_hunk_sha256": "b58e412bd0fd310047f55cb5cf3df7c9ba716ef9023188d4df6d5df5e35b53c0",
+    "added_side_matches_reconstruction": true,
+    "historical_full_function_available": false,
+    "suffix_source": "captured final head; an explicit counterfactual assumption"
+  },
+  "authored_variant_source_sha256": {
+    "base": "ad7c896fe0a28272d8de1785a5ed463ddf801150637e25a347b4a66c207d2414",
+    "head": "5e7209d5e48ba628eb55c062074098129c2e0d17a6bc166c9571278ed04fc651",
+    "head_flat_elif_counterfactual": "996120f6f050fee55344f92a14c7c3225bb856c959c707b6f962311ca75ccbe2",
+    "review_hunk_nested_elif_reconstruction": "d8a65c5ef3eb02d177bed0f50425733b450506f460cf7028ad7e0958379d576a"
+  },
+  "scope": {
+    "input_domain": "35 hand-enumerated ordinary Python dictionaries: 5 tools forms x 7 choices",
+    "tools_axis": [
+      "missing",
+      "null",
+      "empty",
+      "one_alpha",
+      "two_alpha_beta"
+    ],
+    "choice_axis": [
+      "missing",
+      "null",
+      "auto",
+      "none",
+      "named_alpha",
+      "named_beta",
+      "named_absent"
+    ],
+    "observations": "return value, exception type/message, mutated input, return identity; validation entry traced separately",
+    "external_module_imports_executed": [],
+    "full_pydantic_model_or_http_request_executed": false,
+    "upstream_test_file_executed": false,
+    "dependencies_installed": false,
+    "network_used": false,
+    "field_default_applied": false,
+    "not_covered": [
+      "full validator order and Pydantic field validation/default injection",
+      "arbitrary or malformed tools and named choices",
+      "custom mappings/objects, concurrent mutation, side-effecting truthiness",
+      "historical early full function, all possible JSON inputs, current vLLM API"
+    ]
+  },
+  "summary": {
+    "status": "passed",
+    "distinct_inputs": 35,
+    "variants": 4,
+    "executed_function_calls": 140,
+    "expected_outcome_checks_passed": 140,
+    "base_head_changed_case_ids": [
+      "null/missing",
+      "empty/missing"
+    ],
+    "head_vs_counterfactuals": {
+      "head_flat_elif_counterfactual": {
+        "outcome_difference_case_ids": [],
+        "validation_entry_difference_case_ids": [
+          "one_alpha/missing",
+          "two_alpha_beta/missing"
+        ]
+      },
+      "review_hunk_nested_elif_reconstruction": {
+        "outcome_difference_case_ids": [],
+        "validation_entry_difference_case_ids": [
+          "one_alpha/missing",
+          "two_alpha_beta/missing"
+        ]
+      }
+    }
+  },
+  "falsified_overbroad_local_claims": [
+    {
+      "claim": "Every locally accepted auto choice requires a nonempty tools list",
+      "counterexample_case_id": "empty/auto",
+      "variant": "head",
+      "observed": "returns unchanged with auto and []"
+    },
+    {
+      "claim": "With empty tools, missing and explicit none tool_choice are interchangeable",
+      "counterexample_case_ids": [
+        "empty/missing",
+        "empty/none"
+      ],
+      "variant": "head",
+      "observed": "missing returns with no choice key; explicit none raises ValueError"
+    }
+  ],
+  "cases": [
+    {
+      "id": "missing/missing",
+      "tools_kind": "missing",
+      "choice_kind": "missing",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            }
+          },
+          "validation_block_entered": false
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            }
+          },
+          "validation_block_entered": false
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            }
+          },
+          "validation_block_entered": false
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder"
+            }
+          },
+          "validation_block_entered": false
+        }
+      }
+    },
+    {
+      "id": "missing/null",
+      "tools_kind": "missing",
+      "choice_kind": "null",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "missing/auto",
+      "tools_kind": "missing",
+      "choice_kind": "auto",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": "auto"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "missing/none",
+      "tools_kind": "missing",
+      "choice_kind": "none",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": "none"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "missing/named_alpha",
+      "tools_kind": "missing",
+      "choice_kind": "named_alpha",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "alpha"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "missing/named_beta",
+      "tools_kind": "missing",
+      "choice_kind": "named_beta",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "beta"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "missing/named_absent",
+      "tools_kind": "missing",
+      "choice_kind": "named_absent",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "absent"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/missing",
+      "tools_kind": "null",
+      "choice_kind": "missing",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            }
+          },
+          "validation_block_entered": false
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            }
+          },
+          "validation_block_entered": false
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null
+            }
+          },
+          "validation_block_entered": false
+        }
+      }
+    },
+    {
+      "id": "null/null",
+      "tools_kind": "null",
+      "choice_kind": "null",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/auto",
+      "tools_kind": "null",
+      "choice_kind": "auto",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": "auto"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/none",
+      "tools_kind": "null",
+      "choice_kind": "none",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": "none"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/named_alpha",
+      "tools_kind": "null",
+      "choice_kind": "named_alpha",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "alpha"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/named_beta",
+      "tools_kind": "null",
+      "choice_kind": "named_beta",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "beta"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "null/named_absent",
+      "tools_kind": "null",
+      "choice_kind": "named_absent",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": null,
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "absent"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "When using `tool_choice`, `tools` must be set.",
+            "error_code": "missing_tools",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": null,
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/missing",
+      "tools_kind": "empty",
+      "choice_kind": "missing",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": []
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            }
+          },
+          "validation_block_entered": false
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            }
+          },
+          "validation_block_entered": false
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": []
+            }
+          },
+          "validation_block_entered": false
+        }
+      }
+    },
+    {
+      "id": "empty/null",
+      "tools_kind": "empty",
+      "choice_kind": "null",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/auto",
+      "tools_kind": "empty",
+      "choice_kind": "auto",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": "auto"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/none",
+      "tools_kind": "empty",
+      "choice_kind": "none",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": "none"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/named_alpha",
+      "tools_kind": "empty",
+      "choice_kind": "named_alpha",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "alpha"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/named_beta",
+      "tools_kind": "empty",
+      "choice_kind": "named_beta",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "beta"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "empty/named_absent",
+      "tools_kind": "empty",
+      "choice_kind": "named_absent",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "absent"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/missing",
+      "tools_kind": "one_alpha",
+      "choice_kind": "missing",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ]
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": false
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": false
+        }
+      }
+    },
+    {
+      "id": "one_alpha/null",
+      "tools_kind": "one_alpha",
+      "choice_kind": "null",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/auto",
+      "tools_kind": "one_alpha",
+      "choice_kind": "auto",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/none",
+      "tools_kind": "one_alpha",
+      "choice_kind": "none",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": "none"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/named_alpha",
+      "tools_kind": "one_alpha",
+      "choice_kind": "named_alpha",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "alpha"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/named_beta",
+      "tools_kind": "one_alpha",
+      "choice_kind": "named_beta",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "beta"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "one_alpha/named_absent",
+      "tools_kind": "one_alpha",
+      "choice_kind": "named_absent",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "absent"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/missing",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "missing",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ]
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": false
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": false
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/null",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "null",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": null
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": null
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/auto",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "auto",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "auto"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/none",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "none",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": "none"
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "`tool_choice` must either be a named tool or \"auto\". `tool_choice=\"none\" is not supported.",
+            "error_code": "invalid_choice",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": "none"
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/named_alpha",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "named_alpha",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "alpha"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "alpha"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/named_beta",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "named_beta",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "beta"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "return",
+            "returned_data": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            },
+            "returns_input_identity": true,
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "beta"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    },
+    {
+      "id": "two_alpha_beta/named_absent",
+      "tools_kind": "two_alpha_beta",
+      "choice_kind": "named_absent",
+      "input": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "model": "developmental-offline-placeholder",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "alpha",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "beta",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "function",
+          "function": {
+            "name": "absent"
+          }
+        }
+      },
+      "runs": {
+        "base": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "head_flat_elif_counterfactual": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        },
+        "review_hunk_nested_elif_reconstruction": {
+          "outcome": {
+            "status": "raise",
+            "exception_type": "ValueError",
+            "exception_message": "The tool specified in `tool_choice` does not match any of the specified `tools`",
+            "error_code": "named_mismatch",
+            "data_after": {
+              "messages": [
+                {
+                  "role": "user",
+                  "content": "Hello"
+                }
+              ],
+              "model": "developmental-offline-placeholder",
+              "tools": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "alpha",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                },
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "beta",
+                    "parameters": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "function",
+                "function": {
+                  "name": "absent"
+                }
+              }
+            }
+          },
+          "validation_block_entered": true
+        }
+      }
+    }
+  ]
+}

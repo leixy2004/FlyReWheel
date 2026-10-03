@@ -1,0 +1,83 @@
+{
+  "schema_version": "phase0-v1",
+  "record_id": "SYNTHETIC-UNLABELLED-INSTANCE-1",
+  "origin": "synthetic",
+  "analysis_set": "development",
+  "analysis_eligible": false,
+  "exclusion_reasons": ["Entirely fictional structural example; not empirical data or an observed finding"],
+  "sampling": {
+    "frame_id": null,
+    "repository": "SYNTHETIC/example-repository",
+    "month_stratum": null,
+    "inclusion_probability": null,
+    "selection_manifest_sha256": null
+  },
+  "rule": {
+    "family_id": "SYNTHETIC-FAMILY-1",
+    "version_id": "SYNTHETIC-RULE-DRAFT-1",
+    "frozen_sha256": null,
+    "source_pr_ids": ["SYNTHETIC-PR-A"],
+    "available_at": null,
+    "statement": "Fictional candidate: worker dispatch must preserve the configured execution backend's calling contract.",
+    "repository_specific_premise": "Fictional backend contract, not inspected or verified",
+    "support_status": "unlabelled",
+    "evidence_refs": []
+  },
+  "target": {
+    "pr_id": "SYNTHETIC-PR-B",
+    "instance_id": "SYNTHETIC-UNLABELLED-INSTANCE-1",
+    "lineage_id": null,
+    "checkpoint_at": "2026-04-10T10:00:00Z",
+    "base_sha": null,
+    "head_sha": null,
+    "checkpoint_status": "unlabelled",
+    "checkpoint_evidence_refs": [],
+    "coverage_status": "not_started",
+    "coverage_missing": ["No real code, historical events, independent annotators, tests or verified labels"]
+  },
+  "evidence": [
+    {
+      "id": "SYNTHETIC-COMMENT-EVIDENCE-1",
+      "kind": "comment",
+      "locator": "synthetic:example-only/edited-comment",
+      "sha256": null,
+      "event_at": "2026-04-10T09:59:00Z",
+      "edited_at": "2026-04-10T10:05:00Z",
+      "available_at": "2026-04-10T10:05:00Z",
+      "observed_at": "2026-04-11T00:00:00Z",
+      "visibility_basis": "synthetic",
+      "input_role": "label_only",
+      "limitations": [
+        "Fictional edited text is available after the fictional checkpoint, even though creation precedes it",
+        "No earlier comment body is provided; do not inject this text into the target-as-of input"
+      ]
+    }
+  ],
+  "source_statements": [
+    {
+      "id": "SYNTHETIC-STATEMENT-1",
+      "evidence_ref": "SYNTHETIC-COMMENT-EVIDENCE-1",
+      "actor_source_id": "SYNTHETIC-ACTOR",
+      "statement_type": "unknown",
+      "text": "[Fictional comment for schema demonstration] Please check whether this call can run under a different backend.",
+      "correctness_label": null
+    }
+  ],
+  "judgments": [],
+  "adjudication": {
+    "status": "pending",
+    "adjudicator_id": null,
+    "input_judgment_ids": [],
+    "labels": null,
+    "correction": null,
+    "evidence_refs": [],
+    "rationale": null,
+    "supersedes": null
+  },
+  "notes": [
+    "SYNTHETIC AND UNLABELLED: no empirical result is represented by this record",
+    "The text is not a source statement from vLLM PR 8568 or any other real pull request",
+    "Missing annotations are null or empty, not fabricated TP/FP, recurrence or correction outcomes",
+    "analysis_eligible means inclusion in primary sample accounting, not a positive or verified result; unknown sampled empirical records remain in denominators"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "mode": "compiled-local-governed-review-smoke",
+  "checks": 16,
+  "stages": [
+    "compiled-cli-root-selection",
+    "no-implicit-runtime-fail-closed",
+    "suspension-and-no-eligible-plan",
+    "comparison-backed-successor-selection",
+    "manual-replay-label"
+  ],
+  "networkAttempts": 0,
+  "productionActivation": "not_performed",
+  "certification": "none",
+  "modelExecution": "not_run",
+  "limitations": [
+    "Authored fixtures and local PGlite only; no live PostgreSQL, model, runtime service, credentials or publication.",
+    "Successful trusted adapter and real asynchronous pg-boss lifecycle execution are covered by the authored integration tests, not this fail-closed CLI smoke."
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "mode": "compiled-offline-detectorless-comparison",
+  "scorer": "explicit-semantic-v2",
+  "cases": [
+    {
+      "mode": "compatible",
+      "digest": "237c110d22a0ea0b14b7c921c2e9e9bd071c493f26d9e69f642bff4fd2a35149",
+      "summary": {
+        "status": "compatible",
+        "preserved": 2,
+        "corrected": 2,
+        "regressed": 0,
+        "stillFailing": 0,
+        "inconclusive": 0
+      }
+    },
+    {
+      "mode": "regressed",
+      "digest": "9396098791fee86fc49421e202e3c9b7ffe2586bbd16f3acc8bc92949c933f0c",
+      "summary": {
+        "status": "regressed",
+        "preserved": 0,
+        "corrected": 2,
+        "regressed": 2,
+        "stillFailing": 0,
+        "inconclusive": 0
+      }
+    },
+    {
+      "mode": "target-only",
+      "digest": "c045cb670c0a7c4aeebccdbc675bc12978daa7b0b784f6c4f1604d6ee9a069e3",
+      "summary": {
+        "status": "inconclusive",
+        "preserved": 2,
+        "corrected": 1,
+        "regressed": 0,
+        "stillFailing": 0,
+        "inconclusive": 1
+      }
+    },
+    {
+      "mode": "not-run",
+      "digest": "3f10cc0898016b43be91ce5f9da8e93c5230c63d4fa22d5ead1574507aaf1ce2",
+      "summary": {
+        "status": "inconclusive",
+        "preserved": 0,
+        "corrected": 0,
+        "regressed": 0,
+        "stillFailing": 0,
+        "inconclusive": 4
+      }
+    }
+  ],
+  "persistedReopen": true,
+  "compiledCliRead": true,
+  "modelExecution": "not_run",
+  "notification": "not_performed",
+  "activation": "not_performed",
+  "certification": "none",
+  "limitations": [
+    "Authored fixture semantics and feedback only; no model-quality or human-ground-truth evidence.",
+    "Exact selected anchors and declared file cases only; incomplete repository context.",
+    "No external requests, credentials, publication, deployment or commit."
+  ]
+}

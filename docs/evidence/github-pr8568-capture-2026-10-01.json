@@ -1,0 +1,38 @@
+{
+  "kind": "read-only-live-capture-verification",
+  "source": "https://github.com/vllm-project/vllm/pull/8568",
+  "evidenceDigest": "ae78e20298184fad19d0e9745aa0c50ed856d39701829e56b5bf294788e631a5",
+  "snapshotDigest": "94917319313ffa7b3e455b41ee335f598f18b95b55844903cf1ad467e03eb61d",
+  "baseTip": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+  "mergeBase": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+  "head": "eae161c33f47a0b760701769f56fc249563f8ed0",
+  "coverage": {
+    "changedPaths": 2,
+    "capturedSides": 3,
+    "excludedSides": 0,
+    "capturedBytes": 64884,
+    "scope": "changed-entries-only"
+  },
+  "discussions": {
+    "issueComments": 3,
+    "reviews": 7,
+    "reviewComments": 5
+  },
+  "acquisition": {
+    "startedAt": "2026-10-01T09:30:22.253Z",
+    "completedAt": "2026-10-01T09:30:56.570Z",
+    "requests": 23,
+    "maxRequests": 40,
+    "decodedResponseBytes": 253222,
+    "authentication": "none",
+    "transport": "@octokit/rest@22.0.1"
+  },
+  "limitations": [
+    "Current non-atomic API observation, not a historical review checkpoint",
+    "Provider-declared ancestry and inventory; source statements are not ground truth or feedback",
+    "No clone, full repository access, model call, repository-code execution, authentication change or external write",
+    "An initial acquisition passed but local persistence failed because the output parent directory did not exist; the directory was created and the same bounded capture retried successfully"
+  ],
+  "localPackage": ".flyrewheel/github-pr8568.json",
+  "localDatabase": ".flyrewheel/github-pr8568-db"
+}

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { RuleBundleSchema, type RuleBundle } from './model.js';
+import { RuleVersionSchema, type RuleVersion } from './semantic-rule.js';
 
 /** Stable canonical JSON, rejecting unsupported values instead of silently dropping identity fields. */
 export function canonicalJson(value: unknown): string {
@@ -19,3 +20,4 @@ export function canonicalJson(value: unknown): string {
 }
 export function digestOf(value: unknown): string { return createHash('sha256').update(canonicalJson(value)).digest('hex'); }
 export function bundleDigest(bundle: RuleBundle): string { return digestOf(RuleBundleSchema.parse(bundle)); }
+export function ruleVersionDigest(rule: RuleVersion): string { return digestOf(RuleVersionSchema.parse(rule)); }

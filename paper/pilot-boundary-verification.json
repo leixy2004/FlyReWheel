@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "isolated_reproduction_processes": 2,
+  "reruns_byte_identical": true,
+  "saved_result_byte_identical": true,
+  "artifacts": [
+    {
+      "file": "paper/reproduce-pilot-boundaries.py",
+      "sha256": "73b05e7e7dd5bc65e2e7e65500ff14369f1b23c7076dfb1dcb380489ffaf926d"
+    },
+    {
+      "file": "paper/pilot-boundary-results.json",
+      "sha256": "8849a0f54a8014526eeed4d35aa112de3cc210925ddfd32f9f3980e6e8105aed"
+    },
+    {
+      "file": "paper/pilot-boundary-reproduction.md",
+      "sha256": "b6abb07030c680b28499711bdfaa28c258f3daa80236736799b84df2447a257d"
+    },
+    {
+      "file": "paper/pilot-materials-manifest.json",
+      "sha256": "27b43233a80add0e9ccb85df9068b33416700f4935b30299566d90d4e17bf229"
+    }
+  ],
+  "json_source_method_bindings_rechecked": 16,
+  "material_bindings_rechecked": 14,
+  "report_links": [
+    {
+      "target": "pilot-case-cards.md",
+      "status": "local_file_checked"
+    },
+    {
+      "target": "pilot-materials-manifest.json",
+      "status": "local_file_checked"
+    },
+    {
+      "target": "reproduce-pilot-boundaries.py",
+      "status": "local_file_checked"
+    },
+    {
+      "target": "pilot-boundary-results.json",
+      "status": "local_file_checked"
+    },
+    {
+      "target": "pilot-boundary-verification.json",
+      "status": "local_file_checked"
+    },
+    {
+      "target": "../experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py#L516-L535",
+      "status": "local_file_and_line_range_checked"
+    },
+    {
+      "target": "../experiments/vllm/fixtures/pr-9034/after/vllm/sequence.py#L516-L538",
+      "status": "local_file_and_line_range_checked"
+    },
+    {
+      "target": "../experiments/vllm/fixtures/pr-2570/before/vllm/sampling_params.py#L160-L194",
+      "status": "local_file_and_line_range_checked"
+    },
+    {
+      "target": "../experiments/vllm/fixtures/pr-2570/after/vllm/sampling_params.py#L160-L194",
+      "status": "local_file_and_line_range_checked"
+    },
+    {
+      "target": "../experiments/vllm/evidence/pr-2570/after/tests/test_sampling_params.py#L6-L8",
+      "status": "local_file_and_line_range_checked"
+    }
+  ],
+  "report_json_pointers": [
+    {
+      "pointer": "/vllm_pr_9034/input_rows",
+      "resolved_type": "list"
+    },
+    {
+      "pointer": "/vllm_pr_9034/repeated_delta_call",
+      "resolved_type": "dict"
+    },
+    {
+      "pointer": "/vllm_pr_2570/input_rows",
+      "resolved_type": "list"
+    }
+  ],
+  "negative_integrity_probes": [
+    {
+      "id": "temporary_copy_baseline",
+      "status": "byte_identical"
+    },
+    {
+      "id": "manifest_mutation",
+      "status": "rejected_before_method_execution",
+      "error": "Manifest changed; review bindings before continuing"
+    },
+    {
+      "id": "source_mutation",
+      "status": "rejected_before_method_execution",
+      "error": "Material byte identity changed: experiments/vllm/fixtures/pr-9034/before/vllm/sequence.py"
+    },
+    {
+      "id": "authored_method_mutation",
+      "status": "rejected_before_method_execution",
+      "error": "Transcription differs: get_output_token_ids_to_return"
+    }
+  ],
+  "external_links_network_checked": false
+}

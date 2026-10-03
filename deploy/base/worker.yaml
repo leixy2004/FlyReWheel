@@ -31,6 +31,8 @@ spec:
         - name: worker
           image: flyrewheel:dev
           imagePullPolicy: IfNotPresent
+          # Registers replay + application queues; application runtime is blocked
+          # until reviewed trusted bootstrap dependencies are supplied in code.
           command: [node, dist/worker.js]
           envFrom:
             - configMapRef:

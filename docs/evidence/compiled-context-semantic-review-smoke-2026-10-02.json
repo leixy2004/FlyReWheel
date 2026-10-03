@@ -1,0 +1,85 @@
+{
+  "mode": "authored-compiled-sdk-selected-context-review-smoke",
+  "contextDigest": "54fdf02991c4ead31d6f6ef1e3347f98878b4819ac842e48883ed7b180cfa7fa",
+  "repositoryContextCheck": "exact-local-git-recapture-matched",
+  "historicalAvailability": "unproven",
+  "sourceRepositoryRemovedBeforeReopen": true,
+  "contextAbsentFindings": [
+    "unknown",
+    "unknown"
+  ],
+  "liveModel": "not_run",
+  "isolation": "not_verified",
+  "ruleDigest": "40200f050c783d85b3b22404498af95e8693a31fbf4a4fe84c06348c5afa9f10",
+  "snapshotDigest": "f29b9b2559f6f483ce126fdf50c99bfad6113e458c5bc8d5ed3735f2453c6e8f",
+  "reviewId": "review_b9f470f7b45c69abdb9dfc418b26eff139d66b97f1619cc717c1fd838ac1cdff",
+  "reviewDigest": "7b607256b8acfdd951803fa02643b3d365041e4513fb17f970443795ffa24b95",
+  "reopenedIdentically": true,
+  "protocol": "semantic-review-v3",
+  "sessionId": "authored-compiled-session",
+  "modelExecution": "not_run",
+  "snapshotCheck": "exact-local-git-recapture-matched",
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "candidateReviewId": "review_c274a4eab563b022a60c51b647b0ee04a479f7d127b5e6d83af299f8fa6f8d96",
+  "candidateTargetState": "unknown",
+  "requiredContext": [
+    "callee-contract",
+    "test"
+  ],
+  "candidateException": [
+    "An explicitly public read may omit an authorization guard when exact captured local-policy evidence establishes that exception"
+  ],
+  "capturedPolicy": "// Local policy: publicRead is explicitly public; privateRead requires an authorization guard.\n",
+  "candidateAnchorDecisions": [
+    {
+      "path": "src/smoke.ts",
+      "offset": 96,
+      "status": "violation",
+      "evidenceRefs": [
+        "60376c18ad306fc61f7478153b16df7dc7d085566f28bbd4c5fd5e4e842a4598",
+        "291bddc2d8fe76c7dd61f41d3e224dcd5e3eea11efe7e299d9ca65b487748b22",
+        "3dd7c402ec2daaf326240ede45c3334983a3245bbba3797e042aabbfc8ded834"
+      ]
+    },
+    {
+      "path": "src/smoke.ts",
+      "offset": 38,
+      "status": "safe",
+      "evidenceRefs": [
+        "0dea142d5bb4c826130c990dd2ea9b9495cfbec97555427852bd4af47990b4f8",
+        "291bddc2d8fe76c7dd61f41d3e224dcd5e3eea11efe7e299d9ca65b487748b22",
+        "3dd7c402ec2daaf326240ede45c3334983a3245bbba3797e042aabbfc8ded834"
+      ]
+    }
+  ],
+  "comparisonDigest": "f28664f52bfd526502913cef83e3cc6af9992cd7d519f284417e3d31c0fe0b81",
+  "scorer": "per-anchor-context-v4",
+  "summary": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 1,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "finding": {
+    "status": "violation",
+    "origin": "fixture",
+    "humanVerdict": "Unknown",
+    "introduction": "unverified",
+    "notificationEligibility": "unverified"
+  },
+  "notification": "not_performed"
+}

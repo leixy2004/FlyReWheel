@@ -1,0 +1,44 @@
+Local closed-loop application checkpoint — 2026-10-02
+Runtime: Node.js 24.19.0, Git 2.52.0, Linux
+
+PASS npm test
+  vitest run --maxWorkers=2
+  41 test files, 573 tests passed
+  Duration 308.42s
+  Includes 4 new integrated closed-loop tests and all 569 prior tests.
+PASS npx vitest run tests/local-closed-loop.test.ts --maxWorkers=2
+  Final affected-behavior rerun: 4/4 passed, duration 23.84s.
+PASS npm run typecheck
+PASS npm run build
+PASS node dist/cli.js closed-loop demo --out-dir .flyrewheel/local-closed-loop-verification
+PASS same compiled command again; cmp first/second report output is identical
+PASS independent fresh /tmp output and repository output have identical Git SHAs,
+  mining evidence, rule, review, comparison and decision identities.
+  Execution receipts intentionally retain their real first-run timestamps,
+  local paths and unique workspace attempts, so candidate receipt digests differ
+  across independent fresh databases.
+PASS npm run validate:deploy
+  30 YAML documents parsed; no cluster or runtime backend was provisioned.
+PASS git diff --check
+
+Source integration tests cover separate-process CLI/read/reopen/rerun;
+33 on-disk artifact hashes; exact historical before/fix sources kept unknown;
+future target bytes excluded from historical mining input; generated revision
+parent/source preservation and actual authored SDK process receipts; no duplicate
+runtime attempts on rerun; partial decision failure/resume; artifact corruption
+failure/recovery; forbidden model flag; unrelated paths, database ownership and
+lock rejection; preexisting heldout content blocking revision generation; and
+consumed source alias holdout registration rejection.
+
+The compiled report is summarized in local-closed-loop-compiled-2026-10-02.json.
+Its complete report and artifacts remain in the ignored verification directory.
+The complete report lists 33 artifacts and reopens 28 persisted records.
+Compatible: positive preserved 1, negative corrected 1, fixture accept.
+Regressed: positive lost 1, negative corrected 1, accept blocked, fixture reject.
+Both: source fixture, modelExecution not_run, human verdicts Unknown,
+requests pending, activation not_performed, isolation not_verified.
+
+These are authored integration scenarios, not empirical efficacy results.
+No external API/model calls, authentication, backend provisioning, deployment,
+publication, upload, dependency additions or source-repository commit occurred.
+Only the dedicated synthetic demo repository receives its three fixture commits.

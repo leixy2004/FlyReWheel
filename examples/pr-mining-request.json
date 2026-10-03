@@ -1,0 +1,40 @@
+{
+  "id": "fixture-mining-request",
+  "evidenceDigest": "1104ecd3aa6bf553eb246ee9f2572a445f31de1879d962cb64d9164b484a6aae",
+  "sources": [
+    {
+      "side": "before",
+      "path": "src/sample.ts"
+    },
+    {
+      "side": "after",
+      "path": "src/sample.ts"
+    }
+  ],
+  "statements": [
+    {
+      "kind": "pull"
+    },
+    {
+      "kind": "issue-comment",
+      "id": 10
+    },
+    {
+      "kind": "review",
+      "id": 20
+    },
+    {
+      "kind": "review-comment",
+      "id": 30
+    }
+  ],
+  "requestedRule": {
+    "ruleId": "fixture-mined-rule",
+    "version": "draft-1",
+    "parentDigest": null
+  },
+  "objective": "Investigate whether privileged reads need policy context; retain uncertainty.",
+  "actor": "synthetic-fixture",
+  "source": "fixture",
+  "createdAt": "2026-10-01T00:00:00Z"
+}

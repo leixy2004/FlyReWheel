@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "gateway": {
+    "kind": "blocked"
+  }
+}

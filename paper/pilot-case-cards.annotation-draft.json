@@ -1,0 +1,319 @@
+{
+  "document_type": "developmental-author-analysis-draft",
+  "document_version": 1,
+  "created_date_utc": "2026-10-02",
+  "flyrewheel_baseline_commit": "d4cfc95f0cfa77a7bed2308adc3376cc31731dee",
+  "formal_phase0_schema_instance": false,
+  "formal_analysis_eligible": false,
+  "benchmark_eligible": false,
+  "selection": "already_inspected_convenience_seeds",
+  "human_annotators": [],
+  "report": "paper/pilot-case-cards.md",
+  "execution": {
+    "upstream_imports": false,
+    "upstream_tests": false,
+    "isolated_reproduction": false,
+    "authored_static_scan_rerun": false,
+    "network_acquisition": false,
+    "model_inference": false
+  },
+  "verification": {
+    "manifest": "paper/pilot-materials-manifest.json",
+    "manifest_sha256": "27b43233a80add0e9ccb85df9068b33416700f4935b30299566d90d4e17bf229",
+    "checked_file_count": 16,
+    "result": "all_matches",
+    "scope": "Local byte consistency only; not online provenance authentication, historical visibility, or semantic correctness.",
+    "checked_records": [
+      {
+        "manifest_pointer": "/cases/1/sourceFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/1/sourceFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/1/metadataFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/1/metadataFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/3/sourceFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/3/sourceFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/3/testFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/3/metadataFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/3/metadataFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/3/metadataFiles/2",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/0/sourceFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/0/sourceFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/0/testFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/0/testFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "match"
+      },
+      {
+        "manifest_pointer": "/cases/0/metadataFiles/0",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      },
+      {
+        "manifest_pointer": "/cases/0/metadataFiles/1",
+        "bytes_sha256": "match",
+        "git_blob_sha1": "not_recorded"
+      }
+    ]
+  },
+  "common_missing_evidence": [
+    "Raw historical feedback and exact feedback-before source checkpoint",
+    "Visibility evidence and pre-feedback review-rule text or explicitly controlled intervention",
+    "Independent later same-rule targets with lineage and temporal checks",
+    "Independent human adjudication and matched future-review comparison"
+  ],
+  "cases": [
+    {
+      "pr": 2664,
+      "manifest_pointer": "/cases/1",
+      "source_pair_role": "squash_parent_to_squash_merge_not_historical_review_checkpoint",
+      "before_commit": "ab406446691f289ef51d1abd8d1ff66760eda36f",
+      "after_commit": "d79ced3292445d8471b3c4e5ce2dbf311834ec1b",
+      "mechanism": "Actor-vs-ordinary receiver dispatch selected by engine_use_ray",
+      "proposed_rule": "Use actor dispatch for encode_request_async only when self.engine is the Ray actor constructed under engine_use_ray; await the ordinary receiver directly otherwise.",
+      "overbroad_rule": "All self.engine calls must use remote dispatch.",
+      "source_derived_boundary": "The after non-Ray direct-call branch at lines 457-462 and the before abort branch at lines 397-401.",
+      "generic_mechanism": "Ray actor calling convention",
+      "repository_decisive_premise": "The constructor flag maps self.engine to actor or ordinary receiver; worker_use_ray alone is insufficient.",
+      "counterevidence": "One repair with same-file contrasts, not repeated misuse or observed maintenance.",
+      "test_source_status": "none_retained",
+      "missing_context": [
+        "Version-bound Ray/dependency contract",
+        "Executed actor and ordinary paths",
+        "Receiver/flag consistency beyond captured constructor"
+      ],
+      "anchors": [
+        {
+          "side": "before",
+          "lines": [
+            [
+              397,
+              401
+            ],
+            [
+              450,
+              454
+            ]
+          ]
+        },
+        {
+          "side": "after",
+          "lines": [
+            [
+              205,
+              218
+            ],
+            [
+              305,
+              364
+            ],
+            [
+              451,
+              462
+            ]
+          ]
+        }
+      ],
+      "research_labels": {
+        "mechanism_correctness": "unknown",
+        "rule_applicability": "unknown",
+        "repository_specific": "unknown",
+        "legal_neighbor": "unknown",
+        "independent_recurrence": "unknown",
+        "actual_reuse": "unknown",
+        "historical_rule_update": "unknown",
+        "contract_change": "unknown",
+        "future_review_benefit": "unknown"
+      },
+      "independent_human_adjudication": "not_performed",
+      "independent_later_target": "not_established",
+      "historical_rule_available_at": null,
+      "rule_and_boundary_origin": "retrospective_author_hypothesis_with_fix_visible"
+    },
+    {
+      "pr": 9034,
+      "manifest_pointer": "/cases/3",
+      "source_pair_role": "squash_parent_to_squash_merge_not_historical_review_checkpoint",
+      "before_commit": "22f8a69549d30b9b00464141797d274fb6b7e65f",
+      "after_commit": "ba30942240d35eb26b503e139eb4b01ccbbeb954",
+      "mechanism": "A zero new-token count reaches cached_all[-0:], returning the full prompt-plus-output cache.",
+      "proposed_rule": "In delta mode, handle zero separately before suffix slicing; preserve one-token scalar and positive-count suffix behavior under a nonnegative offset and cache-consistent append-only lifecycle.",
+      "overbroad_rule": "Negative slicing of token caches is erroneous.",
+      "source_derived_boundary": "The guarded slice remains at after line 538 and is appropriate for a valid new-token count greater than one.",
+      "generic_mechanism": "Python negative-zero suffix slicing",
+      "repository_decisive_premise": "Delta output owes only new output IDs while the cached sequence contains both prompt and output.",
+      "counterevidence": "Generic-language defect; one fix and patch-coupled integration test do not demonstrate repository-specific learning necessity.",
+      "test_source_status": "one_integration_file_retained_not_executed_not_direct_method_oracle",
+      "missing_context": [
+        "All offset and output-replacement callers",
+        "Validated monotonic-output/cache lifecycle",
+        "Full two serving production files",
+        "Direct method oracle"
+      ],
+      "anchors": [
+        {
+          "side": "before",
+          "lines": [
+            [
+              516,
+              535
+            ]
+          ]
+        },
+        {
+          "side": "after",
+          "lines": [
+            [
+              211,
+              215
+            ],
+            [
+              238,
+              246
+            ],
+            [
+              266,
+              279
+            ],
+            [
+              433,
+              442
+            ],
+            [
+              516,
+              538
+            ]
+          ]
+        }
+      ],
+      "research_labels": {
+        "mechanism_correctness": "unknown",
+        "rule_applicability": "unknown",
+        "repository_specific": "unknown",
+        "legal_neighbor": "unknown",
+        "independent_recurrence": "unknown",
+        "actual_reuse": "unknown",
+        "historical_rule_update": "unknown",
+        "contract_change": "unknown",
+        "future_review_benefit": "unknown"
+      },
+      "independent_human_adjudication": "not_performed",
+      "independent_later_target": "not_established",
+      "historical_rule_available_at": null,
+      "rule_and_boundary_origin": "retrospective_author_hypothesis_with_fix_visible"
+    },
+    {
+      "pr": 2570,
+      "manifest_pointer": "/cases/0",
+      "source_pair_role": "squash_parent_to_squash_merge_not_historical_review_checkpoint",
+      "before_commit": "1e4277d2d1eceedbe0d00ba9e2c1bef88145df7b",
+      "after_commit": "3209b4903376fd723858b256dcfabb8420a0cc64",
+      "mechanism": "None reaches an ordered numeric comparison; fix adds an is-not-None guard and changes the annotation from int to Optional[int].",
+      "proposed_rule": "For this API allowing max_tokens=None, exclude None from the lower-bound comparison while retaining rejection of supplied integers below one.",
+      "overbroad_rule": "Every accepted max_tokens value must be at least one.",
+      "source_derived_boundary": "None is admitted by the retained direct unit test; zero still reaches ValueError and positive integers pass this check.",
+      "generic_mechanism": "Optional-value ordered-comparison error",
+      "repository_decisive_premise": "The API admits None, supported by the saved PR statement and after-test source despite a before int annotation.",
+      "counterevidence": "Weak/control case; rich-context or diagnosis advantage is not established by a small optional-input repair.",
+      "test_source_status": "one_direct_test_file_and_one_generation_regression_file_retained_not_executed",
+      "missing_context": [
+        "Earlier API contract and regression history",
+        "Downstream meaning of None",
+        "Executed upstream constructor and generation tests"
+      ],
+      "anchors": [
+        {
+          "side": "before",
+          "lines": [
+            [
+              111,
+              148
+            ],
+            [
+              183,
+              194
+            ]
+          ]
+        },
+        {
+          "side": "after",
+          "lines": [
+            [
+              111,
+              116
+            ],
+            [
+              183,
+              194
+            ]
+          ]
+        }
+      ],
+      "research_labels": {
+        "mechanism_correctness": "unknown",
+        "rule_applicability": "unknown",
+        "repository_specific": "unknown",
+        "legal_neighbor": "unknown",
+        "independent_recurrence": "unknown",
+        "actual_reuse": "unknown",
+        "historical_rule_update": "unknown",
+        "contract_change": "unknown",
+        "future_review_benefit": "unknown"
+      },
+      "independent_human_adjudication": "not_performed",
+      "independent_later_target": "not_established",
+      "historical_rule_available_at": null,
+      "rule_and_boundary_origin": "retrospective_author_hypothesis_with_fix_visible"
+    }
+  ]
+}

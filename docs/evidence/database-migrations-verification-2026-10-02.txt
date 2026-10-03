@@ -1,0 +1,116 @@
+Versioned database migrations verification: 2026-10-02
+Source baseline:
+1423a8239ab8ab286bbe4bad4c4cf8ca6dc9bbf7
+Frozen source/test/script/deploy/dependency tree SHA-256:
+81bfd99ea3162d4a3a7c801040445db5f005006ee5d2b96cf5128c4cdaeb321b
+\nFull suite, maxWorkers=2, 720 second safety bound:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+Full suite exit code: 124
+\nTree SHA-256 after full suite:
+81bfd99ea3162d4a3a7c801040445db5f005006ee5d2b96cf5128c4cdaeb321b
+
+Final source-frozen aggregate retry (initial 720s run was incomplete; no final test result):
+Added SQL-only runner discovery and one regression; no test assertions/timeouts relaxed.
+Frozen source/test/script/deploy/dependency tree SHA-256:
+b8454afbe23f080a991ace78c5aa649ab4060848b7612a43f097d11bd815db56
+Full suite, maxWorkers=2, 1200 second aggregate command budget, dot reporter:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2 --reporter=dot
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+················································································
+Previous retry interrupted with exit 130 before a final result to finish the reviewed SQL filename hardening.
+Final source-frozen aggregate; all focused changes finished, no assertion/test-timeout changes:
+4afadd7dee014b7881cf9fd01d9f9e7cbc243ca9e0e164b5334375899fe05b9b
+Full suite, maxWorkers=2, 1200 second aggregate command budget, dot reporter:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2 --reporter=dot
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+·································································································································································································································································································································································································stderr | tests/github-pr-history.test.ts > stops immediately on rate limits, timeout and response budgets without exposing provider bodies
+GET /search/issues?q=repo%3Afixture%2Fproject%20is%3Apr%20created%3A2026-10-01T00%3A00%3A00Z..2026-10-01T23%3A59%3A59Z&sort=created&order=asc&per_page=5&page=1 - 429 with id UNKNOWN in 1ms
+
+········································stderr | tests/github-pr-history.test.ts > records failures, continues bounded non-rate failures, retries explicitly and never re-captures successes
+GET /repos/fixture/project/pulls/7 - 404 with id UNKNOWN in 1ms
+
+···stderr | tests/github-pr-history.test.ts > stops a batch on HTTP 403, with remaining PRs pending
+GET /repos/fixture/project/pulls/7 - 403 with id UNKNOWN in 1ms
+
+·stderr | tests/github-pr-history.test.ts > stops a batch on HTTP 429, with remaining PRs pending
+GET /repos/fixture/project/pulls/7 - 429 with id UNKNOWN in 1ms
+
+························stderr | tests/github-pr-history.test.ts > retains a per-PR deadline reason when fetch aborts before the longer aggregate deadline
+GET /repos/fixture/project/pulls/7 - 500 with id UNKNOWN in 120001ms
+
+·····························································································································································································································································································································································································································································································stderr | tests/github-pr.test.ts > aborts on ref/metadata movement, rate errors, request and decoded-response limits
+GET /repos/fixture/project/pulls/7 - 429 with id request-1 in 1ms
+
+························································································································································································································································································
+
+ Test Files  82 passed (82)
+      Tests  1210 passed (1210)
+   Start at  19:23:44
+   Duration  759.33s (tests 99%, import 1%)
+
+Full suite exit code: 0
+Tree SHA-256 after full suite:
+4afadd7dee014b7881cf9fd01d9f9e7cbc243ca9e0e164b5334375899fe05b9b
+
+Final frozen-tree typecheck/build/static/artifact checks:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+Build removed stale SQL and copied the current migration directory exactly.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 validate:deploy
+> node deploy/validate.mjs
+
+PASS: 30 YAML documents parsed; local references, offline defaults, secret-free templates, workload hardening and single-runner invariants verified.
+NOT VERIFIED HERE: Kustomize rendering, Kubernetes API schemas/admission, image builds, cluster startup, network enforcement, live credentials/inference, backups or crash recovery.
+{
+  "compiledMigrationBytesIdentical": true,
+  "adopted": 14,
+  "reapplied": 0,
+  "preservedDomainRecords": 1,
+  "cliAdoptionAndReopen": "passed",
+  "livePostgres": "not_run"
+}
+{
+  "mode": "compiled-offline-database-selection-smoke",
+  "checks": 85,
+  "explicitSelectors": "passed",
+  "validationBeforeAcquisition": "passed",
+  "localCrossProcessPersistence": "passed",
+  "ambientDatabaseUrlIsolation": "passed",
+  "inMemoryDefaults": "passed",
+  "closedLoopLocalOnly": "passed",
+  "workerCheck": "service-free",
+  "networkAttempts": 0,
+  "livePostgres": "not_used"
+}
+Historical SQL diff and whitespace checks passed.
+4afadd7dee014b7881cf9fd01d9f9e7cbc243ca9e0e164b5334375899fe05b9b
+Final ancillary checks exit code: 0

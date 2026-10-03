@@ -1,0 +1,9 @@
+Combined verification on 2026-10-01 after independent review fixes
+Baseline: f4c21b1; new workspace runner, SDK worker, mining model boundary
+npm test: 326 passed across 32 files, maxWorkers=2, 161.79 seconds
+npm run typecheck: passed
+npm run build: passed
+ git diff --check: passed
+Independent reviews: no remaining blocking findings
+SDK tests use authored fake executable; no live model, credentials or OpenSandbox
+Production transport remains blocked; process groups are not container isolation

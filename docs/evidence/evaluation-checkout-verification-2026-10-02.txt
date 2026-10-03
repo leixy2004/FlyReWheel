@@ -1,0 +1,78 @@
+FlyReWheel exact-head evaluation checkout verification
+Date: 2026-10-02
+Classification: DEVELOPMENT FIXTURE ONLY; no empirical efficacy claim
+Base commit: dad40e95c4d8d6d5c9140680cadb7aa7d9bb9e4e
+Working-tree extension only. No commit, push, publish, upload, deployment or dependency change.
+
+Scope
+- Optional evaluation checkout export/inspect CLI and API
+- Exact caller-selected full commit SHA union, reachable ancestor/tree/blob closure, selected full committed tree
+- Fresh standalone Git init, explicit-OID pack-objects, strict index-pack; no source ref or worktree mutation
+- Independent all-object inventory/reachability/ref/metadata/file-byte verification; fail closed
+- Production all-local-refs-v1 transport unchanged
+- Historical public availability always unproven; timestamps cannot establish visibility
+
+Completed checks
+- Focused suite: 48 tests across 2 files PASS
+- npm run typecheck: PASS
+- npm run build: PASS
+- node scripts/smoke-evaluation-checkout.mjs: PASS (compiled API and separate compiled CLI inspection)
+- npm run validate:deploy: PASS (30 YAML documents; static checks only)
+- git diff --check: PASS
+- Independent read-only boundary review: no further material gaps within trusted/exclusive-storage scope
+
+Full suite
+- PASS npm test (vitest run --maxWorkers=2): 875 tests across 60 files, 514.69 seconds, exit 0
+- Final typecheck/build/compiled smoke/static deployment validation and diff checks: PASS
+- Repeated compiled smoke: identical logical request/object inventory and assertions; per-instance metadata digest intentionally differs
+- Source/test files were frozen before and throughout the full suite; only documentation and smoke deliverables were added afterward
+- Changed Markdown relative links: 57/57 exist
+
+Adversarial coverage
+- Future branch/tag/notes refs, reflog-only future commit, dangling future blob, mixed source packs
+- Identical old timestamps on allowed and future commits; exact SHA visibility instead of date filtering
+- Multiple allowed heads and path-independent logical inventory/request digest
+- Invalid/duplicate/abbreviated/revision-expression/tag-object/missing heads and false-proof fields
+- Shallow, promisor configuration and markers, alternates/http-alternates, grafts, replacements, commondir
+- Config includes/filter commands, symlinked/hardlinked Git storage, source hook non-execution
+- Extra refs/objects/metadata/config comments/hidden index flags/remote URLs and altered HEAD
+- Nested .git files/directories, empty directories, ignored/untracked/modified files and FIFOs
+- Selected symlinks/gitlinks, CRLF and ident transforms, incomplete export refusal
+- Individual compressed-object and repeated-blob checkout-size bounds
+- Exact rerun/reinspection equality and refusal to replace invalid existing exports
+
+Limitations
+- Authored development fixtures, not independent historical labels or real model performance.
+- No model or target-repository code executed; no network/authentication/remote publication requested.
+- Export is not a filesystem/execution sandbox, provenance signature, or complete temporal-availability proof.
+- Downstream execution/transfer integration is not enabled automatically; source-store access must be separately restricted.
+- Linux and installed Git only; trusted storage needs exclusive access and independent resource quotas.
+- Deadline bounds cover Git phases; filesystem checks are byte/entry bounded, not a whole-operation real-time guarantee.
+
+Tool versions
+v24.19.0
+git version 2.47.3
+
+Verification source hashes
+2d8a1e9318a5e819527ba32307f0628bb4c2a4bd417365a57be7ea895ce1dff8  src/workspace/evaluation-checkout.ts
+bb9e441b846297fe4b83cba762a9a8df500630ad790c6a019e6a7de17e11e730  src/workspace/process.ts
+d1d287c7054e18f97cb4267c1d768da63c23e77003e98aba04ccc2f987ce181b  src/workspace/index.ts
+aa2ebfa3e648a7245811ff2a40e7c9b195446242d1b1f4a3057361eab7ac0e55  src/cli.ts
+f33080c5e4c2f313cf713f537408f5faf945a2f1403b0b52db0d3e9b0d767c40  tests/evaluation-checkout.cli.test.ts
+086a63353a538b076395ed1772a9d10d8e4c1fbd7c41c84bb4da0ba3421aa883  tests/evaluation-checkout.test.ts
+06b3213d3da1e90bd4d266468ac2d284fd4253216fb00470d213e30bf02ac666  scripts/smoke-evaluation-checkout.mjs
+
+Raw full-suite terminal output
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  60 passed (60)
+      Tests  875 passed (875)
+   Start at  14:51:30
+   Duration  514.69s (tests 99%, import 1%)

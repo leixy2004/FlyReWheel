@@ -10,7 +10,7 @@ Production direction: TypeScript, official OpenAI Codex SDK, self-hosted pg-boss
 
 ## Implementation boundaries
 
-- Core: Zod schemas, immutable identities, PostgreSQL persistence, feedback append-only semantics, promotion and evaluation policies
+- Core: Zod schemas, immutable identities, PostgreSQL persistence, feedback append-only semantics, promotion and evaluation policies; separate opt-in local semantic-v2 governance with per-rule CAS history
 - Detectors: reuse ast-grep for an executable structural example; OpenGrep/Semgrep JSON adapter for multi-language extensions; no regex imitation of a static analyzer
 - Agent: official Codex SDK structured outputs, narrow read-only tool policy; no custom CLI transcript parser, no shell/Bash grants, no automatic model calls in tests
 - Jobs: one mature PostgreSQL-backed queue adapter; do not implement a scheduler, lease service or retry engine
@@ -29,6 +29,36 @@ Production direction: TypeScript, official OpenAI Codex SDK, self-hosted pg-boss
 8. Task/run identities bind commit, bundle digest and configuration; same key with different payload fails
 9. Stale proposal approval/promotion is rejected using the expected active version
 10. No automatic account setup, credentials, deployment, repository push or third-party communication
+
+## Local semantic-v2 governance boundary
+
+The `local-semantic-review` namespace records local experimental review eligibility,
+not production activation or broad semantic correctness. Immutable version import,
+revision generation and accepted comparison decisions never change eligibility
+implicitly. Explicit commands register candidates, bootstrap an unvalidated root,
+select a comparison-backed revision, suspend, retire or atomically supersede a
+version. Retired and superseded versions are terminal; at most one version per
+logical rule is selected as `local-shadow`.
+
+Every mutation pins the exact rule and canonical scope digests and the expected
+head of that logical rule's append-only event stream. Revised selection requires
+an accepted compatible current per-anchor comparison with nonempty scored
+observations. Supersession additionally requires an already registered successor
+of the same logical rule, its direct parent to be the exact old version, and a
+comparison of that exact pair. Eligibility pins that immutable decision/comparison;
+later feedback or separate accept/reject/defer decisions never automatically select,
+revoke or renew it. Any such change requires a new explicit action and current CAS
+head, not a latest-feedback consensus. History validation preserves hashes,
+provenance and legal transitions; failed CAS or validation cannot partially replace
+a rule.
+
+Exact repository/path selection returns eligible local-shadow versions and
+exclusion explanations without running or publishing anything. Digest-pinned
+review APIs remain available for explicit historical/research replay; only opt-in
+registry selection is gated. The v1 active registry and promotion flow remain
+independent. Fixture and local-human-declared provenance are never authenticated
+approval, and neither bootstrapping nor comparison acceptance grants certification.
+See the [commands, states and trust limits](semantic-rule-governance.md).
 
 ## Source privacy and execution limits
 

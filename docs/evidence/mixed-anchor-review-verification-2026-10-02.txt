@@ -1,0 +1,99 @@
+FlyReWheel mixed-anchor semantic review verification
+Date: 2026-10-02
+Base checkout: 92b375e62f141127214188a70b9024eec5ae7c27
+Status: verified working-tree extension; no repository commit created
+
+Scope and versioned contracts
+- Fixture schemaVersion 2 keeps exact rule/snapshot/evidence bindings and target
+  coverage while adding independent anchorJudgments. Each anchor has its own
+  decision, reasoning, evidenceRefs and missingContext; no evidence is pooled.
+- New executed reviews bind receipt judgmentContract per-anchor-v3, fixed worker
+  outputContract semantic-review-v2, and runtime semantic-snapshot-review-v2.
+  The outer persisted review schemaVersion remains 1.
+- Current comparison scorer is per-anchor-semantic-v3. Exact feedback anchors can
+  be scored independently of unresolved target coverage. File-level cases still
+  require target-level judgments; every declared scan must complete. Removing a
+  detector, losing an anchor, or citing its bytes never establishes safety.
+- Current comparisons support both new anchor judgments and explicit legacy
+  findingAnchors. The union of base/candidate regression cases retains dropped
+  positives. Overlapping-but-different valid spans do not score an old FP anchor.
+- New local accept requires compatible current-scoring output. Existing reports
+  and decisions keep their original rederivation and idempotent return paths.
+  Older scorers remain readable but cannot receive a newly identified accept.
+
+Completed commands on final source
+PASS npm test (vitest run --maxWorkers=2): 722 tests, 48 files, 376.84 seconds
+PASS npm run typecheck
+PASS npm run build
+PASS node scripts/smoke-semantic-workspace.mjs
+PASS node scripts/smoke-detectorless-comparison.mjs
+PASS node scripts/smoke-revision-generation.mjs
+PASS npm run validate:deploy: 30 YAML documents; static checks only
+PASS git diff --check
+PASS final documentation validation: all 205 relative links/heading references
+resolve across the eight changed Markdown files; four checklist items finalized.
+
+Authored fixture coverage
+- One same-file target contains a private-read violation and a legitimate public
+  exception, with and without detection assets. Unselected occurrences remain
+  not_verified; explicit unknown anchors remain unknown findings.
+- Independent target/anchor evidence and context gates; known anchors survive
+  target unknown; one anchor cannot borrow another's required context. Target
+  safe/violation cannot survive an inconsistent context-gated anchor set.
+- Duplicate/conflicting exact anchors, contradictory safe targets, missing refs,
+  duplicate refs/context, stale rule/snapshot/target/source bindings, wrong side,
+  path, line, column or offset, empty spans and bounded anchor arrays fail closed.
+- Same-file TP preservation and FP correction across legacy/new review pairs;
+  target-only safety and citations alone cannot score selected feedback.
+- Exact legacy fixture IDs/payload hashes, both historical model prompt/schema
+  generation hashes, both old scorer report hashes and historical accepted
+  decisions remain readable and idempotent. No records are silently upgraded.
+- Authored official SDK/worker path, fixed schema dispatch and output mismatch
+  rejection, immutable store roundtrips/reopen, and full comparison integration.
+- Existing lifecycle, supervision, cleanup, transaction, source-split, byte-budget,
+  CLI, revision-operator, and legacy review tests pass in the full suite.
+
+Compiled same-file conditional-rule smoke
+Artifact: compiled-mixed-anchor-review-smoke-2026-10-02.json
+Artifact SHA256: 9652c62abd7bb4264d12294aad23c0d785fc6bcabc36c5b23f6e35287607152a
+The captured fixture names publicRead/privateRead and includes an exact local
+policy comment. The baseline applies its guard rule to all reads; the candidate
+adds the explicit public-read exception. Each independent anchor cites the exact
+policy evidence plus its own callsite. Candidate target state remains unknown.
+FP corrected: 1; TP preserved: 1; inconclusive selected feedback: 0.
+Both reviews and the comparison reopen identically. Authored SDK output retains
+modelExecution=not_run, fixture origin, human verdict Unknown, and verified cleanup.
+No activation, introduction claim or notification was performed.
+
+Additional compiled regression smokes
+- Detectorless comparison: compatible, regressed, target-only-inconclusive and
+  not-run-inconclusive scenarios pass, including persisted reopen and CLI reads.
+- Diagnosis operators: boundary_update plus persisted retain_rule/request_context/
+  abstain, mismatch and protected-field rejection, regression acceptance blocked,
+  exact reopen, and no activation remain intact.
+
+Stable source/build identity
+Aggregate SHA256 of sorted sha256sum records for all files under src/tests/scripts:
+d6c334ff708e1d81770211cfce3e2f507e2ce299c08c53b5202db603f9b1024a
+This aggregate was identical immediately before and after the final full suite.
+Selected source and compiled hashes:
+58931abcbf72b21a2561f3830769f7543163688856bc488b5e2145524266a4ef  src/semantic-review.ts
+cc45f438a46284a72de658fe659b3a8139016c44f01bb85ee7446a5abc48c795  src/revision-comparison.ts
+15b8839e30ad5ba7b0841d54470ce9c9aaab2d639075475e347b9fb5468eca73  src/semantic-review-execution.ts
+7cb5516a7bcae43b1aeda3c678c08f73a708edb02ddb0ee152992bed3c54d0a3  dist/semantic-review.js
+d78666674c3affbf6566fdd60c5b31e6ce4ae04606846c9299b03c8dfdf24700  dist/revision-comparison.js
+769cc3a35ef43f69767b54c958c9599fbf09f43487d791dd5588e413a1095122  dist/semantic-review-execution.js
+
+Limits
+All new semantic decisions, policies, diagnoses and TP/FP labels are authored
+fixtures or declarations, not independent semantic truth. Exact byte/citation
+validation cannot establish that a declared context kind proves a semantic fact.
+The useful conditional-rule example verifies representation and application flow;
+it is not evidence of model quality, reduced false positives, generalization or
+preserved future recall. Repository-wide admissible evidence, historical as-of
+isolation and production backend/gateway isolation remain unverified.
+No external network requests, authentication, live model/backend execution,
+dependency changes, deployment, publication, upload or source-repository commit
+were performed. Temporary authored Git fixture commits are test inputs only.
+Static deployment validation does not verify Kubernetes admission, image builds,
+cluster startup, network enforcement, backups or crash recovery.

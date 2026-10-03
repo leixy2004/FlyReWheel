@@ -1,0 +1,16 @@
+Retained upstream test source: tests/test_sampling_params.py
+Not executed by this packet. Original line numbers follow.
+
+0001 | """Tests for the SamplingParams class.
+0002 | """
+0003 | from vllm import SamplingParams
+0004 |
+0005 |
+0006 | def test_max_tokens_none():
+0007 |     """max_tokens=None should be allowed"""
+0008 |     SamplingParams(temperature=0.01, top_p=0.1, max_tokens=None)
+0009 |
+0010 |
+0011 | if __name__ == "__main__":
+0012 |     import pytest
+0013 |     pytest.main([__file__])

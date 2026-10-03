@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:flyrewheel:paper:paired-restriction-record:v2",
+  "title": "Selected three-window generated-rule pilot record",
+  "description": "Research bookkeeping for the selected one-repository generated-rule temporal pilot, with optional separately identified natural episodes. Operational configuration is not yet frozen or preregistered. No cases, labels or observations are supplied; structural validation cannot establish real execution, visibility, chronology or annotation independence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocolVersion", "status", "freeze", "screeningLedger", "episodes", "runs", "amendments", "studyRoute", "sourceFrameLedger", "ruleConstructionLedger"],
+  "properties": {
+    "studyRoute": {"const": "one_repository_three_window_generated_rules"},
+    "sourceFrameLedger": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/framePR"},
+      "description": "Complete in-frame PR enumeration, including unselected and inaccessible records; preserve all selected W1/W2 PR by frozen-family pairs, zero opportunities, unknowns and failures. External manifests may supply details by digest but cannot omit these denominator rows."
+    },
+    "ruleConstructionLedger": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/constructionAttempt"},
+      "description": "All W0 construction attempts, including no-rule and unsupported candidates, before W1 exposure. An empty array is permitted only as unfinished draft bookkeeping, not completed construction."
+    },
+    "protocolVersion": {"const": "paired-restriction-v2-temporal-draft"},
+    "status": {"enum": ["draft", "frozen", "completed", "stopped"]},
+    "freeze": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/freeze"}]},
+    "screeningLedger": {"type": "array", "items": {"$ref": "#/$defs/screening"}},
+    "episodes": {"type": "array", "items": {"$ref": "#/$defs/episode"}},
+    "runs": {"type": "array", "items": {"$ref": "#/$defs/run"}},
+    "amendments": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["recordedAt", "reason", "changedFields", "exposureStatus", "priorProtocolDigest", "newProtocolDigest"],
+        "properties": {
+          "recordedAt": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"},
+          "changedFields": {"$ref": "#/$defs/nonemptyRefs"}, "exposureStatus": {"$ref": "#/$defs/text"},
+          "priorProtocolDigest": {"$ref": "#/$defs/digest"}, "newProtocolDigest": {"$ref": "#/$defs/digest"}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"enum": ["frozen", "completed"]}}},
+      "then": {"properties": {"freeze": {"$ref": "#/$defs/freeze"}, "episodes": {"minItems": 1, "contains": {"properties": {"origin": {"const": "generated_rule_temporal"}}, "required": ["origin"]}, "minContains": 1}, "sourceFrameLedger": {"minItems": 1}, "ruleConstructionLedger": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "refs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "nonemptyRefs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "count": {"type": "integer", "minimum": 0},
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frozenAt", "protocolDigest", "implementationCommit", "sourceFrameDigest", "episodeRosterDigest", "visibilityAuditDigest", "lineageAuditDigest", "annotationProtocolDigest", "promptBundleDigest", "renderingAndGateContractDigest", "independentAdjudicatorIds", "arbitratorId", "modelsAndSamplerConfigDigest", "seedRosterDigest", "randomizedOrderDigest", "resourceLimits", "diagnosisConditions", "arms", "proposalSlotsPerUpdatingArm", "searchBudgetAndStopRule", "analysisAndDecisionRuleDigest", "earlierPlanDisposition", "exposureDeclaration", "primaryRepositoryId", "temporalDesign", "ruleConstructionLedgerDigest", "allPRDenominatorDefinition", "naturalCohortDisposition"],
+      "properties": {
+        "frozenAt": {"$ref": "#/$defs/text"},
+        "protocolDigest": {"$ref": "#/$defs/digest"},
+        "implementationCommit": {"$ref": "#/$defs/text"},
+        "sourceFrameDigest": {"$ref": "#/$defs/digest"},
+        "episodeRosterDigest": {"$ref": "#/$defs/digest"},
+        "visibilityAuditDigest": {"$ref": "#/$defs/digest"},
+        "lineageAuditDigest": {"$ref": "#/$defs/digest"},
+        "annotationProtocolDigest": {"$ref": "#/$defs/digest"},
+        "promptBundleDigest": {"$ref": "#/$defs/digest"},
+        "renderingAndGateContractDigest": {"$ref": "#/$defs/digest"},
+        "independentAdjudicatorIds": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+        "arbitratorId": {"$ref": "#/$defs/text"},
+        "modelsAndSamplerConfigDigest": {"$ref": "#/$defs/digest"},
+        "seedRosterDigest": {"$ref": "#/$defs/digest"},
+        "randomizedOrderDigest": {"$ref": "#/$defs/digest"},
+        "resourceLimits": {"$ref": "#/$defs/resourceLimits"},
+        "diagnosisConditions": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"enum": ["provided", "inferred"]}},
+        "arms": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": {"enum": ["hard", "unrestricted", "scoped_memory", "frozen"]}},
+        "proposalSlotsPerUpdatingArm": {"const": 1},
+        "searchBudgetAndStopRule": {"$ref": "#/$defs/text"},
+        "analysisAndDecisionRuleDigest": {"$ref": "#/$defs/digest"},
+        "earlierPlanDisposition": {"$ref": "#/$defs/text"},
+        "exposureDeclaration": {"$ref": "#/$defs/text"},
+        "primaryRepositoryId": {"$ref": "#/$defs/text"},
+        "temporalDesign": {"$ref": "#/$defs/temporalDesign"},
+        "ruleConstructionLedgerDigest": {"$ref": "#/$defs/digest"},
+        "allPRDenominatorDefinition": {"$ref": "#/$defs/text"},
+        "naturalCohortDisposition": {"$ref": "#/$defs/text"}
+      }
+    },
+    "resourceLimits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revisionInputTokens", "revisionOutputTokens", "persistentStateTokens", "reviewInputTokens", "reviewOutputTokens", "totalCallCapPerEpisodeRun", "timeLimitSeconds", "costCeilingAndCurrency", "countingRules"],
+      "properties": {
+        "revisionInputTokens": {"type": "integer", "minimum": 1}, "revisionOutputTokens": {"type": "integer", "minimum": 1},
+        "persistentStateTokens": {"type": "integer", "minimum": 1}, "reviewInputTokens": {"type": "integer", "minimum": 1},
+        "reviewOutputTokens": {"type": "integer", "minimum": 1}, "totalCallCapPerEpisodeRun": {"type": "integer", "minimum": 1},
+        "timeLimitSeconds": {"type": "number", "exclusiveMinimum": 0},
+        "costCeilingAndCurrency": {"$ref": "#/$defs/text"}, "countingRules": {"$ref": "#/$defs/text"}
+      }
+    },
+    "screening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "sourceRefs", "screeningOrder", "status", "reasons", "developmentExposure", "naturalOrConstructed", "annotationMinutes", "missingEvidence"],
+      "properties": {
+        "candidateId": {"$ref": "#/$defs/text"},
+        "sourceRefs": {"$ref": "#/$defs/nonemptyRefs"},
+        "screeningOrder": {"type": "integer", "minimum": 1},
+        "status": {"enum": ["pending", "eligible", "ineligible", "unresolved", "budget_exhausted", "access_blocked"]},
+        "reasons": {"$ref": "#/$defs/refs"},
+        "developmentExposure": {"$ref": "#/$defs/text"},
+        "naturalOrConstructed": {
+          "enum": ["generated_rule_temporal", "natural", "synthetic", "unknown"],
+          "description": "Generated-rule temporal is the selected primary route; natural is an optional separate-origin supplement. Synthetic is development only."
+        },
+        "annotationMinutes": {"type": "number", "minimum": 0},
+        "missingEvidence": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "diagnosis": {
+      "type": "object", "additionalProperties": false,
+      "required": ["category", "reasoning", "evidenceRefs", "missingEvidence", "originalContextStatus", "revisionContextStatus", "provenance", "lockedAt", "recordDigest"],
+      "properties": {
+        "category": {"enum": ["judgment", "context", "boundary", "contract", "mixed", "insufficient_evidence", "unknown"]},
+        "reasoning": {"$ref": "#/$defs/text"}, "evidenceRefs": {"$ref": "#/$defs/refs"}, "missingEvidence": {"$ref": "#/$defs/refs"},
+        "originalContextStatus": {"enum": ["decisive_evidence_present", "decisive_evidence_absent", "unknown"]},
+        "revisionContextStatus": {"enum": ["sufficient", "restored_before_revision", "still_missing", "unknown"]},
+        "provenance": {"$ref": "#/$defs/text"}, "lockedAt": {"$ref": "#/$defs/text"}, "recordDigest": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["episodeId", "candidateId", "repositoryId", "familyId", "indexIssueLineageId", "origin", "oldRuleDigest", "oldRuleVisibilityEvidenceRefs", "originalReviewerInputDigest", "indexFindingDigest", "rawFeedbackDigest", "feedbackVisibilityEvidenceRefs", "sharedFeedbackSupervisionDigest", "revisionInputDigest", "gatePacketDigest", "retrievalEnvelopeDigest", "independentDiagnosisRecords", "referenceDiagnosis", "arbitrationRecordDigest", "futureTargets", "eligibilityDecisionDigest", "experimentalConstruction", "feedbackOrigin", "feedbackLockedAt", "middlePRId", "middleCheckpointVisibilityEvidenceRefs"],
+      "properties": {
+        "episodeId": {"$ref": "#/$defs/text"},
+        "candidateId": {"$ref": "#/$defs/text"},
+        "repositoryId": {"$ref": "#/$defs/text"},
+        "familyId": {"$ref": "#/$defs/text"},
+        "indexIssueLineageId": {"$ref": "#/$defs/text"},
+        "origin": {"enum": ["generated_rule_temporal", "natural"]},
+        "oldRuleDigest": {"$ref": "#/$defs/digest"},
+        "oldRuleVisibilityEvidenceRefs": {
+          "$ref": "#/$defs/nonemptyRefs",
+          "description": "Natural episodes need historical old-rule visibility; generated episodes need W0 evidence visibility plus the experimental rule-lock audit, never a backdated historical-rule claim."
+        },
+        "originalReviewerInputDigest": {"$ref": "#/$defs/digest"},
+        "indexFindingDigest": {"$ref": "#/$defs/digest"},
+        "rawFeedbackDigest": {
+          "$ref": "#/$defs/digest",
+          "description": "Exact independent human judgment/feedback records for generated episodes; raw natural correction for an optional natural episode. Never fabricate a developer comment."
+        },
+        "feedbackVisibilityEvidenceRefs": {
+          "$ref": "#/$defs/nonemptyRefs",
+          "description": "For generated feedback, bind permitted source-time evidence and actual human lock/release events; do not pretend experimental judgments were historically visible."
+        },
+        "sharedFeedbackSupervisionDigest": {"$ref": "#/$defs/digest"},
+        "revisionInputDigest": {"$ref": "#/$defs/digest"},
+        "gatePacketDigest": {"$ref": "#/$defs/digest"},
+        "retrievalEnvelopeDigest": {"$ref": "#/$defs/digest"},
+        "independentDiagnosisRecords": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/diagnosis"}},
+        "referenceDiagnosis": {"$ref": "#/$defs/diagnosis"},
+        "arbitrationRecordDigest": {"$ref": "#/$defs/digest"},
+        "futureTargets": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/target"}},
+        "eligibilityDecisionDigest": {"$ref": "#/$defs/digest"},
+        "experimentalConstruction": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/experimentalConstruction"}]},
+        "feedbackOrigin": {"enum": ["independently_human_verified_experimental", "natural_correction"]},
+        "feedbackLockedAt": {"$ref": "#/$defs/timestamp"},
+        "middlePRId": {"$ref": "#/$defs/text"},
+        "middleCheckpointVisibilityEvidenceRefs": {"$ref": "#/$defs/nonemptyRefs"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"origin": {"const": "generated_rule_temporal"}}},
+          "then": {"properties": {"experimentalConstruction": {"$ref": "#/$defs/experimentalConstruction"}, "feedbackOrigin": {"const": "independently_human_verified_experimental"}}}
+        },
+        {"if": {"properties": {"origin": {"const": "natural"}}}, "then": {"properties": {"experimentalConstruction": {"type": "null"}, "feedbackOrigin": {"const": "natural_correction"}}}}
+      ]
+    },
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["targetId", "prId", "issueLineageId", "inputPacketDigest", "asOfVisibilityEvidenceRefs", "independenceEvidenceRefs", "sourceScope", "asOfAnnotationDigest", "laterEvidenceAnnotationDigest", "referenceLabel", "referenceRecordDigest", "referenceLockedAt", "repeatsFeedbackMechanism", "missingEvidence"],
+      "properties": {
+        "targetId": {"$ref": "#/$defs/text"}, "prId": {"$ref": "#/$defs/text"}, "issueLineageId": {"$ref": "#/$defs/text"},
+        "inputPacketDigest": {"$ref": "#/$defs/digest"}, "asOfVisibilityEvidenceRefs": {"$ref": "#/$defs/nonemptyRefs"},
+        "independenceEvidenceRefs": {"$ref": "#/$defs/nonemptyRefs"}, "sourceScope": {"$ref": "#/$defs/text"},
+        "asOfAnnotationDigest": {"$ref": "#/$defs/digest"}, "laterEvidenceAnnotationDigest": {"$ref": "#/$defs/digest"},
+        "referenceLabel": {"enum": ["violation", "legal_neighbor", "safe_applicable", "unknown", "disputed"]},
+        "referenceRecordDigest": {"$ref": "#/$defs/digest"}, "referenceLockedAt": {"$ref": "#/$defs/text"},
+        "repeatsFeedbackMechanism": {"type": ["boolean", "null"]}, "missingEvidence": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["runId", "episodeId", "condition", "arm", "gateMode", "repetitionId", "pairedSeedId", "sharedDiagnosisDigest", "commonRevisionInputDigest", "promptDigest", "proposalDisposition", "submittedStateDigest", "effectiveStateDigest", "gateOutcome", "gateRecordDigest", "contextRequestFulfilled", "targets", "cost", "protocolDeviations"],
+      "properties": {
+        "runId": {"$ref": "#/$defs/text"}, "episodeId": {"$ref": "#/$defs/text"}, "condition": {"enum": ["provided", "inferred"]},
+        "arm": {"enum": ["hard", "unrestricted", "scoped_memory", "frozen"]}, "gateMode": {"enum": ["shared_gate", "no_gate_ablation"]},
+        "repetitionId": {"$ref": "#/$defs/text"}, "pairedSeedId": {"$ref": "#/$defs/text"},
+        "sharedDiagnosisDigest": {"$ref": "#/$defs/digest"}, "commonRevisionInputDigest": {"$ref": "#/$defs/digest"},
+        "promptDigest": {"$ref": "#/$defs/digest"},
+        "proposalDisposition": {"enum": ["changed", "retained", "abstained", "context_requested", "schema_invalid", "policy_invalid", "not_run", "frozen_reference"]},
+        "submittedStateDigest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "effectiveStateDigest": {"$ref": "#/$defs/digest"}, "gateOutcome": {"enum": ["pass", "regressed", "still_failing", "inconclusive", "not_run", "bypassed_ablation"]},
+        "gateRecordDigest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "contextRequestFulfilled": {"type": "boolean", "const": false},
+        "targets": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+        "cost": {"$ref": "#/$defs/cost"}, "protocolDeviations": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["targetId", "blindedOutputId", "inputPacketDigest", "rawOutputDigest", "prediction", "resolutionReason", "evidenceSupport", "assessmentRecordDigest", "assessorId", "assessmentLockedAt", "unblindingDisclosure"],
+      "properties": {
+        "targetId": {"$ref": "#/$defs/text"}, "blindedOutputId": {"$ref": "#/$defs/text"}, "inputPacketDigest": {"$ref": "#/$defs/digest"},
+        "rawOutputDigest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "prediction": {"enum": ["violation", "safe", "not_applicable", "unresolved"]},
+        "resolutionReason": {"enum": ["judgment", "abstained", "missing_context", "scope_excluded", "unsupported_input", "timeout", "invalid_output", "not_run", "missing_output", "other"]},
+        "evidenceSupport": {"enum": ["supported", "unsupported", "unknown", "not_assessable"]},
+        "assessmentRecordDigest": {"$ref": "#/$defs/digest"}, "assessorId": {"$ref": "#/$defs/text"},
+        "assessmentLockedAt": {"$ref": "#/$defs/text"}, "unblindingDisclosure": {"$ref": "#/$defs/text"}
+      }
+    },
+    "cost": {
+      "type": "object", "additionalProperties": false,
+      "required": ["diagnosisCalls", "proposalCalls", "gateReviewCalls", "futureReviewCalls", "inputTokens", "outputTokens", "elapsedSeconds", "billedCost", "currency", "standaloneAccounting", "cachedAccounting", "failures", "retries"],
+      "properties": {
+        "diagnosisCalls": {"$ref": "#/$defs/count"}, "proposalCalls": {"$ref": "#/$defs/count"},
+        "gateReviewCalls": {"$ref": "#/$defs/count"}, "futureReviewCalls": {"$ref": "#/$defs/count"},
+        "inputTokens": {"$ref": "#/$defs/count"}, "outputTokens": {"$ref": "#/$defs/count"},
+        "elapsedSeconds": {"type": "number", "minimum": 0}, "billedCost": {"type": ["number", "null"], "minimum": 0},
+        "currency": {"type": ["string", "null"]}, "standaloneAccounting": {"$ref": "#/$defs/text"},
+        "cachedAccounting": {"$ref": "#/$defs/text"}, "failures": {"$ref": "#/$defs/count"}, "retries": {"$ref": "#/$defs/count"}
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1,
+      "description": "Actual declared event time; source visibility and experimental lock/exposure times must not be substituted for each other."
+    },
+    "timeWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startInclusive", "endExclusive", "selectionRule", "reviewCheckpointRule"],
+      "properties": {
+        "startInclusive": {"$ref": "#/$defs/timestamp"},
+        "endExclusive": {"$ref": "#/$defs/timestamp"},
+        "selectionRule": {"$ref": "#/$defs/text"},
+        "reviewCheckpointRule": {"$ref": "#/$defs/text"}
+      }
+    },
+    "temporalDesign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["historyW0", "feedbackW1", "evaluationW2", "laterLabelObservationCutoff", "sourceVisibilityAuditDigest", "experimentalExposureAuditDigest", "modelPretrainingExposureDeclaration"],
+      "properties": {
+        "historyW0": {"$ref": "#/$defs/timeWindow"},
+        "feedbackW1": {"$ref": "#/$defs/timeWindow"},
+        "evaluationW2": {"$ref": "#/$defs/timeWindow"},
+        "laterLabelObservationCutoff": {"$ref": "#/$defs/timestamp"},
+        "sourceVisibilityAuditDigest": {"$ref": "#/$defs/digest"},
+        "experimentalExposureAuditDigest": {"$ref": "#/$defs/digest"},
+        "modelPretrainingExposureDeclaration": {"$ref": "#/$defs/text"}
+      },
+      "description": "Human audit must establish W0 end <= W1 start < W1 end <= W2 start < W2 end and admissible evidence cutoffs. Chronological separation does not certify unknown public-history exposure in model pretraining."
+    },
+    "framePair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["familyId", "coverageStatus", "referenceRelevance", "findingStatus", "feedbackStatus", "issueIds", "missingEvidence"],
+      "properties": {
+        "familyId": {"$ref": "#/$defs/text"},
+        "coverageStatus": {"enum": ["pending", "reviewed", "incomplete", "failed", "not_run"]},
+        "referenceRelevance": {"enum": ["relevant", "not_relevant", "unknown", "disputed", "not_annotated"]},
+        "findingStatus": {"enum": ["finding_present", "no_finding", "unknown", "not_run"]},
+        "feedbackStatus": {"enum": ["supported", "unsupported", "unknown", "not_applicable", "not_annotated"]},
+        "issueIds": {"$ref": "#/$defs/refs"},
+        "missingEvidence": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "framePR": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repositoryId", "prId", "window", "frameEventEvidenceRefs", "selectionStatus", "inclusionProbability", "acquisitionStatus", "checkpointStatus", "inputPacketDigest", "familyPairs", "exclusionAndMissingness"],
+      "properties": {
+        "repositoryId": {"$ref": "#/$defs/text"},
+        "prId": {"$ref": "#/$defs/text"},
+        "window": {"enum": ["W0", "W1", "W2", "frame_unknown"]},
+        "frameEventEvidenceRefs": {"$ref": "#/$defs/refs"},
+        "selectionStatus": {"enum": ["selected", "not_selected", "excluded", "unknown"]},
+        "inclusionProbability": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "acquisitionStatus": {"enum": ["pending", "accessible", "access_blocked", "unavailable", "not_attempted"]},
+        "checkpointStatus": {"enum": ["pending", "reconstructable", "unreconstructable", "unknown", "not_applicable"]},
+        "inputPacketDigest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "familyPairs": {"type": "array", "items": {"$ref": "#/$defs/framePair"}},
+        "exclusionAndMissingness": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "constructionAttempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attemptId", "sourcePRIds", "sourcePacketDigest", "procedureDigest", "constructorProvenance", "disposition", "familyIds", "rawOutputDigest", "ruleDigests", "lockedAt", "missingEvidence"],
+      "properties": {
+        "attemptId": {"$ref": "#/$defs/text"},
+        "sourcePRIds": {"$ref": "#/$defs/nonemptyRefs"},
+        "sourcePacketDigest": {"$ref": "#/$defs/digest"},
+        "procedureDigest": {"$ref": "#/$defs/digest"},
+        "constructorProvenance": {"$ref": "#/$defs/text"},
+        "disposition": {"enum": ["supported_rule", "provisional_rule", "no_rule", "failed", "not_run"]},
+        "familyIds": {"$ref": "#/$defs/refs"},
+        "rawOutputDigest": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "ruleDigests": {"type": "array", "items": {"$ref": "#/$defs/digest"}, "uniqueItems": true},
+        "lockedAt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/timestamp"}]},
+        "missingEvidence": {"$ref": "#/$defs/refs"}
+      }
+    },
+    "experimentalConstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["w0SourcePacketDigest", "w0ProcedureDigest", "constructionAttemptIds", "ruleRosterLockDigest", "ruleLockedAt", "firstMiddleContentExposedAt", "firstMiddleLabelsAvailableAt", "generationExposureAuditRefs"],
+      "properties": {
+        "w0SourcePacketDigest": {"$ref": "#/$defs/digest"},
+        "w0ProcedureDigest": {"$ref": "#/$defs/digest"},
+        "constructionAttemptIds": {"$ref": "#/$defs/nonemptyRefs"},
+        "ruleRosterLockDigest": {"$ref": "#/$defs/digest"},
+        "ruleLockedAt": {"$ref": "#/$defs/timestamp"},
+        "firstMiddleContentExposedAt": {"$ref": "#/$defs/timestamp"},
+        "firstMiddleLabelsAvailableAt": {"$ref": "#/$defs/timestamp"},
+        "generationExposureAuditRefs": {"$ref": "#/$defs/nonemptyRefs"}
+      },
+      "description": "For generated rules, require an audited actual rule lock before middle content exposure and before middle labels become available to rule construction. This does not claim the rule existed historically in W0. JSON Schema cannot prove the event order or nonexposure."
+    }
+  }
+}

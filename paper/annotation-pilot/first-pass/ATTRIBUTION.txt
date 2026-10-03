@@ -1,0 +1,6 @@
+Source files: vLLM contributors, vllm-project/vllm, Apache License 2.0.
+Source display adds line-number prefixes and selected excerpts. Empty lines omit the prefix's final space.
+Original trailing source whitespace is preserved before a display-only ⟦EOL⟧ marker, not trimmed.
+Existing notices and comments remain in the complete source files.
+Task instructions and response forms are authored for this training exercise.
+See LICENSE.txt. Exact byte/version mappings are kept separately for audit.

@@ -1,0 +1,74 @@
+{
+  "mode": "authored-compiled-sdk-mixed-anchor-workspace-review-smoke",
+  "liveModel": "not_run",
+  "isolation": "not_verified",
+  "ruleDigest": "2f543dc3695398ac684fff33f06de6c9223870f5ba554d00a4dbfcb94b24e21e",
+  "snapshotDigest": "c5742bd10f16a81d46264631f5c3dc3b231754a0c431449e61af3c91e9b3c1b0",
+  "reviewId": "review_37491cddfc4db0cb11294d5311313c4630e53c88247b4849d0eac0fcdb372379",
+  "reviewDigest": "7c2755e76a2df5d997dc20e492da43fd9fe7a4dc446226d09ea304ff5293a33a",
+  "reopenedIdentically": true,
+  "protocol": "semantic-review-v2",
+  "sessionId": "authored-compiled-session",
+  "modelExecution": "not_run",
+  "snapshotCheck": "exact-local-git-recapture-matched",
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "candidateReviewId": "review_8787420c7724770e667da21d4149c7d9e3a6aa2046fbaa95eac0add194c091d0",
+  "candidateTargetState": "unknown",
+  "requiredContext": [
+    "local-policy"
+  ],
+  "candidateException": [
+    "An explicitly public read may omit an authorization guard when exact captured local-policy evidence establishes that exception"
+  ],
+  "capturedPolicy": "// Local policy: publicRead is explicitly public; privateRead requires an authorization guard.\n",
+  "candidateAnchorDecisions": [
+    {
+      "path": "src/smoke.ts",
+      "offset": 133,
+      "status": "safe",
+      "evidenceRefs": [
+        "9b7f617476c9cf733663bef7bb594e6f3f1bcb3ebcfd578f66ce668d40d5883f",
+        "9c317d6e52ba4e9ab7eac3d55db06cb37f8874006188549fa99e85c238e4428f"
+      ]
+    },
+    {
+      "path": "src/smoke.ts",
+      "offset": 191,
+      "status": "violation",
+      "evidenceRefs": [
+        "e74bcd406a2f18494b7e438fa981be8e62aee6227aaf4e620b3d10f0efe0685d",
+        "9c317d6e52ba4e9ab7eac3d55db06cb37f8874006188549fa99e85c238e4428f"
+      ]
+    }
+  ],
+  "comparisonDigest": "f6cb10995533947752b8dc1f16f5195065f53bf7bfaf1c5e2648b6af4d179bb2",
+  "scorer": "per-anchor-semantic-v3",
+  "summary": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 1,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "finding": {
+    "status": "violation",
+    "origin": "fixture",
+    "humanVerdict": "Unknown",
+    "introduction": "unverified",
+    "notificationEligibility": "unverified"
+  },
+  "notification": "not_performed"
+}

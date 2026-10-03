@@ -1,0 +1,81 @@
+
+[Original lines 147-173]
+0147 |     type: Literal["function"] = "function"
+0148 |
+0149 |
+0150 | class ChatCompletionRequest(OpenAIBaseModel):
+0151 |     # Ordered by official OpenAI API documentation
+0152 |     # https://platform.openai.com/docs/api-reference/chat/create
+0153 |     messages: List[ChatCompletionMessageParam]
+0154 |     model: str
+0155 |     frequency_penalty: Optional[float] = 0.0
+0156 |     logit_bias: Optional[Dict[str, float]] = None
+0157 |     logprobs: Optional[bool] = False
+0158 |     top_logprobs: Optional[int] = 0
+0159 |     max_tokens: Optional[int] = None
+0160 |     n: Optional[int] = 1
+0161 |     presence_penalty: Optional[float] = 0.0
+0162 |     response_format: Optional[ResponseFormat] = None
+0163 |     seed: Optional[int] = Field(None, ge=_LONG_INFO.min, le=_LONG_INFO.max)
+0164 |     stop: Optional[Union[str, List[str]]] = Field(default_factory=list)
+0165 |     stream: Optional[bool] = False
+0166 |     stream_options: Optional[StreamOptions] = None
+0167 |     temperature: Optional[float] = 0.7
+0168 |     top_p: Optional[float] = 1.0
+0169 |     tools: Optional[List[ChatCompletionToolsParam]] = None
+0170 |     tool_choice: Optional[Union[Literal["none"], Literal["auto"],
+0171 |                                 ChatCompletionNamedToolChoiceParam]] = "none"
+0172 |
+0173 |     # NOTE this will be ignored by VLLM -- the model determines the behavior
+
+[Original lines 378-427]
+0378 |     @model_validator(mode="before")
+0379 |     @classmethod
+0380 |     def check_tool_usage(cls, data):
+0381 |
+0382 |         # if "tool_choice" is not specified but tools are provided,
+0383 |         # default to "auto" tool_choice
+0384 |         if "tool_choice" not in data and "tools" in data:
+0385 |             data["tool_choice"] = "auto"
+0386 |
+0387 |         # if "tool_choice" is specified -- validation
+0388 |         if "tool_choice" in data:
+0389 |
+0390 |             # ensure that if "tool choice" is specified, tools are present
+0391 |             if "tools" not in data or data["tools"] is None:
+0392 |                 raise ValueError(
+0393 |                     "When using `tool_choice`, `tools` must be set.")
+0394 |
+0395 |             # make sure that tool choice is either a named tool
+0396 |             # OR that it's set to "auto"
+0397 |             if data["tool_choice"] != "auto" and not isinstance(
+0398 |                     data["tool_choice"], dict):
+0399 |                 raise ValueError(
+0400 |                     "`tool_choice` must either be a named tool or \"auto\". "
+0401 |                     "`tool_choice=\"none\" is not supported.")
+0402 |
+0403 |             # ensure that if "tool_choice" is specified as an object,
+0404 |             # it matches a valid tool
+0405 |             if isinstance(data["tool_choice"], dict):
+0406 |                 valid_tool = False
+0407 |                 specified_function = data["tool_choice"]["function"]
+0408 |                 if not specified_function:
+0409 |                     raise ValueError(
+0410 |                         "Incorrectly formatted `tool_choice`. Should be like "
+0411 |                         "`{\"type\": \"function\","
+0412 |                         " \"function\": {\"name\": \"my_function\"}}`")
+0413 |                 specified_function_name = specified_function["name"]
+0414 |                 if not specified_function_name:
+0415 |                     raise ValueError(
+0416 |                         "Incorrectly formatted `tool_choice`. Should be like "
+0417 |                         "`{\"type\": \"function\", "
+0418 |                         "\"function\": {\"name\": \"my_function\"}}`")
+0419 |                 for tool in data["tools"]:
+0420 |                     if tool["function"]["name"] == specified_function_name:
+0421 |                         valid_tool = True
+0422 |                         break
+0423 |                 if not valid_tool:
+0424 |                     raise ValueError(
+0425 |                         "The tool specified in `tool_choice` does not match any"
+0426 |                         " of the specified `tools`")
+0427 |         return data

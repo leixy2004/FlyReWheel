@@ -1,0 +1,169 @@
+
+[Original lines 181-215]
+0181 |             array(VLLM_TOKEN_ID_ARRAY_TYPE, [token_id]) * count
+0182 |             for token_id, count in token_counts
+0183 |         ]
+0184 |
+0185 |         return SequenceData(reduce(array.__add__, arrs))
+0186 |
+0187 |     @staticmethod
+0188 |     def from_seqs(
+0189 |         prompt_token_ids: GenericSequence[int],
+0190 |         output_token_ids: Optional[GenericSequence[int]] = None,
+0191 |     ) -> "SequenceData":
+0192 |         prompt_token_ids_arr = array(VLLM_TOKEN_ID_ARRAY_TYPE,
+0193 |                                      prompt_token_ids)
+0194 |
+0195 |         if output_token_ids is None:
+0196 |             return SequenceData(prompt_token_ids_arr)
+0197 |
+0198 |         output_token_ids_arr = array(VLLM_TOKEN_ID_ARRAY_TYPE,
+0199 |                                      output_token_ids)
+0200 |
+0201 |         return SequenceData(prompt_token_ids_arr,
+0202 |                             _output_token_ids=output_token_ids_arr)
+0203 |
+0204 |     def __post_init__(self) -> None:
+0205 |         assert self._prompt_token_ids.typecode == "l"
+0206 |         assert self._output_token_ids.typecode == "l"
+0207 |         self._prompt_token_ids_tuple: Tuple[int, ...] = tuple(
+0208 |             self._prompt_token_ids)
+0209 |         self._update_cached_all_tokens()
+0210 |
+0211 |     def _update_cached_all_tokens(self):
+0212 |         assert isinstance(self._prompt_token_ids, array)
+0213 |         assert isinstance(self._output_token_ids, array)
+0214 |         self._cached_all_token_ids: List[int] = list(self._prompt_token_ids +
+0215 |                                                      self._output_token_ids)
+
+[Original lines 238-279]
+0238 |     @property
+0239 |     def output_token_ids(self) -> Tuple[int, ...]:
+0240 |         return tuple(self._output_token_ids)
+0241 |
+0242 |     @output_token_ids.setter
+0243 |     def output_token_ids(self, new_output_token_ids: List[int]) -> None:
+0244 |         self._output_token_ids = array(VLLM_TOKEN_ID_ARRAY_TYPE,
+0245 |                                        new_output_token_ids)
+0246 |         self._update_cached_all_tokens()
+0247 |
+0248 |     @property
+0249 |     def output_token_ids_array(self) -> array:
+0250 |         """Return the prompt token ids in array type.
+0251 |
+0252 |         Note that the array is in "I" type, and it is not compatible
+0253 |         with torch.long (2 bytes vs 4 bytes). So beware of the usage.
+0254 |         """
+0255 |         assert isinstance(self._output_token_ids, array)
+0256 |         return self._output_token_ids
+0257 |
+0258 |     @property
+0259 |     def mrope_position_delta(self) -> Optional[int]:
+0260 |         return self._mrope_position_delta
+0261 |
+0262 |     @mrope_position_delta.setter
+0263 |     def mrope_position_delta(self, new_mrope_position_delta):
+0264 |         self._mrope_position_delta = new_mrope_position_delta
+0265 |
+0266 |     def append_token_id(self, token_id: int, logprob: float) -> None:
+0267 |         self._output_token_ids.append(token_id)
+0268 |         self._new_appended_tokens.append(token_id)
+0269 |         self._cached_all_token_ids.append(token_id)
+0270 |         self._cumulative_logprob += logprob
+0271 |
+0272 |     def get_len(self) -> int:
+0273 |         return len(self._output_token_ids) + len(self._prompt_token_ids)
+0274 |
+0275 |     def get_prompt_len(self) -> int:
+0276 |         return len(self._prompt_token_ids)
+0277 |
+0278 |     def get_output_len(self) -> int:
+0279 |         return len(self._output_token_ids)
+
+[Original lines 414-443]
+0414 |         # and a decoder prompt.) The decision of which type of sequence
+0415 |         # to generate is determined by the `from_decoder_prompt` argument.
+0416 |         #
+0417 |         # When constructing a encoder sequence
+0418 |         # (`from_decoder_prompt` False) it matters that
+0419 |         # the `LLMInputs` instance stored in `inputs` is valid
+0420 |         # in the sense that its encoder-related member variables are
+0421 |         # populated; below, an exception is raised if this is
+0422 |         # not the case.
+0423 |         #
+0424 |         # When constructing a decoder sequence (`from_decoder_prompt` True)
+0425 |         # it does not matter whether `inputs` has its encoder-related
+0426 |         # member variables populated.
+0427 |         if not (from_decoder_prompt
+0428 |                 or is_valid_encoder_decoder_llm_inputs(inputs)):
+0429 |             raise ValueError("Cannot extract encoder input prompt from "
+0430 |                              f"invalid input {inputs}; did you forget the "
+0431 |                              "encoder input prompt fields?")
+0432 |
+0433 |         self.data = SequenceData.from_seqs(self.prompt_token_ids)
+0434 |         self.output_logprobs: SampleLogprobs = []
+0435 |         self.output_text = ""
+0436 |
+0437 |         self.status = SequenceStatus.WAITING
+0438 |         self.stop_reason: Union[int, str, None] = None
+0439 |
+0440 |         # These are used to keep track of delta outputs
+0441 |         self._last_output_token_ids_offset: int = 0
+0442 |         self._last_output_text_offset: int = 0
+0443 |
+
+[Original lines 482-535]
+0482 |             inputs).get("encoder_multi_modal_data")) or {}
+0483 |
+0484 |     @property
+0485 |     def mm_processor_kwargs(self) -> Dict[str, Any]:
+0486 |         return self.inputs.get("mm_processor_kwargs") or {}
+0487 |
+0488 |     @property
+0489 |     def lora_int_id(self) -> int:
+0490 |         return self.lora_request.lora_int_id if self.lora_request else 0
+0491 |
+0492 |     @property
+0493 |     def prompt_adapter_id(self) -> int:
+0494 |         return self.prompt_adapter_request.prompt_adapter_id \
+0495 |                         if self.prompt_adapter_request else 0
+0496 |
+0497 |     def get_output_text_to_return(self, buffer_length: int,
+0498 |                                   delta: bool) -> str:
+0499 |         """If delta is True, only new text since the last call to
+0500 |         this method is returned"""
+0501 |
+0502 |         # We return the full output text if the sequence is finished.
+0503 |         truncate = buffer_length and not self.is_finished()
+0504 |         if not delta:
+0505 |             return self.output_text[:-buffer_length] if truncate else (
+0506 |                 self.output_text)
+0507 |         length = len(self.output_text)
+0508 |         if truncate:
+0509 |             length -= buffer_length
+0510 |         last_offset = self._last_output_text_offset
+0511 |         if last_offset < length:
+0512 |             self._last_output_text_offset = length
+0513 |             return self.output_text[last_offset:length]
+0514 |         return ""
+0515 |
+0516 |     def get_output_token_ids_to_return(
+0517 |             self, delta: bool) -> Union[GenericSequence[int], int]:
+0518 |         """If delta is True, only new tokens since the last call to
+0519 |         this method are returned"""
+0520 |         if not delta:
+0521 |             return self.get_output_token_ids()
+0522 |
+0523 |         output_len = self.get_output_len()
+0524 |
+0525 |         # Get the number of new tokens
+0526 |         num_new_tokens = output_len - self._last_output_token_ids_offset
+0527 |         self._last_output_token_ids_offset = output_len
+0528 |
+0529 |         # Return new tokens
+0530 |         if num_new_tokens == 1:
+0531 |             # Optimization for single decode token case
+0532 |             # (which is what we have most of the time)
+0533 |             return self.data._cached_all_token_ids[-1]
+0534 |
+0535 |         return self.data._cached_all_token_ids[-num_new_tokens:]

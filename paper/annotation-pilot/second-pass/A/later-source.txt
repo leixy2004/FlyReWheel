@@ -1,0 +1,888 @@
+0001 | # Adapted from
+0002 | # https://github.com/lm-sys/FastChat/blob/168ccc29d3f7edc50823016105c024fe2282732a/fastchat/protocol/openai_api_protocol.py
+0003 | import time
+0004 | from argparse import Namespace
+0005 | from typing import Any, Dict, List, Literal, Optional, Union
+0006 |
+0007 | import torch
+0008 | from openai.types.chat import ChatCompletionContentPartParam
+0009 | from pydantic import BaseModel, ConfigDict, Field, model_validator
+0010 | from typing_extensions import Annotated, Required, TypedDict
+0011 |
+0012 | from vllm.entrypoints.chat_utils import ChatCompletionMessageParam
+0013 | from vllm.entrypoints.openai.logits_processors import get_logits_processors
+0014 | from vllm.pooling_params import PoolingParams
+0015 | from vllm.sampling_params import (LogitsProcessor, RequestOutputKind,
+0016 |                                   SamplingParams)
+0017 | from vllm.sequence import Logprob
+0018 | from vllm.transformers_utils.tokenizer import AnyTokenizer
+0019 | from vllm.utils import random_uuid
+0020 |
+0021 | # torch is mocked during docs generation,
+0022 | # so we have to provide the values as literals
+0023 | _MOCK_LONG_INFO = Namespace(min=-9223372036854775808, max=9223372036854775807)
+0024 | _LONG_INFO: Union["torch.iinfo", Namespace]
+0025 |
+0026 | try:
+0027 |     from sphinx.ext.autodoc.mock import _MockModule
+0028 |
+0029 |     if isinstance(torch, _MockModule):
+0030 |         _LONG_INFO = _MOCK_LONG_INFO
+0031 |     else:
+0032 |         _LONG_INFO = torch.iinfo(torch.long)
+0033 | except ModuleNotFoundError:
+0034 |     _LONG_INFO = torch.iinfo(torch.long)
+0035 |
+0036 | assert _LONG_INFO.min == _MOCK_LONG_INFO.min
+0037 | assert _LONG_INFO.max == _MOCK_LONG_INFO.max
+0038 |
+0039 |
+0040 | class CustomChatCompletionMessageParam(TypedDict, total=False):
+0041 |     """Enables custom roles in the Chat Completion API."""
+0042 |     role: Required[str]
+0043 |     """The role of the message's author."""
+0044 |
+0045 |     content: Union[str, List[ChatCompletionContentPartParam]]
+0046 |     """The contents of the message."""
+0047 |
+0048 |     name: str
+0049 |     """An optional name for the participant.
+0050 |
+0051 |     Provides the model information to differentiate between participants of the
+0052 |     same role.
+0053 |     """
+0054 |
+0055 |     tool_call_id: Optional[str]
+0056 |
+0057 |     tool_calls: Optional[List[dict]]
+0058 |
+0059 |
+0060 | class OpenAIBaseModel(BaseModel):
+0061 |     # OpenAI API does not allow extra fields
+0062 |     model_config = ConfigDict(extra="forbid")
+0063 |
+0064 |
+0065 | class ErrorResponse(OpenAIBaseModel):
+0066 |     object: str = "error"
+0067 |     message: str
+0068 |     type: str
+0069 |     param: Optional[str] = None
+0070 |     code: int
+0071 |
+0072 |
+0073 | class ModelPermission(OpenAIBaseModel):
+0074 |     id: str = Field(default_factory=lambda: f"modelperm-{random_uuid()}")
+0075 |     object: str = "model_permission"
+0076 |     created: int = Field(default_factory=lambda: int(time.time()))
+0077 |     allow_create_engine: bool = False
+0078 |     allow_sampling: bool = True
+0079 |     allow_logprobs: bool = True
+0080 |     allow_search_indices: bool = False
+0081 |     allow_view: bool = True
+0082 |     allow_fine_tuning: bool = False
+0083 |     organization: str = "*"
+0084 |     group: Optional[str] = None
+0085 |     is_blocking: bool = False
+0086 |
+0087 |
+0088 | class ModelCard(OpenAIBaseModel):
+0089 |     id: str
+0090 |     object: str = "model"
+0091 |     created: int = Field(default_factory=lambda: int(time.time()))
+0092 |     owned_by: str = "vllm"
+0093 |     root: Optional[str] = None
+0094 |     parent: Optional[str] = None
+0095 |     max_model_len: Optional[int] = None
+0096 |     permission: List[ModelPermission] = Field(default_factory=list)
+0097 |
+0098 |
+0099 | class ModelList(OpenAIBaseModel):
+0100 |     object: str = "list"
+0101 |     data: List[ModelCard] = Field(default_factory=list)
+0102 |
+0103 |
+0104 | class UsageInfo(OpenAIBaseModel):
+0105 |     prompt_tokens: int = 0
+0106 |     total_tokens: int = 0
+0107 |     completion_tokens: Optional[int] = 0
+0108 |
+0109 |
+0110 | class JsonSchemaResponseFormat(OpenAIBaseModel):
+0111 |     name: str
+0112 |     description: Optional[str] = None
+0113 |     # schema is the field in openai but that causes conflicts with pydantic so
+0114 |     # instead use json_schema with an alias
+0115 |     json_schema: Optional[Dict[str, Any]] = Field(default=None, alias='schema')
+0116 |     strict: Optional[bool] = None
+0117 |
+0118 |
+0119 | class ResponseFormat(OpenAIBaseModel):
+0120 |     # type must be "json_schema", "json_object" or "text"
+0121 |     type: Literal["text", "json_object", "json_schema"]
+0122 |     json_schema: Optional[JsonSchemaResponseFormat] = None
+0123 |
+0124 |
+0125 | class StreamOptions(OpenAIBaseModel):
+0126 |     include_usage: Optional[bool] = True
+0127 |     continuous_usage_stats: Optional[bool] = True
+0128 |
+0129 |
+0130 | class FunctionDefinition(OpenAIBaseModel):
+0131 |     name: str
+0132 |     description: Optional[str] = None
+0133 |     parameters: Optional[Dict[str, Any]] = None
+0134 |
+0135 |
+0136 | class ChatCompletionToolsParam(OpenAIBaseModel):
+0137 |     type: Literal["function"] = "function"
+0138 |     function: FunctionDefinition
+0139 |
+0140 |
+0141 | class ChatCompletionNamedFunction(OpenAIBaseModel):
+0142 |     name: str
+0143 |
+0144 |
+0145 | class ChatCompletionNamedToolChoiceParam(OpenAIBaseModel):
+0146 |     function: ChatCompletionNamedFunction
+0147 |     type: Literal["function"] = "function"
+0148 |
+0149 |
+0150 | class ChatCompletionRequest(OpenAIBaseModel):
+0151 |     # Ordered by official OpenAI API documentation
+0152 |     # https://platform.openai.com/docs/api-reference/chat/create
+0153 |     messages: List[ChatCompletionMessageParam]
+0154 |     model: str
+0155 |     frequency_penalty: Optional[float] = 0.0
+0156 |     logit_bias: Optional[Dict[str, float]] = None
+0157 |     logprobs: Optional[bool] = False
+0158 |     top_logprobs: Optional[int] = 0
+0159 |     max_tokens: Optional[int] = None
+0160 |     n: Optional[int] = 1
+0161 |     presence_penalty: Optional[float] = 0.0
+0162 |     response_format: Optional[ResponseFormat] = None
+0163 |     seed: Optional[int] = Field(None, ge=_LONG_INFO.min, le=_LONG_INFO.max)
+0164 |     stop: Optional[Union[str, List[str]]] = Field(default_factory=list)
+0165 |     stream: Optional[bool] = False
+0166 |     stream_options: Optional[StreamOptions] = None
+0167 |     temperature: Optional[float] = 0.7
+0168 |     top_p: Optional[float] = 1.0
+0169 |     tools: Optional[List[ChatCompletionToolsParam]] = None
+0170 |     tool_choice: Optional[Union[Literal["none"], Literal["auto"],
+0171 |                                 ChatCompletionNamedToolChoiceParam]] = "none"
+0172 |
+0173 |     # NOTE this will be ignored by VLLM -- the model determines the behavior
+0174 |     parallel_tool_calls: Optional[bool] = False
+0175 |     user: Optional[str] = None
+0176 |
+0177 |     # doc: begin-chat-completion-sampling-params
+0178 |     best_of: Optional[int] = None
+0179 |     use_beam_search: bool = False
+0180 |     top_k: int = -1
+0181 |     min_p: float = 0.0
+0182 |     repetition_penalty: float = 1.0
+0183 |     length_penalty: float = 1.0
+0184 |     early_stopping: bool = False
+0185 |     stop_token_ids: Optional[List[int]] = Field(default_factory=list)
+0186 |     include_stop_str_in_output: bool = False
+0187 |     ignore_eos: bool = False
+0188 |     min_tokens: int = 0
+0189 |     skip_special_tokens: bool = True
+0190 |     spaces_between_special_tokens: bool = True
+0191 |     truncate_prompt_tokens: Optional[Annotated[int, Field(ge=1)]] = None
+0192 |     prompt_logprobs: Optional[int] = None
+0193 |     # doc: end-chat-completion-sampling-params
+0194 |
+0195 |     # doc: begin-chat-completion-extra-params
+0196 |     echo: bool = Field(
+0197 |         default=False,
+0198 |         description=(
+0199 |             "If true, the new message will be prepended with the last message "
+0200 |             "if they belong to the same role."),
+0201 |     )
+0202 |     add_generation_prompt: bool = Field(
+0203 |         default=True,
+0204 |         description=
+0205 |         ("If true, the generation prompt will be added to the chat template. "
+0206 |          "This is a parameter used by chat template in tokenizer config of the "
+0207 |          "model."),
+0208 |     )
+0209 |     add_special_tokens: bool = Field(
+0210 |         default=False,
+0211 |         description=(
+0212 |             "If true, special tokens (e.g. BOS) will be added to the prompt "
+0213 |             "on top of what is added by the chat template. "
+0214 |             "For most models, the chat template takes care of adding the "
+0215 |             "special tokens so this should be set to false (as is the "
+0216 |             "default)."),
+0217 |     )
+0218 |     documents: Optional[List[Dict[str, str]]] = Field(
+0219 |         default=None,
+0220 |         description=
+0221 |         ("A list of dicts representing documents that will be accessible to "
+0222 |          "the model if it is performing RAG (retrieval-augmented generation)."
+0223 |          " If the template does not support RAG, this argument will have no "
+0224 |          "effect. We recommend that each document should be a dict containing "
+0225 |          "\"title\" and \"text\" keys."),
+0226 |     )
+0227 |     chat_template: Optional[str] = Field(
+0228 |         default=None,
+0229 |         description=(
+0230 |             "A Jinja template to use for this conversion. "
+0231 |             "As of transformers v4.44, default chat template is no longer "
+0232 |             "allowed, so you must provide a chat template if the tokenizer "
+0233 |             "does not define one."),
+0234 |     )
+0235 |     chat_template_kwargs: Optional[Dict[str, Any]] = Field(
+0236 |         default=None,
+0237 |         description=("Additional kwargs to pass to the template renderer. "
+0238 |                      "Will be accessible by the chat template."),
+0239 |     )
+0240 |     guided_json: Optional[Union[str, dict, BaseModel]] = Field(
+0241 |         default=None,
+0242 |         description=("If specified, the output will follow the JSON schema."),
+0243 |     )
+0244 |     guided_regex: Optional[str] = Field(
+0245 |         default=None,
+0246 |         description=(
+0247 |             "If specified, the output will follow the regex pattern."),
+0248 |     )
+0249 |     guided_choice: Optional[List[str]] = Field(
+0250 |         default=None,
+0251 |         description=(
+0252 |             "If specified, the output will be exactly one of the choices."),
+0253 |     )
+0254 |     guided_grammar: Optional[str] = Field(
+0255 |         default=None,
+0256 |         description=(
+0257 |             "If specified, the output will follow the context free grammar."),
+0258 |     )
+0259 |     guided_decoding_backend: Optional[str] = Field(
+0260 |         default=None,
+0261 |         description=(
+0262 |             "If specified, will override the default guided decoding backend "
+0263 |             "of the server for this specific request. If set, must be either "
+0264 |             "'outlines' / 'lm-format-enforcer'"))
+0265 |     guided_whitespace_pattern: Optional[str] = Field(
+0266 |         default=None,
+0267 |         description=(
+0268 |             "If specified, will override the default whitespace pattern "
+0269 |             "for guided json decoding."))
+0270 |
+0271 |     # doc: end-chat-completion-extra-params
+0272 |
+0273 |     def to_sampling_params(
+0274 |             self, tokenizer: AnyTokenizer,
+0275 |             guided_decode_logits_processor: Optional[LogitsProcessor],
+0276 |             default_max_tokens: int) -> SamplingParams:
+0277 |         max_tokens = self.max_tokens
+0278 |         if max_tokens is None:
+0279 |             max_tokens = default_max_tokens
+0280 |
+0281 |         prompt_logprobs = self.prompt_logprobs
+0282 |         if prompt_logprobs is None and self.echo:
+0283 |             prompt_logprobs = self.top_logprobs
+0284 |
+0285 |         # We now allow logprobs being true without top_logrobs.
+0286 |         logits_processors = get_logits_processors(
+0287 |             logit_bias=self.logit_bias,
+0288 |             allowed_token_ids=None,
+0289 |             tokenizer=tokenizer,
+0290 |         )
+0291 |         if guided_decode_logits_processor:
+0292 |             logits_processors.append(guided_decode_logits_processor)
+0293 |
+0294 |         return SamplingParams.from_optional(
+0295 |             n=self.n,
+0296 |             best_of=self.best_of,
+0297 |             presence_penalty=self.presence_penalty,
+0298 |             frequency_penalty=self.frequency_penalty,
+0299 |             repetition_penalty=self.repetition_penalty,
+0300 |             temperature=self.temperature,
+0301 |             top_p=self.top_p,
+0302 |             top_k=self.top_k,
+0303 |             min_p=self.min_p,
+0304 |             seed=self.seed,
+0305 |             stop=self.stop,
+0306 |             stop_token_ids=self.stop_token_ids,
+0307 |             logprobs=self.top_logprobs if self.logprobs else None,
+0308 |             prompt_logprobs=prompt_logprobs,
+0309 |             ignore_eos=self.ignore_eos,
+0310 |             max_tokens=max_tokens,
+0311 |             min_tokens=self.min_tokens,
+0312 |             use_beam_search=self.use_beam_search,
+0313 |             early_stopping=self.early_stopping,
+0314 |             skip_special_tokens=self.skip_special_tokens,
+0315 |             spaces_between_special_tokens=self.spaces_between_special_tokens,
+0316 |             include_stop_str_in_output=self.include_stop_str_in_output,
+0317 |             length_penalty=self.length_penalty,
+0318 |             logits_processors=logits_processors,
+0319 |             truncate_prompt_tokens=self.truncate_prompt_tokens,
+0320 |             output_kind=RequestOutputKind.DELTA if self.stream \
+0321 |                 else RequestOutputKind.FINAL_ONLY,
+0322 |         )
+0323 |
+0324 |     @model_validator(mode="before")
+0325 |     @classmethod
+0326 |     def validate_stream_options(cls, data):
+0327 |         if data.get("stream_options") and not data.get("stream"):
+0328 |             raise ValueError(
+0329 |                 "Stream options can only be defined when `stream=True`.")
+0330 |
+0331 |         return data
+0332 |
+0333 |     @model_validator(mode="before")
+0334 |     @classmethod
+0335 |     def check_logprobs(cls, data):
+0336 |         if (prompt_logprobs := data.get("prompt_logprobs")) is not None:
+0337 |             if data.get("stream") and prompt_logprobs > 0:
+0338 |                 raise ValueError(
+0339 |                     "`prompt_logprobs` are not available when `stream=True`.")
+0340 |
+0341 |             if prompt_logprobs < 0:
+0342 |                 raise ValueError("`prompt_logprobs` must be a positive value.")
+0343 |
+0344 |         if (top_logprobs := data.get("top_logprobs")) is not None:
+0345 |             if top_logprobs < 0:
+0346 |                 raise ValueError("`top_logprobs` must be a positive value.")
+0347 |
+0348 |             if not data.get("logprobs"):
+0349 |                 raise ValueError(
+0350 |                     "when using `top_logprobs`, `logprobs` must be set to true."
+0351 |                 )
+0352 |
+0353 |         return data
+0354 |
+0355 |     @model_validator(mode="before")
+0356 |     @classmethod
+0357 |     def check_guided_decoding_count(cls, data):
+0358 |         if isinstance(data, ValueError):
+0359 |             raise data
+0360 |
+0361 |         guide_count = sum([
+0362 |             "guided_json" in data and data["guided_json"] is not None,
+0363 |             "guided_regex" in data and data["guided_regex"] is not None,
+0364 |             "guided_choice" in data and data["guided_choice"] is not None
+0365 |         ])
+0366 |         # you can only use one kind of guided decoding
+0367 |         if guide_count > 1:
+0368 |             raise ValueError(
+0369 |                 "You can only use one kind of guided decoding "
+0370 |                 "('guided_json', 'guided_regex' or 'guided_choice').")
+0371 |         # you can only either use guided decoding or tools, not both
+0372 |         if guide_count > 1 and data.get("tool_choice",
+0373 |                                         "none") not in ("none", "auto"):
+0374 |             raise ValueError(
+0375 |                 "You can only either use guided decoding or tools, not both.")
+0376 |         return data
+0377 |
+0378 |     @model_validator(mode="before")
+0379 |     @classmethod
+0380 |     def check_tool_usage(cls, data):
+0381 |
+0382 |         # if "tool_choice" is not specified but tools are provided,
+0383 |         # default to "auto" tool_choice
+0384 |         if "tool_choice" not in data and data.get("tools"):
+0385 |             data["tool_choice"] = "auto"
+0386 |
+0387 |         # if "tool_choice" is specified -- validation
+0388 |         if "tool_choice" in data:
+0389 |
+0390 |             # ensure that if "tool choice" is specified, tools are present
+0391 |             if "tools" not in data or data["tools"] is None:
+0392 |                 raise ValueError(
+0393 |                     "When using `tool_choice`, `tools` must be set.")
+0394 |
+0395 |             # make sure that tool choice is either a named tool
+0396 |             # OR that it's set to "auto"
+0397 |             if data["tool_choice"] != "auto" and not isinstance(
+0398 |                     data["tool_choice"], dict):
+0399 |                 raise ValueError(
+0400 |                     "`tool_choice` must either be a named tool or \"auto\". "
+0401 |                     "`tool_choice=\"none\" is not supported.")
+0402 |
+0403 |             # ensure that if "tool_choice" is specified as an object,
+0404 |             # it matches a valid tool
+0405 |             if isinstance(data["tool_choice"], dict):
+0406 |                 valid_tool = False
+0407 |                 specified_function = data["tool_choice"]["function"]
+0408 |                 if not specified_function:
+0409 |                     raise ValueError(
+0410 |                         "Incorrectly formatted `tool_choice`. Should be like "
+0411 |                         "`{\"type\": \"function\","
+0412 |                         " \"function\": {\"name\": \"my_function\"}}`")
+0413 |                 specified_function_name = specified_function["name"]
+0414 |                 if not specified_function_name:
+0415 |                     raise ValueError(
+0416 |                         "Incorrectly formatted `tool_choice`. Should be like "
+0417 |                         "`{\"type\": \"function\", "
+0418 |                         "\"function\": {\"name\": \"my_function\"}}`")
+0419 |                 for tool in data["tools"]:
+0420 |                     if tool["function"]["name"] == specified_function_name:
+0421 |                         valid_tool = True
+0422 |                         break
+0423 |                 if not valid_tool:
+0424 |                     raise ValueError(
+0425 |                         "The tool specified in `tool_choice` does not match any"
+0426 |                         " of the specified `tools`")
+0427 |         return data
+0428 |
+0429 |
+0430 | class CompletionRequest(OpenAIBaseModel):
+0431 |     # Ordered by official OpenAI API documentation
+0432 |     # https://platform.openai.com/docs/api-reference/completions/create
+0433 |     model: str
+0434 |     prompt: Union[List[int], List[List[int]], str, List[str]]
+0435 |     best_of: Optional[int] = None
+0436 |     echo: Optional[bool] = False
+0437 |     frequency_penalty: Optional[float] = 0.0
+0438 |     logit_bias: Optional[Dict[str, float]] = None
+0439 |     logprobs: Optional[int] = None
+0440 |     max_tokens: Optional[int] = 16
+0441 |     n: int = 1
+0442 |     presence_penalty: Optional[float] = 0.0
+0443 |     seed: Optional[int] = Field(None, ge=_LONG_INFO.min, le=_LONG_INFO.max)
+0444 |     stop: Optional[Union[str, List[str]]] = Field(default_factory=list)
+0445 |     stream: Optional[bool] = False
+0446 |     stream_options: Optional[StreamOptions] = None
+0447 |     suffix: Optional[str] = None
+0448 |     temperature: Optional[float] = 1.0
+0449 |     top_p: Optional[float] = 1.0
+0450 |     user: Optional[str] = None
+0451 |
+0452 |     # doc: begin-completion-sampling-params
+0453 |     use_beam_search: bool = False
+0454 |     top_k: int = -1
+0455 |     min_p: float = 0.0
+0456 |     repetition_penalty: float = 1.0
+0457 |     length_penalty: float = 1.0
+0458 |     early_stopping: bool = False
+0459 |     stop_token_ids: Optional[List[int]] = Field(default_factory=list)
+0460 |     include_stop_str_in_output: bool = False
+0461 |     ignore_eos: bool = False
+0462 |     min_tokens: int = 0
+0463 |     skip_special_tokens: bool = True
+0464 |     spaces_between_special_tokens: bool = True
+0465 |     truncate_prompt_tokens: Optional[Annotated[int, Field(ge=1)]] = None
+0466 |     allowed_token_ids: Optional[List[int]] = None
+0467 |     prompt_logprobs: Optional[int] = None
+0468 |     # doc: end-completion-sampling-params
+0469 |
+0470 |     # doc: begin-completion-extra-params
+0471 |     add_special_tokens: bool = Field(
+0472 |         default=True,
+0473 |         description=(
+0474 |             "If true (the default), special tokens (e.g. BOS) will be added to "
+0475 |             "the prompt."),
+0476 |     )
+0477 |     response_format: Optional[ResponseFormat] = Field(
+0478 |         default=None,
+0479 |         description=
+0480 |         ("Similar to chat completion, this parameter specifies the format of "
+0481 |          "output. Only {'type': 'json_object'} or {'type': 'text' } is "
+0482 |          "supported."),
+0483 |     )
+0484 |     guided_json: Optional[Union[str, dict, BaseModel]] = Field(
+0485 |         default=None,
+0486 |         description="If specified, the output will follow the JSON schema.",
+0487 |     )
+0488 |     guided_regex: Optional[str] = Field(
+0489 |         default=None,
+0490 |         description=(
+0491 |             "If specified, the output will follow the regex pattern."),
+0492 |     )
+0493 |     guided_choice: Optional[List[str]] = Field(
+0494 |         default=None,
+0495 |         description=(
+0496 |             "If specified, the output will be exactly one of the choices."),
+0497 |     )
+0498 |     guided_grammar: Optional[str] = Field(
+0499 |         default=None,
+0500 |         description=(
+0501 |             "If specified, the output will follow the context free grammar."),
+0502 |     )
+0503 |     guided_decoding_backend: Optional[str] = Field(
+0504 |         default=None,
+0505 |         description=(
+0506 |             "If specified, will override the default guided decoding backend "
+0507 |             "of the server for this specific request. If set, must be one of "
+0508 |             "'outlines' / 'lm-format-enforcer'"))
+0509 |     guided_whitespace_pattern: Optional[str] = Field(
+0510 |         default=None,
+0511 |         description=(
+0512 |             "If specified, will override the default whitespace pattern "
+0513 |             "for guided json decoding."))
+0514 |
+0515 |     # doc: end-completion-extra-params
+0516 |
+0517 |     def to_sampling_params(
+0518 |             self, tokenizer: AnyTokenizer,
+0519 |             guided_decode_logits_processor: Optional[LogitsProcessor],
+0520 |             default_max_tokens: int) -> SamplingParams:
+0521 |         max_tokens = self.max_tokens
+0522 |         if max_tokens is None:
+0523 |             max_tokens = default_max_tokens
+0524 |
+0525 |         prompt_logprobs = self.prompt_logprobs
+0526 |         if prompt_logprobs is None and self.echo:
+0527 |             prompt_logprobs = self.logprobs
+0528 |
+0529 |         echo_without_generation = self.echo and self.max_tokens == 0
+0530 |
+0531 |         logits_processors = get_logits_processors(
+0532 |             logit_bias=self.logit_bias,
+0533 |             allowed_token_ids=self.allowed_token_ids,
+0534 |             tokenizer=tokenizer,
+0535 |         )
+0536 |         if guided_decode_logits_processor:
+0537 |             logits_processors.append(guided_decode_logits_processor)
+0538 |
+0539 |         return SamplingParams.from_optional(
+0540 |             n=self.n,
+0541 |             best_of=self.best_of,
+0542 |             presence_penalty=self.presence_penalty,
+0543 |             frequency_penalty=self.frequency_penalty,
+0544 |             repetition_penalty=self.repetition_penalty,
+0545 |             temperature=self.temperature,
+0546 |             top_p=self.top_p,
+0547 |             top_k=self.top_k,
+0548 |             min_p=self.min_p,
+0549 |             seed=self.seed,
+0550 |             stop=self.stop,
+0551 |             stop_token_ids=self.stop_token_ids,
+0552 |             logprobs=self.logprobs,
+0553 |             ignore_eos=self.ignore_eos,
+0554 |             max_tokens=max_tokens if not echo_without_generation else 1,
+0555 |             min_tokens=self.min_tokens,
+0556 |             use_beam_search=self.use_beam_search,
+0557 |             early_stopping=self.early_stopping,
+0558 |             prompt_logprobs=prompt_logprobs,
+0559 |             skip_special_tokens=self.skip_special_tokens,
+0560 |             spaces_between_special_tokens=self.spaces_between_special_tokens,
+0561 |             include_stop_str_in_output=self.include_stop_str_in_output,
+0562 |             length_penalty=self.length_penalty,
+0563 |             logits_processors=logits_processors,
+0564 |             truncate_prompt_tokens=self.truncate_prompt_tokens,
+0565 |             output_kind=RequestOutputKind.DELTA if self.stream \
+0566 |                 else RequestOutputKind.FINAL_ONLY,
+0567 |         )
+0568 |
+0569 |     @model_validator(mode="before")
+0570 |     @classmethod
+0571 |     def check_guided_decoding_count(cls, data):
+0572 |         guide_count = sum([
+0573 |             "guided_json" in data and data["guided_json"] is not None,
+0574 |             "guided_regex" in data and data["guided_regex"] is not None,
+0575 |             "guided_choice" in data and data["guided_choice"] is not None
+0576 |         ])
+0577 |         if guide_count > 1:
+0578 |             raise ValueError(
+0579 |                 "You can only use one kind of guided decoding "
+0580 |                 "('guided_json', 'guided_regex' or 'guided_choice').")
+0581 |         return data
+0582 |
+0583 |     @model_validator(mode="before")
+0584 |     @classmethod
+0585 |     def check_logprobs(cls, data):
+0586 |         if (prompt_logprobs := data.get("prompt_logprobs")) is not None:
+0587 |             if data.get("stream") and prompt_logprobs > 0:
+0588 |                 raise ValueError(
+0589 |                     "`prompt_logprobs` are not available when `stream=True`.")
+0590 |
+0591 |             if prompt_logprobs < 0:
+0592 |                 raise ValueError("`prompt_logprobs` must be a positive value.")
+0593 |
+0594 |         if (logprobs := data.get("logprobs")) is not None and logprobs < 0:
+0595 |             raise ValueError("`logprobs` must be a positive value.")
+0596 |
+0597 |         return data
+0598 |
+0599 |     @model_validator(mode="before")
+0600 |     @classmethod
+0601 |     def validate_stream_options(cls, data):
+0602 |         if data.get("stream_options") and not data.get("stream"):
+0603 |             raise ValueError(
+0604 |                 "Stream options can only be defined when `stream=True`.")
+0605 |
+0606 |         return data
+0607 |
+0608 |
+0609 | class EmbeddingRequest(OpenAIBaseModel):
+0610 |     # Ordered by official OpenAI API documentation
+0611 |     # https://platform.openai.com/docs/api-reference/embeddings
+0612 |     model: str
+0613 |     input: Union[List[int], List[List[int]], str, List[str]]
+0614 |     encoding_format: Literal["float", "base64"] = "float"
+0615 |     dimensions: Optional[int] = None
+0616 |     user: Optional[str] = None
+0617 |
+0618 |     # doc: begin-embedding-pooling-params
+0619 |     additional_data: Optional[Any] = None
+0620 |
+0621 |     # doc: end-embedding-pooling-params
+0622 |
+0623 |     def to_pooling_params(self):
+0624 |         return PoolingParams(additional_data=self.additional_data)
+0625 |
+0626 |
+0627 | class CompletionLogProbs(OpenAIBaseModel):
+0628 |     text_offset: List[int] = Field(default_factory=list)
+0629 |     token_logprobs: List[Optional[float]] = Field(default_factory=list)
+0630 |     tokens: List[str] = Field(default_factory=list)
+0631 |     top_logprobs: List[Optional[Dict[str,
+0632 |                                      float]]] = Field(default_factory=list)
+0633 |
+0634 |
+0635 | class CompletionResponseChoice(OpenAIBaseModel):
+0636 |     index: int
+0637 |     text: str
+0638 |     logprobs: Optional[CompletionLogProbs] = None
+0639 |     finish_reason: Optional[str] = None
+0640 |     stop_reason: Optional[Union[int, str]] = Field(
+0641 |         default=None,
+0642 |         description=(
+0643 |             "The stop string or token id that caused the completion "
+0644 |             "to stop, None if the completion finished for some other reason "
+0645 |             "including encountering the EOS token"),
+0646 |     )
+0647 |     prompt_logprobs: Optional[List[Optional[Dict[int, Logprob]]]] = None
+0648 |
+0649 |
+0650 | class CompletionResponse(OpenAIBaseModel):
+0651 |     id: str = Field(default_factory=lambda: f"cmpl-{random_uuid()}")
+0652 |     object: str = "text_completion"
+0653 |     created: int = Field(default_factory=lambda: int(time.time()))
+0654 |     model: str
+0655 |     choices: List[CompletionResponseChoice]
+0656 |     usage: UsageInfo
+0657 |
+0658 |
+0659 | class CompletionResponseStreamChoice(OpenAIBaseModel):
+0660 |     index: int
+0661 |     text: str
+0662 |     logprobs: Optional[CompletionLogProbs] = None
+0663 |     finish_reason: Optional[str] = None
+0664 |     stop_reason: Optional[Union[int, str]] = Field(
+0665 |         default=None,
+0666 |         description=(
+0667 |             "The stop string or token id that caused the completion "
+0668 |             "to stop, None if the completion finished for some other reason "
+0669 |             "including encountering the EOS token"),
+0670 |     )
+0671 |
+0672 |
+0673 | class CompletionStreamResponse(OpenAIBaseModel):
+0674 |     id: str = Field(default_factory=lambda: f"cmpl-{random_uuid()}")
+0675 |     object: str = "text_completion"
+0676 |     created: int = Field(default_factory=lambda: int(time.time()))
+0677 |     model: str
+0678 |     choices: List[CompletionResponseStreamChoice]
+0679 |     usage: Optional[UsageInfo] = Field(default=None)
+0680 |
+0681 |
+0682 | class EmbeddingResponseData(OpenAIBaseModel):
+0683 |     index: int
+0684 |     object: str = "embedding"
+0685 |     embedding: Union[List[float], str]
+0686 |
+0687 |
+0688 | class EmbeddingResponse(OpenAIBaseModel):
+0689 |     id: str = Field(default_factory=lambda: f"cmpl-{random_uuid()}")
+0690 |     object: str = "list"
+0691 |     created: int = Field(default_factory=lambda: int(time.time()))
+0692 |     model: str
+0693 |     data: List[EmbeddingResponseData]
+0694 |     usage: UsageInfo
+0695 |
+0696 |
+0697 | class FunctionCall(OpenAIBaseModel):
+0698 |     name: str
+0699 |     arguments: str
+0700 |
+0701 |
+0702 | class ToolCall(OpenAIBaseModel):
+0703 |     id: str = Field(default_factory=lambda: f"chatcmpl-tool-{random_uuid()}")
+0704 |     type: Literal["function"] = "function"
+0705 |     function: FunctionCall
+0706 |
+0707 |
+0708 | class DeltaFunctionCall(BaseModel):
+0709 |     name: Optional[str] = None
+0710 |     arguments: Optional[str] = None
+0711 |
+0712 |
+0713 | # a tool call delta where everything is optional
+0714 | class DeltaToolCall(OpenAIBaseModel):
+0715 |     id: str = Field(default_factory=lambda: f"chatcmpl-tool-{random_uuid()}")
+0716 |     type: Literal["function"] = "function"
+0717 |     index: int
+0718 |     function: Optional[DeltaFunctionCall] = None
+0719 |
+0720 |
+0721 | class ExtractedToolCallInformation(BaseModel):
+0722 |     # indicate if tools were called
+0723 |     tools_called: bool
+0724 |
+0725 |     # extracted tool calls
+0726 |     tool_calls: List[ToolCall]
+0727 |
+0728 |     # content - per OpenAI spec, content AND tool calls can be returned rarely
+0729 |     # But some models will do this intentionally
+0730 |     content: Optional[str] = None
+0731 |
+0732 |
+0733 | class ChatMessage(OpenAIBaseModel):
+0734 |     role: str
+0735 |     content: Optional[str] = None
+0736 |     tool_calls: List[ToolCall] = Field(default_factory=list)
+0737 |
+0738 |
+0739 | class ChatCompletionLogProb(OpenAIBaseModel):
+0740 |     token: str
+0741 |     logprob: float = -9999.0
+0742 |     bytes: Optional[List[int]] = None
+0743 |
+0744 |
+0745 | class ChatCompletionLogProbsContent(ChatCompletionLogProb):
+0746 |     top_logprobs: List[ChatCompletionLogProb] = Field(default_factory=list)
+0747 |
+0748 |
+0749 | class ChatCompletionLogProbs(OpenAIBaseModel):
+0750 |     content: Optional[List[ChatCompletionLogProbsContent]] = None
+0751 |
+0752 |
+0753 | class ChatCompletionResponseChoice(OpenAIBaseModel):
+0754 |     index: int
+0755 |     message: ChatMessage
+0756 |     logprobs: Optional[ChatCompletionLogProbs] = None
+0757 |     # per OpenAI spec this is the default
+0758 |     finish_reason: Optional[str] = "stop"
+0759 |     # not part of the OpenAI spec but included in vLLM for legacy reasons
+0760 |     stop_reason: Optional[Union[int, str]] = None
+0761 |
+0762 |
+0763 | class ChatCompletionResponse(OpenAIBaseModel):
+0764 |     id: str = Field(default_factory=lambda: f"chatcmpl-{random_uuid()}")
+0765 |     object: Literal["chat.completion"] = "chat.completion"
+0766 |     created: int = Field(default_factory=lambda: int(time.time()))
+0767 |     model: str
+0768 |     choices: List[ChatCompletionResponseChoice]
+0769 |     usage: UsageInfo
+0770 |     prompt_logprobs: Optional[List[Optional[Dict[int, Logprob]]]] = None
+0771 |
+0772 |
+0773 | class DeltaMessage(OpenAIBaseModel):
+0774 |     role: Optional[str] = None
+0775 |     content: Optional[str] = None
+0776 |     tool_calls: List[DeltaToolCall] = Field(default_factory=list)
+0777 |
+0778 |
+0779 | class ChatCompletionResponseStreamChoice(OpenAIBaseModel):
+0780 |     index: int
+0781 |     delta: DeltaMessage
+0782 |     logprobs: Optional[ChatCompletionLogProbs] = None
+0783 |     finish_reason: Optional[str] = None
+0784 |     stop_reason: Optional[Union[int, str]] = None
+0785 |
+0786 |
+0787 | class ChatCompletionStreamResponse(OpenAIBaseModel):
+0788 |     id: str = Field(default_factory=lambda: f"chatcmpl-{random_uuid()}")
+0789 |     object: Literal["chat.completion.chunk"] = "chat.completion.chunk"
+0790 |     created: int = Field(default_factory=lambda: int(time.time()))
+0791 |     model: str
+0792 |     choices: List[ChatCompletionResponseStreamChoice]
+0793 |     usage: Optional[UsageInfo] = Field(default=None)
+0794 |
+0795 |
+0796 | class BatchRequestInput(OpenAIBaseModel):
+0797 |     """
+0798 |     The per-line object of the batch input file.
+0799 |
+0800 |     NOTE: Currently only the `/v1/chat/completions` endpoint is supported.
+0801 |     """
+0802 |
+0803 |     # A developer-provided per-request id that will be used to match outputs to
+0804 |     # inputs. Must be unique for each request in a batch.
+0805 |     custom_id: str
+0806 |
+0807 |     # The HTTP method to be used for the request. Currently only POST is
+0808 |     # supported.
+0809 |     method: str
+0810 |
+0811 |     # The OpenAI API relative URL to be used for the request. Currently
+0812 |     # /v1/chat/completions is supported.
+0813 |     url: str
+0814 |
+0815 |     # The parameters of the request.
+0816 |     body: Union[ChatCompletionRequest, EmbeddingRequest]
+0817 |
+0818 |
+0819 | class BatchResponseData(OpenAIBaseModel):
+0820 |     # HTTP status code of the response.
+0821 |     status_code: int = 200
+0822 |
+0823 |     # An unique identifier for the API request.
+0824 |     request_id: str
+0825 |
+0826 |     # The body of the response.
+0827 |     body: Optional[Union[ChatCompletionResponse, EmbeddingResponse]] = None
+0828 |
+0829 |
+0830 | class BatchRequestOutput(OpenAIBaseModel):
+0831 |     """
+0832 |     The per-line object of the batch output and error files
+0833 |     """
+0834 |
+0835 |     id: str
+0836 |
+0837 |     # A developer-provided per-request id that will be used to match outputs to
+0838 |     # inputs.
+0839 |     custom_id: str
+0840 |
+0841 |     response: Optional[BatchResponseData]
+0842 |
+0843 |     # For requests that failed with a non-HTTP error, this will contain more
+0844 |     # information on the cause of the failure.
+0845 |     error: Optional[Any]
+0846 |
+0847 |
+0848 | class TokenizeCompletionRequest(OpenAIBaseModel):
+0849 |     model: str
+0850 |     prompt: str
+0851 |
+0852 |     add_special_tokens: bool = Field(default=True)
+0853 |
+0854 |
+0855 | class TokenizeChatRequest(OpenAIBaseModel):
+0856 |     model: str
+0857 |     messages: List[ChatCompletionMessageParam]
+0858 |
+0859 |     add_generation_prompt: bool = Field(default=True)
+0860 |     add_special_tokens: bool = Field(default=False)
+0861 |
+0862 |
+0863 | TokenizeRequest = Union[TokenizeCompletionRequest, TokenizeChatRequest]
+0864 |
+0865 |
+0866 | class TokenizeResponse(OpenAIBaseModel):
+0867 |     count: int
+0868 |     max_model_len: int
+0869 |     tokens: List[int]
+0870 |
+0871 |
+0872 | class DetokenizeRequest(OpenAIBaseModel):
+0873 |     model: str
+0874 |     tokens: List[int]
+0875 |
+0876 |
+0877 | class DetokenizeResponse(OpenAIBaseModel):
+0878 |     prompt: str
+0879 |
+0880 |
+0881 | class LoadLoraAdapterRequest(BaseModel):
+0882 |     lora_name: str
+0883 |     lora_path: str
+0884 |
+0885 |
+0886 | class UnloadLoraAdapterRequest(BaseModel):
+0887 |     lora_name: str
+0888 |     lora_int_id: Optional[int] = Field(default=None)

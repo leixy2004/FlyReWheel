@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-live-github-pr-history-range-verification",
+  "date": "2026-10-02",
+  "result": "corrected-preview-passed",
+  "execution": {
+    "baseCommit": "f12d108b95e796fd83a2e0037acfd898ab97f41b",
+    "sourceState": "uncommitted query and precision fix",
+    "transport": "@octokit/rest@22.0.1",
+    "cli": "node --import ./.flyrewheel/history-range-verification-2026-10-02/audit-preview.mjs dist/cli.js github-pr history preview --repository vllm-project/vllm --created-from 2024-09-18T15:17:18Z --created-before 2024-09-18T16:17:18Z --status merged --max-pulls 2 --max-pages 1 --out .flyrewheel/history-range-verification-2026-10-02/live-plan.json",
+    "authentication": "none",
+    "transportObservation": "Native fetch pass-through with fixed endpoint/query and one-GET guard; no mocked live response",
+    "exitCode": 0,
+    "sourceHistoryModuleSha256": "0d443e69298b335b834058e6aec4be744761c6d305b6dcbedf7f90d2ac40da7a",
+    "testHistoryModuleSha256": "d21aeca27075e10265c14915eddd705cee0644e27d1557fb5b0ff111f8cca515",
+    "compiledCliSha256": "c2a38e025a05a2ba1b50cd5d12df1f6c502da400cf7911cb2037c5f6d67bb8bb",
+    "compiledHistoryModuleSha256": "c74b87507bfa16339a04fe5613414cc37cc21d281560113021dabe7a215f7986"
+  },
+  "query": {
+    "q": "repo:vllm-project/vllm is:pr created:2024-09-18T15:17:18Z..2024-09-18T16:17:17Z is:merged",
+    "sort": "created",
+    "order": "asc",
+    "perPage": 5,
+    "page": 1,
+    "conversion": "Single inclusive [from, before-minus-one-second] range; exact local [from, before) and status/identity validation unchanged"
+  },
+  "actual": {
+    "attemptedGets": 1,
+    "successfulHttpResponses": 1,
+    "statuses": [
+      200
+    ],
+    "selectedPullNumbers": [
+      8568
+    ],
+    "captureAttempts": 0,
+    "modelCalls": 0,
+    "githubWrites": 0,
+    "uploads": 0,
+    "capturedBlobs": 0,
+    "databaseCreated": false
+  },
+  "observation": [
+    {
+      "event": "attempt",
+      "at": "2026-10-02T02:41:52.570Z",
+      "method": "GET",
+      "url": "https://api.github.com/search/issues?q=repo%3Avllm-project%2Fvllm%20is%3Apr%20created%3A2024-09-18T15%3A17%3A18Z..2024-09-18T16%3A17%3A17Z%20is%3Amerged&sort=created&order=asc&per_page=5&page=1",
+      "authorizationPresent": false,
+      "redirect": "error"
+    },
+    {
+      "event": "response",
+      "at": "2026-10-02T02:41:59.702Z",
+      "status": 200
+    },
+    {
+      "event": "search-observation",
+      "totalCount": 1,
+      "incompleteResults": false,
+      "rows": [
+        {
+          "number": 8568,
+          "htmlUrl": "https://github.com/vllm-project/vllm/pull/8568",
+          "repositoryUrl": "https://api.github.com/repos/vllm-project/vllm",
+          "createdAt": "2024-09-18T15:17:18Z",
+          "state": "closed",
+          "mergedAt": "2024-09-26T23:23:17Z"
+        }
+      ]
+    }
+  ],
+  "planPackage": {
+    "digest": "7e4aa5524e17d05f42819e5e0049cfbebd2383e66d7219ae1b8eec9c9e83099d",
+    "plan": {
+      "schemaVersion": 1,
+      "kind": "github-pr-history-plan",
+      "filter": {
+        "repository": "vllm-project/vllm",
+        "createdFrom": "2024-09-18T15:17:18Z",
+        "createdBefore": "2024-09-18T16:17:18Z",
+        "status": "merged",
+        "maxPulls": 2,
+        "maxPages": 1
+      },
+      "ordering": "created-ascending-then-number",
+      "pulls": [
+        {
+          "number": 8568,
+          "url": "https://github.com/vllm-project/vllm/pull/8568",
+          "title": "fix validation: Only set tool_choice `auto` if at least one tool is provided",
+          "createdAt": "2024-09-18T15:17:18Z",
+          "updatedAt": "2024-09-26T23:23:18Z",
+          "state": "closed",
+          "mergedAt": "2024-09-26T23:23:17Z"
+        }
+      ],
+      "discovery": {
+        "observedAt": "2026-10-02T02:41:59.710Z",
+        "pagesRead": 1,
+        "rowsRead": 1,
+        "reportedTotal": 1,
+        "incompleteResults": false,
+        "searchCapReached": false,
+        "hasMore": false,
+        "stopReason": "exhausted",
+        "coverage": "all-reported-search-results-observed",
+        "notes": [
+          "Current non-atomic GitHub search observation; search indexing, omissions, and movement can affect results.",
+          "Not a probability sample, historical review checkpoint, complete repository history, or semantic ground truth.",
+          "Creation-time ascending API order; retained rows sorted by creation time then PR number. Ties beyond a cap may vary.",
+          "Closed includes merged PRs. Creation window is inclusive from and exclusive before; it is not a merge-time window."
+        ]
+      }
+    },
+    "receipt": {
+      "kind": "package-integrity-only"
+    }
+  },
+  "preservedFailure": {
+    "file": "docs/evidence/github-pr-history-vllm-live-2026-10-02.json",
+    "sha256": "36877fb9dfdb3201293a92498b0364341929616b22d62911bf702a533d568051",
+    "ledgerSha256": "0b8537d71cb3763f7961c44af4d3dcee364f0ae348d56bc9c0d72c39e6b8f639",
+    "result": "Original repeated-created-qualifier query returned total 22309 and out-of-window PRs #1 through #5; strict validation rejected both original attempts",
+    "interpretation": "Same-window corrected-range preview establishes observed query compatibility; provider internal parsing of repeated qualifiers is not inferred as a universal API contract"
+  },
+  "checks": {
+    "typecheck": "passed",
+    "build": "passed",
+    "fullSuite": {
+      "passedTests": 627,
+      "files": 43,
+      "maxWorkers": 2,
+      "durationSeconds": 337.21
+    },
+    "focusedSuite": {
+      "passedTests": 52
+    },
+    "compiledOfflineCliSmoke": {
+      "mode": "offline-authored-transport-fixture",
+      "transport": "@octokit/rest@22.0.1",
+      "compiledCli": true,
+      "checked": [
+        "preview",
+        "import",
+        "partial-capture-exit-2",
+        "reopen-resume",
+        "exact-mining-link",
+        "show",
+        "list",
+        "zero-read-completed-resume"
+      ],
+      "externalNetworkRequests": 0,
+      "mockedGetRequests": 23,
+      "pullNumbers": [
+        7,
+        8
+      ],
+      "labels": "unknown-only",
+      "receipt": "package-integrity-only",
+      "modelExecution": "not_run"
+    },
+    "deploymentManifestValidation": "passed: 30 YAML documents",
+    "diffCheck": "passed",
+    "sourceHashesStableAcrossVerification": true,
+    "regressions": [
+      "Actual Octokit URL/query serialization",
+      "Preserved observed 2023 rows rejected under corrected query",
+      "Inclusive lower/last second accepted and exclusive upper rejected",
+      "One-second windows",
+      "Leap-day and year rollover",
+      "Offset normalization",
+      "Zero-only fractional representation retained",
+      "Nonzero and sub-millisecond bound/response fractions rejected",
+      "Existing partial search/cap/coverage validation unchanged"
+    ]
+  },
+  "localEvidence": {
+    "directory": ".flyrewheel/history-range-verification-2026-10-02",
+    "ledgerSha256": "7561994e25647a9bda51cb69cbd3b1e2cd8e9e0cfbeef6cb9a76aed839b58dcd",
+    "auditWrapperSha256": "a844919789b2266d53c80d76656b6b2560288713922251e18f8f1b00fa5aa59d",
+    "planFileSha256": "9f7ac88b25aee9707e79fc80e21f0c5b38bec3b6a8446a1e6a9d949a044aa5e2",
+    "fullSuiteLogSha256": "49061fd4ca537842900d72913b7283b35fa4f1834836412ed319682fc6984362",
+    "typecheckLogSha256": "f887d012b893b27b5f19086c00e39578bc837eeac8d4463e08b1eefcd656cf22",
+    "buildLogSha256": "887921f1394da21928a9e8da6ab7629242d8e2caebb32506f446d70107d8d217"
+  },
+  "primaryReferences": [
+    "https://docs.github.com/en/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates",
+    "https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests#search-by-when-an-issue-or-pull-request-was-created-or-last-updated"
+  ],
+  "limitations": [
+    "One bounded current search observation, not representative sampling or complete repository history",
+    "all-reported-search-results-observed refers only to this reported one-row search; indexing, omission and non-atomic changes remain possible",
+    "Whole-second API creation-time contract is explicit; unexpected fractional creation times fail closed rather than being rounded",
+    "No capture, database reopen/resume or mining request executed by this query-validation step; subsequent acquisition is separate",
+    "HTTP success and local audit logs are application observations, not signed provider attestations or wire-byte receipts",
+    "No authentication, model inference, target-repository execution, external writes, upload, publish or commit occurred"
+  ]
+}

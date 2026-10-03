@@ -1,0 +1,129 @@
+Retained upstream test source: tests/entrypoints/openai/test_chunked_prompt.py
+Not executed by this packet. Original line numbers follow.
+
+0001 | import openai  # use the official client for correctness check
+0002 | import pytest
+0003 | import pytest_asyncio
+0004 |
+0005 | from ...utils import RemoteOpenAIServer
+0006 |
+0007 | # any model with a chat template should work here
+0008 | MODEL_NAME = "HuggingFaceH4/zephyr-7b-beta"
+0009 |
+0010 |
+0011 | @pytest.fixture(scope="module")
+0012 | def server():
+0013 |     args = [
+0014 |         # use half precision for speed and memory savings in CI environment
+0015 |         "--dtype",
+0016 |         "bfloat16",
+0017 |         "--max-model-len",
+0018 |         "8192",
+0019 |         "--enforce-eager",
+0020 |         # lora config below
+0021 |         "--max-num-seqs",
+0022 |         "128",
+0023 |         "--enable-chunked-prefill",
+0024 |         "--max-num-batched-tokens",
+0025 |         "1000",
+0026 |         # large prompts create a lot of output
+0027 |         "--disable-log-requests",
+0028 |     ]
+0029 |
+0030 |     with RemoteOpenAIServer(MODEL_NAME, args) as remote_server:
+0031 |         yield remote_server
+0032 |
+0033 |
+0034 | @pytest_asyncio.fixture
+0035 | async def client(server):
+0036 |     async with server.get_async_client() as async_client:
+0037 |         yield async_client
+0038 |
+0039 |
+0040 | @pytest.mark.asyncio
+0041 | async def test_completion_stream_options_and_logprobs_with_long_prompts(
+0042 |         client: openai.AsyncOpenAI):
+0043 |     # Test stream with long prompt
+0044 |     prompt = "What is the capital of France?" * 400
+0045 |
+0046 |     stream = await client.completions.create(
+0047 |         model=MODEL_NAME,
+0048 |         prompt=prompt,
+0049 |         max_tokens=5,
+0050 |         temperature=0.0,
+0051 |         stream=True,
+0052 |         stream_options={
+0053 |             "include_usage": True,
+0054 |             "continuous_usage_stats": True,
+0055 |         },
+0056 |         logprobs=5,
+0057 |     )
+0058 |
+0059 |     tokens_received = 0
+0060 |     finished = False
+0061 |     async for chunk in stream:
+0062 |         assert chunk.usage.prompt_tokens >= 0
+0063 |         assert chunk.usage.completion_tokens >= 0
+0064 |         assert chunk.usage.total_tokens == (chunk.usage.prompt_tokens +
+0065 |                                             chunk.usage.completion_tokens)
+0066 |         if not finished:
+0067 |             tokens_received += 1
+0068 |             assert chunk.choices[0].text
+0069 |
+0070 |             if chunk.choices[0].finish_reason is not None:
+0071 |                 finished = True
+0072 |
+0073 |         if finished:
+0074 |             assert chunk.usage.completion_tokens == tokens_received
+0075 |
+0076 |
+0077 | @pytest.mark.asyncio
+0078 | async def test_chat_completion_stream_options_and_logprobs_with_long_prompts(
+0079 |         client: openai.AsyncOpenAI):
+0080 |     # Test stream with long prompt
+0081 |     messages = [{
+0082 |         "role": "system",
+0083 |         "content": "You are a helpful assistant."
+0084 |     }, {
+0085 |         "role": "user",
+0086 |         "content": "What is the capital of France?" * 400
+0087 |     }]
+0088 |     stream = await client.chat.completions.create(
+0089 |         model=MODEL_NAME,
+0090 |         messages=messages,
+0091 |         max_tokens=5,
+0092 |         temperature=0.0,
+0093 |         stream=True,
+0094 |         stream_options={
+0095 |             "include_usage": True,
+0096 |             "continuous_usage_stats": True,
+0097 |         },
+0098 |         logprobs=True,
+0099 |         top_logprobs=5,
+0100 |     )
+0101 |
+0102 |     tokens_received = 0
+0103 |     empty_chunks_received = 0
+0104 |     finished = False
+0105 |     async for chunk in stream:
+0106 |         assert chunk.usage.prompt_tokens >= 0
+0107 |         assert chunk.usage.completion_tokens >= 0
+0108 |         assert chunk.usage.total_tokens == (chunk.usage.prompt_tokens +
+0109 |                                             chunk.usage.completion_tokens)
+0110 |
+0111 |         if not finished:
+0112 |             if chunk.choices[0].delta.content == "":
+0113 |                 # when there is no tokens generated
+0114 |                 assert chunk.usage.completion_tokens == 0
+0115 |                 assert chunk.choices[0].logprobs is None
+0116 |                 empty_chunks_received += 1
+0117 |             else:
+0118 |                 tokens_received += 1
+0119 |
+0120 |             if chunk.choices[0].finish_reason is not None:
+0121 |                 finished = True
+0122 |
+0123 |         if finished:
+0124 |             assert chunk.usage.completion_tokens == tokens_received
+0125 |
+0126 |     assert empty_chunks_received <= 1

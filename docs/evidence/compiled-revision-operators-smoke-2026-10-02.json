@@ -1,0 +1,55 @@
+{
+  "mode": "compiled-authored-sdk-revision-generation",
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "requestDigest": "e9261f9bca859e311673625d3c4bd7002feff3f0f0f31a581323bb499a1d7cde",
+  "candidateDigest": "ae2d12bca6c6e328081093fa5bb1a8d98e49cf3c48344405bfca28458cd7d86c",
+  "ruleDigest": "96f95659aec548dc2b2c7b39f984d7a5b168c30d30dbaec2436e894cfc911b70",
+  "source": "fixture",
+  "protocol": "rule-revision-v2",
+  "sessionId": "compiled-revision-sdk",
+  "policyVersion": "diagnosis-operators-v1",
+  "operator": "boundary_update",
+  "persistedNonMutationOperators": [
+    "retain_rule",
+    "request_context",
+    "abstain"
+  ],
+  "diagnosisMutationMismatch": "rejected",
+  "protectedBoundaryEdit": "rejected",
+  "diagnosis": "model-proposal-not-ground-truth",
+  "comparison": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regression": {
+    "status": "regressed",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 1,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regressionAcceptance": "blocked",
+  "localDecision": "accept",
+  "humanVerdict": "Unknown",
+  "activation": "not_performed",
+  "reopenedIdentically": true,
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ]
+}

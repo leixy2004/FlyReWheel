@@ -1,0 +1,11 @@
+{
+  "package": "@ai-hero/sandcastle",
+  "version": "0.12.0",
+  "registry": "https://registry.npmjs.org/",
+  "tarball": "https://registry.npmjs.org/@ai-hero/sandcastle/-/sandcastle-0.12.0.tgz",
+  "integrity": "sha512-kdQ414rM8t1QiWeqZ3Klz4KSd0PqQG4bRVuqGpRDUomWhojSZkEAc1tbcEcThVmBEaHkCt8LmYR49vqEPNIoYQ==",
+  "npmGitHead": "e99f832f26dc9d245c019a9ddd19fa5dee792427",
+  "queriedAt": "2026-10-01T01:09:00Z",
+  "installLifecycleScripts": "disabled using --ignore-scripts and .npmrc",
+  "verification": "npm registry metadata, installed package exports/types/source, exact lockfile, offline npm ci and tests"
+}

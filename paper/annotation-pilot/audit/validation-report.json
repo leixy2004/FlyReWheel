@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "baseline_commit": "08bc3a8edc652a3397c2f8b05cd9cd0855b55213",
+  "outputs_verified": 44,
+  "input_files_verified": 25,
+  "first_pass_files": 17,
+  "cases": 4,
+  "first_pass_has_only_allowlisted_before_source_and_neutral_material": true,
+  "later_artifacts_in_first_pass": 0,
+  "blank_forms_have_no_annotator_or_judgments": true,
+  "provenance_manifest_sha256": "7399593dd00cdd6d526ea34b77fc2acb7e52e6a6dbdfb35581346e0922a6c393",
+  "new_human_annotations": 0,
+  "upstream_or_reproduction_code_executed": false,
+  "limits": "Exact allowlist/byte separation, not proof of semantic blinding, human independence, historical visibility, or source correctness."
+}

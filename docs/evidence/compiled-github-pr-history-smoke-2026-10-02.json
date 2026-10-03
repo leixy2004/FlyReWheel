@@ -1,0 +1,24 @@
+{
+  "mode": "offline-authored-transport-fixture",
+  "transport": "@octokit/rest@22.0.1",
+  "compiledCli": true,
+  "checked": [
+    "preview",
+    "import",
+    "partial-capture-exit-2",
+    "reopen-resume",
+    "exact-mining-link",
+    "show",
+    "list",
+    "zero-read-completed-resume"
+  ],
+  "externalNetworkRequests": 0,
+  "mockedGetRequests": 23,
+  "pullNumbers": [
+    7,
+    8
+  ],
+  "labels": "unknown-only",
+  "receipt": "package-integrity-only",
+  "modelExecution": "not_run"
+}

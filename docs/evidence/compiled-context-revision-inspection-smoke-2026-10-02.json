@@ -1,0 +1,87 @@
+{
+  "mode": "compiled-authored-sdk-context-revision-generation",
+  "evidencePolicyVersion": "selected-context-evidence-v1",
+  "repositoryContextBindings": [
+    {
+      "feedbackId": "compiled-fp",
+      "reviewId": "review_1fe7b8d2de2100820bcab4d821f5f31b6681f73c835a9c92fa6c7c34763d06ef",
+      "reviewDigest": "ff58ec86e4315f50196af4a396fd6c4ed1477528be26626f014cdee70180eefb",
+      "snapshotDigest": "8d8318ce7a2093102a603cb2099ceb4f04b1f1e7072306fd2cb0ad1c947ec888",
+      "repositoryContextDigests": [
+        "e344ce2f925649d9c3105e346117e1870c774f95a988e3672f9484be3e55131f"
+      ],
+      "evidenceRefs": [
+        "cb48d42445b027b2c44ec8f65a7e2cadbd4a791612f93697d34a9abf017eb73f"
+      ]
+    }
+  ],
+  "sourceRepositoryRemovedBeforeReopen": true,
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "requestDigest": "7c5e44129edb3a73efeb0d2decdea63bd06788398a6a7e992f74d7894d26a003",
+  "candidateDigest": "3ccc8c404066b321f81a86b513b6bf9a79205ce63b1e56139b8c7f50a4084275",
+  "ruleDigest": "9041f7f37db0c14688a337f2afe9759694012226e2c8e682f648829be0145c99",
+  "source": "fixture",
+  "protocol": "rule-revision-v3",
+  "sessionId": "compiled-revision-sdk",
+  "policyVersion": "diagnosis-operators-v1",
+  "operator": "boundary_update",
+  "persistedNonMutationOperators": [
+    "retain_rule",
+    "request_context",
+    "abstain"
+  ],
+  "diagnosisMutationMismatch": "rejected",
+  "protectedBoundaryEdit": "rejected",
+  "diagnosis": "model-proposal-not-ground-truth",
+  "comparison": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regression": {
+    "status": "regressed",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 1,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regressionAcceptance": "blocked",
+  "localDecision": "accept",
+  "humanVerdict": "Unknown",
+  "activation": "not_performed",
+  "reopenedIdentically": true,
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "inspectionVerification": {
+    "checks": 67,
+    "candidates": 1,
+    "outcomes": 3,
+    "repeatedJson": "byte-identical",
+    "outFiles": "byte-identical",
+    "filtersAndPagination": "passed",
+    "malformedAndMissingSelectors": "rejected",
+    "linkedComparisons": "exact-request-and-candidate-rule",
+    "recordsUnchanged": true,
+    "authoredExecutableRemoved": true,
+    "runtimeExecutionsDuringInspection": 0,
+    "networkAttempts": 0,
+    "modelExecution": "not_run",
+    "certification": "none"
+  }
+}

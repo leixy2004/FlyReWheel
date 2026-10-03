@@ -1,0 +1,637 @@
+0001 | import asyncio
+0002 | import time
+0003 | from functools import partial
+0004 | from typing import (Any, Dict, Iterable, List, Optional, Set, Tuple, Type,
+0005 |                     Union, AsyncIterator)
+0006 |
+0007 | from vllm.lora.request import LoRARequest
+0008 | from vllm.config import ModelConfig
+0009 | from vllm.engine.arg_utils import AsyncEngineArgs
+0010 | from vllm.engine.llm_engine import LLMEngine
+0011 | from vllm.engine.ray_utils import initialize_cluster, ray
+0012 | from vllm.logger import init_logger
+0013 | from vllm.outputs import RequestOutput
+0014 | from vllm.sampling_params import SamplingParams
+0015 |
+0016 | logger = init_logger(__name__)
+0017 |
+0018 |
+0019 | class AsyncEngineDeadError(RuntimeError):
+0020 |     pass
+0021 |
+0022 |
+0023 | def _raise_exception_on_finish(task: asyncio.Task,
+0024 |                                request_tracker: "RequestTracker") -> None:
+0025 |     msg = ("Task finished unexpectedly. This should never happen! "
+0026 |            "Please open an issue on Github.")
+0027 |     try:
+0028 |         try:
+0029 |             task.result()
+0030 |         except asyncio.CancelledError:
+0031 |             return
+0032 |         except Exception as exc:
+0033 |             raise AsyncEngineDeadError(
+0034 |                 msg + " See stack trace above for the actual cause.") from exc
+0035 |         raise AsyncEngineDeadError(msg)
+0036 |     except Exception as exc:
+0037 |         request_tracker.propagate_exception(exc)
+0038 |         raise exc
+0039 |
+0040 |
+0041 | class AsyncStream:
+0042 |     """A stream of RequestOutputs for a request that can be
+0043 |     iterated over asynchronously."""
+0044 |
+0045 |     def __init__(self, request_id: str) -> None:
+0046 |         self.request_id = request_id
+0047 |         self._queue = asyncio.Queue()
+0048 |         self._finished = False
+0049 |
+0050 |     def put(self, item: RequestOutput) -> None:
+0051 |         if self._finished:
+0052 |             return
+0053 |         self._queue.put_nowait(item)
+0054 |
+0055 |     def finish(self) -> None:
+0056 |         self._queue.put_nowait(StopAsyncIteration())
+0057 |         self._finished = True
+0058 |
+0059 |     @property
+0060 |     def finished(self) -> bool:
+0061 |         return self._finished
+0062 |
+0063 |     def __aiter__(self):
+0064 |         return self
+0065 |
+0066 |     async def __anext__(self) -> RequestOutput:
+0067 |         result = await self._queue.get()
+0068 |         if isinstance(result, Exception):
+0069 |             raise result
+0070 |         return result
+0071 |
+0072 |
+0073 | class RequestTracker:
+0074 |     """Synchronous abstraction for tracking requests."""
+0075 |
+0076 |     def __init__(self) -> None:
+0077 |         self._request_streams: Dict[str, AsyncStream] = {}
+0078 |         self._finished_requests: asyncio.Queue[str] = asyncio.Queue()
+0079 |         self._new_requests: asyncio.Queue[Tuple[AsyncStream,
+0080 |                                                 dict]] = asyncio.Queue()
+0081 |         self.new_requests_event = None
+0082 |
+0083 |     def __contains__(self, item):
+0084 |         return item in self._request_streams
+0085 |
+0086 |     def init_event(self):
+0087 |         self.new_requests_event = asyncio.Event()
+0088 |
+0089 |     def propagate_exception(self,
+0090 |                             exc: Exception,
+0091 |                             request_id: Optional[str] = None) -> None:
+0092 |         """Propagate an exception to request streams
+0093 |         (all if request_id is None)."""
+0094 |         if request_id is not None:
+0095 |             self._request_streams[request_id].put(exc)
+0096 |         else:
+0097 |             for stream in self._request_streams.values():
+0098 |                 stream.put(exc)
+0099 |
+0100 |     def process_request_output(self,
+0101 |                                request_output: RequestOutput,
+0102 |                                *,
+0103 |                                verbose: bool = False) -> None:
+0104 |         """Process a request output from the engine."""
+0105 |         request_id = request_output.request_id
+0106 |
+0107 |         self._request_streams[request_id].put(request_output)
+0108 |         if request_output.finished:
+0109 |             if verbose:
+0110 |                 logger.info(f"Finished request {request_id}.")
+0111 |             self.abort_request(request_id)
+0112 |
+0113 |     def add_request(self, request_id: str,
+0114 |                     **engine_add_request_kwargs) -> AsyncStream:
+0115 |         """Add a request to be sent to the engine on the next background
+0116 |         loop iteration."""
+0117 |         if request_id in self._request_streams:
+0118 |             raise KeyError(f"Request {request_id} already exists.")
+0119 |
+0120 |         stream = AsyncStream(request_id)
+0121 |         self._new_requests.put_nowait((stream, {
+0122 |             "request_id": request_id,
+0123 |             **engine_add_request_kwargs
+0124 |         }))
+0125 |
+0126 |         self.new_requests_event.set()
+0127 |
+0128 |         return stream
+0129 |
+0130 |     def abort_request(self, request_id: str, *, verbose: bool = False) -> None:
+0131 |         """Abort a request during next background loop iteration."""
+0132 |         if verbose:
+0133 |             logger.info(f"Aborted request {request_id}.")
+0134 |
+0135 |         self._finished_requests.put_nowait(request_id)
+0136 |
+0137 |         if request_id not in self._request_streams or self._request_streams[
+0138 |                 request_id].finished:
+0139 |             # The request has already finished or been aborted.
+0140 |             return
+0141 |
+0142 |         self._request_streams[request_id].finish()
+0143 |
+0144 |     def get_new_and_finished_requests(self) -> Tuple[List[Dict], Set[str]]:
+0145 |         """Get the new requests and finished requests to be
+0146 |         sent to the engine."""
+0147 |         new_requests: List[Dict] = []
+0148 |         finished_requests: Set[str] = set()
+0149 |
+0150 |         while not self._finished_requests.empty():
+0151 |             request_id = self._finished_requests.get_nowait()
+0152 |             finished_requests.add(request_id)
+0153 |             self._request_streams.pop(request_id, None)
+0154 |
+0155 |         while not self._new_requests.empty():
+0156 |             stream, new_request = self._new_requests.get_nowait()
+0157 |             if stream.request_id in finished_requests:
+0158 |                 # The request has already been aborted.
+0159 |                 stream.finish()
+0160 |                 continue
+0161 |             self._request_streams[stream.request_id] = stream
+0162 |             new_requests.append(new_request)
+0163 |
+0164 |         self.new_requests_event.clear()
+0165 |
+0166 |         return new_requests, finished_requests
+0167 |
+0168 |     async def wait_for_new_requests(self):
+0169 |         await self.new_requests_event.wait()
+0170 |
+0171 |
+0172 | class _AsyncLLMEngine(LLMEngine):
+0173 |     """Extension of LLMEngine to add async methods."""
+0174 |
+0175 |     async def step_async(self) -> List[RequestOutput]:
+0176 |         """Performs one decoding iteration and returns newly generated results.
+0177 |         The workers are ran asynchronously if possible.
+0178 |
+0179 |         This function performs one decoding iteration of the engine. It first
+0180 |         schedules the sequences to be executed in the next iteration and the
+0181 |         token blocks to be swapped in/out/copy. Then, it executes the model
+0182 |         and updates the scheduler with the model outputs. Finally, it decodes
+0183 |         the sequences and returns the newly generated results.
+0184 |         """
+0185 |         seq_group_metadata_list, scheduler_outputs = self.scheduler.schedule()
+0186 |
+0187 |         if not scheduler_outputs.is_empty():
+0188 |             # Execute the model.
+0189 |             all_outputs = await self._run_workers_async(
+0190 |                 "execute_model",
+0191 |                 driver_kwargs={
+0192 |                     "seq_group_metadata_list": seq_group_metadata_list,
+0193 |                     "blocks_to_swap_in": scheduler_outputs.blocks_to_swap_in,
+0194 |                     "blocks_to_swap_out": scheduler_outputs.blocks_to_swap_out,
+0195 |                     "blocks_to_copy": scheduler_outputs.blocks_to_copy,
+0196 |                 })
+0197 |
+0198 |             # Only the driver worker returns the sampling results.
+0199 |             output = all_outputs[0]
+0200 |         else:
+0201 |             output = []
+0202 |
+0203 |         return self._process_model_outputs(output, scheduler_outputs)
+0204 |
+0205 |     async def encode_request_async(
+0206 |         self,
+0207 |         request_id: str,  # pylint: disable=unused-argument
+0208 |         prompt: Optional[str],
+0209 |         prompt_token_ids: Optional[List[int]] = None,
+0210 |         lora_request: Optional[LoRARequest] = None,
+0211 |     ):
+0212 |         if prompt_token_ids is None:
+0213 |             assert prompt is not None
+0214 |             prompt_token_ids = await self.tokenizer.encode_async(
+0215 |                 request_id=request_id,
+0216 |                 prompt=prompt,
+0217 |                 lora_request=lora_request)
+0218 |         return prompt_token_ids
+0219 |
+0220 |     async def add_request_async(
+0221 |         self,
+0222 |         request_id: str,
+0223 |         prompt: Optional[str],
+0224 |         sampling_params: SamplingParams,
+0225 |         prompt_token_ids: Optional[List[int]] = None,
+0226 |         arrival_time: Optional[float] = None,
+0227 |         lora_request: Optional[LoRARequest] = None,
+0228 |         prefix_pos: Optional[int] = None,
+0229 |     ) -> None:
+0230 |         if lora_request is not None and not self.lora_config:
+0231 |             raise ValueError(f"Got lora_request {lora_request} but LoRA is "
+0232 |                              "not enabled!")
+0233 |         if arrival_time is None:
+0234 |             arrival_time = time.time()
+0235 |         prompt_token_ids = await self.encode_request_async(
+0236 |             request_id=request_id,
+0237 |             prompt=prompt,
+0238 |             prompt_token_ids=prompt_token_ids,
+0239 |             lora_request=lora_request)
+0240 |
+0241 |         return self.add_request(
+0242 |             request_id,
+0243 |             prompt=prompt,
+0244 |             prompt_token_ids=prompt_token_ids,
+0245 |             sampling_params=sampling_params,
+0246 |             arrival_time=arrival_time,
+0247 |             lora_request=lora_request,
+0248 |             prefix_pos=prefix_pos,
+0249 |         )
+0250 |
+0251 |     async def _run_workers_async(
+0252 |         self,
+0253 |         method: str,
+0254 |         *args,
+0255 |         driver_args: Optional[List[Any]] = None,
+0256 |         driver_kwargs: Optional[Dict[str, Any]] = None,
+0257 |         **kwargs,
+0258 |     ) -> Any:
+0259 |         """Runs the given method on all workers."""
+0260 |         coros = []
+0261 |
+0262 |         if driver_args is None:
+0263 |             driver_args = args
+0264 |         if driver_kwargs is None:
+0265 |             driver_kwargs = kwargs
+0266 |
+0267 |         # Run the driver worker asynchronously.
+0268 |         driver_executor = getattr(self.driver_worker, method)
+0269 |         coros.append(asyncio.get_event_loop().run_in_executor(
+0270 |             None, partial(driver_executor, *driver_args, **driver_kwargs)))
+0271 |
+0272 |         # Run the ray workers asynchronously.
+0273 |         for worker in self.workers:
+0274 |             coros.append(worker.execute_method.remote(method, *args, **kwargs))
+0275 |
+0276 |         all_outputs = await asyncio.gather(*coros)
+0277 |         return all_outputs
+0278 |
+0279 |
+0280 | class AsyncLLMEngine:
+0281 |     """An asynchronous wrapper for LLMEngine.
+0282 |
+0283 |     This class is used to wrap the LLMEngine class to make it asynchronous. It
+0284 |     uses asyncio to create a background loop that keeps processing incoming
+0285 |     requests. The LLMEngine is kicked by the generate method when there
+0286 |     are requests in the waiting queue. The generate method yields the outputs
+0287 |     from the LLMEngine to the caller.
+0288 |
+0289 |     NOTE: For the comprehensive list of arguments, see `LLMEngine`.
+0290 |
+0291 |     Args:
+0292 |         worker_use_ray: Whether to use Ray for model workers. Required for
+0293 |             distributed execution. Should be the same as
+0294 |             `parallel_config.worker_use_ray`.
+0295 |         engine_use_ray: Whether to make LLMEngine a Ray actor. If so, the
+0296 |             async frontend will be executed in a separate process as the
+0297 |             model workers.
+0298 |         log_requests: Whether to log the requests.
+0299 |         start_engine_loop: If True, the background task to run the engine
+0300 |             will be automatically started in the generate call.
+0301 |         *args: Arguments for LLMEngine.
+0302 |         *kwargs: Arguments for LLMEngine.
+0303 |     """
+0304 |
+0305 |     _engine_class: Type[_AsyncLLMEngine] = _AsyncLLMEngine
+0306 |
+0307 |     def __init__(self,
+0308 |                  worker_use_ray: bool,
+0309 |                  engine_use_ray: bool,
+0310 |                  *args,
+0311 |                  log_requests: bool = True,
+0312 |                  max_log_len: Optional[int] = None,
+0313 |                  start_engine_loop: bool = True,
+0314 |                  **kwargs) -> None:
+0315 |         self.worker_use_ray = worker_use_ray
+0316 |         self.engine_use_ray = engine_use_ray
+0317 |         self.log_requests = log_requests
+0318 |         self.max_log_len = max_log_len
+0319 |         self.engine = self._init_engine(*args, **kwargs)
+0320 |
+0321 |         self.background_loop = None
+0322 |         # We need to keep a reference to unshielded
+0323 |         # task as well to prevent it from being garbage
+0324 |         # collected
+0325 |         self._background_loop_unshielded = None
+0326 |         self.start_engine_loop = start_engine_loop
+0327 |         self._request_tracker = RequestTracker()
+0328 |
+0329 |     @property
+0330 |     def is_running(self) -> bool:
+0331 |         return (self.background_loop is not None
+0332 |                 and not self.background_loop.done())
+0333 |
+0334 |     def start_background_loop(self) -> None:
+0335 |         """Start the background loop."""
+0336 |         if self.is_running:
+0337 |             raise RuntimeError("Background loop is already running.")
+0338 |         self._request_tracker.init_event()
+0339 |
+0340 |         self._background_loop_unshielded = asyncio.get_event_loop(
+0341 |         ).create_task(self.run_engine_loop())
+0342 |         self._background_loop_unshielded.add_done_callback(
+0343 |             partial(_raise_exception_on_finish,
+0344 |                     request_tracker=self._request_tracker))
+0345 |         self.background_loop = asyncio.shield(self._background_loop_unshielded)
+0346 |
+0347 |     def _init_engine(self, *args,
+0348 |                      **kwargs) -> Union[_AsyncLLMEngine, "ray.ObjectRef"]:
+0349 |         if not self.engine_use_ray:
+0350 |             engine_class = self._engine_class
+0351 |         elif self.worker_use_ray:
+0352 |             engine_class = ray.remote(num_cpus=0)(self._engine_class).remote
+0353 |         else:
+0354 |             # FIXME(woosuk): This is a bit hacky. Be careful when changing the
+0355 |             # order of the arguments.
+0356 |             cache_config = args[1]
+0357 |             parallel_config = args[2]
+0358 |             if parallel_config.tensor_parallel_size == 1:
+0359 |                 num_gpus = cache_config.gpu_memory_utilization
+0360 |             else:
+0361 |                 num_gpus = 1
+0362 |             engine_class = ray.remote(num_gpus=num_gpus)(
+0363 |                 self._engine_class).remote
+0364 |         return engine_class(*args, **kwargs)
+0365 |
+0366 |     async def engine_step(self) -> bool:
+0367 |         """Kick the engine to process the waiting requests.
+0368 |
+0369 |         Returns True if there are in-progress requests."""
+0370 |
+0371 |         new_requests, finished_requests = (
+0372 |             self._request_tracker.get_new_and_finished_requests())
+0373 |
+0374 |         for new_request in new_requests:
+0375 |             # Add the request into the vLLM engine's waiting queue.
+0376 |             # TODO: Maybe add add_request_batch to reduce Ray overhead
+0377 |             if self.engine_use_ray:
+0378 |                 await self.engine.add_request.remote(**new_request)
+0379 |             else:
+0380 |                 await self.engine.add_request_async(**new_request)
+0381 |
+0382 |         if finished_requests:
+0383 |             await self._engine_abort(finished_requests)
+0384 |
+0385 |         if self.engine_use_ray:
+0386 |             request_outputs = await self.engine.step.remote()
+0387 |         else:
+0388 |             request_outputs = await self.engine.step_async()
+0389 |
+0390 |         # Put the outputs into the corresponding streams.
+0391 |         for request_output in request_outputs:
+0392 |             self._request_tracker.process_request_output(
+0393 |                 request_output, verbose=self.log_requests)
+0394 |
+0395 |         return len(request_outputs) > 0
+0396 |
+0397 |     async def _engine_abort(self, request_ids: Iterable[str]):
+0398 |         if self.engine_use_ray:
+0399 |             await self.engine.abort_request.remote(request_ids)
+0400 |         else:
+0401 |             self.engine.abort_request(request_ids)
+0402 |
+0403 |     async def run_engine_loop(self):
+0404 |         # Initialize the RequestTracker here so it uses the right event loop.
+0405 |         has_requests_in_progress = False
+0406 |         while True:
+0407 |             if not has_requests_in_progress:
+0408 |                 await self._request_tracker.wait_for_new_requests()
+0409 |             has_requests_in_progress = await self.engine_step()
+0410 |             await asyncio.sleep(0)
+0411 |
+0412 |     async def add_request(
+0413 |         self,
+0414 |         request_id: str,
+0415 |         prompt: Optional[str],
+0416 |         sampling_params: SamplingParams,
+0417 |         prompt_token_ids: Optional[List[int]] = None,
+0418 |         arrival_time: Optional[float] = None,
+0419 |         lora_request: Optional[LoRARequest] = None,
+0420 |         prefix_pos: Optional[int] = None,
+0421 |     ) -> AsyncStream:
+0422 |         if self.log_requests:
+0423 |             shortened_prompt = prompt
+0424 |             shortened_token_ids = prompt_token_ids
+0425 |             if self.max_log_len is not None:
+0426 |                 if shortened_prompt is not None:
+0427 |                     shortened_prompt = shortened_prompt[:self.max_log_len]
+0428 |                 if shortened_token_ids is not None:
+0429 |                     shortened_token_ids = shortened_token_ids[:self.
+0430 |                                                               max_log_len]
+0431 |             logger.info(f"Received request {request_id}: "
+0432 |                         f"prompt: {shortened_prompt!r}, "
+0433 |                         f"prefix_pos: {prefix_pos},"
+0434 |                         f"sampling params: {sampling_params}, "
+0435 |                         f"prompt token ids: {shortened_token_ids}, "
+0436 |                         f"lora_request: {lora_request}.")
+0437 |
+0438 |         if not self.is_running:
+0439 |             if self.start_engine_loop:
+0440 |                 self.start_background_loop()
+0441 |             else:
+0442 |                 raise AsyncEngineDeadError(
+0443 |                     "Background loop is not running. If it was running, "
+0444 |                     "inspect the output to find the stacktrace of the "
+0445 |                     "error that caused the background loop to stop "
+0446 |                     "(AsyncEngineDeadError).")
+0447 |
+0448 |         if arrival_time is None:
+0449 |             arrival_time = time.time()
+0450 |
+0451 |         if self.engine_use_ray:
+0452 |             prompt_token_ids = await self.engine.encode_request_async.remote(
+0453 |                 request_id=request_id,
+0454 |                 prompt=prompt,
+0455 |                 prompt_token_ids=prompt_token_ids,
+0456 |                 lora_request=lora_request)
+0457 |         else:
+0458 |             prompt_token_ids = await self.engine.encode_request_async(
+0459 |                 request_id=request_id,
+0460 |                 prompt=prompt,
+0461 |                 prompt_token_ids=prompt_token_ids,
+0462 |                 lora_request=lora_request)
+0463 |
+0464 |         stream = self._request_tracker.add_request(
+0465 |             request_id,
+0466 |             prompt=prompt,
+0467 |             sampling_params=sampling_params,
+0468 |             prompt_token_ids=prompt_token_ids,
+0469 |             arrival_time=arrival_time,
+0470 |             lora_request=lora_request,
+0471 |             prefix_pos=prefix_pos)
+0472 |
+0473 |         return stream
+0474 |
+0475 |     async def generate(
+0476 |         self,
+0477 |         prompt: Optional[str],
+0478 |         sampling_params: SamplingParams,
+0479 |         request_id: str,
+0480 |         prompt_token_ids: Optional[List[int]] = None,
+0481 |         lora_request: Optional[LoRARequest] = None,
+0482 |         prefix_pos: Optional[int] = None,
+0483 |     ) -> AsyncIterator[RequestOutput]:
+0484 |         """Generate outputs for a request.
+0485 |
+0486 |         Generate outputs for a request. This method is a coroutine. It adds the
+0487 |         request into the waiting queue of the LLMEngine and streams the outputs
+0488 |         from the LLMEngine to the caller.
+0489 |
+0490 |         Args:
+0491 |             prompt: The prompt string. Can be None if prompt_token_ids is
+0492 |                 provided.
+0493 |             sampling_params: The sampling parameters of the request.
+0494 |             request_id: The unique id of the request.
+0495 |             prompt_token_ids: The token IDs of the prompt. If None, we
+0496 |                 use the tokenizer to convert the prompts to token IDs.
+0497 |             lora_request: LoRA request to use for generation, if any.
+0498 |             prefix_pos: If not None, we use the given position as the prefix
+0499 |                 position for each prompt. We will cache the prefix's KV
+0500 |                 cache and reuse it for the next request with the same prefix.
+0501 |                 This is an experimental feature, and may be replaced with
+0502 |                 automatic prefix caching in the future.
+0503 |
+0504 |         Yields:
+0505 |             The output `RequestOutput` objects from the LLMEngine for the
+0506 |             request.
+0507 |
+0508 |         Details:
+0509 |             - If the engine is not running, start the background loop,
+0510 |               which iteratively invokes
+0511 |               :meth:`~vllm.engine.async_llm_engine.AsyncLLMEngine.engine_step`
+0512 |               to process the waiting requests.
+0513 |             - Add the request to the engine's `RequestTracker`.
+0514 |               On the next background loop, this request will be sent to
+0515 |               the underlying engine.
+0516 |               Also, a corresponding `AsyncStream` will be created.
+0517 |             - Wait for the request outputs from `AsyncStream` and yield them.
+0518 |
+0519 |         Example:
+0520 |             >>> # Please refer to entrypoints/api_server.py for
+0521 |             >>> # the complete example.
+0522 |             >>>
+0523 |             >>> # initialize the engine and the example input
+0524 |             >>> engine = AsyncLLMEngine.from_engine_args(engine_args)
+0525 |             >>> example_input = {
+0526 |             >>>     "prompt": "What is LLM?",
+0527 |             >>>     "stream": False, # assume the non-streaming case
+0528 |             >>>     "temperature": 0.0,
+0529 |             >>>     "request_id": 0,
+0530 |             >>> }
+0531 |             >>>
+0532 |             >>> # start the generation
+0533 |             >>> results_generator = engine.generate(
+0534 |             >>>    example_input["prompt"],
+0535 |             >>>    SamplingParams(temperature=example_input["temperature"]),
+0536 |             >>>    example_input["request_id"])
+0537 |             >>>
+0538 |             >>> # get the results
+0539 |             >>> final_output = None
+0540 |             >>> async for request_output in results_generator:
+0541 |             >>>     if await request.is_disconnected():
+0542 |             >>>         # Abort the request if the client disconnects.
+0543 |             >>>         await engine.abort(request_id)
+0544 |             >>>         # Return or raise an error
+0545 |             >>>         ...
+0546 |             >>>     final_output = request_output
+0547 |             >>>
+0548 |             >>> # Process and return the final output
+0549 |             >>> ...
+0550 |         """
+0551 |         # Preprocess the request.
+0552 |         # This should not be used for logging, as it is monotonic time.
+0553 |         arrival_time = time.monotonic()
+0554 |
+0555 |         try:
+0556 |             stream = await self.add_request(
+0557 |                 request_id,
+0558 |                 prompt,
+0559 |                 sampling_params,
+0560 |                 prompt_token_ids=prompt_token_ids,
+0561 |                 arrival_time=arrival_time,
+0562 |                 lora_request=lora_request,
+0563 |                 prefix_pos=prefix_pos,
+0564 |             )
+0565 |
+0566 |             async for request_output in stream:
+0567 |                 yield request_output
+0568 |         except (Exception, asyncio.CancelledError) as e:
+0569 |             # If there is an exception or coroutine is cancelled, abort the
+0570 |             # request.
+0571 |             self._abort(request_id)
+0572 |             raise e
+0573 |
+0574 |     async def abort(self, request_id: str) -> None:
+0575 |         """Abort a request.
+0576 |
+0577 |         Abort a submitted request. If the request is finished or not found,
+0578 |         this method will be a no-op.
+0579 |
+0580 |         Args:
+0581 |             request_id: The unique id of the request.
+0582 |         """
+0583 |         if not self.is_running:
+0584 |             raise AsyncEngineDeadError(
+0585 |                 "Background loop is not running. If it was running, "
+0586 |                 "inspect the output to find the stacktrace of the "
+0587 |                 "error that caused the background loop to stop "
+0588 |                 "(AsyncEngineDeadError).")
+0589 |
+0590 |         return self._abort(request_id)
+0591 |
+0592 |     def _abort(self, request_id: str) -> None:
+0593 |         """Abort a request.
+0594 |
+0595 |         Abort a submitted request. If the request is finished or not found,
+0596 |         this method will be a no-op.
+0597 |
+0598 |         Args:
+0599 |             request_id: The unique id of the request.
+0600 |         """
+0601 |         self._request_tracker.abort_request(request_id,
+0602 |                                             verbose=self.log_requests)
+0603 |
+0604 |     async def get_model_config(self) -> ModelConfig:
+0605 |         """Get the model configuration of the vLLM engine."""
+0606 |         if self.engine_use_ray:
+0607 |             return await self.engine.get_model_config.remote()
+0608 |         else:
+0609 |             return self.engine.get_model_config()
+0610 |
+0611 |     @classmethod
+0612 |     def from_engine_args(cls,
+0613 |                          engine_args: AsyncEngineArgs,
+0614 |                          start_engine_loop: bool = True) -> "AsyncLLMEngine":
+0615 |         """Creates an async LLM engine from the engine arguments."""
+0616 |         # Create the engine configs.
+0617 |         engine_configs = engine_args.create_engine_configs()
+0618 |         parallel_config = engine_configs[2]
+0619 |         # Initialize the cluster.
+0620 |         placement_group = initialize_cluster(parallel_config,
+0621 |                                              engine_args.engine_use_ray)
+0622 |         # Create the async LLM engine.
+0623 |         engine = cls(parallel_config.worker_use_ray,
+0624 |                      engine_args.engine_use_ray,
+0625 |                      *engine_configs,
+0626 |                      placement_group,
+0627 |                      log_requests=not engine_args.disable_log_requests,
+0628 |                      log_stats=not engine_args.disable_log_stats,
+0629 |                      max_log_len=engine_args.max_log_len,
+0630 |                      start_engine_loop=start_engine_loop)
+0631 |         return engine
+0632 |
+0633 |     async def do_log_stats(self) -> None:
+0634 |         if self.engine_use_ray:
+0635 |             await self.engine.do_log_stats.remote()
+0636 |         else:
+0637 |             self.engine.do_log_stats()

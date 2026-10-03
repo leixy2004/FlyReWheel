@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-01",
+  "runtime": "v24.19.0",
+  "baselineCommit": "c154ea3dad9857d94c654d91412674579322833e",
+  "validation": "Final working-tree cleanup safety fix, compiled dist/cli.js",
+  "cases": [
+    {
+      "kind": "assume-unchanged",
+      "prepare": "ready",
+      "gitReportedDirty": false,
+      "cleanlinessVerified": false,
+      "cleanupExitCode": 2,
+      "cleanupStatus": "preserved-dirty",
+      "retainedBytes": true,
+      "archivedFlags": {
+        "assumeUnchangedPaths": [
+          "value.txt"
+        ],
+        "skipWorktreePaths": []
+      },
+      "archivedUntracked": [],
+      "afterExplicitCommit": "closed-clean",
+      "worktreeRemoved": true,
+      "branchRetained": true
+    },
+    {
+      "kind": "skip-worktree",
+      "prepare": "ready",
+      "gitReportedDirty": false,
+      "cleanlinessVerified": false,
+      "cleanupExitCode": 2,
+      "cleanupStatus": "preserved-dirty",
+      "retainedBytes": true,
+      "archivedFlags": {
+        "assumeUnchangedPaths": [],
+        "skipWorktreePaths": [
+          "value.txt"
+        ]
+      },
+      "archivedUntracked": [],
+      "afterExplicitCommit": "closed-clean",
+      "worktreeRemoved": true,
+      "branchRetained": true
+    },
+    {
+      "kind": "ignorecase",
+      "prepare": "ready",
+      "gitReportedDirty": true,
+      "cleanlinessVerified": false,
+      "cleanupExitCode": 2,
+      "cleanupStatus": "preserved-dirty",
+      "retainedBytes": true,
+      "archivedFlags": {
+        "assumeUnchangedPaths": [],
+        "skipWorktreePaths": []
+      },
+      "archivedUntracked": [
+        "VALUE.txt"
+      ],
+      "afterExplicitCommit": "closed-clean",
+      "worktreeRemoved": true,
+      "branchRetained": true
+    }
+  ],
+  "localIgnoreCaseConfigUnchanged": true,
+  "modelInvoked": false,
+  "sandboxInvoked": false,
+  "networkUsed": false
+}

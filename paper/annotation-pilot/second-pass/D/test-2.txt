@@ -1,0 +1,43 @@
+Retained upstream test source: tests/test_regression.py
+Not executed by this packet. Original line numbers follow.
+
+0001 | """Containing tests that check for regressions in vLLM's behavior.
+0002 |
+0003 | It should include tests that are reported by users and making sure they
+0004 | will never happen again.
+0005 |
+0006 | """
+0007 | from vllm import LLM, SamplingParams
+0008 |
+0009 |
+0010 | def test_duplicated_ignored_sequence_group():
+0011 |     """https://github.com/vllm-project/vllm/issues/1655"""
+0012 |
+0013 |     sampling_params = SamplingParams(temperature=0.01,
+0014 |                                      top_p=0.1,
+0015 |                                      max_tokens=256)
+0016 |     llm = LLM(model="facebook/opt-125m",
+0017 |               max_num_batched_tokens=4096,
+0018 |               tensor_parallel_size=1)
+0019 |     prompts = ["This is a short prompt", "This is a very long prompt " * 1000]
+0020 |     outputs = llm.generate(prompts, sampling_params=sampling_params)
+0021 |
+0022 |     assert len(prompts) == len(outputs)
+0023 |
+0024 |
+0025 | def test_max_tokens_none():
+0026 |     sampling_params = SamplingParams(temperature=0.01,
+0027 |                                      top_p=0.1,
+0028 |                                      max_tokens=None)
+0029 |     llm = LLM(model="facebook/opt-125m",
+0030 |               max_num_batched_tokens=4096,
+0031 |               tensor_parallel_size=1)
+0032 |     prompts = ["Just say hello!"]
+0033 |     outputs = llm.generate(prompts, sampling_params=sampling_params)
+0034 |
+0035 |     assert len(prompts) == len(outputs)
+0036 |
+0037 |
+0038 | if __name__ == "__main__":
+0039 |     import pytest
+0040 |     pytest.main([__file__])

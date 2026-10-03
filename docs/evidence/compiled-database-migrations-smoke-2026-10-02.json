@@ -1,0 +1,8 @@
+{
+  "compiledMigrationBytesIdentical": true,
+  "adopted": 14,
+  "reapplied": 0,
+  "preservedDomainRecords": 1,
+  "cliAdoptionAndReopen": "passed",
+  "livePostgres": "not_run"
+}

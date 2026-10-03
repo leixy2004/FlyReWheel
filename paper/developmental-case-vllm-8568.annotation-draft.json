@@ -1,0 +1,226 @@
+{
+  "document_type": "developmental-author-analysis-draft",
+  "document_version": 1,
+  "created_date_utc": "2026-10-02",
+  "status": "author_analysis_unreviewed",
+  "formal_phase0_schema_instance": false,
+  "analysis_eligible": false,
+  "benchmark_eligible": false,
+  "eligibility_reason": "Purposively selected vLLM development case already used in tool and rule design; no independent human annotation or future instance.",
+  "human_annotators": [],
+  "independent_human_adjudication": "not_performed",
+  "second_model_check": "author_side_static_sanity_check_only_not_human_annotation",
+  "target_repository_code_execution": "not_performed",
+  "new_network_acquisition": "not_performed",
+  "system_or_model_efficacy_experiment": "not_performed",
+  "source": {
+    "repository": "vllm-project/vllm",
+    "pull_request": 8568,
+    "url": "https://github.com/vllm-project/vllm/pull/8568",
+    "package": ".flyrewheel/github-pr8568.json",
+    "package_bytes_sha256": "4c153cd4bd2ef95db4be6d5f1185fc3559ffafaf7feb85df8e57ac549e1cc356",
+    "package_declared_evidence_digest": "ae78e20298184fad19d0e9745aa0c50ed856d39701829e56b5bf294788e631a5",
+    "package_declared_snapshot_digest": "94917319313ffa7b3e455b41ee335f598f18b95b55844903cf1ad467e03eb61d",
+    "application_canonical_digests_recomputed": false,
+    "observation": {
+      "provider": "github",
+      "apiOrigin": "https://api.github.com",
+      "observation": "current-api-state",
+      "historicalReviewCheckpoint": false,
+      "ancestry": "provider-declared",
+      "inventory": "provider-declared-compare",
+      "repositoryContext": "changed-paths-only",
+      "discussionConsistency": "non-atomic-current-observation",
+      "discussionCoverage": "all-pages-returned-within-limits",
+      "compareFileCount": 2,
+      "sourceStatements": "untrusted-not-ground-truth-or-feedback"
+    },
+    "capture_started_at": "2026-10-01T09:30:22.253Z",
+    "capture_completed_at": "2026-10-01T09:30:56.570Z",
+    "early_review_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+    "early_review_full_snapshot": "not_in_capture",
+    "blobs": [
+      {
+        "side": "after",
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "path": "tests/tool_use/test_chat_completion_request_validations.py",
+        "git_blob_sha1": "3d0fe8f06089549a46c5bf513cc53bdca055939c",
+        "sha256": "baac2223cf8d78a461bd96660ea56ddd4340232aa1015d50f7831b78496dbbd6",
+        "byte_length": 1872,
+        "locally_verified_byte_bindings": true
+      },
+      {
+        "side": "before",
+        "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "git_blob_sha1": "7e9f53b1816d1e74755af62d704d4e295da0e814",
+        "sha256": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+        "byte_length": 31505,
+        "locally_verified_byte_bindings": true
+      },
+      {
+        "side": "after",
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "git_blob_sha1": "359012611a34a7dc86be5e54ef890633f50bc8da",
+        "sha256": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+        "byte_length": 31507,
+        "locally_verified_byte_bindings": true
+      }
+    ]
+  },
+  "proposed_rule": {
+    "candidate_name": "Default automatic tool choice only for a nonempty tool list when choice is omitted",
+    "origin": "author_hypothesis_using_known_fix_not_automated_mining_result",
+    "relationship_to_existing_supplied_candidate": "Same developmental hypothesis as .flyrewheel/mining-pr8568-candidate-input.json; not a new independent rule or observed revision.",
+    "invariant": "For the captured ChatCompletionRequest contract, derive auto only when tool_choice is absent and tools is a valid nonempty list; missing, null or empty tools must not trigger auto solely through key presence.",
+    "applicability": [
+      "The operation derives the default choice from a plain request mapping.",
+      "The tools domain is an optional list.",
+      "The missing-choice and no-tools policies remain those of the captured contract."
+    ],
+    "boundaries": [
+      "An explicitly present tool_choice, including none or null, belongs to its separate validation contract.",
+      "Equivalent dominating nonempty checks or upstream normalization can satisfy the constraint without the literal data.get pattern."
+    ],
+    "required_context": [
+      "Input types and normalization order",
+      "Field defaults and missing versus explicit choice",
+      "Explicit choice validation",
+      "Version-specific specification or tests"
+    ],
+    "rule_available_at": null,
+    "rule_available_at_status": "unknown_not_reconstructed",
+    "source_anchors": [
+      {
+        "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "start_line": 378,
+        "end_line": 401
+      },
+      {
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "start_line": 169,
+        "end_line": 171
+      },
+      {
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "path": "vllm/entrypoints/openai/protocol.py",
+        "start_line": 378,
+        "end_line": 427
+      },
+      {
+        "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+        "path": "tests/tool_use/test_chat_completion_request_validations.py",
+        "start_line": 6,
+        "end_line": 71
+      }
+    ]
+  },
+  "research_labels": {
+    "relevance": "unknown",
+    "state": "unknown",
+    "rule_dependency": "unknown",
+    "change_attribution": "unknown",
+    "context_requirement": "unknown",
+    "correctness": "unknown",
+    "independent_recurrence": "unknown",
+    "actual_reuse": "unknown",
+    "historical_rule_update": "unknown",
+    "feedback_correction_target": "unknown",
+    "feedback_attribution_level": "unknown",
+    "contract_change": "unknown",
+    "future_review_benefit": "unknown"
+  },
+  "observed_source_statements": [
+    {
+      "comment_id": 1766097849,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766097849",
+      "author_login": "DarkLight1337",
+      "created_at": "2024-09-19T03:27:16Z",
+      "updated_at": "2024-09-19T03:27:16Z",
+      "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "current_commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "original_line": 389,
+      "current_line": null,
+      "in_reply_to_id": null
+    },
+    {
+      "comment_id": 1766457258,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766457258",
+      "author_login": "chiragjn",
+      "created_at": "2024-09-19T09:02:21Z",
+      "updated_at": "2024-09-19T09:02:21Z",
+      "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "current_commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "original_line": 389,
+      "current_line": null,
+      "in_reply_to_id": 1766097849
+    },
+    {
+      "comment_id": 1766460918,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766460918",
+      "author_login": "DarkLight1337",
+      "created_at": "2024-09-19T09:04:42Z",
+      "updated_at": "2024-09-19T09:05:19Z",
+      "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "current_commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "original_line": 389,
+      "current_line": null,
+      "in_reply_to_id": 1766097849
+    },
+    {
+      "comment_id": 1766464273,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766464273",
+      "author_login": "DarkLight1337",
+      "created_at": "2024-09-19T09:06:46Z",
+      "updated_at": "2024-09-19T09:06:47Z",
+      "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "current_commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "original_line": 389,
+      "current_line": null,
+      "in_reply_to_id": 1766097849
+    },
+    {
+      "comment_id": 1766512468,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766512468",
+      "author_login": "chiragjn",
+      "created_at": "2024-09-19T09:38:12Z",
+      "updated_at": "2024-09-19T09:38:13Z",
+      "original_commit": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "current_commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "original_line": 389,
+      "current_line": null,
+      "in_reply_to_id": 1766097849
+    }
+  ],
+  "test_request_and_response_ids": [
+    2360522790,
+    2372382904
+  ],
+  "local_static_observations": [
+    "The production diff changes only the tool-availability operand at line 384.",
+    "For omitted choice, null changes from auto plus local error to no inserted key; empty list changes from auto without local rejection to no inserted key.",
+    "The helper does not insert none; that is the field default and the value asserted by unexecuted upstream tests.",
+    "Explicit auto plus empty list is not rejected by the captured helper; end-to-end request validity remains unexecuted.",
+    "The final helper gives no output/error witness distinguishing sequential if from the proposed elif counterfactual on ordinary valid list inputs; equivalence of the uncaptured early version is not established."
+  ],
+  "missing_evidence": [
+    "Full early-review source and predecessor snapshot",
+    "Public event order for initial and revised commits",
+    "Historical PR-description and edited-comment bodies",
+    "Complete validation chain and dependency/runtime version",
+    "Executed mechanism-discriminating tests",
+    "Independent human judgments and adjudication",
+    "A contemporaneous old review rule or finding and revised rule text",
+    "Independent later PR with a reconstructable checkpoint",
+    "Matched baseline and candidate future-review observations"
+  ],
+  "report": "paper/developmental-case-vllm-8568.md"
+}

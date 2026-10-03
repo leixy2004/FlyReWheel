@@ -1,0 +1,240 @@
+{
+  "issueComments": [
+    {
+      "id": 2358760765,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#issuecomment-2358760765",
+      "author": {
+        "id": 41898282,
+        "login": "github-actions[bot]"
+      },
+      "body": "👋 Hi! Thank you for contributing to the vLLM project.\n Just a reminder: PRs would not trigger full CI run by default. Instead, it would only run `fastcheck` CI which starts running only a small and essential subset of CI tests to quickly catch errors. You can run other CI tests on top of those by going to your `fastcheck` build on Buildkite UI (linked in the PR checks section) and unblock them. If you do not have permission to unblock, ping `simon-mo` or `khluu` to add you in our Buildkite org. \n\nOnce the PR is approved and ready to go, your PR reviewer(s) can run CI to test the changes comprehensively before merging.\n\n To run CI, PR reviewers can do one of these:\n- Add `ready` label to the PR\n- Enable auto-merge.\n\n🚀",
+      "createdAt": "2024-09-18T15:17:36Z",
+      "updatedAt": "2024-09-18T15:17:36Z"
+    },
+    {
+      "id": 2360522790,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#issuecomment-2360522790",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "Can you add a test to check the behavior when `\"tools\": null` is passed? Otherwise looks good.",
+      "createdAt": "2024-09-19T09:46:51Z",
+      "updatedAt": "2024-09-19T09:46:51Z"
+    },
+    {
+      "id": 2372382904,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#issuecomment-2372382904",
+      "author": {
+        "id": 10295418,
+        "login": "chiragjn"
+      },
+      "body": "I have added some basic tests",
+      "createdAt": "2024-09-24T21:03:54Z",
+      "updatedAt": "2024-09-24T21:03:54Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 2314312297,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2314312297",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "",
+      "submittedAt": "2024-09-19T03:27:16Z",
+      "state": "COMMENTED",
+      "commitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    {
+      "id": 2314901808,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2314901808",
+      "author": {
+        "id": 10295418,
+        "login": "chiragjn"
+      },
+      "body": "",
+      "submittedAt": "2024-09-19T09:02:21Z",
+      "state": "COMMENTED",
+      "commitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    {
+      "id": 2314907352,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2314907352",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "",
+      "submittedAt": "2024-09-19T09:04:42Z",
+      "state": "COMMENTED",
+      "commitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    {
+      "id": 2314912474,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2314912474",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "",
+      "submittedAt": "2024-09-19T09:06:47Z",
+      "state": "COMMENTED",
+      "commitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    {
+      "id": 2314988605,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2314988605",
+      "author": {
+        "id": 10295418,
+        "login": "chiragjn"
+      },
+      "body": "",
+      "submittedAt": "2024-09-19T09:38:13Z",
+      "state": "COMMENTED",
+      "commitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e"
+    },
+    {
+      "id": 2326788377,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2326788377",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "Thanks for the bugfix!",
+      "submittedAt": "2024-09-25T01:31:18Z",
+      "state": "APPROVED",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0"
+    },
+    {
+      "id": 2326835345,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#pullrequestreview-2326835345",
+      "author": {
+        "id": 18430555,
+        "login": "K-Mistele"
+      },
+      "body": "LGTM :)",
+      "submittedAt": "2024-09-25T02:24:17Z",
+      "state": "APPROVED",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0"
+    }
+  ],
+  "reviewComments": [
+    {
+      "id": 1766097849,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766097849",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "Why change this to `elif`?",
+      "createdAt": "2024-09-19T03:27:16Z",
+      "updatedAt": "2024-09-19T03:27:16Z",
+      "reviewId": 2314312297,
+      "inReplyToId": null,
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "diffHunk": "@@ -381,11 +381,12 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n-            data[\"tool_choice\"] = \"auto\"\n+        if \"tool_choice\" not in data:\n+            if data.get(\"tools\"):\n+                data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation\n-        if \"tool_choice\" in data:\n+        elif \"tool_choice\" in data:",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "originalCommitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "line": null,
+      "originalLine": 389,
+      "startLine": null,
+      "originalStartLine": null,
+      "side": "RIGHT",
+      "startSide": null
+    },
+    {
+      "id": 1766457258,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766457258",
+      "author": {
+        "id": 10295418,
+        "login": "chiragjn"
+      },
+      "body": "Should be mutually exclusive with line 384, right?\r\n\r\nBut I think post the `if data.get(\"tools\"):` change on line 385, it should be fine to keep it `if`\r\nThe reason I made it elif because otherwise setting tool_choice on line 386 will also trigger this branch",
+      "createdAt": "2024-09-19T09:02:21Z",
+      "updatedAt": "2024-09-19T09:02:21Z",
+      "reviewId": 2314901808,
+      "inReplyToId": 1766097849,
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "diffHunk": "@@ -381,11 +381,12 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n-            data[\"tool_choice\"] = \"auto\"\n+        if \"tool_choice\" not in data:\n+            if data.get(\"tools\"):\n+                data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation\n-        if \"tool_choice\" in data:\n+        elif \"tool_choice\" in data:",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "originalCommitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "line": null,
+      "originalLine": 389,
+      "startLine": null,
+      "originalStartLine": null,
+      "side": "RIGHT",
+      "startSide": null
+    },
+    {
+      "id": 1766460918,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766460918",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "They are not mutually exclusive. In the case of `\"tool_choice\" not in data and data.get(\"tools\")`, it's intended to run the code inside the subsequent `if` block since at that point, `data[\"tool_choice\"]` has been set to `\"auto\"`.",
+      "createdAt": "2024-09-19T09:04:42Z",
+      "updatedAt": "2024-09-19T09:05:19Z",
+      "reviewId": 2314907352,
+      "inReplyToId": 1766097849,
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "diffHunk": "@@ -381,11 +381,12 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n-            data[\"tool_choice\"] = \"auto\"\n+        if \"tool_choice\" not in data:\n+            if data.get(\"tools\"):\n+                data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation\n-        if \"tool_choice\" in data:\n+        elif \"tool_choice\" in data:",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "originalCommitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "line": null,
+      "originalLine": 389,
+      "startLine": null,
+      "originalStartLine": null,
+      "side": "RIGHT",
+      "startSide": null
+    },
+    {
+      "id": 1766464273,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766464273",
+      "author": {
+        "id": 44970335,
+        "login": "DarkLight1337"
+      },
+      "body": "I think to fix this bug, the following code should be sufficient:\r\n\r\n```diff,py\r\n-        if \"tool_choice\" not in data and \"tools\" in data:\r\n+        if \"tool_choice\" not in data and data.get(\"tools\"):\r\n             data[\"tool_choice\"] = \"auto\"\r\n \r\n         # if \"tool_choice\" is specified -- validation\r\n         if \"tool_choice\" in data:\r\n```",
+      "createdAt": "2024-09-19T09:06:46Z",
+      "updatedAt": "2024-09-19T09:06:47Z",
+      "reviewId": 2314912474,
+      "inReplyToId": 1766097849,
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "diffHunk": "@@ -381,11 +381,12 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n-            data[\"tool_choice\"] = \"auto\"\n+        if \"tool_choice\" not in data:\n+            if data.get(\"tools\"):\n+                data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation\n-        if \"tool_choice\" in data:\n+        elif \"tool_choice\" in data:",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "originalCommitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "line": null,
+      "originalLine": 389,
+      "startLine": null,
+      "originalStartLine": null,
+      "side": "RIGHT",
+      "startSide": null
+    },
+    {
+      "id": 1766512468,
+      "url": "https://github.com/vllm-project/vllm/pull/8568#discussion_r1766512468",
+      "author": {
+        "id": 10295418,
+        "login": "chiragjn"
+      },
+      "body": "Sure, applying your suggestion then",
+      "createdAt": "2024-09-19T09:38:12Z",
+      "updatedAt": "2024-09-19T09:38:13Z",
+      "reviewId": 2314988605,
+      "inReplyToId": 1766097849,
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "diffHunk": "@@ -381,11 +381,12 @@ def check_tool_usage(cls, data):\n \n         # if \"tool_choice\" is not specified but tools are provided,\n         # default to \"auto\" tool_choice\n-        if \"tool_choice\" not in data and \"tools\" in data:\n-            data[\"tool_choice\"] = \"auto\"\n+        if \"tool_choice\" not in data:\n+            if data.get(\"tools\"):\n+                data[\"tool_choice\"] = \"auto\"\n \n         # if \"tool_choice\" is specified -- validation\n-        if \"tool_choice\" in data:\n+        elif \"tool_choice\" in data:",
+      "commitId": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "originalCommitId": "7aa40bf05fa7cc502c4648d89eeff26b8c97918e",
+      "line": null,
+      "originalLine": 389,
+      "startLine": null,
+      "originalStartLine": null,
+      "side": "RIGHT",
+      "startSide": null
+    }
+  ]
+}

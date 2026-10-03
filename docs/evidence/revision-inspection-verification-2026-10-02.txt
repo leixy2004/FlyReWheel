@@ -1,0 +1,70 @@
+Revision generation inspection CLI verification — 2026-10-02
+
+Baseline: 70ba99d (working-tree patch; no commit created)
+Scope: expose existing persisted revision candidate/no-mutation records through
+read-only domain CLI commands, existing exact validators, and bounded SQL pages.
+No new tables, migrations, dependencies, immutable schemas, or record hash changes.
+
+Frozen-source checks:
+- npm run typecheck: passed
+- npm run build: passed (including copying packaged versioned migrations)
+- git diff --check: passed
+- Core schemas, historical migration SQL and dependency manifests: unchanged
+- All source/test/script checksums recorded before the aggregate run and verified
+  unchanged after it and after both final compiled smokes
+
+Full aggregate run against the frozen source:
+Command: npm test
+Package script: vitest run --maxWorkers=2
+External allowance: 1200 seconds
+Result: exit 0
+Test Files: 84 passed (84)
+Tests: 1224 passed (1224)
+Duration: 803.50s
+No tests skipped or left running.
+
+Focused checks before the freeze:
+- tests/revision-generation.cli.test.ts: 1/1 passed, 23.91s
+- tests/revision-inspection.storage.test.ts: 9/9 passed, 25.49s
+- Last-added >100 cursor assertions: passed in 4.11s; also included in full run
+- The full run includes the four new command database-selector help checks
+
+Final compiled checks after the full aggregate run:
+- node scripts/smoke-revision-generation.mjs: passed, 67 CLI checks
+  Evidence: compiled-revision-inspection-smoke-2026-10-02.json
+- node scripts/smoke-revision-generation.mjs --context: passed, 67 CLI checks
+  Evidence: compiled-context-revision-inspection-smoke-2026-10-02.json
+
+Both smokes verify a durable generated boundary candidate and retain_rule,
+request_context and abstain outcomes after reopen; exact raw record readback;
+stable repeated JSON and --out bytes; request/ID/rule filters; digest pagination;
+empty, missing and malformed input behavior; explicit database selectors; and
+comparison links matched by both request and candidate rule. The authored runtime
+executable is removed before inspection and child sockets/fetch are blocked.
+Inspection made zero runtime executions and zero child network attempts.
+Context-mode inspection also succeeds after removal of the source repository.
+Stored requests, candidates, outcomes, rules, comparisons, decisions and Unknown
+fixture verdicts remain unchanged; activation is not performed.
+
+New focused storage coverage additionally checks 20-record default pages,
+legacy >100 guards and cursor traversal beyond them, exact comparison filters,
+malformed options, index/receipt corruption, the inclusive compact-record 16MB
+budget, historical v1/v2 projection, independent source/modelExecution fields,
+and frozen fixture versus caller-declared human feedback (later feedback excluded).
+
+Limits:
+This is authored offline application/CLI verification. No live model, server-backed
+PostgreSQL, provider backend, authentication, network service, deployment,
+publication, upload, dependency installation, or commit was performed. Domain
+inspection still opens storage through the normal versioned migration path and
+can apply pending migrations. These checks do not establish diagnosis truth,
+model quality, historical validity, human authentication, or rule certification.
+
+Frozen changed code/test/script SHA-256:
+ece8cd4a689cced8f5ba1644c9f75655ccffeb835bbb84ef1db349a14c8651b6  src/cli-revision-inspection.ts
+01d91adf2b04d20c64800548320b7a6a15c34915c3303114696707f3c9aed371  src/cli.ts
+6bcc465e525af208d2b295c1981a25e63262e9731c0a2c2000fdcba0fa944a79  src/storage/store.ts
+109a6854e8a88dc37c653a87e01396c894e63d056ab5920b6daf8198aac83aaf  tests/revision-generation.cli.test.ts
+fe310e63754271dbaf00aaec33dbb1e023cd1a9ab88fb32f808dc38f254f4521  tests/revision-inspection.storage.test.ts
+708e61d481fc28eae6d56070bd8e0c7335afde62b2dc60b35dd1527da7a24c99  tests/database-selection.cli.test.ts
+12bece9fed72b94fee0250cb5d6e9e0b9cf31f42a047c0ae7bf226b8c332a48b  scripts/smoke-revision-generation.mjs

@@ -1,0 +1,80 @@
+Detectorless semantic revision comparison verification, 2026-10-02
+
+Scope: local working-tree implementation following the e0e6c38 methods review.
+Methods: paper/method-draft.md
+Contract: docs/local-revision-comparisons.md
+Smoke evidence: docs/evidence/compiled-detectorless-comparison-smoke-2026-10-02.json
+
+Final checks:
+- npm run typecheck: PASS
+- npm run build: PASS
+- npm test (vitest run --maxWorkers=2): PASS, 648 tests in 44 files, 332.54 seconds
+- node scripts/smoke-detectorless-comparison.mjs: PASS
+- node scripts/smoke-revision-generation.mjs: PASS
+- node scripts/smoke-semantic-workspace.mjs: PASS
+- npm run validate:deploy: PASS (static manifest validation only; no deployment)
+- git diff --check: PASS
+- Read-only independent code review: no core correctness/security blocker found
+
+Verified semantics:
+- Current report scorer is explicit-semantic-v2; caller inputs cannot select a scorer.
+- Explicit required-context-complete target judgments score declared exact file cases
+  without a detector or with zero hits. Silence, unknown/not_run and missing context
+  never establish safety. Incomplete declared scans remain inconclusive.
+- TP/FP feedback requires an exact anchor explicitly adjudicated in findingAnchors
+  plus its validated known finding. A context citation or target-only safe judgment
+  cannot score an FP. Explicit safe anchors can exist without detector occurrences.
+- Removing a detector or a declared positive cannot hide the base/candidate case union.
+- Legacy reports and decisions remain readable and exact-input retries idempotent.
+  New accepts against old unversioned reports are blocked pending current scoring.
+- Legacy execution receipts rederive their original prompt/schema bytes. The original
+  e0e6c38 execution/evidence/model-schema implementations were compared directly:
+  generation SHA256 048937f7de1cce41ac94b00d6ff32847e80ad3af4fb8d1f7fd89076d9a86e1e9
+  exactly matches the legacy branch. A permanent golden test preserves this check.
+- Compiled smoke covers compatible, regressed, target-only safe and not-run outcomes,
+  selected anchors, a dropped positive, blocked accepts, disk reopen, and compiled CLI.
+
+Initial whole-suite diagnostics identified three outdated fixture expectations:
+revision-generation safe judgments lacked explicit anchors (2 tests), and one old
+negative test prohibited all safe anchors. Fixtures now declare explicit safe anchors;
+the negative test still rejects a safe anchor belonging to a different target.
+The final complete rerun above passed; no assertion was weakened to accept implicit safety.
+
+Limits:
+- All semantic decisions, labels and model outputs here are authored fixtures. No live
+  model, external request, authentication, upload, publication or deployment occurred.
+- No dependency was added and no source commit was created by this task. Tests create
+  disposable synthetic Git histories as part of their existing local fixture workflows.
+- One target-level decision is supported per file. Independent mixed safe/violation
+  anchor decisions within the same target are not yet expressible; no inference fills
+  that gap. Required-context kind labels are declarations, not proof of semantic facts.
+- Scope remains declared cases and selected feedback; repository context is incomplete,
+  and introduction, notification eligibility, activation and certification are unverified
+  or not performed as recorded. No measured effectiveness/precision claim is made.
+- Old demo DB/output destinations can conflict with the updated authored safe fixtures.
+  Use fresh destinations for the new demo contract; historical artifacts are not replaced.
+
+Source and compiled-module SHA256 values after final checks:
+104d93da8abf6973899fb131723048c9f14fec9ab07e040e6f31a6ebd98d6960  src/revision-comparison.ts
+8468090494bb5495627facc05250ed7d9429be8574632d929b5215fe88b71db6  src/semantic-review.ts
+6536759e6e2565790ca9cbd1944d156ef3c69372f955cd338db708cfa15d3517  src/semantic-review-execution.ts
+6e6cfc4fade02d49a5af8c2a3b4e2532abb9e2cacbde81db8f3b1147a88ce10c  src/storage/store.ts
+a0f982ba81ba03b4a85b08fceb814ce59ab01e68e4074f352dd1e1ceacf8aec7  dist/revision-comparison.js
+1b3b5e1b2ad09a5c06f41e92784faf1a9b1013c086ca900e24e9d2a4a8a04914  dist/semantic-review.js
+d230b8fe2e0fe0dd8bd571d08c23acaec7002fa42dd3df53511fe9c8ee0e6b2f  dist/semantic-review-execution.js
+7a2a3caafa92e065dfa42ae1a3ed3083f7bcaab7ad43e8edc735d364abec9c0b  dist/storage/store.js
+
+Final test output:
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  44 passed (44)
+      Tests  648 passed (648)
+   Start at  12:12:05
+   Duration  332.54s (tests 99%, import 1%)

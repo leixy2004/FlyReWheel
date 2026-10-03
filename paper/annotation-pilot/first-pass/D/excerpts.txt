@@ -1,0 +1,160 @@
+
+[Original lines 39-90]
+0039 |             to use new tokens, while values < 0 encourage the model to repeat
+0040 |             tokens.
+0041 |         frequency_penalty: Float that penalizes new tokens based on their
+0042 |             frequency in the generated text so far. Values > 0 encourage the
+0043 |             model to use new tokens, while values < 0 encourage the model to
+0044 |             repeat tokens.
+0045 |         repetition_penalty: Float that penalizes new tokens based on whether
+0046 |             they appear in the prompt and the generated text so far. Values > 1
+0047 |             encourage the model to use new tokens, while values < 1 encourage
+0048 |             the model to repeat tokens.
+0049 |         temperature: Float that controls the randomness of the sampling. Lower
+0050 |             values make the model more deterministic, while higher values make
+0051 |             the model more random. Zero means greedy sampling.
+0052 |         top_p: Float that controls the cumulative probability of the top tokens
+0053 |             to consider. Must be in (0, 1]. Set to 1 to consider all tokens.
+0054 |         top_k: Integer that controls the number of top tokens to consider. Set
+0055 |             to -1 to consider all tokens.
+0056 |         min_p: Float that represents the minimum probability for a token to be
+0057 |             considered, relative to the probability of the most likely token.
+0058 |             Must be in [0, 1]. Set to 0 to disable this.
+0059 |         use_beam_search: Whether to use beam search instead of sampling.
+0060 |         length_penalty: Float that penalizes sequences based on their length.
+0061 |             Used in beam search.
+0062 |         early_stopping: Controls the stopping condition for beam search. It
+0063 |             accepts the following values: `True`, where the generation stops as
+0064 |             soon as there are `best_of` complete candidates; `False`, where an
+0065 |             heuristic is applied and the generation stops when is it very
+0066 |             unlikely to find better candidates; `"never"`, where the beam search
+0067 |             procedure only stops when there cannot be better candidates
+0068 |             (canonical beam search algorithm).
+0069 |         stop: List of strings that stop the generation when they are generated.
+0070 |             The returned output will not contain the stop strings.
+0071 |         stop_token_ids: List of tokens that stop the generation when they are
+0072 |             generated. The returned output will contain the stop tokens unless
+0073 |             the stop tokens are special tokens.
+0074 |         include_stop_str_in_output: Whether to include the stop strings in output
+0075 |             text. Defaults to False.
+0076 |         ignore_eos: Whether to ignore the EOS token and continue generating
+0077 |             tokens after the EOS token is generated.
+0078 |         max_tokens: Maximum number of tokens to generate per output sequence.
+0079 |         logprobs: Number of log probabilities to return per output token.
+0080 |             Note that the implementation follows the OpenAI API: The return
+0081 |             result includes the log probabilities on the `logprobs` most likely
+0082 |             tokens, as well the chosen tokens. The API will always return the
+0083 |             log probability of the sampled token, so there  may be up to
+0084 |             `logprobs+1` elements in the response.
+0085 |         prompt_logprobs: Number of log probabilities to return per prompt token.
+0086 |         skip_special_tokens: Whether to skip special tokens in the output.
+0087 |         spaces_between_special_tokens: Whether to add spaces between special
+0088 |             tokens in the output.  Defaults to True.
+0089 |         logits_processors: List of functions that modify logits based on
+0090 |             previously generated tokens.
+
+[Original lines 93-159]
+0093 |     def __init__(
+0094 |         self,
+0095 |         n: int = 1,
+0096 |         best_of: Optional[int] = None,
+0097 |         presence_penalty: float = 0.0,
+0098 |         frequency_penalty: float = 0.0,
+0099 |         repetition_penalty: float = 1.0,
+0100 |         temperature: float = 1.0,
+0101 |         top_p: float = 1.0,
+0102 |         top_k: int = -1,
+0103 |         min_p: float = 0.0,
+0104 |         use_beam_search: bool = False,
+0105 |         length_penalty: float = 1.0,
+0106 |         early_stopping: Union[bool, str] = False,
+0107 |         stop: Optional[Union[str, List[str]]] = None,
+0108 |         stop_token_ids: Optional[List[int]] = None,
+0109 |         include_stop_str_in_output: bool = False,
+0110 |         ignore_eos: bool = False,
+0111 |         max_tokens: int = 16,
+0112 |         logprobs: Optional[int] = None,
+0113 |         prompt_logprobs: Optional[int] = None,
+0114 |         skip_special_tokens: bool = True,
+0115 |         spaces_between_special_tokens: bool = True,
+0116 |         logits_processors: Optional[List[LogitsProcessor]] = None,
+0117 |     ) -> None:
+0118 |         self.n = n
+0119 |         self.best_of = best_of if best_of is not None else n
+0120 |         self.presence_penalty = presence_penalty
+0121 |         self.frequency_penalty = frequency_penalty
+0122 |         self.repetition_penalty = repetition_penalty
+0123 |         self.temperature = temperature
+0124 |         self.top_p = top_p
+0125 |         self.top_k = top_k
+0126 |         self.min_p = min_p
+0127 |         self.use_beam_search = use_beam_search
+0128 |         self.length_penalty = length_penalty
+0129 |         self.early_stopping = early_stopping
+0130 |         if stop is None:
+0131 |             self.stop = []
+0132 |         elif isinstance(stop, str):
+0133 |             self.stop = [stop]
+0134 |         else:
+0135 |             self.stop = list(stop)
+0136 |         if stop_token_ids is None:
+0137 |             self.stop_token_ids = []
+0138 |         else:
+0139 |             self.stop_token_ids = list(stop_token_ids)
+0140 |         self.ignore_eos = ignore_eos
+0141 |         self.max_tokens = max_tokens
+0142 |         self.logprobs = logprobs
+0143 |         self.prompt_logprobs = prompt_logprobs
+0144 |         self.skip_special_tokens = skip_special_tokens
+0145 |         self.spaces_between_special_tokens = spaces_between_special_tokens
+0146 |         self.logits_processors = logits_processors
+0147 |         self.include_stop_str_in_output = include_stop_str_in_output
+0148 |         self._verify_args()
+0149 |         if self.use_beam_search:
+0150 |             self._verify_beam_search()
+0151 |         else:
+0152 |             self._verify_non_beam_search()
+0153 |             if self.temperature < _SAMPLING_EPS:
+0154 |                 # Zero temperature means greedy sampling.
+0155 |                 self.top_p = 1.0
+0156 |                 self.top_k = -1
+0157 |                 self.min_p = 0.0
+0158 |                 self._verify_greedy_sampling()
+0159 |
+
+[Original lines 160-194]
+0160 |     def _verify_args(self) -> None:
+0161 |         if self.n < 1:
+0162 |             raise ValueError(f"n must be at least 1, got {self.n}.")
+0163 |         if self.best_of < self.n:
+0164 |             raise ValueError(f"best_of must be greater than or equal to n, "
+0165 |                              f"got n={self.n} and best_of={self.best_of}.")
+0166 |         if not -2.0 <= self.presence_penalty <= 2.0:
+0167 |             raise ValueError("presence_penalty must be in [-2, 2], got "
+0168 |                              f"{self.presence_penalty}.")
+0169 |         if not -2.0 <= self.frequency_penalty <= 2.0:
+0170 |             raise ValueError("frequency_penalty must be in [-2, 2], got "
+0171 |                              f"{self.frequency_penalty}.")
+0172 |         if not 0.0 < self.repetition_penalty <= 2.0:
+0173 |             raise ValueError("repetition_penalty must be in (0, 2], got "
+0174 |                              f"{self.repetition_penalty}.")
+0175 |         if self.temperature < 0.0:
+0176 |             raise ValueError(
+0177 |                 f"temperature must be non-negative, got {self.temperature}.")
+0178 |         if not 0.0 < self.top_p <= 1.0:
+0179 |             raise ValueError(f"top_p must be in (0, 1], got {self.top_p}.")
+0180 |         if self.top_k < -1 or self.top_k == 0:
+0181 |             raise ValueError(f"top_k must be -1 (disable), or at least 1, "
+0182 |                              f"got {self.top_k}.")
+0183 |         if not 0.0 <= self.min_p <= 1.0:
+0184 |             raise ValueError("min_p must be in [0, 1], got "
+0185 |                              f"{self.min_p}.")
+0186 |         if self.max_tokens < 1:
+0187 |             raise ValueError(
+0188 |                 f"max_tokens must be at least 1, got {self.max_tokens}.")
+0189 |         if self.logprobs is not None and self.logprobs < 0:
+0190 |             raise ValueError(
+0191 |                 f"logprobs must be non-negative, got {self.logprobs}.")
+0192 |         if self.prompt_logprobs is not None and self.prompt_logprobs < 0:
+0193 |             raise ValueError(f"prompt_logprobs must be non-negative, got "
+0194 |                              f"{self.prompt_logprobs}.")

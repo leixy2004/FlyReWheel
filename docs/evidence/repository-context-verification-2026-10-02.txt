@@ -1,0 +1,48 @@
+Repository-context final source-frozen verification, 2026-10-02
+Base repository HEAD:
+a4f64bd7c05c56a1c6844d193d360f6a90a9f722
+Source/test/script tree SHA-256 before:
+57e4f7adfa058020d2dd04fc304feb6c319ba3aecf6315db821a57ed554c0947  -
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 build
+> tsc -p deploy/tsconfig.build.json && node scripts/copy-migrations.mjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 validate:deploy
+> node deploy/validate.mjs
+
+PASS: 30 YAML documents parsed; local references, offline defaults, secret-free templates, workload hardening and single-runner invariants verified.
+NOT VERIFIED HERE: Kustomize rendering, Kubernetes API schemas/admission, image builds, cluster startup, network enforcement, live credentials/inference, backups or crash recovery.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+
+ Test Files  62 passed (62)
+      Tests  885 passed (885)
+   Start at  15:32:19
+   Duration  540.39s (tests 99%, import 1%)
+
+Source/test/script tree SHA-256 after:
+57e4f7adfa058020d2dd04fc304feb6c319ba3aecf6315db821a57ed554c0947  -
+Aggregate exit code: 0
+
+Additional verification artifacts:
+- compiled-repository-context-smoke-2026-10-02.json: final compiled capture, exact-head binding, verify, cite, import/show/reopen, pagination and tamper smoke passed.
+- repository-context-legacy-compatibility-2026-10-02.json: original a4f64bd7 and refactored snapshot content/digests match; existing semantic contract files unchanged.
+- Focused final context + snapshot checks passed 17 tests across 2 files before this aggregate.
+
+Non-final run note: an earlier in-flight aggregate overlapped the two final hardening edits and encountered the added assertions against cached pre-hardening modules (FIFO import timed out; binary/text contradiction was not rejected). That mixed run is not used as verification. The fresh aggregate above kept the final source/test/script tree identical throughout and passed without relaxing assertions or timeouts.
+
+Boundary: context capture/citations are implemented; semantic-review acceptance is not integrated. Historical availability remains unproven. No live inference, authentication, deployment, new dependency, upload, publication or source commit.

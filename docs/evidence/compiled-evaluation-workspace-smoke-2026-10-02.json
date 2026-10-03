@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "classification": "development-fixture",
+  "mode": "compiled-evaluation-workspace-real-sandcastle-bundle-smoke",
+  "policy": "exact-allowed-head-closure-v1",
+  "exportId": "authored-export",
+  "requestDigest": "9ea57c71d8b8ab8315fed740647de600c155d2da7ac5ca58f3adbcf922694791",
+  "baselineRequestDigest": "20c7833fe6497dfefc24618b14b4f4236dfdbb6307653b11b547045673f170a4",
+  "baselineRecordDigest": "293eb7858f1c5f4d716829d2d5e36a832d82547670cd6f156e80196dc2702e84",
+  "inventory": {
+    "count": 7,
+    "expandedBytes": 485,
+    "digest": "3a7ee05e30e9cab5cac9a7d0e84f67829a1942e37e4a9e3ae53096a2bd964afc"
+  },
+  "transfer": "real-public-sandcastle-bundle",
+  "transferredBytes": 802,
+  "runtime": "authored-standalone-clone-no-shared-object-storage",
+  "forbiddenFutureObjectLookups": "all-rejected",
+  "fullCommittedSourceAndTestTree": "verified-without-execution",
+  "baselineMetadataAcrossPrepareExecutionCleanup": "byte-identical",
+  "sourceRefs": "unchanged",
+  "execution": "succeeded",
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ],
+  "fetchBoundaryCalls": 0,
+  "modelExecution": "not_run",
+  "targetCodeExecution": "not_run",
+  "liveBackend": "not_run",
+  "historicalPublicAvailability": "unproven",
+  "timestampsEstablishVisibility": false,
+  "limitations": [
+    "Authored development fixture, not an empirical evaluation or historical availability proof.",
+    "No live OpenSandbox cluster or model was used; local lifecycle receipts are authored fixture evidence.",
+    "Object/ref isolation is not a runtime/filesystem sandbox; real evaluation runtimes must not have source/store access."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": 2078993154,
+  "number": 8568,
+  "repository": "vllm-project/vllm",
+  "url": "https://github.com/vllm-project/vllm/pull/8568",
+  "title": "fix validation: Only set tool_choice `auto` if at least one tool is provided",
+  "body": "Passing \r\n\r\n```\r\n{\r\n...\r\n\"tools\": null\r\n}\r\n```\r\n\r\nwithout \"tool_choice\" key causes a validation failure because the code sets \"tool_choice\" to \"auto\" on its own and then fails because it finds \"tools\" as None.\r\nThis change fixes the validation so that \"tool_choice\" is only set if at least one tool is provided",
+  "author": {
+    "id": 10295418,
+    "login": "chiragjn"
+  },
+  "state": "closed",
+  "draft": false,
+  "merged": true,
+  "createdAt": "2024-09-18T15:17:18Z",
+  "updatedAt": "2024-09-26T23:23:18Z",
+  "closedAt": "2024-09-26T23:23:17Z",
+  "mergedAt": "2024-09-26T23:23:17Z",
+  "baseRef": "main",
+  "baseTip": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+  "headRef": "patch-3",
+  "head": "eae161c33f47a0b760701769f56fc249563f8ed0",
+  "headRepository": "chiragjn/vllm",
+  "mergeCommit": "ee2da3e9efb38add804e2023d47e9f42f38bd638",
+  "reportedChangedFiles": 2,
+  "reportedIssueComments": 3,
+  "reportedReviewComments": 5
+}

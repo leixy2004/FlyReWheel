@@ -1,0 +1,143 @@
+
+[Original lines 205-218]
+0205 |     async def encode_request_async(
+0206 |         self,
+0207 |         request_id: str,  # pylint: disable=unused-argument
+0208 |         prompt: Optional[str],
+0209 |         prompt_token_ids: Optional[List[int]] = None,
+0210 |         lora_request: Optional[LoRARequest] = None,
+0211 |     ):
+0212 |         if prompt_token_ids is None:
+0213 |             assert prompt is not None
+0214 |             prompt_token_ids = await self.tokenizer.encode_async(
+0215 |                 request_id=request_id,
+0216 |                 prompt=prompt,
+0217 |                 lora_request=lora_request)
+0218 |         return prompt_token_ids
+
+[Original lines 305-319]
+0305 |     _engine_class: Type[_AsyncLLMEngine] = _AsyncLLMEngine
+0306 |
+0307 |     def __init__(self,
+0308 |                  worker_use_ray: bool,
+0309 |                  engine_use_ray: bool,
+0310 |                  *args,
+0311 |                  log_requests: bool = True,
+0312 |                  max_log_len: Optional[int] = None,
+0313 |                  start_engine_loop: bool = True,
+0314 |                  **kwargs) -> None:
+0315 |         self.worker_use_ray = worker_use_ray
+0316 |         self.engine_use_ray = engine_use_ray
+0317 |         self.log_requests = log_requests
+0318 |         self.max_log_len = max_log_len
+0319 |         self.engine = self._init_engine(*args, **kwargs)
+
+[Original lines 347-401]
+0347 |     def _init_engine(self, *args,
+0348 |                      **kwargs) -> Union[_AsyncLLMEngine, "ray.ObjectRef"]:
+0349 |         if not self.engine_use_ray:
+0350 |             engine_class = self._engine_class
+0351 |         elif self.worker_use_ray:
+0352 |             engine_class = ray.remote(num_cpus=0)(self._engine_class).remote
+0353 |         else:
+0354 |             # FIXME(woosuk): This is a bit hacky. Be careful when changing the
+0355 |             # order of the arguments.
+0356 |             cache_config = args[1]
+0357 |             parallel_config = args[2]
+0358 |             if parallel_config.tensor_parallel_size == 1:
+0359 |                 num_gpus = cache_config.gpu_memory_utilization
+0360 |             else:
+0361 |                 num_gpus = 1
+0362 |             engine_class = ray.remote(num_gpus=num_gpus)(
+0363 |                 self._engine_class).remote
+0364 |         return engine_class(*args, **kwargs)
+0365 |
+0366 |     async def engine_step(self) -> bool:
+0367 |         """Kick the engine to process the waiting requests.
+0368 |
+0369 |         Returns True if there are in-progress requests."""
+0370 |
+0371 |         new_requests, finished_requests = (
+0372 |             self._request_tracker.get_new_and_finished_requests())
+0373 |
+0374 |         for new_request in new_requests:
+0375 |             # Add the request into the vLLM engine's waiting queue.
+0376 |             # TODO: Maybe add add_request_batch to reduce Ray overhead
+0377 |             if self.engine_use_ray:
+0378 |                 await self.engine.add_request.remote(**new_request)
+0379 |             else:
+0380 |                 await self.engine.add_request_async(**new_request)
+0381 |
+0382 |         if finished_requests:
+0383 |             await self._engine_abort(finished_requests)
+0384 |
+0385 |         if self.engine_use_ray:
+0386 |             request_outputs = await self.engine.step.remote()
+0387 |         else:
+0388 |             request_outputs = await self.engine.step_async()
+0389 |
+0390 |         # Put the outputs into the corresponding streams.
+0391 |         for request_output in request_outputs:
+0392 |             self._request_tracker.process_request_output(
+0393 |                 request_output, verbose=self.log_requests)
+0394 |
+0395 |         return len(request_outputs) > 0
+0396 |
+0397 |     async def _engine_abort(self, request_ids: Iterable[str]):
+0398 |         if self.engine_use_ray:
+0399 |             await self.engine.abort_request.remote(request_ids)
+0400 |         else:
+0401 |             self.engine.abort_request(request_ids)
+
+[Original lines 415-465]
+0415 |         prompt: Optional[str],
+0416 |         sampling_params: SamplingParams,
+0417 |         prompt_token_ids: Optional[List[int]] = None,
+0418 |         arrival_time: Optional[float] = None,
+0419 |         lora_request: Optional[LoRARequest] = None,
+0420 |         prefix_pos: Optional[int] = None,
+0421 |     ) -> AsyncStream:
+0422 |         if self.log_requests:
+0423 |             shortened_prompt = prompt
+0424 |             shortened_token_ids = prompt_token_ids
+0425 |             if self.max_log_len is not None:
+0426 |                 if shortened_prompt is not None:
+0427 |                     shortened_prompt = shortened_prompt[:self.max_log_len]
+0428 |                 if shortened_token_ids is not None:
+0429 |                     shortened_token_ids = shortened_token_ids[:self.
+0430 |                                                               max_log_len]
+0431 |             logger.info(f"Received request {request_id}: "
+0432 |                         f"prompt: {shortened_prompt!r}, "
+0433 |                         f"prefix_pos: {prefix_pos},"
+0434 |                         f"sampling params: {sampling_params}, "
+0435 |                         f"prompt token ids: {shortened_token_ids}, "
+0436 |                         f"lora_request: {lora_request}.")
+0437 |
+0438 |         if not self.is_running:
+0439 |             if self.start_engine_loop:
+0440 |                 self.start_background_loop()
+0441 |             else:
+0442 |                 raise AsyncEngineDeadError(
+0443 |                     "Background loop is not running. If it was running, "
+0444 |                     "inspect the output to find the stacktrace of the "
+0445 |                     "error that caused the background loop to stop "
+0446 |                     "(AsyncEngineDeadError).")
+0447 |
+0448 |         if arrival_time is None:
+0449 |             arrival_time = time.time()
+0450 |         prompt_token_ids = await self.engine.encode_request_async(
+0451 |             request_id=request_id,
+0452 |             prompt=prompt,
+0453 |             prompt_token_ids=prompt_token_ids,
+0454 |             lora_request=lora_request)
+0455 |
+0456 |         stream = self._request_tracker.add_request(
+0457 |             request_id,
+0458 |             prompt=prompt,
+0459 |             sampling_params=sampling_params,
+0460 |             prompt_token_ids=prompt_token_ids,
+0461 |             arrival_time=arrival_time,
+0462 |             lora_request=lora_request,
+0463 |             prefix_pos=prefix_pos)
+0464 |
+0465 |         return stream

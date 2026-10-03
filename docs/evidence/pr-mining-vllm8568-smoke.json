@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "pr-mining-local-smoke",
+  "date": "2026-10-01",
+  "sourcePr": "https://github.com/vllm-project/vllm/pull/8568",
+  "sourceAcquisition": "previously captured public GitHub package; no fresh network call in this smoke",
+  "execution": "compiled node dist/cli.js with persistent local PGlite",
+  "candidateOrigin": "assistant-authored supplied hypothesis; no runtime model synthesis",
+  "evidenceDigest": "ae78e20298184fad19d0e9745aa0c50ed856d39701829e56b5bf294788e631a5",
+  "snapshotDigest": "94917319313ffa7b3e455b41ee335f598f18b95b55844903cf1ad467e03eb61d",
+  "requestDigest": "3c9c710c7d91f46c224ab85599164c93af6f482105131d304b28ed4a00bae29e",
+  "candidateDigest": "4655d76fe0e7d5543a15f646f188d5cf1cf953349fb3cdc1f70ee4ea020c0dcf",
+  "ruleDigest": "d8d5f83e0be801f71c628c039c0f2ac2f72892926a4b90b3137e706e4b6784e9",
+  "sourceCases": [
+    {
+      "id": "pr-case_f5400474d1e99e3105c3a23789b1694fad34056e7736acaaff80d3dc20677e0c",
+      "repository": "github:vllm-project/vllm",
+      "commit": "72fc97a0f100b92f1ff6c6a16e27d12f1c7569aa",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "sourceDigest": "d3340fb8076b8e9f82a4d0546a845b615ffa79573f5ebf7f61f4cd85ca0671fb",
+      "split": "training",
+      "expected": "unknown",
+      "reviewedBy": null
+    },
+    {
+      "id": "pr-case_f0edcb88e74910f7f04ef7d88c06d4add3c7e7be9adc5e2918ca07af1a7a0925",
+      "repository": "github:vllm-project/vllm",
+      "commit": "eae161c33f47a0b760701769f56fc249563f8ed0",
+      "path": "vllm/entrypoints/openai/protocol.py",
+      "sourceDigest": "54f985fd9d2dea5454e6dd1ea1ce48bda71e383e1fb15696aa4bb97160520369",
+      "split": "training",
+      "expected": "unknown",
+      "reviewedBy": null
+    }
+  ],
+  "verification": {
+    "separateProcessRequestReadMatches": true,
+    "separateProcessCandidateReadMatches": true,
+    "sourceCasesUnknown": true,
+    "activeRule": null,
+    "review": {
+      "id": "review_be8a6e615b2e56ba3dcad7cdc9aef7aa125b2d8da262d0dfd80dde2389c5609a",
+      "targets": 2,
+      "findings": 0,
+      "semanticStates": [
+        "not_run",
+        "not_run"
+      ]
+    }
+  },
+  "limitations": [
+    "Package integrity only; no reconstructed historical review checkpoint",
+    "No authenticated labels, no TP/FP claims",
+    "No target repository code executed",
+    "No live mining, detector/regression quality or model benchmark",
+    "No external writes, uploads, authentication changes or activation"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "mode": "compiled-authored-sdk-context-revision-generation",
+  "evidencePolicyVersion": "selected-context-evidence-v1",
+  "repositoryContextBindings": [
+    {
+      "feedbackId": "compiled-fp",
+      "reviewId": "review_87e62048bdc3a96813f7843c2c9254271daf24fcfb9486541f9329d076a82bd9",
+      "reviewDigest": "e27e828c01ce10817977533630ba25e009e31c30fcd43c33aa8065203368227e",
+      "snapshotDigest": "c14dafb642eead214c16cfecdd08b0f58c41f943637874daa65e119195d74b5d",
+      "repositoryContextDigests": [
+        "bcace7a2bd543aa8a5a237221dd1ecec8b73c1f65b7798b9b902c5b0904b80c5"
+      ],
+      "evidenceRefs": [
+        "933d586ddcb0d76fbf3b82a09cd0af5f6ce7ab4547629303fb219c8266723db1"
+      ]
+    }
+  ],
+  "sourceRepositoryRemovedBeforeReopen": true,
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "requestDigest": "67b444df4edac5eca052c495ad9ed61df5686829ec17ece5e503b3f4db7f8bcb",
+  "candidateDigest": "7dc481484326ad6bda872ab008b9ea37bf8529d409509314d00699737512c57e",
+  "ruleDigest": "3b85540a6d858b90250b1adea658b09050f2c7a2a0a94354720b82b4afecd792",
+  "source": "fixture",
+  "protocol": "rule-revision-v3",
+  "sessionId": "compiled-revision-sdk",
+  "policyVersion": "diagnosis-operators-v1",
+  "operator": "boundary_update",
+  "persistedNonMutationOperators": [
+    "retain_rule",
+    "request_context",
+    "abstain"
+  ],
+  "diagnosisMutationMismatch": "rejected",
+  "protectedBoundaryEdit": "rejected",
+  "diagnosis": "model-proposal-not-ground-truth",
+  "comparison": {
+    "status": "compatible",
+    "preserved": 1,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regression": {
+    "status": "regressed",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 1,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "regressionAcceptance": "blocked",
+  "localDecision": "accept",
+  "humanVerdict": "Unknown",
+  "activation": "not_performed",
+  "reopenedIdentically": true,
+  "cleanup": "verified",
+  "lifecycle": [
+    "lease-acquired",
+    "host-workspace-verified",
+    "runtime-reserved",
+    "runtime-workspace-verified",
+    "worker-started",
+    "worker-completed",
+    "stop-verified",
+    "evidence-collected",
+    "destroy-verified",
+    "lease-released"
+  ]
+}

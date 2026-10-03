@@ -1,0 +1,69 @@
+Scope revision applicability verification — 2026-10-02
+
+Working tree based on 9758a60a377c186194b7dd52e2e35c31ac0ee17c.
+No commit was created by this implementation task.
+
+Result
+- Opt-in scope-applicability-v5 comparison policy is implemented.
+- A dedicated selected-finding applicability claim may correct a captured,
+  path-excluded FP anchor with explicit context-complete NOT_APPLICABLE evidence.
+- Ordinary scoped review retains out_of_scope / not_run and never silently
+  reviews excluded targets.
+- Existing scorer versions and stored hashes keep their original interpretation.
+- V5 reports target disposition coverage separately and rejects lost established
+  positive regressions or selected TP feedback, including contradictory
+  NOT_APPLICABLE claims and mixed FP/TP anchors in an excluded file.
+- Unknown/absent/skipped work does not count as correction. Excluded whole-file
+  negative/fixed regression cases stay inconclusive; one finding claim cannot
+  certify file-wide applicability.
+
+Verification
+- Full frozen suite: 86 files, 1266 tests passed, exit 0, 833.25 seconds.
+  Command: ./node_modules/.bin/vitest run --maxWorkers=2
+  Supervision allowance: timeout 1200 seconds.
+  Log: scope-applicability-full-suite-2026-10-02.txt
+- Final npm run typecheck: passed.
+- Final npm run build: passed.
+- Final git diff --check: passed.
+- New focused applicability scorer/storage tests: 17 passed.
+- New dedicated workspace/receipt tests: 14 passed.
+- Source plus freshly compiled worker-entrypoint suite: 71 passed.
+- Existing revision-generation/workspace runner/worker regressions: 68 passed.
+- Earlier overlapping focused runs: 69 initial comparison/governance tests and
+  52 context/governance tests passed. These counts are not additive coverage.
+- Exact SDK receipt/capability persistence and source-gone reopen test passed
+  after the final immutable-retry adjustment. The full suite includes that edit.
+
+Functional freeze
+- 297 files under src, tests, deploy, scripts, experiments plus package.json,
+  package-lock.json and tsconfig.json were hashed before the full run.
+- Manifest SHA256:
+  597c309fef62ca67fc1c536808b3b8d42bc881ef324bbd7611f2a0856155e2b6
+- Rechecked after the full run, final typecheck and final build: no frozen
+  functional path changed. Only these verification records were added afterward.
+
+Evidence boundaries exercised
+- Exact request, base/candidate rule and version, review IDs/content digests,
+  snapshot/repository/head, feedback, base finding/anchor and selected context.
+- Every supplied evidence byte checked, including unused citations; decisive
+  claims must cite own after-side evidence spanning the selected finding.
+- Required-context union and explicit missing context gated per claim.
+- Unselected context, before-only/context-only/other-anchor evidence, dangling
+  references, duplicate claims and identity substitutions rejected.
+- Fixed comparison-applicability-v1 typed worker, no-tools policy, local Git and
+  selected-context recapture, process supervision, cleanup and cancellation.
+- JSON or copied objects cannot mint runtime capabilities for a new comparison.
+  An exact validated immutable retry after restart returns the saved comparison;
+  a new ID with only imported receipt JSON remains rejected.
+- Receipts rederive canonical input/prompt/request/response/runtime digests after
+  the original source checkout is gone.
+
+Limitations
+All semantic judgments and context-kind declarations remain unverified fixture
+or model claims. Exact bytes and receipts establish binding and application
+provenance, not semantic truth, logical narrowing, contract history, generalization
+or human ground truth. Literal path scope is structured selection, not a logical
+solver. Whole-file applicability and detector-language applicability are outside
+this bounded channel. Authored SDK/worker fixtures are explicitly no-isolation,
+no-live-model evidence; no live authentication, model, backend or network run,
+deployment, publication, upload, new dependency or project commit was performed.

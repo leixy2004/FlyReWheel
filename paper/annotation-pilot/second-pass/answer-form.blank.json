@@ -1,0 +1,176 @@
+{
+  "form_version": 1,
+  "purpose": "developmental_training_only",
+  "stage": 2,
+  "participant_id": null,
+  "session_date": null,
+  "python_and_repository_familiarity": null,
+  "completed_independently": null,
+  "allowed_materials_only": null,
+  "deviations": null,
+  "prior_response_sha256": null,
+  "session_timing": {
+    "started_at_utc": null,
+    "ended_at_utc": null,
+    "active_minutes": null,
+    "pause_minutes": null
+  },
+  "cases": [
+    {
+      "case_id": "A",
+      "familiarity": {
+        "recognized_case_or_version": null,
+        "prior_fix_or_result_exposure": null,
+        "details": null,
+        "accidental_exposure_or_deviation": null
+      },
+      "timing": {
+        "started_at_utc": null,
+        "ended_at_utc": null,
+        "active_minutes": null,
+        "pause_minutes": null,
+        "unfinished_due_to_time": null
+      },
+      "judgment": null,
+      "judgment_explanation": null,
+      "confidence": null,
+      "conditional_rule": {
+        "when": null,
+        "require": null,
+        "because": null,
+        "scope": null
+      },
+      "applicability_preconditions": [],
+      "exceptions_or_legal_neighbors": [],
+      "reusable_rule_supported": null,
+      "repository_specificity": null,
+      "specificity_explanation": null,
+      "context_sufficiency": null,
+      "evidence": [],
+      "missing_context": [],
+      "limitations": null,
+      "historical_as_of_claim": null,
+      "historical_visibility_explanation": null,
+      "change_from_first_pass": null,
+      "update_cause_hypotheses": [],
+      "update_cause_explanation": null
+    },
+    {
+      "case_id": "B",
+      "familiarity": {
+        "recognized_case_or_version": null,
+        "prior_fix_or_result_exposure": null,
+        "details": null,
+        "accidental_exposure_or_deviation": null
+      },
+      "timing": {
+        "started_at_utc": null,
+        "ended_at_utc": null,
+        "active_minutes": null,
+        "pause_minutes": null,
+        "unfinished_due_to_time": null
+      },
+      "judgment": null,
+      "judgment_explanation": null,
+      "confidence": null,
+      "conditional_rule": {
+        "when": null,
+        "require": null,
+        "because": null,
+        "scope": null
+      },
+      "applicability_preconditions": [],
+      "exceptions_or_legal_neighbors": [],
+      "reusable_rule_supported": null,
+      "repository_specificity": null,
+      "specificity_explanation": null,
+      "context_sufficiency": null,
+      "evidence": [],
+      "missing_context": [],
+      "limitations": null,
+      "historical_as_of_claim": null,
+      "historical_visibility_explanation": null,
+      "change_from_first_pass": null,
+      "update_cause_hypotheses": [],
+      "update_cause_explanation": null
+    },
+    {
+      "case_id": "C",
+      "familiarity": {
+        "recognized_case_or_version": null,
+        "prior_fix_or_result_exposure": null,
+        "details": null,
+        "accidental_exposure_or_deviation": null
+      },
+      "timing": {
+        "started_at_utc": null,
+        "ended_at_utc": null,
+        "active_minutes": null,
+        "pause_minutes": null,
+        "unfinished_due_to_time": null
+      },
+      "judgment": null,
+      "judgment_explanation": null,
+      "confidence": null,
+      "conditional_rule": {
+        "when": null,
+        "require": null,
+        "because": null,
+        "scope": null
+      },
+      "applicability_preconditions": [],
+      "exceptions_or_legal_neighbors": [],
+      "reusable_rule_supported": null,
+      "repository_specificity": null,
+      "specificity_explanation": null,
+      "context_sufficiency": null,
+      "evidence": [],
+      "missing_context": [],
+      "limitations": null,
+      "historical_as_of_claim": null,
+      "historical_visibility_explanation": null,
+      "change_from_first_pass": null,
+      "update_cause_hypotheses": [],
+      "update_cause_explanation": null
+    },
+    {
+      "case_id": "D",
+      "familiarity": {
+        "recognized_case_or_version": null,
+        "prior_fix_or_result_exposure": null,
+        "details": null,
+        "accidental_exposure_or_deviation": null
+      },
+      "timing": {
+        "started_at_utc": null,
+        "ended_at_utc": null,
+        "active_minutes": null,
+        "pause_minutes": null,
+        "unfinished_due_to_time": null
+      },
+      "judgment": null,
+      "judgment_explanation": null,
+      "confidence": null,
+      "conditional_rule": {
+        "when": null,
+        "require": null,
+        "because": null,
+        "scope": null
+      },
+      "applicability_preconditions": [],
+      "exceptions_or_legal_neighbors": [],
+      "reusable_rule_supported": null,
+      "repository_specificity": null,
+      "specificity_explanation": null,
+      "context_sufficiency": null,
+      "evidence": [],
+      "missing_context": [],
+      "limitations": null,
+      "historical_as_of_claim": null,
+      "historical_visibility_explanation": null,
+      "change_from_first_pass": null,
+      "update_cause_hypotheses": [],
+      "update_cause_explanation": null
+    }
+  ]
+}

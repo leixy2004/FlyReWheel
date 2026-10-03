@@ -1,0 +1,80 @@
+{
+  "status": "succeeded",
+  "mode": "authored-fixture-only",
+  "modelExecution": "not_run",
+  "isolation": "not_verified",
+  "evidence": {
+    "historicalSnapshotDigest": "e7d6dac7db91da77ed82e65687b22311d8cb3b47112656b1d8c21f0f34d69592",
+    "prEvidenceDigest": "51ec4eed91caae67059d519f29f32a663f7454e017fb399d5934ae8851acd7a4",
+    "miningRequestDigest": "64329c84bf3910f15926a7d286e23fb6d243a038472a55a09074a52a8a90ed72",
+    "minedCandidateDigest": "aad63c04ed57a27bd6ab8772eb1d0ef04cddd433e9a2672de6e45887c317cdf4",
+    "baseRuleDigest": "1ff3b08560e2f1648617dfc9eb33e78da56154308f3785ef4ec8c8bdeb407d4e",
+    "targetSnapshotDigest": "2a2fbff812298c19057fd4e4524cdf6626edcf0c47bac5c85f36562857af45ce",
+    "baseReviewId": "review_466225e136a59010f2c7cdb8c0c6226776d091a0ba05f6bb97e3d3819d91835d"
+  },
+  "outcomes": [
+    {
+      "scenario": "compatible",
+      "requestDigest": "6332a673164aebc969be421b8dc6e05daa86167e2507f8f260db4aa766482084",
+      "candidateDigest": "76e35767fedce7f77136ba8229e60b8606b36bf7ade4a2fb7a696bd875b71215",
+      "ruleDigest": "1cc377218b647d06daae221a9b8a2481e0780f44c42322f500c8e9db2fbab895",
+      "reviewId": "review_c9919339b58ae54a70db6e288367b04218a889f14cebc9827375371a7612a485",
+      "comparisonDigest": "dd2ff1b33f19d54d2db869eca39d80bf77af70b3d24a408b08186427f5e40f56",
+      "summary": {
+        "status": "compatible",
+        "preserved": 1,
+        "corrected": 1,
+        "regressed": 0,
+        "stillFailing": 0,
+        "inconclusive": 0
+      },
+      "decisionDigest": "94a4c4613bcc9d953f272ad1c4f49d49f40db6abbf3d464c2d672f914f95908d",
+      "localDecision": "accept",
+      "acceptance": "fixture-only",
+      "activation": "not_performed"
+    },
+    {
+      "scenario": "regressed",
+      "requestDigest": "22d6bc9de5623e831232402e4588fdf6bcff912810c7a4079fe705289ae833e2",
+      "candidateDigest": "2d7d8dddca91a51b72451d926d653973becfa7d23b6096ae60fadb4831c452f4",
+      "ruleDigest": "1a244f56e75a36b405711658eba3d7aaf3e87ab56f723fd1dcd80ca402d32ba3",
+      "reviewId": "review_3a0fd8b678981326787397a3e0d4f81b7df8b1e93b01a5a1cb623394166c249b",
+      "comparisonDigest": "79066e040b5a5fd4619c62909cf253dc3df3e56bf0db6c39f5375eddb746a9dd",
+      "summary": {
+        "status": "regressed",
+        "preserved": 0,
+        "corrected": 1,
+        "regressed": 1,
+        "stillFailing": 0,
+        "inconclusive": 0
+      },
+      "decisionDigest": "7d16ac73679082c1cdbcb43622d8da15adf4b8b99b7e9cea2790dfc0a093d336",
+      "localDecision": "reject",
+      "acceptance": "blocked-as-expected",
+      "activation": "not_performed"
+    }
+  ],
+  "checks": {
+    "realAstGrepTargets": 2,
+    "historicalSourceLabels": "unknown-only",
+    "futureBytesExcludedFromMiningPrompt": true,
+    "positivePreserved": true,
+    "negativeCorrected": true,
+    "regressionAcceptanceBlocked": true,
+    "humanVerdicts": "Unknown",
+    "activation": "not_performed",
+    "reopenedIdentically": true,
+    "reopenedRecords": 28,
+    "rerunPolicy": "reuse-and-revalidate-immutable-records",
+    "fullModelRun": "not_run"
+  },
+  "limitations": [
+    "Fixture-only plumbing demonstration: proposals, semantic judgments, TP/FP expectations and local decisions are authored; no live model or developer feedback.",
+    "The Git history is real but synthetic. GitHub metadata is authored in the evidence format, not acquired from GitHub; package integrity is not provider verification.",
+    "Mining consumes only selected historical changed sides; source cases remain unknown. Later fixture feedback is anchor-scoped, not whole-file ground truth.",
+    "The authored CLI runs through the installed Codex SDK with selected evidence and tools disabled; this is not sandbox isolation or a production backend.",
+    "Comparisons cover two selected feedback anchors only. No regression cases are invented for unlabelled mined sources; these scenarios are not empirical efficacy or a heldout evaluation.",
+    "Full local history is available to workspace infrastructure. No certified temporal isolation, repository-wide semantic correctness or notification eligibility is established.",
+    "Local accept/reject never activates a rule. Immutable mining/revision requests remain pending and synthesis not_run; fixture feedback leaves human verdicts Unknown."
+  ]
+}

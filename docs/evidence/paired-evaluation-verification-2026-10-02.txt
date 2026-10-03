@@ -1,0 +1,68 @@
+FlyReWheel offline paired semantic-review evaluation verification
+Date: 2026-10-02
+Base commit: 7333ea08021d28af4f04eb54681af84e9b855e58
+Working-tree extension only. No commit, push, publish, upload, deployment or dependency change.
+
+Scope
+- Separate exact-anchor-issue-paired-v1 descriptive scorer; no v1 promotion changes
+- Three frozen manifests: dataset/sampling/temporal/families, separately supplied labels, review arms with exact policy/model/information/budget bindings
+- Reuse full semantic-rule/snapshot/review validation without detector or model execution
+- Fixed full PR x family roster, exact source anchors, deduplicated issue counts, retained unknown/excluded/unmatched records
+- Paired descriptive counts/deltas/transitions only; no population estimate, confidence interval, significance test, promotion or efficacy claim
+- CLI immutable-file output, bounded regular-file/UTF-8 reads and authored synthetic demonstration
+
+Completed checks
+- Focused new tests: 46/46 passed across 2 files (including source CLI roundtrip and immutable-output/error tests)
+- npm run typecheck: PASS
+- npm run build: PASS
+- node scripts/smoke-paired-evaluation.mjs: PASS (compiled demo, separate-process manifest replay, deterministic golden identity, refusal to overwrite)
+- npm run validate:deploy: PASS (30 YAML documents; static checks only)
+- git diff --check: PASS
+- Existing compiled local semantic-governance smoke: PASS (regression check)
+- Compiled paired-evaluation smoke repeat: byte-identical
+- Documentation relative targets: 144/144 exist across the changed Markdown files
+
+Full suite
+- PASS npm test (vitest run --maxWorkers=2): 791 tests across 54 files, 425.84 seconds, exit 0
+- PASS final typecheck and build rerun on unchanged source
+- Only documentation wording and this evidence record changed after aggregate execution started; source/test files were frozen for the run
+
+Adversarial checks
+- Exact positive issue deduplication with multiple anchors; false-alert anchor burden remains separate
+- Safe/unknown/not-verified/missing/failed/not-run positives remain in missed-positive counts
+- Shifted/before-side anchors, unmatched findings, zero labels and target-only legacy safety do not invent negative or safe evidence
+- Duplicate repository/PR aliases rejected independently of snapshot metadata/digest
+- Orphan, duplicate/conflicting labels, missing coverage, malformed anchors and tampered reviews rejected
+- Frozen workspace receipt context/history must agree with run declarations; aggregate declared usage cannot understate receipt lower bounds
+- Budget overruns and missing/mismatched paired rosters withhold deltas/transitions
+- Authored receipt fixture demonstrates internal validation only; forged import provenance never becomes provider/model/human authentication
+- FIFO/nonregular/oversized/invalid UTF-8 input fails without blocking, truncating or writing a report
+
+Compiled artifact
+- docs/evidence/compiled-paired-evaluation-smoke-2026-10-02.json
+- Golden report ID: paired_evaluation_b4ef714a908c1fca5cd43ef3ea0d60158a688cd0e452223df7ed7415dcd81f5f
+- Both authored arms find 2 of 5 positive instances and miss 3; candidate removes one negative-instance alert while losing one positive and gaining another
+- The input oracle and predictions are intentionally co-authored synthetic fixtures. These numbers are not model-quality or scientific effect results
+
+Limits
+- No actual model or provider API invocation, independent human annotation, live deployment or external mutation occurred
+- Imported sampling, temporal isolation, human/adjudication, model/version/policy and cost claims remain unverified declarations
+- Same declared conditions do not prove equal actual information/cost; unknown/partial labeling does not support exhaustive recall or representativeness
+- Exact-anchor matching is deliberately strict, has no fuzzy semantic matching and requires an independently frozen anchor rubric
+- No global manifest version registry or immutable filesystem service is implemented; exclusive writes and content identities provide local reproducibility only
+
+Frozen source and artifact SHA-256
+e139d43bf9a57c03a720096eed0c6a370c6d6b27e0dc9b635d22b55a772a5250  src/core/paired-evaluation.ts
+b3fbb5f30f225376ff09fa17b101579563118e3591fb0c1f2763aadef535ad66  src/paired-evaluation.ts
+418271c8144f682214e3e5ae1f0db0f22e60f392b1df103e5223bcbe7f5fcd77  src/paired-evaluation-demo.ts
+441c5997ccd7ef48cf11f5a2c1af8716fe9a444d03d4939995cea59e3d5e5aa8  src/cli.ts
+c4beb5a60a0695c4c94815bbee58e0960cd1422cdd80b1cd7aa0724748e41a98  src/core/index.ts
+106a97438e086d04b78f5af7d5867dfc45493dfdf27a7bf5881644274f715d96  tests/paired-evaluation.test.ts
+ce7bf3f5f8c07ab1d97108e5d497497a687da2204d97be689a66c0f10a6d3bde  tests/paired-evaluation.cli.test.ts
+e476b73192d45d0372c306f7510010eb4f6e586b306e45a1d3f59d9f13525395  tests/helpers/paired-evaluation-receipt.ts
+4227ffb8fb81d333d3248f78ab0e5b22aab8cb6b9d3d26ee151f38845f6ea396  scripts/smoke-paired-evaluation.mjs
+c1563630e4da6e55bbc5ae4fd3b96cb5e661c68d75e142b46e5e8c45ca9c460b  docs/paired-review-evaluation.md
+b3e6057c675b19ea65f75fc1d90bb11622395354bded99ec5fecf269f6a08f30  paper/method-draft.md
+ddba14ae5e70779d343aeaf7a26e9b858d6621ceb8a85883eb43747adf596711  paper/claim-evidence-checklist.md
+62cd17817a799717770fbb7b66325f2eab39fdc706e9585207bfe4e306d106cb  README.md
+bda6894f6b0aa8cdfb47c20560f26e8355d6a3ec335bccc868f1f398c6a0933b  docs/evidence/compiled-paired-evaluation-smoke-2026-10-02.json

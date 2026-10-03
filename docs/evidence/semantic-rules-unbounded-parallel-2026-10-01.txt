@@ -1,0 +1,67 @@
+v24.19.0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> flyrewheel@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 /workspace/scratch/bcbe35e84401/FlyReWheel
+
+ ❯ tests/workspace.test.ts (14 tests | 2 failed) 34793ms
+   × same identity concurrent allocation admits one and cannot be reused even after clean close 5018ms
+   × clean removal retains output branch commits, main, immutable cleanup evidence and idempotent result 5012ms
+ ❯ tests/core-invariants.test.ts (17 tests | 1 failed) 57122ms
+   ❯ immutable evidence in real embedded PostgreSQL (6)
+     × retains immutable records across a local PostgreSQL restart 11542ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/core-invariants.test.ts > immutable evidence in real embedded PostgreSQL > retains immutable records across a local PostgreSQL restart
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/core-invariants.test.ts:70:3
+     68| describe('immutable evidence in real embedded PostgreSQL', () => {
+     69|
+     70|   it('retains immutable records across a local PostgreSQL restart', as…
+       |   ^
+     71|     const directory = await mkdtemp(join(tmpdir(), 'flyrewheel-db-'));
+     72|     let disk: QualEvoStore | undefined;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/workspace.test.ts > same identity concurrent allocation admits one and cannot be reused even after clean close
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/workspace.test.ts:63:1
+     61| }, 15_000);
+     62|
+     63| test('same identity concurrent allocation admits one and cannot be reu…
+       | ^
+     64|   const f = await fixture('race'); const options = { ...identity(f), b…
+     65|   const outcomes = await Promise.allSettled([prepareWorkspace(options)…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/workspace.test.ts > clean removal retains output branch commits, main, immutable cleanup evidence and idempotent result
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/workspace.test.ts:73:1
+     71| });
+     72|
+     73| test('clean removal retains output branch commits, main, immutable cle…
+       | ^
+     74|   const f = await fixture('clean');
+     75|   const a = await prepareWorkspace({ ...identity(f), baseSha: f.commit…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 14 passed (16)
+      Tests  3 failed | 111 passed (114)
+   Start at  11:47:22
+   Duration  57.77s (tests 97%, import 2%, transform 1%)
