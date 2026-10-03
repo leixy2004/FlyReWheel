@@ -1,0 +1,19 @@
+{
+  "planCommit": "6fb867c0a2c8e95929bd406630646fc7e6856d54",
+  "startedAt": "2026-10-03T23:07:51.716Z",
+  "completedAt": "2026-10-03T23:09:24.423Z",
+  "elapsedMs": 92707,
+  "code": 0,
+  "signal": null,
+  "status": "completed",
+  "stopping": null,
+  "peakObservedTemporaryBytes": 161341440,
+  "diskLimit": 536870912,
+  "timeLimitMs": 600000,
+  "perFileProcessLimit": 67108864,
+  "diskEnforcement": "100ms observer plus per-file rlimit; not a filesystem aggregate quota; transient overshoot cannot be ruled out",
+  "failureDiagnostic": null,
+  "evidenceRetained": true,
+  "modelExecution": "not_run",
+  "upstreamExecution": "not_run"
+}

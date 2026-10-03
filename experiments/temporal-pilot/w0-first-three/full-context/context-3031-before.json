@@ -1,0 +1,94 @@
+{
+  "side": "before",
+  "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+  "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+  "manifest": {
+    "schemaVersion": 1,
+    "repositoryId": "github:encode/httpx",
+    "classification": "unverified-evaluation-input",
+    "allowedHeads": [
+      "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+    ],
+    "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+    "visibility": {
+      "basis": "caller-declared-exact-heads",
+      "declaredAsOf": null,
+      "evidenceDigests": [
+        "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa"
+      ]
+    }
+  },
+  "binding": {
+    "schemaVersion": 1,
+    "exportId": "httpx-w0-3031-before",
+    "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+    "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+    "repositoryId": "github:encode/httpx",
+    "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+    "allowedHeads": [
+      "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+    ],
+    "inventory": {
+      "count": 9383,
+      "expandedBytes": 49369678,
+      "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+    }
+  },
+  "exportRecord": {
+    "schemaVersion": 1,
+    "policy": "exact-allowed-head-closure-v1",
+    "request": {
+      "schemaVersion": 1,
+      "repositoryId": "github:encode/httpx",
+      "classification": "unverified-evaluation-input",
+      "allowedHeads": [
+        "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+      ],
+      "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "visibility": {
+        "basis": "caller-declared-exact-heads",
+        "declaredAsOf": null,
+        "evidenceDigests": [
+          "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa"
+        ]
+      }
+    },
+    "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+    "storageDigest": "b68908ab67f8d21440c2d7be0a1cb4528a3e1d943ae5217efe7bb51caab815b4",
+    "inventory": {
+      "count": 9383,
+      "expandedBytes": 49369678,
+      "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+    },
+    "refs": [
+      {
+        "name": "refs/heads/allowed-b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+      }
+    ],
+    "historicalPublicAvailability": "unproven",
+    "timestampsEstablishVisibility": false,
+    "isolation": "standalone-git-object-closure-not-an-execution-sandbox"
+  },
+  "observation": {
+    "objectClosureVerified": true,
+    "exactRefsVerified": true,
+    "fullCommittedTreeVerified": true,
+    "historicalPublicAvailability": "unproven",
+    "executionSandbox": false
+  },
+  "cleanBeforeProbe": true,
+  "dirtyChangesIsolated": true,
+  "derivedCleanup": "removed",
+  "immutableExportRetained": true,
+  "absentAmongAuthorizedCommitProbes": [
+    "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+    "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+    "ea3071642d12ed546d901861a5901da6fad37073",
+    "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+  ],
+  "generationTemplate": null,
+  "executable": false,
+  "configuredModel": null,
+  "workspacePathStatus": "derived-probe-removed-must-rederive-before-any-execution"
+}

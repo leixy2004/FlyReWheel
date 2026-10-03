@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-agent-offline-boundary-audit",
+  "reviewer": "leakage_audit",
+  "humanLabel": false,
+  "networkRequests": 0,
+  "allSixExports": {
+    "allStoredObjectsEqualSingleHeadAncestorClosure": true,
+    "inventoryCountAndDigestMatch": true,
+    "onlyAllowedHeadRef": true,
+    "headMatches": true,
+    "checkoutClean": true
+  },
+  "derivedDirectoriesRemoved": 6,
+  "cacheRefs": [],
+  "exactShaFetches": 6,
+  "fetchFailures": 0,
+  "retries": 0,
+  "elapsedMs": 92707,
+  "peakObservedBytes": 161341440,
+  "apiLedger": 48,
+  "newRestRequests": 0,
+  "modelExecution": "not_run",
+  "historicalPublicAvailability": "unproven",
+  "limitations": [
+    "Disk observation is not a filesystem hard quota.",
+    "Native agents are not independent human annotators."
+  ],
+  "identityAudit": {
+    "reviewer": "identity_audit",
+    "exportsReinspected": 6,
+    "filesPerCheckout": 114,
+    "uniqueFileCountClaimed": false,
+    "allSixCommitTreeIdentitiesMatchFrozenPackages": true,
+    "allThreeLocallyRecapturedSnapshotDigestsMatch": true,
+    "allAfterTemplatesBindOriginalRequestsAndExactHead": true,
+    "publishedContextJsonMatchesStageBytes": true,
+    "networkRequests": 0,
+    "targetCodeExecution": "not_run"
+  }
+}
