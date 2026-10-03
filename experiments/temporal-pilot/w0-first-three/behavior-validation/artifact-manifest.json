@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4553,
+      "sha256": "b2a1f5d2bbd3168c88ce365be371c88d58c731d9b51581005d2ce2d495e865fb"
+    },
+    {
+      "path": "container-results-readable.json",
+      "bytes": 3953,
+      "sha256": "bf7dd7a9eb8c58e9b5d5d958b21087584a4f61e54ea1f5a0f08b53cf16186670"
+    },
+    {
+      "path": "container-results.json",
+      "bytes": 2936,
+      "sha256": "f156d5c086b9571aa17b767d217e30ea30ed60e329459cea9922779a8c766caf"
+    },
+    {
+      "path": "dependency-acquisition.json",
+      "bytes": 3281,
+      "sha256": "279df84f572f50d69b4f6235fc77a781041641bce90a95d4cd4d7199620a35f9"
+    },
+    {
+      "path": "docs-after-download.log",
+      "bytes": 248,
+      "sha256": "d5d8526ff07ba74b72e46db4f6b3ddb44688a1a3536845ddcabd539be8817eca"
+    },
+    {
+      "path": "docs-before-download.log",
+      "bytes": 248,
+      "sha256": "d5d8526ff07ba74b72e46db4f6b3ddb44688a1a3536845ddcabd539be8817eca"
+    },
+    {
+      "path": "image-pull.log",
+      "bytes": 658,
+      "sha256": "327d053c0b0ec32bcadc29123e585f6ebbd887b46a8c1b4deafe13f0c29eae90"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 1017,
+      "sha256": "0d99c091fc23bc7f40db68fc77158502f566000bddfd3a935585ae354337bbd2"
+    },
+    {
+      "path": "input-quality.json",
+      "bytes": 2323,
+      "sha256": "9a5bbb220d47c46f593443fa4e4075a23f2c7265016f1570016204fd787a8f69"
+    },
+    {
+      "path": "ledger.json",
+      "bytes": 2802,
+      "sha256": "c3f58fdd264e93fece99b3a79d0b43257a047706dca79900a610ae6e0ea661af"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 3558,
+      "sha256": "71cc01ec8cd2538f49ef7e2fed031ad600a79380268fd2cad34033908a40bfe6"
+    },
+    {
+      "path": "ruff-after-download.log",
+      "bytes": 514,
+      "sha256": "168f42abe23762fee92842307d4ca95565134fbc0ee4ed221ac826fa726f8a90"
+    },
+    {
+      "path": "ruff-after.lock",
+      "bytes": 91,
+      "sha256": "81a9d51e71272a59a12bfb76945d44b5ee5d245f273fed7448e8ca7681342289"
+    },
+    {
+      "path": "ruff-before-download.log",
+      "bytes": 515,
+      "sha256": "dbf7c602aae42f9eae1f9fcbbe2b7c7f27428db6a7f6cc46debf4134ebd8d09a"
+    },
+    {
+      "path": "ruff-before.lock",
+      "bytes": 91,
+      "sha256": "1f38c7411036ef8d8a7e51ca91a214fb45cc522ece4772aecdd2acf31c66f20b"
+    }
+  ]
+}
