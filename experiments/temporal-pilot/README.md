@@ -52,6 +52,23 @@ metadata, not a locally verified clone or a historical public-visibility proof.
 A rerun overwrites the output with a newly timestamped observation; preserve the
 original version in Git before deciding to rerun.
 
+## Independent W0 commit identity lookup
+
+`node scripts/verify-temporal-source-identities.mjs` checks all 38 W0 merge commit
+objects through a separate official GitHub GraphQL lookup. The verifier pins the
+original frame SHA256 and queries only commit OID, tree OID, and complete ordered
+parent OIDs, in at most four requests of ten commits each. It does not query W1
+or W2 objects, PR content, source files, discussions, or labels. It uses existing
+`gh` authentication, with no retries or credential changes.
+
+`source-identity-verification.json` records the exact queries, timestamps, script
+and frame hashes, expected and observed identities, and all selected members,
+including failures or members not checked. The recorded run matched all 38 W0
+identities in four requests. This independently checks lookup consistency within
+GitHub's metadata, not local Git object integrity, historical public availability,
+source eligibility, or experimental efficacy. A rerun overwrites this evidence;
+preserve the recorded result in Git first.
+
 ## Boundaries and next gates
 
 This freezes a metadata sampling frame only, not the complete pilot or a research
