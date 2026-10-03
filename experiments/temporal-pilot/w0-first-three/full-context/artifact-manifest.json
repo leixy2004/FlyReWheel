@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-context-stage-artifact-manifest",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4510,
+      "sha256": "3cc60fe507ed07df2328c68294de42fb8a696622f7853b55a151a8d9223b6415"
+    },
+    {
+      "path": "context-3031-after.json",
+      "bytes": 34956,
+      "sha256": "ef541381154428592636d53ea8c3e510e05496e04809dfcd94bbc386745de63c"
+    },
+    {
+      "path": "context-3031-before.json",
+      "bytes": 3264,
+      "sha256": "4b081f03afb8b2aa4afa2bd86a84bd1b0e1be7a05585f2704dd47cb75c15be32"
+    },
+    {
+      "path": "context-3035-after.json",
+      "bytes": 29394,
+      "sha256": "436a1998f8bd220e270e5033c3cb8c1c5167105ec7381743c25d79c806155031"
+    },
+    {
+      "path": "context-3035-before.json",
+      "bytes": 3312,
+      "sha256": "e7a741934a9a3be738133d62cc5653a079e41f7ad51689184603c19a8548dfb9"
+    },
+    {
+      "path": "context-3036-after.json",
+      "bytes": 32507,
+      "sha256": "c97042983e190f88e793bedf676fede9f37b4ee0be1ae7f664ba730c76e92a5b"
+    },
+    {
+      "path": "context-3036-before.json",
+      "bytes": 3216,
+      "sha256": "c0c875cc237552041b3fbb00a5c04efdf8584aef3032d169bda312bade7f2e2a"
+    },
+    {
+      "path": "git-log.jsonl",
+      "bytes": 7885,
+      "sha256": "c920251187e9678632ef306fa07bd78d35027ed1e8a2bc12ebb8b4eada675b03"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 1242,
+      "sha256": "49ae98b605f64c47f5c3aa8da1899d363ec526455d8652804196a4347802304d"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 3947,
+      "sha256": "232931da121f236aad98b2be9f308cfee460eb10af937368b1b83f3c302f7051"
+    },
+    {
+      "path": "result.json",
+      "bytes": 5668,
+      "sha256": "c0f54b085a366956350155461fa47a53d953f26cd1cfb9c299d28095926fe94b"
+    },
+    {
+      "path": "stage-report.json",
+      "bytes": 635,
+      "sha256": "b276c8f9261cd9d532563681c8a0307d2bd148daca59a3e41eb7df4d503eecea"
+    }
+  ]
+}
