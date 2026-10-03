@@ -98,3 +98,25 @@ error-path tests, not a successful OpenSandbox server health receipt.
 The [metadata-only capacity follow-up](evidence/execd-capacity-2026-10-03.md) pins
 the actual amd64 digest, corrects the helper entrypoint assumption, and describes
 a bounded next measurement. Metadata alone does not admit a pull.
+
+## Final capacity update for the permission request
+
+The subsequent authorized [bounded layer measurement](evidence/execd-capacity-2026-10-03.md#authorized-bounded-payload-measurement--completed-follow-up)
+completed in 9.759 seconds: 57.52 MiB compressed, 115.40625 MiB decoded tar,
+all 13 layer/diff-ID hashes verified, no extraction/import/execution, owned cache
+removed. Pin `runtime.execd_image` to
+`opensandbox/execd@sha256:9b856dad9c73488660522361abfaaa1ddbb9032169bcfb44c83348f46bc1cd9a`.
+The revised conservative planning estimate is 5.619 GiB additional, leaving about
+10.898 GiB from current free space. The image capacity gap is resolved for a bounded
+attempt; dependency installation still has a monitored 1 GiB allowance. Preserve
+the 8 GiB planning envelope, 6 GiB reaction threshold and fresh pre-stage checks;
+neither value is a hard quota or a measured Docker peak.
+
+The parent can now request the four concrete permissions in the table above in
+one step: task-only API key, temporary verified/scoped TLS, loopback control plane
+with one bounded workload, and the explicit upstream helper default-root/network/
+capability/resource exception (including its retained execd ENTRYPOINT). No
+NET_ADMIN, new model credential, API call, privileged mode or host networking is
+required. None of those pending permissions has been exercised. Before a later
+launch, implement and verify the preparation/cleanup requirements documented in
+the capacity review; the current checker is not that executor.
