@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "kind": {
+      "type": "string",
+      "const": "unassigned-source-inspection-draft"
+    },
+    "packetId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "assignment": {
+      "type": "string",
+      "const": "unassigned"
+    },
+    "formalRelease": {
+      "type": "string",
+      "const": "blocked-history-and-rubric-unverified"
+    },
+    "coverage": {
+      "type": "string",
+      "enum": [
+        "unassessed"
+      ]
+    },
+    "label": {
+      "type": "null"
+    },
+    "ruleDefinition": {
+      "type": "null"
+    },
+    "response": {
+      "type": "null"
+    },
+    "instruction": {
+      "type": "string",
+      "const": "Do not assign correctness labels. Historical visibility and rule rubric are unverified. Record missing context only after assignment; do not search external sources."
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "packetId",
+    "assignment",
+    "formalRelease",
+    "coverage",
+    "label",
+    "ruleDefinition",
+    "response",
+    "instruction",
+    "sources"
+  ],
+  "additionalProperties": false
+}

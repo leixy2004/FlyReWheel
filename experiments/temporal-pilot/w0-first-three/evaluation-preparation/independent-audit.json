@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "reviewers": [
+    "identity_audit",
+    "leakage_audit"
+  ],
+  "scope": "offline leakage and measurement audit; not human labels",
+  "findingsAddressed": [
+    "Enforce exact before/after Ruff pair, commands, versions and exits.",
+    "Bind context tree and export request/inventory to original source identity.",
+    "Reject private annotation directories in repository or overlapping output, including symlink parents.",
+    "Separate private packets from facilitator mapping; never publish packet bytes or IDs."
+  ],
+  "counts": {
+    "samples": 3,
+    "sourceBindings": 8,
+    "contexts": 6,
+    "pairedToolChecks": 1,
+    "W1DevelopmentCandidates": 13,
+    "W2HoldoutCandidates": 19
+  },
+  "formalLabels": 0,
+  "ruleFamilies": 0,
+  "modelRuns": 0,
+  "effectEstimates": null,
+  "formalAsOfRelease": false,
+  "historicalVisibility": "unproven"
+}

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "PAPER-DATA-AUDIT.md",
+      "bytes": 2090,
+      "sha256": "8760b0209454d8b138248d25f4927575632e06ddedfadecb86ec758ab0d7eb12"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5178,
+      "sha256": "293ee8aae88c1e10eb1cfbdea0f48c8ee12119ee951f271f6ac9ddbbcd21a136"
+    },
+    {
+      "path": "blind-draft.schema.json",
+      "bytes": 1850,
+      "sha256": "987be49f575055d0062c929cf610747d57f1eb0f575e64732ada0ccd2556582e"
+    },
+    {
+      "path": "heldout-selection.json",
+      "bytes": 12417,
+      "sha256": "4ec61bac4681a6e8b428cba9f96e6e336ab59678120ab86b252d8abbb8ce1bae"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 876,
+      "sha256": "e5088428f71ec0499747bae88f37150c72accb9fb687bbca5a06c4dbc66ee1aa"
+    },
+    {
+      "path": "provenance-ledger.json",
+      "bytes": 23091,
+      "sha256": "9d6835f5a00eb84037c0dcdada00bc50495a1483a42f31cbcc5ab32ac0f69d93"
+    },
+    {
+      "path": "schema-contracts.json",
+      "bytes": 360,
+      "sha256": "a396bc5c6a30f318eb6539067cb520b9ecaf0ad058abc1baa62b74a9242d9bef"
+    }
+  ]
+}
