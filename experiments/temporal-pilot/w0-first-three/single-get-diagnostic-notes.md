@@ -32,3 +32,11 @@ new local commit has therefore not been attempted after the failure. The produce
 implementation remains ready for offline validation; a real collection attempt
 requires the existing cloud environment's supported egress path to be diagnosed
 and a subsequent request decision. This file does not authorize that step.
+
+## Authorized publication and offline follow-up
+
+The parent clarified that the stop rule applies to upstream acquisition, not
+publication through the existing repository Git connection. The saved diagnosis
+was subsequently pushed to PR #14 using that connection. No further upstream GET
+was performed. `docs/w0-proxy-diagnosis.md` records the later offline proxy check;
+it does not reinterpret the earlier failure as an authentication or TLS rejection.

@@ -36,6 +36,25 @@ it.each([['CERT_HAS_EXPIRED', 'tls'], ['ENOTFOUND', 'network-dns'], ['ECONNREFUS
   expect(calls).toBe(1); expect(JSON.stringify(result)).not.toContain('SECRET');
 });
 
+it.each([undefined, 'UNKNOWN', 'UNRECOGNIZED_SECRET_CODE'])('keeps unrecognized transport code %s unknown without inventing HTTP, TLS or proxy attribution', async code => {
+  let calls = 0;
+  const fetch: typeof globalThis.fetch = async () => {
+    calls++;
+    // Synthetic SDK-like status is not an observed HTTP response. No real proxy is contacted.
+    const cause = Object.assign(new Error('SECRET proxy or TLS guess'), { code, status: 500,
+      request: { headers: { authorization: 'SECRET credential' } } });
+    throw new TypeError('SECRET URL', { cause });
+  };
+  const result = await diagnoseW0FirstRead({ fetch });
+  expect(result).toMatchObject({ status: 'failed', httpStatus: null,
+    classification: { category: 'transport-unknown' }, requests: 1, totalRequestsUsed: 2 });
+  if (!('errorChain' in result)) throw new Error('Expected failed diagnostic');
+  expect(result.classification).toEqual({ category: 'transport-unknown' });
+  expect(result.errorChain.every(entry => entry.code === undefined)).toBe(true);
+  expect(calls).toBe(1);
+  expect(JSON.stringify(result)).not.toContain('SECRET');
+});
+
 it('does not invoke code/cause getters or retain unrecognized names and codes', () => {
   const error = { name: 'SECRET', code: 'SECRET' };
   Object.defineProperty(error, 'cause', { get() { throw new Error('no getter access'); } });
