@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-agent-behavior-availability-audit",
+  "humanAnnotation": false,
+  "identityAudit": {
+    "reviewer": "identity_audit",
+    "officialMinimalCommands": [
+      "ruff format httpx tests --diff",
+      "ruff check httpx tests",
+      "mkdocs build"
+    ],
+    "noDedicatedPytestForTheseChanges": true,
+    "externalSetupPythonActionNotLocallyTestable": true,
+    "docsImportsFixedHttpxAndRequiresRuntimeDependencies": true
+  },
+  "boundaryAudit": {
+    "reviewer": "leakage_audit",
+    "networkRequestsByReviewer": 0,
+    "sourceManifestFilesPerAttempt": 114,
+    "bothWheelHashesVerified": true,
+    "officialPythonImageDigestVerified": true,
+    "savedContainerIsolationVerified": true,
+    "residualContainers": 0,
+    "ruffChecksActuallyExecuted": 0,
+    "afterControlActuallyExecuted": false,
+    "permissionDenialsNotCompatibilityResults": true,
+    "noModelOrHumanLabels": true
+  },
+  "conclusion": "No paired behavior evidence; preserve unknown and original failures."
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "side": "before",
+    "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+    "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+    "imageId": "sha256:d3846bce6e97d0ef5c32fc023300d5e39251ad791e6fdfaee41d2ba75246766e",
+    "sourceFileCount": 114,
+    "createArgs": [
+      "docker",
+      "create",
+      "--pull=never",
+      "--name",
+      "flyrewheel-w0-ruff-before",
+      "--user",
+      "65534:65534",
+      "--network=none",
+      "--read-only",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges:true",
+      "--pids-limit=64",
+      "--cpus=1",
+      "--memory=512m",
+      "--memory-swap=512m",
+      "--tmpfs=/tmp:rw,nosuid,nodev,size=128m,mode=1777",
+      "--workdir=/source",
+      "--entrypoint=/usr/local/bin/python",
+      "--mount",
+      "type=bind,src=/tmp/flyrewheel-w0-behavior-attempt-1/run-before/source,dst=/source,readonly",
+      "--mount",
+      "type=bind,src=/tmp/flyrewheel-w0-behavior-attempt-1/run-before/harness,dst=/harness,readonly",
+      "--mount",
+      "type=bind,src=/tmp/flyrewheel-w0-behavior-attempt-1/ruff-before,dst=/wheels,readonly",
+      "sha256:d3846bce6e97d0ef5c32fc023300d5e39251ad791e6fdfaee41d2ba75246766e",
+      "-I",
+      "/harness/runner.py"
+    ],
+    "createExit": 0,
+    "createDiagnostic": "",
+    "created": true,
+    "isolation": {
+      "NetworkMode": "none",
+      "ReadonlyRootfs": true,
+      "CapDrop": [
+        "ALL"
+      ],
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "NanoCpus": 1000000000,
+      "PidsLimit": 64,
+      "Tmpfs": {
+        "/tmp": "rw,nosuid,nodev,size=128m,mode=1777"
+      }
+    },
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/tmp/flyrewheel-w0-behavior-attempt-1/run-before/source",
+        "Destination": "/source",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/tmp/flyrewheel-w0-behavior-attempt-1/run-before/harness",
+        "Destination": "/harness",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/tmp/flyrewheel-w0-behavior-attempt-1/ruff-before",
+        "Destination": "/wheels",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "startExit": 2,
+    "stdout": "",
+    "stderr": "/usr/local/bin/python: can't open file '/harness/runner.py': [Errno 13] Permission denied\n",
+    "containerState": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 2,
+      "Error": "",
+      "StartedAt": "2026-10-03T23:20:29.034393618Z",
+      "FinishedAt": "2026-10-03T23:20:29.29368863Z"
+    },
+    "containerRemoved": true,
+    "elapsedSeconds": 1.078
+  }
+]
