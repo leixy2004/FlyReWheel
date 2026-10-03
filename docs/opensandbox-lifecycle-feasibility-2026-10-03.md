@@ -47,6 +47,10 @@ container. The official example can bind its server to loopback and set Docker
 `publish_host=127.0.0.1`; never inherit the general `network_mode=host` default.
 [Example configuration](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/examples/example.config.toml).
 
+The [narrowed permission plan](opensandbox-minimal-permission-plan-2026-10-03.md)
+separates the optional NET_ADMIN policy from the minimal SDK experiment and
+documents the upstream extraction-helper defaults.
+
 ## Exact actions missing from the current authorization boundary
 
 | Requirement / official action | Finding and disposition |

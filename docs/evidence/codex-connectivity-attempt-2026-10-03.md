@@ -311,3 +311,36 @@ No diagnostic process remained after completion. The original filesystem
 permissions/authentication source were unchanged. The separately owned compiled
 entrypoint fix is still assigned to the main session; this diagnostic made no
 runtime-source or container-recipe changes.
+
+## Independent authentication-source review (no further startup/model attempt)
+
+A separate read-only review checked whether authentication could stay at its
+existing read-only source while only non-credential CODEX_HOME moved to temporary
+writable storage. This rules out a different hypothesis from installation_id
+configuration alone. Pinned official rust-v0.159.2 commit:
+`ff6aec96948b70d94983af2641a6b67c94faeff5`.
+
+- File storage fixes the path to `codex_home/auth.json`, with no independent auth
+  path parameter in the reviewed load path.
+  [storage.rs:154](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/storage.rs#L154)
+- Direct keyring record keys derive from canonical CODEX_HOME, so changing it
+  selects a different record.
+  [storage.rs:238](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/storage.rs#L238)
+- Secrets keyring uses both encrypted files under that home and a home-derived
+  keyring key; it does not independently redirect to the existing auth source.
+  [local.rs:165](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/secrets/src/local.rs#L165),
+  [lib.rs:184](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/secrets/src/lib.rs#L184)
+- Official environment authentication exists, but presence-only checks found
+  `CODEX_ACCESS_TOKEN` and `CODEX_API_KEY` absent in this environment. No values
+  were read, and existing credentials were not extracted to populate them.
+  Ephemeral storage has no persistent fallback.
+  [manager.rs:1488](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/login/src/auth/manager.rs#L1488)
+- `credential_broker` in the schema belongs to network proxy configuration, not
+  CLI authentication-file redirection.
+  [config.schema.json:2953](https://github.com/openai/codex/blob/ff6aec96948b70d94983af2641a6b67c94faeff5/codex-rs/core/config.schema.json#L2953)
+
+Under the current no-copy/no-link/no-new-authorization constraints, these official
+mechanisms do not allow a writable temporary CODEX_HOME to reuse the existing
+read-only authentication source. A platform-provided broker or independently
+supplied authorized authentication mechanism remains required. No guessed auth
+path flag, credential read, startup retry or model invocation was performed.
