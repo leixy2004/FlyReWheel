@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_actual_capture_artifact_manifest",
+  "repository": "encode/httpx",
+  "selectionOrder": [
+    3035,
+    3031,
+    3036
+  ],
+  "totalUpstreamRequests": 48,
+  "budget": 50,
+  "additionalUpstreamRequestsPlanned": 0,
+  "captureRequests": 45,
+  "priorRequests": 3,
+  "realSourcePackages": 3,
+  "independentHumanLabels": 0,
+  "ruleMining": "not_run",
+  "modelExecution": "not_run",
+  "evaluationReady": false,
+  "retention": "User-requested source/provenance evidence on isolated review branch; quarantine-only, not released as an evaluation corpus.",
+  "licenseFile": "LICENSE.httpx.md",
+  "licenseSha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+  "files": [
+    {
+      "path": "package-3035.json",
+      "bytes": 53179,
+      "sha256": "a0e1de76143154a1fd8f021c8be9f9a778a161986e5d5d03fc50e1ca92a92883",
+      "number": 3035,
+      "prUrl": "https://github.com/encode/httpx/pull/3035",
+      "head": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+      "baseTip": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "mergeBase": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "sourceScope": "changed_paths_only",
+      "requests": 13,
+      "licenseSource": "https://github.com/encode/httpx/blob/33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac/LICENSE.md",
+      "capturedSourceSides": 2
+    },
+    {
+      "path": "package-3031.json",
+      "bytes": 60967,
+      "sha256": "41f3209e3209d8790127149d5928c27910048e3515cf60e786ccfd30b2247c7a",
+      "number": 3031,
+      "prUrl": "https://github.com/encode/httpx/pull/3031",
+      "head": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+      "baseTip": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "mergeBase": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "sourceScope": "changed_paths_only",
+      "requests": 13,
+      "licenseSource": "https://github.com/encode/httpx/blob/abcfb791a03affbeee40c38eb8fedd6a02accbaa/LICENSE.md",
+      "capturedSourceSides": 2
+    },
+    {
+      "path": "package-3036.json",
+      "bytes": 68571,
+      "sha256": "9eb899563bd26d08fbd03d8b0fe0d4323243f5b20fd663d0969d81d877840ffd",
+      "number": 3036,
+      "prUrl": "https://github.com/encode/httpx/pull/3036",
+      "head": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "baseTip": "ea3071642d12ed546d901861a5901da6fad37073",
+      "mergeBase": "ea3071642d12ed546d901861a5901da6fad37073",
+      "sourceScope": "changed_paths_only",
+      "requests": 19,
+      "licenseSource": "https://github.com/encode/httpx/blob/7f4c512fe9db5eb0876adc2bff4153c04541006b/LICENSE.md",
+      "capturedSourceSides": 4
+    }
+  ]
+}

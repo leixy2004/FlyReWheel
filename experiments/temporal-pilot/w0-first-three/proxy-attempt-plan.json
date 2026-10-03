@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "kind": "existing_environment_proxy_w0_attempt_plan",
+  "selectionCommit": "4f8921b94682c1c497d7340cabd8f8e1fe7d6a82",
+  "selectionSha256": "ed908425462c155e2f84b7bd2ba55797a4077b0ce770c8933b2b83ce8971be43",
+  "selectedPrNumbers": [3035, 3031, 3036],
+  "nodeVersionObserved": "v24.19.0",
+  "processInvocation": "node --use-env-proxy --import tsx scripts/run-w0-proxy-attempt.ts",
+  "proxyConfiguration": "Use only the environment-provided HTTP(S) proxy and NO_PROXY settings without reading or changing their values.",
+  "tlsPolicy": "Preserve TLS certificate verification and existing trust; no insecure flags or new trust roots.",
+  "previousUpstreamGetRequests": 2,
+  "diagnostic": {"endpoint": "GET /repos/encode/httpx/pulls/3035", "maxRequests": 1, "timeoutMs": 15000},
+  "captureGate": "Only a 200 diagnostic response matching the published selected PR merge identity permits capture.",
+  "captureMaxGetRequests": 47,
+  "totalGetBudget": 50,
+  "captureOrder": [3035, 3031, 3036],
+  "requestAccounting": "Count all new attempts, including failed reads, license, commit and tree requests; consume the remaining shared allowance.",
+  "stopRules": ["Stop on any error or identity mismatch.", "No automatic retries, direct fallback, credentials or endpoint substitutions.", "No W1/W2 source, diff, discussion, label or model-output reads."],
+  "outputDirectory": "experiments/temporal-pilot/w0-first-three/proxy-attempt-1/",
+  "oldRecords": "Preserve both previous attempts unchanged; exclusive output creation prevents a silent rerun.",
+  "evidenceBoundary": "Current W0 observations remain quarantined, not historical human labels or mined rules.",
+  "causalCaveat": "Enabling the existing environment proxy is a supported client configuration correction, not proof it was the sole cause of either earlier error."
+}

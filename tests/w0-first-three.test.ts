@@ -42,6 +42,7 @@ it('retains authored zero-change successes in frozen order without claiming mini
   expect(order).toEqual([3035, 3031, 3036]);
   expect(summary.items.map((p: any) => p.status)).toEqual(['captured', 'captured', 'captured']);
   expect(summary.requests).toBe(3 * fixture(3035).receipt.requests);
+  expect(summary).toMatchObject({ priorRequests: 0, availableGetRequests: 50, totalRequestsUsed: summary.requests });
   expect(packages).toHaveLength(3);
   expect(packages.map(value => value.kind)).toEqual(['w0-source-package', 'w0-source-package', 'w0-source-package']);
   expect(packages.map(value => value.evidence.evidence.pull.number)).toEqual([3035, 3031, 3036]);
@@ -102,4 +103,61 @@ it('rejects an internally valid receipt whose request count disagrees with the s
   expect(packages).toHaveLength(0);
   expect(summary.items[0].status).toBe('failed');
   expect(summary.requests).toBe(1);
+});
+
+it('reserves the prior three GETs and passes only remaining allowances to each selected PR', async () => {
+  const limits: number[] = [];
+  const capture = async ({ number, maxRequests }: any, { budget }: any) => {
+    limits.push(maxRequests); expect(maxRequests).toBe(budget.requestsRemaining);
+    const value = fixture(number); value.receipt.requestLimit = maxRequests;
+    budget.requestsRemaining -= value.receipt.requests; return value;
+  };
+  const { summary, packages } = await runW0Capture(plan, capture as any, { priorRequests: 3 });
+  const perPull = fixture(3035).receipt.requests;
+  expect(limits).toEqual([47, 47 - perPull, 47 - perPull * 2]);
+  expect(summary).toMatchObject({ priorRequests: 3, availableGetRequests: 47,
+    requests: perPull * 3, totalRequestsUsed: 3 + perPull * 3 });
+  expect(packages).toHaveLength(3);
+});
+
+it('stops the entire remaining batch after a failure while retaining prior request accounting', async () => {
+  const capture = vi.fn(async ({ maxRequests }: any, { budget }: any) => {
+    expect(maxRequests).toBe(47); budget.requestsRemaining--;
+    throw new GithubReadError('GET /repos/encode/httpx/pulls/3035', { status: 403 });
+  });
+  const { summary, packages } = await runW0Capture(plan, capture as any, { priorRequests: 3 });
+  expect(capture).toHaveBeenCalledTimes(1);
+  expect(summary).toMatchObject({ requests: 1, priorRequests: 3, availableGetRequests: 47, totalRequestsUsed: 4 });
+  expect(summary.items.map(item => item.status)).toEqual(['failed', 'unattempted', 'unattempted']);
+  expect(packages).toHaveLength(0);
+});
+
+it.each([-1, 50, 3.5, NaN, Infinity, '3', null])('rejects invalid prior GET count %s before invoking capture', async priorRequests => {
+  const capture = vi.fn();
+  await expect(runW0Capture(plan, capture, { priorRequests } as any)).rejects.toThrow();
+  expect(capture).not.toHaveBeenCalled();
+});
+
+it('does not exceed 50 cumulative GETs when the remaining 47 are consumed by the first PR', async () => {
+  const capture = vi.fn(async ({ number, maxRequests }: any, { budget }: any) => {
+    expect(maxRequests).toBe(47);
+    const value = fixture(number);
+    while (value.receipt.observations.length < 47) value.receipt.observations.push(structuredClone(value.receipt.observations[0]));
+    value.receipt.requests = value.receipt.requestLimit = 47;
+    budget.requestsRemaining -= 47; return value;
+  });
+  const { summary, packages } = await runW0Capture(plan, capture as any, { priorRequests: 3 });
+  expect(capture).toHaveBeenCalledTimes(1); expect(packages).toHaveLength(1);
+  expect(summary).toMatchObject({ requests: 47, priorRequests: 3, availableGetRequests: 47, totalRequestsUsed: 50 });
+  expect(summary.items.map(item => item.status)).toEqual(['captured', 'unattempted', 'unattempted']);
+});
+
+it('accepts the upper prior-count boundary and allows only its final one GET', async () => {
+  const capture = vi.fn(async ({ maxRequests }: any, { budget }: any) => {
+    expect(maxRequests).toBe(1); expect(budget.requestsRemaining).toBe(1); budget.requestsRemaining--;
+    throw new GithubReadError('GET /repos/encode/httpx/pulls/3035', { status: 429 });
+  });
+  const { summary } = await runW0Capture(plan, capture as any, { priorRequests: 49 });
+  expect(capture).toHaveBeenCalledTimes(1);
+  expect(summary).toMatchObject({ priorRequests: 49, requests: 1, availableGetRequests: 1, totalRequestsUsed: 50 });
 });

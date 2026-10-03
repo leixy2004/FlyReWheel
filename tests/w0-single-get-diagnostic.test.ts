@@ -60,3 +60,12 @@ it('does not invoke code/cause getters or retain unrecognized names and codes', 
   Object.defineProperty(error, 'cause', { get() { throw new Error('no getter access'); } });
   expect(safeErrorChain(error)).toEqual([{}]);
 });
+
+it('counts a proxy diagnostic after the two preserved requests without spending a second GET', async () => {
+  let calls = 0;
+  const result = await diagnoseW0FirstRead({ priorRequests: 2, fetch: async () => {
+    calls++; return new Response('{}', { status: 503, headers: { 'content-type': 'application/json' } });
+  } });
+  expect(result).toMatchObject({ originalRunRequests: 2, requests: 1, totalRequestsUsed: 3, httpStatus: 503 });
+  expect(calls).toBe(1);
+});

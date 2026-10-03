@@ -24,7 +24,9 @@ export function safeErrorChain(error: unknown) {
 }
 
 /** One fixed metadata GET only. fetch is for offline tests, never a fallback route. */
-export async function diagnoseW0FirstRead(testing: { fetch?: typeof globalThis.fetch } = {}) {
+export async function diagnoseW0FirstRead(testing: { fetch?: typeof globalThis.fetch; priorRequests?: number } = {}) {
+  const priorRequests = testing.priorRequests ?? 1;
+  if (!Number.isInteger(priorRequests) || priorRequests < 0 || priorRequests >= 50) throw new Error('INVALID_PRIOR_REQUESTS');
   const startedAt = new Date().toISOString();
   const client = new Octokit({ userAgent: 'FlyReWheel/0.1 read-only-evidence',
     // Suppress SDK free-text logging; only the returned allowlisted record is retained.
@@ -40,7 +42,7 @@ export async function diagnoseW0FirstRead(testing: { fetch?: typeof globalThis.f
   });
   const base = { schemaVersion: 1, kind: 'w0_single_get_diagnostic', endpoint,
     transport: '@octokit/rest@22.0.1', authentication: 'none', startedAt,
-    originalRunRequests: 1, requestBudget: 50, automaticRetries: 0,
+    originalRunRequests: priorRequests, requestBudget: 50, automaticRetries: 0,
     sourceProducer: 'implemented_offline_verified', realSourcePackages: 0,
     sourceOrDiscussionFollowupRequests: 0, modelCalls: 0 };
   try {
@@ -51,13 +53,13 @@ export async function diagnoseW0FirstRead(testing: { fetch?: typeof globalThis.f
     const matches = pr.number === 3035 && pr.base?.repo?.full_name === 'encode/httpx' && pr.base.repo.private === false &&
       pr.merged === true && pr.merged_at === '2024-01-03T05:11:45Z' &&
       pr.merge_commit_sha === 'b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5' && sha(pr.base.sha) && sha(pr.head?.sha);
-    return { ...base, completedAt: new Date().toISOString(), requests, totalRequestsUsed: 1 + requests,
+    return { ...base, completedAt: new Date().toISOString(), requests, totalRequestsUsed: priorRequests + requests,
       status: response.status === 200 && matches ? 'success' : 'identity_or_status_mismatch', httpStatus: response.status,
       ...(matches ? { identity: { repository: 'encode/httpx', number: 3035, mergedAt: pr.merged_at,
         mergeCommit: pr.merge_commit_sha, baseTip: pr.base.sha, head: pr.head.sha, verification: 'provider_declared_metadata_only' } } : {}) };
   } catch (error) {
     const diagnostic = githubHttpFailureDiagnostic(error);
-    return { ...base, completedAt: new Date().toISOString(), requests, totalRequestsUsed: 1 + requests,
+    return { ...base, completedAt: new Date().toISOString(), requests, totalRequestsUsed: priorRequests + requests,
       status: 'failed', httpStatus: diagnostic?.status ?? null,
       ...(diagnostic ? { diagnostic } : {}), classification: classifyGithubReadFailure(error, diagnostic), errorChain: safeErrorChain(error) };
   }

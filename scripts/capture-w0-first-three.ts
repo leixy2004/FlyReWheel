@@ -18,11 +18,14 @@ type Item = { number: number; status: 'captured' | 'failed' | 'unattempted'; fai
   evidenceDigest?: string; snapshotDigest?: string; requests?: number; diagnostic?: GithubReadError['diagnostic']; classification?: GithubReadError['classification'] };
 
 /** Frozen-plan adapter only. The injected capture seam supports offline tests, never credential substitution. */
-export async function runW0Capture(rawPlan: unknown, capture: typeof captureGithubPrEvidence = captureGithubPrEvidence) {
+export async function runW0Capture(rawPlan: unknown, capture: typeof captureGithubPrEvidence = captureGithubPrEvidence,
+  options: { priorRequests?: number } = {}) {
+  const { priorRequests } = z.object({ priorRequests: z.number().int().min(0).max(49).default(0) }).strict().parse(options);
+  const availableGetRequests = 50 - priorRequests;
   if (hash(JSON.stringify(rawPlan)) !== planHash) throw new Error('FROZEN_PLAN_MISMATCH');
   const plan = rawPlan as Plan;
   const startedAt = new Date().toISOString();
-  const budget = { requestsRemaining: 50, deadline: Date.now() + 300_000 };
+  const budget = { requestsRemaining: availableGetRequests, deadline: Date.now() + 300_000 };
   const items: Item[] = plan.selected.map(row => ({ number: row.number, status: 'unattempted' }));
   const packages: Captured[] = [];
   let acceptedEvidenceBytes = 0;
@@ -69,7 +72,9 @@ export async function runW0Capture(rawPlan: unknown, capture: typeof captureGith
   return { summary: { schemaVersion: 1, kind: 'w0_first_three_capture_run', repository: plan.repository,
     planSha256: planHash, frameSha256: plan.frameSha256, startedAt, completedAt: new Date().toISOString(),
     status: items.every(item => item.status === 'captured') ? 'captured_quarantined' : 'stopped', items,
-    requests: 50 - budget.requestsRemaining, maxGetRequests: 50, maxTotalTimeMs: 300_000, acceptedEvidenceBytes,
+    requests: availableGetRequests - budget.requestsRemaining, priorRequests, availableGetRequests,
+    totalRequestsUsed: priorRequests + availableGetRequests - budget.requestsRemaining,
+    maxGetRequests: 50, maxTotalTimeMs: 300_000, acceptedEvidenceBytes,
     license: packages.length ? 'pinned_bytes_verified_for_accepted_packages' : 'unknown',
     licenseAcquisition: 'required_for_accepted_packages', redistribution: 'not_authorized', packageUse: 'quarantine_only_not_rule_input', historicalW0Feedback: false,
     historicalDiscussionCutoff: 'unknown', discussionUse: 'quarantine_only_not_rule_input', mining: 'not_run',
