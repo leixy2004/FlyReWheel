@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "codeSha": "9b6789fcf746e25bd0bc98476ba75cb58975dd40",
+  "shellAvailable": true,
+  "publishedCommand": {
+    "command": "node --import tsx src/cli.ts evaluation checkout inspect --store /tmp/flyrewheel-w0-full-context-attempt-1/exports --manifest /tmp/w0-manifest-3035-before.json",
+    "exitCode": 0,
+    "output": "/tmp/resolver26-inspect.json"
+  },
+  "rows": [
+    {
+      "pr": 3035,
+      "side": "before",
+      "sha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "bindingUnchanged": true,
+      "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3035-before",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-before",
+        "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+        "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "allowedHeads": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ],
+        "inventory": {
+          "count": 9380,
+          "expandedBytes": 49367125,
+          "digest": "68583e5246c2a79a9cacf1ccd0081ed2cdda506f799fe1e2aceabc2b3b9c9dc7"
+        }
+      }
+    },
+    {
+      "pr": 3035,
+      "side": "after",
+      "sha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+      "bindingUnchanged": true,
+      "recordDigest": "712345e35434b77127b830a41e23f8d09cc56ccd3bef71dd1890ce3fea23d18b",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3035-after",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-after",
+        "requestDigest": "9920cc68957ce301ee74a714fc8425fd600b2e6df7f20f4a96f747dbe9a51052",
+        "recordDigest": "712345e35434b77127b830a41e23f8d09cc56ccd3bef71dd1890ce3fea23d18b",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "allowedHeads": [
+          "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369573,
+          "digest": "6988f6b218f3d48f7bc92987b816241d0b554d55152e1fb6b36a6de73f276415"
+        }
+      }
+    },
+    {
+      "pr": 3031,
+      "side": "before",
+      "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "bindingUnchanged": true,
+      "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3031-before",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-before",
+        "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+        "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "allowedHeads": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369678,
+          "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+        }
+      }
+    },
+    {
+      "pr": 3031,
+      "side": "after",
+      "sha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+      "bindingUnchanged": true,
+      "recordDigest": "c6e538cee58b7987bd8430099d84aaa3d0cd61059c9a27b5eaaeaafdae78e5ed",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3031-after",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-after",
+        "requestDigest": "d90bbf204f0ab36487d38be8a24c3488ad5e33f70e68bc468344f13575007c5d",
+        "recordDigest": "c6e538cee58b7987bd8430099d84aaa3d0cd61059c9a27b5eaaeaafdae78e5ed",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "allowedHeads": [
+          "abcfb791a03affbeee40c38eb8fedd6a02accbaa"
+        ],
+        "inventory": {
+          "count": 9389,
+          "expandedBytes": 49374024,
+          "digest": "32b83d9334feee788b9921577d6f308e81db251491c8087176a90f46a4e85420"
+        }
+      }
+    },
+    {
+      "pr": 3036,
+      "side": "before",
+      "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+      "bindingUnchanged": true,
+      "recordDigest": "3fdf738c5073c7a7e9690463f06aa02e883ea9fd128e368e2ae91ad6dd307c27",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3036-before",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-before",
+        "requestDigest": "faa99b5f75787ad5dac22b42aad1aaf61d2fd103767066ae35dd58f019e6d33a",
+        "recordDigest": "3fdf738c5073c7a7e9690463f06aa02e883ea9fd128e368e2ae91ad6dd307c27",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "allowedHeads": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ],
+        "inventory": {
+          "count": 9386,
+          "expandedBytes": 49372234,
+          "digest": "56fd971d608953b6b0ede14f729630710857ebc73e0e9f4d742dc87a155bf3da"
+        }
+      }
+    },
+    {
+      "pr": 3036,
+      "side": "after",
+      "sha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "bindingUnchanged": true,
+      "recordDigest": "4510f4b539e2e0c2256dd9bcf3f513bfb6894384dca8461b6065c687335e73a3",
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "resolverRejection": "Prepared workspace resolver does not support evaluation exports",
+      "exportId": "httpx-w0-3036-after",
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-after",
+        "requestDigest": "5e45977fab6b22c6f4d757137432be4ffb324428117e5a948a714a62c18a5507",
+        "recordDigest": "4510f4b539e2e0c2256dd9bcf3f513bfb6894384dca8461b6065c687335e73a3",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "allowedHeads": [
+          "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+        ],
+        "inventory": {
+          "count": 9394,
+          "expandedBytes": 49376949,
+          "digest": "ac2394bc9e599b0953740bbb919b3efbbd2c22aab1e3d1a93af5f0c8be57fc76"
+        }
+      }
+    }
+  ],
+  "upstreamRequests": 0,
+  "modelCalls": 0,
+  "derivedWorkspacesCreated": 0,
+  "existingRoute": "prepareEvaluationWorkspace performs export inspection, exact binding derivation, isolated repository derivation and prepareWorkspace; application dispatcher accepts {workspace,evaluation} and checks export/repository/checkout.",
+  "integrationGap": "PR26 concrete administrator-configured resolver intentionally only supports ordinary workspaces. No supplied evaluation-aware resolver registry implementation exists in this code SHA. Do not remove binding.",
+  "historicalVisibility": "unproven",
+  "probe": {
+    "command": "timeout 60s node --import tsx /tmp/resolver26-probe.mts",
+    "exitCode": 0,
+    "codePath": "src/prepared-workspace-resolver.ts",
+    "exportedFunction": "createPreparedWorkspaceResolver",
+    "configuration": {
+      "schemaVersion": 1,
+      "entries": []
+    },
+    "invocation": "await resolve({ workspaceId: `w0-${pr}-${side}`, jobDigest: \"0\".repeat(64), kind: \"pr-mining\", repository: binding.repositoryId, expectedSha: context.sha, baseSha: context.sha, headSha: context.sha, evaluationExportId: binding.exportId }, new AbortController().signal)",
+    "scope": "Rejection is tested at evaluationExportId guard before ordinary selection authorization; this is not a positive ordinary registry resolution or a prepared-workspace execution.",
+    "bindingVerification": "digestOf(evaluationWorkspaceBinding(context.binding.exportId, await inspectEvaluationCheckout({storePath,manifest:context.manifest}))) === digestOf(context.binding)",
+    "recordsSource": "/tmp/flyrewheel-w0-full-context-attempt-1/context-{3035,3031,3036}-{before,after}.json"
+  },
+  "existingRouteCodePaths": [
+    "src/workspace/evaluation-workspace.ts:7",
+    "src/application-dispatcher.ts:76",
+    "src/prepared-workspace-resolver.ts:41"
+  ],
+  "route": {
+    "bootstrap": "src/worker-bootstrap.ts:42 accepts injected trusted resolveWorkspace; line 121 passes it to application dependencies.",
+    "contract": "src/application-dispatcher.ts:18 accepts {workspace,evaluation}; lines 77-87 preserve job kind and require exact evaluationExportId, repositoryId and checkoutSha.",
+    "preparation": "src/workspace/evaluation-workspace.ts:7 prepareEvaluationWorkspace re-inspects immutable export, derives a separate repository, prepares workspace and returns evaluation binding.",
+    "gap": "Concrete PR26 createPreparedWorkspaceResolver registry cannot authorize evaluation inputs. An injected trusted evaluation-aware resolver is supported by composition, but that concrete resolver is absent at the reviewed SHA.",
+    "purpose": "Probe sets kind pr-mining; retains original exact exportIds and all binding bytes. No mining authorization succeeded: rejection precedes registry selection. No claim that purpose authorization was positively validated.",
+    "execution": "No dispatcher, runtime, or model entered. No bound evaluation workspace passed to ordinary full-history processing."
+  }
+}

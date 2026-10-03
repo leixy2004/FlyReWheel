@@ -1,0 +1,50 @@
+{
+  "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+  "exportPath": "/tmp/flyrewheel-w0-full-context-attempt-1/exports/export-94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+  "repoPath": "/tmp/flyrewheel-w0-full-context-attempt-1/exports/export-94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a/repo",
+  "manifestPath": "/tmp/flyrewheel-w0-full-context-attempt-1/exports/export-94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a/manifest.json",
+  "record": {
+    "schemaVersion": 1,
+    "policy": "exact-allowed-head-closure-v1",
+    "request": {
+      "schemaVersion": 1,
+      "repositoryId": "github:encode/httpx",
+      "classification": "unverified-evaluation-input",
+      "allowedHeads": [
+        "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+      ],
+      "checkoutSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "visibility": {
+        "basis": "caller-declared-exact-heads",
+        "declaredAsOf": null,
+        "evidenceDigests": [
+          "ab4dad128cb8124d0c1de63e6ea55fc40557965749d9595fb2a84affa2a10c54"
+        ]
+      }
+    },
+    "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+    "storageDigest": "88334d5233672a46e1a065afd88808a008620439c76f136aa0c4943b60c551bc",
+    "inventory": {
+      "count": 9380,
+      "expandedBytes": 49367125,
+      "digest": "68583e5246c2a79a9cacf1ccd0081ed2cdda506f799fe1e2aceabc2b3b9c9dc7"
+    },
+    "refs": [
+      {
+        "name": "refs/heads/allowed-dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "sha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+      }
+    ],
+    "historicalPublicAvailability": "unproven",
+    "timestampsEstablishVisibility": false,
+    "isolation": "standalone-git-object-closure-not-an-execution-sandbox"
+  },
+  "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+  "observation": {
+    "objectClosureVerified": true,
+    "exactRefsVerified": true,
+    "fullCommittedTreeVerified": true,
+    "historicalPublicAvailability": "unproven",
+    "executionSandbox": false
+  }
+}

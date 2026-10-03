@@ -82,3 +82,22 @@ tree/verification, non-null draft labels, added after data and private paths in 
 This lane owns only the new generator/test and this evidence directory. It does not
 edit paper files or existing initialization/preparation cleanup code; the main paper
 worker can consume the data audit without overlapping edits.
+
+## Separate PR #26 integration boundary check
+
+An independent worker fetched PR #26 code from our GitHub into an isolated checkout
+at `9b6789fcf746e25bd0bc98476ba75cb58975dd40`; this branch does not merge that code.
+The issue #3 comment 5974728875 evaluation-inspect command succeeds on a real W0
+export. The probe then inspects all six retained exports and recomputes identical
+evaluation bindings. Ordinary `createPreparedWorkspaceResolver` rejects all six
+evaluation export IDs with its explicit unsupported-evaluation guard. No binding
+was stripped, no source was fetched, and no runtime/model was entered.
+
+The existing evaluation-aware preparation is `prepareEvaluationWorkspace`. Worker
+bootstrap can accept a trusted injected resolver returning `{workspace,evaluation}`,
+and dispatcher validates exact export/repository/checkout. What is missing at this
+PR #26 SHA is a concrete evaluation-aware registry resolver, not W0 source data.
+The diagnostic uses a dummy job digest and tests only the early rejection guard;
+it is not an end-to-end queued mining run or a positive authorization check.
+`resolver26-check.json` gives commands, code paths and six bindings; the exact
+executed probe is archived as text and the successful CLI result is retained.
