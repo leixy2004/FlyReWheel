@@ -23,7 +23,7 @@ server documents host/bridge/custom modes; `skipHealthCheck` cannot create the
 missing command transport. Docker exec would be a different, out-of-band test.
 Bridge without a policy permits outbound networking; this experiment must not
 claim deny-default egress or production network isolation.
-[Official configuration](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/docs/configuration.md),
+[Official configuration](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/configuration.md),
 [endpoint extraction](https://github.com/opensandbox-group/OpenSandbox/blob/c7dc78a4090e5de2b9119e9bd93952cae24f87bd/server/opensandbox_server/services/docker/networking.py#L707).
 
 **Important upstream helper exception:** execd extraction starts a separate
