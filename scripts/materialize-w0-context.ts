@@ -128,6 +128,7 @@ async function worker(stage: string) {
 export async function runMaterialization(stage: string) {
   await mkdir(stage); // Exclusive attempt reservation; never retry an existing stage.
   let peakBytes = 0, stopping: string | null = null, checking = false;
+  let monitorTask: Promise<void> | undefined;
   const startedAt = new Date().toISOString(), started = Date.now();
   const child = spawn('/bin/bash', ['-c', 'ulimit -f 65536; exec "$@"', 'w0-budget', process.execPath, '--import', 'tsx', resolve('scripts/materialize-w0-context.ts'), '--worker', stage],
     { cwd: resolve('.'), env: process.env, detached: true, stdio: ['ignore', 'ignore', 'pipe'] });
@@ -151,15 +152,18 @@ export async function runMaterialization(stage: string) {
     })();
   };
   const deadline = setTimeout(() => stop('deadline-exceeded'), MAX_TIME);
-  const monitor = setInterval(async () => {
+  const monitor = setInterval(() => {
     if (checking) return; checking = true;
+    monitorTask = (async () => {
     try { peakBytes = Math.max(peakBytes, await directoryBytes(stage)); if (peakBytes > MAX_BYTES) stop('disk-budget-exceeded'); }
     catch { stop('disk-monitor-failed'); } finally { checking = false; }
+    })();
   }, 100);
   const end = await new Promise<{ code: number | null; signal: string | null }>((accept, reject) => {
     child.once('error', reject); child.once('close', (code, signal) => accept({ code, signal }));
   });
   clearInterval(monitor); clearTimeout(deadline);
+  await monitorTask;
   if (end.code !== 0) stop(stopping ?? 'worker-failed');
   await termination;
   peakBytes = Math.max(peakBytes, await directoryBytes(stage));
