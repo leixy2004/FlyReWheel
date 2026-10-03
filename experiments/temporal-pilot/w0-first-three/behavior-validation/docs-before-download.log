@@ -1,0 +1,4 @@
+Collecting mkdocs==1.5.3
+  Downloading mkdocs-1.5.3-py3-none-any.whl.metadata (6.2 kB)
+ERROR: Could not find a version that satisfies the requirement mkautodoc==0.2.0 (from versions: none)
+ERROR: No matching distribution found for mkautodoc==0.2.0
