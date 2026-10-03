@@ -1,7 +1,27 @@
 # Verification and recovery scope
 
-Latest local checkpoint: **2026-10-02**, canonical directory `FlyReWheel/`. This is a local
+Historical local checkpoints begin **2026-10-02**, canonical directory `FlyReWheel/`. This is a local
 source/build/test result, not a deployed sandbox or production service.
+
+## Real PostgreSQL cloud checkpoint: 2026-10-03
+
+At GitHub baseline `237056acaaa3c21684fd63772eaca119e2af5f3a` (tree
+`3e21d1d39b5da1a63b608508edac2dfee772712a`), a local verification script exercised
+compiled application code against PostgreSQL 17.11 in an isolated temporary
+Docker database. All 15 migrations, four-pool concurrent initialization and claims,
+stale-owner fences, offline replay deduplication, actual worker SIGKILL recovery,
+compiled service health/readiness and SIGTERM, and database KILL/start persistence
+passed. A separate database passed 014→015 upgrade, deliberately failing SQL
+rollback, corrected retry, and preservation of its existing sentinel record.
+
+See [reproduction and limits](real-postgres-verification.md) and
+[structured evidence](evidence/real-postgres-2026-10-03.json). These are real
+PostgreSQL and process-lifecycle checks with authored test inputs. They do not
+retroactively change the older simulated/PGlite evidence. Real model calls were
+not run; application runtime remained blocked. Isolated workspace execution, S3,
+k3s, production database roles, and empirical efficacy remain unverified. Final
+aggregate tests for the current working tree are pending; prior test counts below
+belong to their stated checkpoints.
 
 ## Versioned database migrations checkpoint: 2026-10-02
 

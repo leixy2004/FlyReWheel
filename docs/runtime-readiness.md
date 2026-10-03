@@ -1,11 +1,27 @@
 # Runtime readiness: verified boundary
 
-Checked 2026-10-02 against source revision `e93ebca` in the selected cloud
+Historical inventory checked 2026-10-02 against source revision `e93ebca` in the selected cloud
 workspace. This is an operational inventory, not a deployment success report.
 The application-wiring sections below also describe the subsequent working-tree
 implementation; the environment inventory itself is unchanged.
 
-## Current execution environment
+## Cloud checkpoint: 2026-10-03
+
+The selected user cloud environment now has Docker 28.4.0. A disposable official
+PostgreSQL 17.11 container ran with network mode `none`, no published ports, and a
+local Unix socket. Real server migrations, concurrent claims, fencing, pg-boss
+retry after a child-process SIGKILL, database restart persistence, and compiled
+worker-service health/readiness and SIGTERM passed. The separate 014→015 upgrade
+check passed transaction rollback and preservation assertions. See the
+[commands, scope and evidence](real-postgres-verification.md).
+
+This supersedes only the older environment and real-database availability gates
+below. It does not establish a deployed replay container, S3, k3s, production roles,
+or an isolated workspace runtime. The compiled application service returned
+`applicationRuntime: blocked` and `modelExecution: not_run` as expected. Historical
+PGlite checks remain PGlite evidence. The new working-tree aggregate is pending.
+
+## Historical execution environment (2026-10-02)
 
 - Node `v24.19.0`, npm `11.9.0`, Python `3.12.14`, and Git `2.52.0` are
   available. The container recipes target Node 22; this host does not validate
@@ -91,7 +107,7 @@ storage ingress/ownership, stop/frozen-evidence collection, verified physical
 destruction, and an authenticated credential-isolated gateway. Installing a
 container tool or passing fixture tests does not provide those components.
 
-## Smallest next real integration test
+## Historical integration plan (2026-10-02)
 
 No real PostgreSQL/container/k3s integration can be run with only the verified
 tools and endpoints above. The in-memory callback test is the queue integration
