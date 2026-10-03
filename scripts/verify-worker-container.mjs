@@ -26,6 +26,10 @@ export async function measurePublicCache(path) {
   await visit(path);
   return bytes;
 }
+export function ownedContainerIds(rows, exactName) {
+  return rows.trim().split('\n').filter(Boolean).map(line => JSON.parse(line))
+    .filter(row => row.Names === exactName && /^[a-f0-9]{12,64}$/.test(row.ID)).map(row => row.ID);
+}
 export function requireSpace(free, required = 0) {
   assert.ok(Number.isFinite(free) && free >= reserveBytes + required, 'Disk budget refused: retain at least 5 GiB');
 }
@@ -53,18 +57,24 @@ export async function main(args) {
   const label = `org.flyrewheel.verification=${task}`;
   const env = { PATH: process.env.PATH, HOME: scratch, DOCKER_CONFIG: join(scratch, 'docker'), BUILDX_CONFIG: join(scratch, 'buildx') };
   await mkdir(env.DOCKER_CONFIG); await mkdir(env.BUILDX_CONFIG);
-  let minimumFree = Infinity;
+  let minimumFree = Infinity, minimumRootFree = Infinity, minimumScratchFree = Infinity;
+  let interrupted, activeStop;
+  const onSignal = () => { interrupted = new Error('Verification interrupted'); activeStop?.(interrupted); };
+  process.on('SIGINT', onSignal); process.on('SIGTERM', onSignal);
   const evidence = { task, image, classification: 'local-runc-no-model-not-production-isolation', checks: [], reserveBytes };
   async function free() {
     const stats = await Promise.all([statfs(root), statfs(scratch), statfs('/')]);
-    const available = Math.min(...stats.map(s => s.bavail * s.bsize));
+    const values = stats.map(s => s.bavail * s.bsize);
+    minimumRootFree = Math.min(minimumRootFree, values[0], values[2]);
+    minimumScratchFree = Math.min(minimumScratchFree, values[1]);
+    const available = Math.min(...values);
     minimumFree = Math.min(minimumFree, available);
     // An extra GiB is a reaction margin; sampling is not a filesystem quota.
     requireSpace(available, GiB);
     return available;
   }
   async function command(bin, argv, { timeout = 120_000, expected = 0, monitor = true, maxBytes = 2 * 1024 * 1024 } = {}) {
-    if (monitor) await free();
+    if (monitor) { if (interrupted) throw interrupted; await free(); }
     return await new Promise((resolveCommand, reject) => {
       const child = spawn(bin, argv, { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'], detached: true });
       let stdout = '', stderr = '', bytes = 0, failure;
@@ -74,6 +84,7 @@ export async function main(args) {
         try { process.kill(-child.pid, 'SIGINT'); } catch {}
         setTimeout(() => { try { process.kill(-child.pid, 'SIGKILL'); } catch {} }, 2000).unref();
       };
+      activeStop = stop;
       const timer = setTimeout(() => stop(new Error('Bounded command timed out')), timeout);
       let checking = false;
       const diskTimer = monitor ? setInterval(async () => {
@@ -88,6 +99,7 @@ export async function main(args) {
       });
       child.on('error', error => { failure = error; });
       child.on('close', code => {
+        activeStop = undefined;
         clearTimeout(timer); clearInterval(diskTimer);
         if (failure) return reject(failure);
         if (code !== expected) {
@@ -99,7 +111,7 @@ export async function main(args) {
     });
   }
   const docker = (argv, opts) => command('docker', argv, opts);
-  let created = false;
+  let checksPassed = false;
   try {
     evidence.sourceSha = (await command('git', ['rev-parse', 'HEAD'])).stdout.trim();
     const branch = (await command('git', ['branch', '--show-current'])).stdout.trim();
@@ -125,13 +137,12 @@ export async function main(args) {
       '--file', 'deploy/workspace-worker/Dockerfile.bounded', '--build-arg', `WORKSPACE_WORKER_BASE_IMAGE=${options.base}`,
       '--label', label, '--tag', image, '.'], { timeout: 600_000, maxBytes: 4 * 1024 * 1024 });
     const [built] = JSON.parse((await docker(['image', 'inspect', image])).stdout);
-    evidence.imageId = built.Id; evidence.imageBytes = built.Size;
+    evidence.imageId = built.Id; evidence.imageBytes = built.Size; evidence.imageRetainedForInspection = image;
     assert.equal(built.Config.User, '10001:10001');
     await docker(['create', '--name', container, '--label', label, '--network', 'none', '--read-only', '--cap-drop', 'ALL',
       '--security-opt', 'no-new-privileges', '--pids-limit', '64', '--memory', '512m', '--cpus', '1',
       '--tmpfs', '/tmp:rw,noexec,nosuid,nodev,size=32m,mode=1777',
       '--tmpfs', '/workspace/repo:rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=0700', image]);
-    created = true;
     await docker(['start', container]);
     assert.equal((await docker(['exec', container, '/usr/bin/id', '-u'])).stdout.trim(), '10001');
     const inspection = JSON.parse((await docker(['inspect', container])).stdout)[0];
@@ -146,7 +157,7 @@ export async function main(args) {
     evidence.checks.push('immutable-assets-single-native-copy-native-cli-starts');
     const refused = await docker(['exec', container, '/opt/flyrewheel/bin/workspace-worker', 'run', '/run/flyrewheel/request.json'], { expected: 78 });
     assert.equal(refused.stdout, '');
-    assert.match(refused.stderr, /Production gateway connection is not configured or verified/);
+    assert.equal(JSON.parse(refused.stderr).error, 'WORKSPACE_WORKER_PRODUCTION_BLOCKED');
     evidence.checks.push('compiled-entrypoint-blocked-exit-78-no-output');
     const bundle = join(scratch, 'source.bundle');
     await command('git', ['bundle', 'create', bundle, '--all']); await chmod(bundle, 0o644);
@@ -163,19 +174,31 @@ export async function main(args) {
     await docker(['stop', '--time', '5', container]);
     assert.equal(JSON.parse((await docker(['inspect', container])).stdout)[0].State.Running, false);
     evidence.checks.push('actual-container-stop-observed');
+    checksPassed = true;
   } finally {
-    // Exact task-generated names only. Never daemon-wide image/cache/volume prune.
-    if (created) {
-      await docker(['rm', '--force', container], { monitor: false });
+    // Reconcile unknown create outcomes by both exact name and unique label.
+    // Never daemon-wide image/cache/volume prune; never remove another task.
+    try {
+      const rows = (await docker(['ps', '-a', '--filter', `label=${label}`, '--format', '{{json .}}'], { monitor: false })).stdout;
+      for (const id of ownedContainerIds(rows, container)) await docker(['rm', '--force', id], { monitor: false });
       const remaining = (await docker(['ps', '-a', '--filter', `label=${label}`, '--format', '{{.ID}}'], { monitor: false })).stdout.trim();
       assert.equal(remaining, '', 'Task container cleanup was not observed');
       evidence.checks.push('task-container-removal-observed');
+      evidence.status = checksPassed ? 'passed' : 'failed';
+    } catch (error) {
+      evidence.status = 'failed-cleanup-unverified';
+      throw error;
+    } finally {
+      evidence.minimumObservedFreeBytes = Number.isFinite(minimumFree) ? minimumFree : null;
+      evidence.minimumRootFreeBytes = Number.isFinite(minimumRootFree) ? minimumRootFree : null;
+      evidence.minimumScratchFreeBytes = Number.isFinite(minimumScratchFree) ? minimumScratchFree : null;
+      evidence.buildCacheRetained = true;
+      try { await rm(scratch, { recursive: true, force: true }); }
+      finally {
+        process.removeListener('SIGINT', onSignal); process.removeListener('SIGTERM', onSignal);
+        process.stdout.write(`${JSON.stringify(evidence, null, 2)}\n`);
+      }
     }
-    evidence.minimumObservedFreeBytes = minimumFree;
-    evidence.imageRetainedForInspection = image;
-    evidence.buildCacheRetained = true;
-    await rm(scratch, { recursive: true, force: true });
-    process.stdout.write(`${JSON.stringify(evidence, null, 2)}\n`);
   }
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

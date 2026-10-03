@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { readFile } from 'node:fs/promises';
+import { readFile, mkdtemp, mkdir, writeFile, symlink, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 // The verifier exports pure guards without opening Docker/network on import.
 // @ts-expect-error standalone operational .mjs has no declaration file
-import { budgetBytes, GiB, parseArgs, requireSpace } from '../scripts/verify-worker-container.mjs';
+import { budgetBytes, GiB, parseArgs, requireSpace, measurePublicCache, ownedContainerIds } from '../scripts/verify-worker-container.mjs';
 
 describe('bounded container verification admission', () => {
   it('refuses malformed/unpinned inputs and ambiguous options before execution', () => {
@@ -18,6 +20,29 @@ describe('bounded container verification admission', () => {
     expect(() => requireSpace(estimate + 5 * GiB, estimate)).not.toThrow();
     for (const value of [NaN, Infinity, -1, 5 * GiB - 1]) expect(() => requireSpace(value)).toThrow();
     for (const value of [NaN, -1, 1.5]) expect(() => budgetBytes(value, 0)).toThrow();
+  });
+  it('rejects ambient files and links in real cache directories', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'worker-cache-negative-'));
+    try {
+      await mkdir(join(directory, '_cacache'));
+      await writeFile(join(directory, '_cacache', 'public-package'), 'abc');
+      expect(await measurePublicCache(directory)).toBe(3);
+      await writeFile(join(directory, '.npmrc'), 'authored-non-secret-fixture');
+      await expect(measurePublicCache(directory)).rejects.toThrow('only public _cacache');
+      await rm(join(directory, '.npmrc'));
+      await symlink('/nonexistent', join(directory, '_cacache', 'linked'));
+      await expect(measurePublicCache(directory)).rejects.toThrow('links/special');
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  });
+  it('reconciles lost create acknowledgements by exact name without selecting another container', () => {
+    const rows = [
+      { Names: 'task-smoke', ID: 'a'.repeat(12) },
+      { Names: 'task-smoke-extra', ID: 'b'.repeat(12) },
+      { Names: 'other-task', ID: 'c'.repeat(12) },
+      { Names: 'task-smoke', ID: '--all' },
+    ].map(row => JSON.stringify(row)).join('\n');
+    expect(ownedContainerIds(rows, 'task-smoke')).toEqual(['a'.repeat(12)]);
+    expect(ownedContainerIds('', 'task-smoke')).toEqual([]);
   });
   it('keeps cache transient, install offline and one native vendor tree', async () => {
     const recipe = await readFile(new URL('../deploy/workspace-worker/Dockerfile.bounded', import.meta.url), 'utf8');

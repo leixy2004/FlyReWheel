@@ -26,7 +26,7 @@ RUN --mount=type=bind,from=npmcache,target=/npm-cache,rw \
     && test -x /usr/local/bin/node && test -x /usr/bin/git \
     && test -x codex/bin/codex \
     && chmod 0555 bin/workspace-worker \
-    && chmod -R a-w /opt/flyrewheel \
+    && chmod -R a+rX,a-w /opt/flyrewheel \
     && mkdir -p /workspace/repo /run/flyrewheel \
     && chown 0:0 /opt /opt/flyrewheel /workspace \
     && chmod 0555 /opt /opt/flyrewheel /workspace \
