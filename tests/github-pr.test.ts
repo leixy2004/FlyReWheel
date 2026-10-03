@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { expect, it } from 'vitest';
 import { captureGithubPrEvidence } from '../src/github-pr.js';
 import { GithubPrEvidencePackageSchema, validateGithubPrEvidence } from '../src/github-pr-evidence.js';
@@ -81,6 +82,8 @@ it('uses only unauthenticated Octokit GETs and preserves exact bytes, exclusions
   expect(result.evidence.discussions.reviewComments[0]).toMatchObject({ commitId: head, originalCommitId: mergeBase, line: null, originalLine: 1 });
   expect(result.receipt).toMatchObject({ kind: 'github-api-observation', authentication: 'none', requests: f.calls.length });
   expect(GithubPrEvidencePackageSchema.parse(result).digest).toBe(result.digest);
+  expect(result).not.toHaveProperty('sourceProvenance');
+  expect(f.calls.some(call => call.url.pathname.includes('/contents/') || call.url.pathname.endsWith(`/git/commits/${base}`))).toBe(false);
   const again = await captureGithubPrEvidence(f.input, { fetch: f.fetch });
   expect(again.digest).toBe(result.digest); expect(again.evidence.snapshotDigest).toBe(result.evidence.snapshotDigest); expect(again.receipt).not.toEqual(result.receipt);
 });
@@ -176,4 +179,124 @@ it('rejects foreign discussion URLs and unsafe inline repository paths', async (
     (f: ReturnType<typeof fixture>) => { f.routes.get(`${f.prefix}/issues/7/comments`)[0].html_url = 'https://github.com/other/repo/pull/7#issuecomment-9'; },
     (f: ReturnType<typeof fixture>) => { f.routes.get(`${f.prefix}/pulls/7/comments`)[0].path = '../escape'; },
   ]) { const f = fixture(); mutate(f); await expect(captureGithubPrEvidence(f.input, { fetch: f.fetch })).rejects.toThrow(); }
+});
+
+function provenanceFixture(licenseBytes = Buffer.from('\ufeffSynthetic license fixture only.\n')) {
+  const f = fixture();
+  const licenseSha = execFileSync('git', ['hash-object', '--stdin'], { input: licenseBytes, encoding: 'utf8', timeout: 5000 }).trim();
+  const license = { path: 'LICENSE.md', mode: '100644', type: 'blob', sha: licenseSha, size: licenseBytes.length };
+  f.after.push(license);
+  f.routes.set(`${f.prefix}/git/commits/${base}`, { sha: base, tree: { sha: sha('a') } });
+  f.routes.set(`${f.prefix}/contents/LICENSE.md`, { type: 'file', path: license.path, sha: license.sha,
+    size: license.size, encoding: 'base64', content: licenseBytes.toString('base64').replace(/(.{20})/g, '$1\n') });
+  return { ...f, license, licenseBytes, input: { ...f.input, includeSourceProvenance: true } };
+}
+
+it('retains pinned license, source roots and every requested nested tree bound to the same receipt', async () => {
+  const f = provenanceFixture(), left = f.before.shift()!, right = f.after.shift()!;
+  f.before.push({ path: 'nested', type: 'tree', mode: '040000', sha: sha('7') } as any);
+  f.after.push({ path: 'nested', type: 'tree', mode: '040000', sha: sha('8') });
+  f.routes.set(`${f.prefix}/git/trees/${sha('7')}`, { sha: sha('7'), truncated: false, tree: [left] });
+  f.routes.set(`${f.prefix}/git/trees/${sha('8')}`, { sha: sha('8'), truncated: false, tree: [right] });
+  f.files[0].filename = 'nested/modified.ts';
+  const budget = { requestsRemaining: 50, deadline: Date.now() + 300_000 };
+  const result = await captureGithubPrEvidence(f.input, { fetch: f.fetch, budget });
+  const provenance = result.sourceProvenance!;
+  expect(provenance.sourceIdentities).toMatchObject({ baseTip: { commit: base, tree: sha('a'), role: 'current-tip-metadata-only-not-source' },
+    mergeBase: { commit: mergeBase, tree: oldTree }, head: { commit: head, tree: newTree } });
+  expect(provenance.license).toMatchObject({ sourceRef: head, path: 'LICENSE.md', text: f.licenseBytes.toString('utf8'),
+    blobSha1: f.license.sha, sha256: createHash('sha256').update(f.licenseBytes).digest('hex') });
+  const retained = [...Object.values(provenance.sourceIdentities).map(identity => identity.observation),
+    provenance.license.observation, provenance.license.treeObservation, ...provenance.sourceTrees];
+  for (const observation of retained) {
+    expect(digestOf(observation.data)).toBe(observation.dataDigest);
+    expect(result.receipt.observations).toContainEqual(expect.objectContaining({ endpoint: observation.endpoint,
+      observedAt: observation.observedAt, dataDigest: observation.dataDigest }));
+  }
+  expect(provenance.sourceTrees.map(observation => observation.data.sha).sort()).toEqual([oldTree, newTree, sha('7'), sha('8')].sort());
+  expect(f.calls.some(call => call.url.pathname.endsWith(`/git/trees/${sha('a')}`))).toBe(false);
+  expect(f.calls.find(call => call.url.pathname.includes('/contents/'))!.url.searchParams.get('ref')).toBe(head);
+  expect(result.receipt.requests).toBe(f.calls.length);
+  expect(50 - budget.requestsRemaining).toBe(f.calls.length);
+  const { sourceProvenance: _sidecar, ...originalPackage } = result;
+  expect(GithubPrEvidencePackageSchema.parse(originalPackage).digest).toBe(result.digest);
+});
+
+it('retains zero-change observations and fetches the head license root without duplicated identical commit requests', async () => {
+  const f = provenanceFixture(); f.pr.base.sha = head;
+  f.routes.set(`${f.prefix}/compare/${head}...${head}`, { base_commit: { sha: head }, merge_base_commit: { sha: head }, files: [] });
+  const result = await captureGithubPrEvidence(f.input, { fetch: f.fetch });
+  expect(result.evidence.snapshot.changes).toEqual([]);
+  expect(result.sourceProvenance!.sourceTrees).toHaveLength(1);
+  expect(result.sourceProvenance!.sourceTrees[0].data.sha).toBe(newTree);
+  expect(f.calls.filter(call => call.url.pathname.includes('/git/commits/'))).toHaveLength(1);
+});
+
+it.each([
+  ['missing license', (f: ReturnType<typeof provenanceFixture>) => { f.after.splice(f.after.indexOf(f.license), 1); }],
+  ['ambiguous license', (f: ReturnType<typeof provenanceFixture>) => { f.after.push({ ...f.license, path: 'COPYING' }); }],
+  ['license symlink', (f: ReturnType<typeof provenanceFixture>) => { f.license.mode = '120000'; }],
+  ['oversize license', (f: ReturnType<typeof provenanceFixture>) => { f.license.size = 262_145; }],
+  ['truncated head tree', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/git/trees/${newTree}`).truncated = true; }],
+  ['baseTip identity mismatch', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/git/commits/${base}`).sha = head; }],
+  ['content blob mismatch', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/contents/LICENSE.md`).sha = head; }],
+  ['content path mismatch', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/contents/LICENSE.md`).path = 'README.md'; }],
+  ['content size mismatch', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/contents/LICENSE.md`).size++; }],
+  ['content encoding mismatch', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/contents/LICENSE.md`).encoding = 'utf-8'; }],
+  ['noncanonical base64', (f: ReturnType<typeof provenanceFixture>) => { f.routes.get(`${f.prefix}/contents/LICENSE.md`).content += '!!!!'; }],
+] as const)('fails provenance capture closed on %s', async (_name, mutate) => {
+  const f = provenanceFixture(); mutate(f);
+  await expect(captureGithubPrEvidence(f.input, { fetch: f.fetch })).rejects.toThrow();
+});
+
+it.each([Buffer.from([255, 254]), Buffer.from('bad\0text'), Buffer.from('   \n')])('rejects non-text license bytes %s', async bytes => {
+  const f = provenanceFixture(bytes);
+  await expect(captureGithubPrEvidence(f.input, { fetch: f.fetch })).rejects.toThrow(/License/);
+});
+
+it('never substitutes a license transport after denial and charges extra GETs to the shared budget', async () => {
+  const denied = provenanceFixture(); denied.setHook(path => path.includes('/contents/') ? { status: 403, data: { message: 'forbidden' } } : undefined);
+  await expect(captureGithubPrEvidence(denied.input, { fetch: denied.fetch })).rejects.toThrow('HTTP 403');
+  expect(denied.calls.at(-1)!.url.pathname).toBe(`${denied.prefix}/contents/LICENSE.md`);
+  expect(denied.calls.filter(call => call.url.pathname.includes('/contents/'))).toHaveLength(1);
+  const limited = provenanceFixture(), budget = { requestsRemaining: 4, deadline: Date.now() + 300_000 };
+  await expect(captureGithubPrEvidence(limited.input, { fetch: limited.fetch, budget })).rejects.toThrow('batch request limit');
+  expect(limited.calls).toHaveLength(4); expect(budget.requestsRemaining).toBe(0);
+  const deadline = provenanceFixture();
+  await expect(captureGithubPrEvidence(deadline.input, { fetch: deadline.fetch, budget: { requestsRemaining: 50, deadline: Date.now() - 1 } })).rejects.toThrow('deadline');
+  expect(deadline.calls).toHaveLength(0);
+});
+
+it('checks a frozen merge identity before any compare, source, license or discussion GET', async () => {
+  const f = fixture();
+  await expect(captureGithubPrEvidence({ ...f.input, includeSourceProvenance: true,
+    expectedMerge: { mergedAt: timestamp, mergeCommit: '9'.repeat(40) } }, { fetch: f.fetch }))
+    .rejects.toThrow('Frozen PR merge identity changed');
+  expect(f.calls.map(call => call.url.pathname)).toEqual([`${f.prefix}/pulls/7`]);
+});
+
+it('feeds an actual collector result into the frozen W0 package validator using only authored HTTP responses', async () => {
+  const { runW0Capture } = await import('../scripts/capture-w0-first-three.js');
+  const { readFile } = await import('node:fs/promises');
+  const plan = JSON.parse(await readFile(new URL('../experiments/temporal-pilot/w0-first-three/selection.json', import.meta.url), 'utf8'));
+  const f = provenanceFixture();
+  // Rename the authored API fixture to the fixed selection; no real API is contacted.
+  const routes = [...f.routes.entries()]; f.routes.clear();
+  for (const [path, data] of routes) {
+    const target = path.replace('/repos/fixture/project', '/repos/encode/httpx').replace(/\/(pulls|issues)\/7(?=\/|$)/, '/$1/3035');
+    const body = JSON.parse(JSON.stringify(data).replaceAll('fixture/project', 'encode/httpx').replaceAll('/pull/7', '/pull/3035'));
+    if (target === '/repos/encode/httpx/pulls/3035') Object.assign(body, { id: 3035, number: 3035,
+      merged_at: plan.selected[0].mergedAt, closed_at: plan.selected[0].mergedAt,
+      updated_at: plan.selected[0].mergedAt, merge_commit_sha: plan.selected[0].mergeCommit });
+    f.routes.set(target, body);
+  }
+  const result = await runW0Capture(plan, async (input, options) => {
+    if (input.number !== 3035) throw new Error('Authored stop after first package');
+    return captureGithubPrEvidence(input, { ...options, fetch: f.fetch });
+  });
+  expect(result.summary.items.map(item => item.status)).toEqual(['captured', 'failed', 'unattempted']);
+  expect(result.packages).toHaveLength(1);
+  expect(result.packages[0].license.text).toBe(f.licenseBytes.toString('utf8'));
+  expect(result.packages[0].evidence.evidence.snapshot.changes.length).toBeGreaterThan(0);
+  expect(result.summary.requests).toBe(f.calls.length);
 });

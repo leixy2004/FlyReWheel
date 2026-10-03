@@ -1,0 +1,11 @@
+{
+  "publishedPlanCommit": "e982c18d04fba192a9a5b0946c2565490128f9a2",
+  "planSha256": "b5d3515cb2a506ca257d3e5edc287745681f38a0131c8d0e7dad9ac067e2231c",
+  "previousRequests": 2,
+  "reservedDiagnosticRequests": 1,
+  "totalRequestsReserved": 3,
+  "requestBudget": 50,
+  "dispatcher": "EnvHttpProxyAgent",
+  "existingProxyOnly": true,
+  "realSourcePackages": 0
+}

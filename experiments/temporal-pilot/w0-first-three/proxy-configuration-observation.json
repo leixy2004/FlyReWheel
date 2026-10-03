@@ -1,0 +1,32 @@
+{
+  "kind": "offline_transport_configuration_observation",
+  "nodeVersion": "v24.19.0",
+  "proxyVariablePresence": {
+    "HTTP_PROXY": true,
+    "HTTPS_PROXY": true,
+    "NO_PROXY": true,
+    "http_proxy": true,
+    "https_proxy": true,
+    "no_proxy": true,
+    "ALL_PROXY": false,
+    "all_proxy": false
+  },
+  "nodeEnvProxySwitchPresent": false,
+  "nodeOptionsPresent": false,
+  "defaultFetchDispatcher": "Agent",
+  "withOfficialCliSwitchDispatcher": "EnvHttpProxyAgent",
+  "withOfficialEnvironmentSwitchDispatcher": "EnvHttpProxyAgent",
+  "probeScheme": "data",
+  "offlineProbeNetworkRequests": 0,
+  "proxyValuesRecorded": false,
+  "effectiveGithubProxyRouteVerified": false,
+  "gitExplicitProxyConfigPresent": false,
+  "gitHttpsHelperUsesLibcurl": true,
+  "ghBinaryReferencesProxyVariables": true,
+  "gitAndGhActualProxyUsageVerified": false,
+  "upstreamGetRequestsTotal": 2,
+  "upstreamGetBudget": 50,
+  "realSourcePackages": 0,
+  "newUpstreamRequestsInThisInvestigation": 0,
+  "osNetworkOrTlsPolicyModified": false
+}
