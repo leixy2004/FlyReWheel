@@ -1,0 +1,6 @@
+Collecting ruff==0.1.9
+  Downloading ruff-0.1.9-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (22 kB)
+Downloading ruff-0.1.9-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (7.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.4/7.4 MB 31.9 MB/s  0:00:00
+Saved /tmp/flyrewheel-w0-behavior-attempt-1/ruff-after/ruff-0.1.9-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Successfully downloaded ruff

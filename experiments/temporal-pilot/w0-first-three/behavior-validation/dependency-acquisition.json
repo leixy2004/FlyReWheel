@@ -1,0 +1,150 @@
+[
+  {
+    "name": "ruff-before",
+    "requirements": [
+      "ruff==0.1.6"
+    ],
+    "command": [
+      "python3",
+      "-m",
+      "pip",
+      "--isolated",
+      "download",
+      "--disable-pip-version-check",
+      "--no-cache-dir",
+      "--index-url",
+      "https://pypi.org/simple",
+      "--only-binary=:all:",
+      "--python-version",
+      "3.11",
+      "--implementation",
+      "cp",
+      "--abi",
+      "cp311",
+      "--platform",
+      "manylinux2014_x86_64",
+      "--dest",
+      "/tmp/flyrewheel-w0-behavior-attempt-1/ruff-before",
+      "ruff==0.1.6"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.329,
+    "wheels": [
+      {
+        "file": "ruff-0.1.6-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "bytes": 6295145,
+        "sha256": "3a0cd909d25f227ac5c36d4e7e681577275fb74ba3b11d288aff7ec47e3ae745"
+      }
+    ]
+  },
+  {
+    "name": "ruff-after",
+    "requirements": [
+      "ruff==0.1.9"
+    ],
+    "command": [
+      "python3",
+      "-m",
+      "pip",
+      "--isolated",
+      "download",
+      "--disable-pip-version-check",
+      "--no-cache-dir",
+      "--index-url",
+      "https://pypi.org/simple",
+      "--only-binary=:all:",
+      "--python-version",
+      "3.11",
+      "--implementation",
+      "cp",
+      "--abi",
+      "cp311",
+      "--platform",
+      "manylinux2014_x86_64",
+      "--dest",
+      "/tmp/flyrewheel-w0-behavior-attempt-1/ruff-after",
+      "ruff==0.1.9"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.429,
+    "wheels": [
+      {
+        "file": "ruff-0.1.9-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "bytes": 7407581,
+        "sha256": "479ca4250cab30f9218b2e563adc362bd6ae6343df7c7b5a7865300a5156d5a6"
+      }
+    ]
+  },
+  {
+    "name": "docs-before",
+    "requirements": [
+      "mkdocs==1.5.3",
+      "mkautodoc==0.2.0",
+      "mkdocs-material==9.4.14"
+    ],
+    "command": [
+      "python3",
+      "-m",
+      "pip",
+      "--isolated",
+      "download",
+      "--disable-pip-version-check",
+      "--no-cache-dir",
+      "--index-url",
+      "https://pypi.org/simple",
+      "--only-binary=:all:",
+      "--python-version",
+      "3.11",
+      "--implementation",
+      "cp",
+      "--abi",
+      "cp311",
+      "--platform",
+      "manylinux2014_x86_64",
+      "--dest",
+      "/tmp/flyrewheel-w0-behavior-attempt-1/docs-before",
+      "mkdocs==1.5.3",
+      "mkautodoc==0.2.0",
+      "mkdocs-material==9.4.14"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 0.866,
+    "wheels": []
+  },
+  {
+    "name": "docs-after",
+    "requirements": [
+      "mkdocs==1.5.3",
+      "mkautodoc==0.2.0",
+      "mkdocs-material==9.5.3"
+    ],
+    "command": [
+      "python3",
+      "-m",
+      "pip",
+      "--isolated",
+      "download",
+      "--disable-pip-version-check",
+      "--no-cache-dir",
+      "--index-url",
+      "https://pypi.org/simple",
+      "--only-binary=:all:",
+      "--python-version",
+      "3.11",
+      "--implementation",
+      "cp",
+      "--abi",
+      "cp311",
+      "--platform",
+      "manylinux2014_x86_64",
+      "--dest",
+      "/tmp/flyrewheel-w0-behavior-attempt-1/docs-after",
+      "mkdocs==1.5.3",
+      "mkautodoc==0.2.0",
+      "mkdocs-material==9.5.3"
+    ],
+    "exitCode": 1,
+    "elapsedSeconds": 0.817,
+    "wheels": []
+  }
+]

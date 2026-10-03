@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-behavior-validation-plan",
+  "baseCommit": "dfee04c00674371551153c71c02473b2205a44de",
+  "samples": [
+    3035,
+    3031,
+    3036
+  ],
+  "selectionFrozen": true,
+  "source": "existing verified before/after evaluation exports only",
+  "apiLedgerFrozen": 48,
+  "newUpstreamGitOrRestReads": 0,
+  "selection": [
+    {
+      "number": 3035,
+      "path": "requirements.txt",
+      "reason": "mkdocs-material bump; official scripts/build documentation command if all required dependencies available as public PyPI wheels without source-build/install hooks",
+      "beforeTool": "mkdocs-material==9.4.14",
+      "afterTool": "mkdocs-material==9.5.3",
+      "candidateCheck": "mkdocs build --site-dir /tmp/site (official build command; no added strictness); do not run packaging or deploy scripts",
+      "fallback": "dependency availability/compatibility failure retained; docs-specific tests unknown"
+    },
+    {
+      "number": 3031,
+      "path": "requirements.txt",
+      "reason": "ruff bump; reuse official scripts/check lint scope and configuration",
+      "beforeTool": "ruff==0.1.6",
+      "afterTool": "ruff==0.1.9",
+      "candidateCheck": "ruff format httpx tests --diff and ruff check httpx tests; no --fix"
+    },
+    {
+      "number": 3036,
+      "paths": [
+        ".github/workflows/publish.yml",
+        ".github/workflows/test-suite.yml"
+      ],
+      "reason": "setup-python action changes cannot be faithfully exercised as GitHub Actions inside an offline Python container",
+      "candidateCheck": "static workflow syntax and exact version transition; full-context mining input quality check",
+      "behaviorResult": "no-direct-applicable-local-upstream-test; action behavior unknown"
+    }
+  ],
+  "container": {
+    "imageSource": "docker.io/library/python:3.11-slim",
+    "imagePolicy": "one official image pull, resolve immutable image ID/digest before execution; no builds",
+    "user": "65534:65534",
+    "network": "none",
+    "readOnlyRoot": true,
+    "sourceMount": "readonly exact committed source; no .git or host credentials exposed",
+    "capDrop": "ALL",
+    "noNewPrivileges": true,
+    "pidsLimit": 64,
+    "cpus": 1,
+    "memory": "512m",
+    "memorySwap": "512m",
+    "tmpfs": "/tmp:rw,nosuid,nodev,size=128m,mode=1777",
+    "hostNetworkOrSocket": false
+  },
+  "dependencies": {
+    "origin": "https://pypi.org/simple and public files.pythonhosted.org wheels only",
+    "noSourceBuilds": true,
+    "noEditableInstallOrUpstreamBuildHooks": true,
+    "lock": "record actual distributions/version/wheel SHA256 and execute only frozen wheels offline",
+    "failure": "do not change source/versions/assertions/index/TLS to get green"
+  },
+  "budget": {
+    "imagePulls": 1,
+    "additionalDiskBytes": 1073741824,
+    "wheelBytes": 134217728,
+    "perCommandSeconds": 120,
+    "totalMinutes": 10,
+    "containersAtOnce": 1,
+    "retries": 0
+  },
+  "claims": "W0 availability/behavior only; no independent human labels, semantic oracle, model execution or effectiveness claims; retain no-test/zero-yield/unknown and all failures",
+  "approval": "If additional approval is required stop the blocked action; no isolation or TLS weakening.",
+  "amendment": {
+    "reason": "First container could not read assistant-owned harness (permission denied before Ruff ran). Preserve failure; correct staging readability only. No upstream source/assertion, uid, network, mount or resource changes.",
+    "infrastructureRetries": 1,
+    "toolCompatibilityRetries": 0,
+    "maxContainersStarted": 3
+  }
+}
