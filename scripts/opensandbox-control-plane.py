@@ -149,6 +149,19 @@ def validate(options):
     return source, python
 
 
+def build_config(task, key):
+    """Pure configuration construction; callers choose real or nonsensitive fixture key."""
+    return (f'[server]\nhost="127.0.0.1"\napi_key={json.dumps(key)}\n'
+                  f'[runtime]\ntype="docker"\nexecd_image={json.dumps(EXECD_IMAGE)}\n'
+                  f'[store]\ntype="sqlite"\npath={json.dumps(str(task / "state.db"))}\n'
+                  '[proxy]\nresolve_internal=false\n'
+                  '[docker]\nnetwork_mode="bridge"\npublish_host="127.0.0.1"\n'
+                  'port_range_min=49000\nport_range_max=49100\n'
+                  'drop_capabilities=["ALL"]\nno_new_privileges=true\npids_limit=64\n'
+                  '[storage]\nallowed_host_paths=["/nonexistent/flyrewheel-denied"]\n'
+                  '[log]\nlevel="ERROR"\n')
+
+
 def run_supervisor(options):
     if not stat.S_ISFIFO(os.fstat(sys.stdin.fileno()).st_mode):
         raise ValueError("supervisor requires parent-owned pipe")
@@ -177,15 +190,7 @@ def run_supervisor(options):
                "PYTHONDONTWRITEBYTECODE": "1", "SANDBOX_CONFIG_PATH": str(task / "config.toml")}
         key = secrets.token_urlsafe(32)
         private_file(task / "api-key", key.encode())
-        config = (f'[server]\nhost="127.0.0.1"\napi_key={json.dumps(key)}\n'
-                  f'[runtime]\ntype="docker"\nexecd_image={json.dumps(options.execd_image)}\n'
-                  f'[store]\ntype="sqlite"\npath={json.dumps(str(task / "state.db"))}\n'
-                  '[proxy]\nresolve_internal=false\n'
-                  '[docker]\nnetwork_mode="bridge"\npublish_host="127.0.0.1"\n'
-                  'port_range_min=49000\nport_range_max=49009\n'
-                  'drop_capabilities=["ALL"]\nno_new_privileges=true\npids_limit=64\n'
-                  '[storage]\nallowed_host_paths=["/nonexistent/flyrewheel-denied"]\n'
-                  '[log]\nlevel="ERROR"\n')
+        config = build_config(task, key)
         private_file(task / "config.toml", config.encode())
         public_command(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
                         "-keyout", str(task / "tls.key.new"), "-out", str(task / "tls.crt.new"),

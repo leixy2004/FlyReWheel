@@ -19,6 +19,22 @@ spec.loader.exec_module(control)
 
 
 class ControlPlaneTests(unittest.TestCase):
+    def test_generated_toml_with_pinned_official_docker_config(self):
+        import tomllib
+        fixture = Path(__file__).parent / "fixtures/opensandbox_docker_config.py"
+        schema_spec = importlib.util.spec_from_file_location("official_docker_config", fixture)
+        schema = importlib.util.module_from_spec(schema_spec)
+        schema_spec.loader.exec_module(schema)
+        schema.DockerConfig.model_rebuild(_types_namespace=vars(schema))
+        config = tomllib.loads(control.build_config(Path("/tmp/non-sensitive-fixture"), "fixture-only-not-an-api-key"))
+        validated = schema.DockerConfig.model_validate(config["docker"])
+        self.assertEqual(validated.port_range_max - validated.port_range_min, 100)
+        self.assertEqual(validated.publish_host, "127.0.0.1")
+        self.assertEqual(validated.drop_capabilities, ["ALL"])
+        self.assertFalse(config["proxy"]["resolve_internal"])
+        with self.assertRaises(ValueError):
+            schema.DockerConfig.model_validate({**config["docker"], "port_range_max": 49009})
+
     def test_default_dry_run_has_no_resource_effects(self):
         output = io.StringIO()
         with patch.object(control, "validate", side_effect=AssertionError("validation I/O")), \

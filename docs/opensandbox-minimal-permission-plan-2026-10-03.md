@@ -124,3 +124,27 @@ NET_ADMIN, new model credential, API call, privileged mode or host networking is
 required. None of those pending permissions has been exercised. Before a later
 launch, verify the preparation/cleanup executor against the documented requirements;
 the static checker is not an executor.
+
+## Prepared executor and remaining confirmation
+
+The default-dry-run [control-plane executor](../scripts/opensandbox-control-plane.py)
+now implements temporary preparation, a detached deadline supervisor, parent-exit
+handling and process/port-verified cleanup. [Usage and scope](../deploy/opensandbox/README.md#temporary-control-plane-executor-not-yet-launched).
+Eight nonsensitive fixture/inert-process/configuration tests pass; no real key, certificate or
+control-plane service was created by them. Five archive-verifier error-path tests
+and eight static-plan/health tests also pass, each with its original evidence scope.
+
+The minimum remaining user confirmation is:
+
+1. Generate a task-only 32-byte API key and one-day loopback TLS certificate/private
+   key, used for no more than 15 minutes, with scoped verified client trust and the
+   documented stop-before-delete cleanup.
+2. Start the patched authenticated control plane on loopback in this dedicated
+   environment and later perform the single bounded no-model SDK lifecycle trial.
+   Bridge egress remains unrestricted; no deny-default network claim is made.
+
+No helper process execution/default-root-network exception, NET_ADMIN, model/API
+credential, model call, external account, host trust-store change, privileged mode
+or public listener is requested. Dependencies must first fit their installation
+budget, and the separate SDK lifecycle driver must provide owned-allocation cleanup;
+the current executor supervises only the control plane. Approval is still pending.
