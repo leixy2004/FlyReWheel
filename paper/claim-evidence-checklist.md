@@ -2,6 +2,18 @@
 
 Audit date: 2026-10-02. The original audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; subsequent sections cover the diagnosis-operator extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84` and the mixed-anchor working-tree extension on `92b375e62f141127214188a70b9024eec5ae7c27`, each with a separate verification record. This checklist accompanies [the methods draft](method-draft.md). A checked item means the stated narrow implementation claim has supporting source and recorded verification. It does not indicate semantic efficacy. Each run retains its own scope; older test counts do not verify newer behavior. All operator and mixed-anchor verification uses authored fixtures, with no live model experiment.
 
+## Executable artifact mapping
+
+The [current methods-to-artifacts map](executable-artifact-map.md) binds hypotheses,
+baselines, temporal cutoffs and metric denominators to their actual commands and
+saved evidence at `37d31a2`, with PR #23 separately pinned to `ce9b9fb` and its
+PR #25 follow-up pinned to `a7adb0e`. It preserves the original negative attempts
+and distinguishes the later successful Ruff before/after lint/format pair from
+research effectiveness. Real-model calls and independent human labels remain zero;
+W0 semantic eligibility, docs behavior and external-action behavior remain unknown. Source capture, full committed
+repository context, authored demos and old CI passes do not establish an empirical
+result or validate a newer tree.
+
 ## Real PostgreSQL infrastructure evidence: 2026-10-03
 
 The [server-backed record](../docs/real-postgres-verification.md) and
