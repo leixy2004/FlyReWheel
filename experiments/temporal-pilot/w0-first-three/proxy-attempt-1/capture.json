@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_first_three_capture_run",
+  "repository": "encode/httpx",
+  "planSha256": "9b024e81a3886794d4b50fb44767cd53a10a794ffbaf881e4305c6cfd648898a",
+  "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+  "startedAt": "2026-10-03T22:39:50.643Z",
+  "completedAt": "2026-10-03T22:40:07.440Z",
+  "status": "captured_quarantined",
+  "items": [
+    {
+      "number": 3035,
+      "status": "captured",
+      "evidenceDigest": "ab4dad128cb8124d0c1de63e6ea55fc40557965749d9595fb2a84affa2a10c54",
+      "snapshotDigest": "4532d1b688fe3e437720fbd54edcddb87da8d644a57aa4ed21f49a4ef54ee535",
+      "requests": 13
+    },
+    {
+      "number": 3031,
+      "status": "captured",
+      "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+      "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+      "requests": 13
+    },
+    {
+      "number": 3036,
+      "status": "captured",
+      "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+      "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+      "requests": 19
+    }
+  ],
+  "requests": 45,
+  "priorRequests": 3,
+  "availableGetRequests": 47,
+  "totalRequestsUsed": 48,
+  "maxGetRequests": 50,
+  "maxTotalTimeMs": 300000,
+  "acceptedEvidenceBytes": 151890,
+  "license": "pinned_bytes_verified_for_accepted_packages",
+  "licenseAcquisition": "required_for_accepted_packages",
+  "redistribution": "not_authorized",
+  "packageUse": "quarantine_only_not_rule_input",
+  "historicalW0Feedback": false,
+  "historicalDiscussionCutoff": "unknown",
+  "discussionUse": "quarantine_only_not_rule_input",
+  "mining": "not_run",
+  "treeIdentities": "required_for_accepted_packages",
+  "sourceScope": "changed_paths_only_not_complete_repository",
+  "modelCalls": 0,
+  "authentication": "none",
+  "retries": 0,
+  "planCommit": "e982c18d04fba192a9a5b0946c2565490128f9a2",
+  "publication": "quarantined_pending_independent_audit"
+}

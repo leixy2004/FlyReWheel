@@ -10,7 +10,15 @@ read-only recheck of that same connection succeeded. The plan was then pushed
 and its remote branch fetched before the first upstream request. This ordering
 is a recorded operational sequence, not independent research preregistration.
 
-## Actual acquisition result
+## Latest bounded attempt
+
+The existing environment proxy was enabled only for the Node process after its
+plan was published. Diagnostic HTTP 200 unlocked the fixed three-PR capture;
+all three packages passed offline and independent native-agent audits. Total
+upstream usage is 48/50 GETs. See `proxy-attempt-1/README.md` and its manifest.
+These packages remain quarantined, with no labels or rule-mining result.
+
+## Earlier failed acquisition (preserved)
 
 `capture-run/run.json` records one attempted GET:
 `GET /repos/encode/httpx/pulls/3035`. It failed with `GITHUB_READ_FAILED`; no

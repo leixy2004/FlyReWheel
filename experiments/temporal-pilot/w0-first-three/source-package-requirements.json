@@ -34,12 +34,14 @@
   ],
   "releaseState": "quarantine_only_not_rule_input_not_publication_authorization",
   "remainingAcquisitionWork": [
-    "Obtain sanitized diagnostic evidence for the first GET failure before authorizing another real attempt.",
-    "No real source package exists; preserve the original failed run and record any later explicitly authorized attempt separately."
+    "The authorized existing-proxy attempt captured all three selected packages; no further upstream requests are planned.",
+    "Historical visibility, lineage, semantic eligibility and feedback cutoff require separate offline protocol gates."
   ],
   "evaluationReady": false,
   "modelCalls": 0,
   "independentLabels": 0,
   "requirementsTiming": "Prepared after the first request failed with zero evidence bytes; this is not a pre-acquisition preregistration.",
-  "producerImplementation": "Existing Octokit collector now emits required sidecars in opt-in provenance mode; W0 runner requires and validates them. Verified offline only."
+  "producerImplementation": "Existing Octokit collector now emits required sidecars in opt-in provenance mode; W0 runner requires and validates them. Verified offline only.",
+  "actualValidation": "proxy-attempt-1/independent-audit.json",
+  "realSourcePackages": 3
 }

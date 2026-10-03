@@ -1,0 +1,141 @@
+{
+  "mode": "offline",
+  "networkRequests": 0,
+  "packages": [
+    {
+      "status": "offline_source_package_consistency_pass",
+      "repository": "encode/httpx",
+      "number": 3035,
+      "provenance": "live-api-observation",
+      "evidenceDigest": "ab4dad128cb8124d0c1de63e6ea55fc40557965749d9595fb2a84affa2a10c54",
+      "snapshotDigest": "4532d1b688fe3e437720fbd54edcddb87da8d644a57aa4ed21f49a4ef54ee535",
+      "sourceIdentities": {
+        "baseTip": {
+          "commit": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "tree": "ddddb6812f4e41c0c106fbd93d0e2ca2ff636f1a",
+          "role": "current-tip-metadata-only-not-source"
+        },
+        "mergeBase": {
+          "commit": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "tree": "ddddb6812f4e41c0c106fbd93d0e2ca2ff636f1a"
+        },
+        "head": {
+          "commit": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+        }
+      },
+      "license": {
+        "sourceRef": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "path": "LICENSE.md",
+        "blobSha1": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+        "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+      },
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "authenticity": "declared_live_observation_not_independently_authenticated",
+      "acquisition": {
+        "requests": 13,
+        "maxGetRequests": 50,
+        "verification": "recorded_observation_consistency_not_independent_network_audit",
+        "crossPackageRunBudget": "not_established",
+        "scope": "single_pr_known_commits_reachable_source_trees_and_changed_blobs"
+      },
+      "syntheticDetection": "explicit_synthetic_or_integrity_only_rejected_forged_live_claim_not_detectable_offline",
+      "licenseInterpretation": "not_performed",
+      "licenseCoverageOfBeforeSource": "unknown",
+      "publicationAllowed": false,
+      "mining": "not_run",
+      "evaluationReady": false
+    },
+    {
+      "status": "offline_source_package_consistency_pass",
+      "repository": "encode/httpx",
+      "number": 3031,
+      "provenance": "live-api-observation",
+      "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+      "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+      "sourceIdentities": {
+        "baseTip": {
+          "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+          "role": "current-tip-metadata-only-not-source"
+        },
+        "mergeBase": {
+          "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+        },
+        "head": {
+          "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+        }
+      },
+      "license": {
+        "sourceRef": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "path": "LICENSE.md",
+        "blobSha1": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+        "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+      },
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "authenticity": "declared_live_observation_not_independently_authenticated",
+      "acquisition": {
+        "requests": 13,
+        "maxGetRequests": 50,
+        "verification": "recorded_observation_consistency_not_independent_network_audit",
+        "crossPackageRunBudget": "not_established",
+        "scope": "single_pr_known_commits_reachable_source_trees_and_changed_blobs"
+      },
+      "syntheticDetection": "explicit_synthetic_or_integrity_only_rejected_forged_live_claim_not_detectable_offline",
+      "licenseInterpretation": "not_performed",
+      "licenseCoverageOfBeforeSource": "unknown",
+      "publicationAllowed": false,
+      "mining": "not_run",
+      "evaluationReady": false
+    },
+    {
+      "status": "offline_source_package_consistency_pass",
+      "repository": "encode/httpx",
+      "number": 3036,
+      "provenance": "live-api-observation",
+      "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+      "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+      "sourceIdentities": {
+        "baseTip": {
+          "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+          "role": "current-tip-metadata-only-not-source"
+        },
+        "mergeBase": {
+          "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+        },
+        "head": {
+          "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712"
+        }
+      },
+      "license": {
+        "sourceRef": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "path": "LICENSE.md",
+        "blobSha1": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+        "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+      },
+      "historicalW0Feedback": false,
+      "historicalSourceAvailability": "not_established",
+      "authenticity": "declared_live_observation_not_independently_authenticated",
+      "acquisition": {
+        "requests": 19,
+        "maxGetRequests": 50,
+        "verification": "recorded_observation_consistency_not_independent_network_audit",
+        "crossPackageRunBudget": "not_established",
+        "scope": "single_pr_known_commits_reachable_source_trees_and_changed_blobs"
+      },
+      "syntheticDetection": "explicit_synthetic_or_integrity_only_rejected_forged_live_claim_not_detectable_offline",
+      "licenseInterpretation": "not_performed",
+      "licenseCoverageOfBeforeSource": "unknown",
+      "publicationAllowed": false,
+      "mining": "not_run",
+      "evaluationReady": false
+    }
+  ]
+}

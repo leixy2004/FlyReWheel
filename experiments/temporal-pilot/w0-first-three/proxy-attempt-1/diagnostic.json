@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0_single_get_diagnostic",
+  "endpoint": "GET /repos/encode/httpx/pulls/3035",
+  "transport": "@octokit/rest@22.0.1",
+  "authentication": "none",
+  "startedAt": "2026-10-03T22:39:32.218Z",
+  "originalRunRequests": 2,
+  "requestBudget": 50,
+  "automaticRetries": 0,
+  "sourceProducer": "implemented_offline_verified",
+  "realSourcePackages": 0,
+  "sourceOrDiscussionFollowupRequests": 0,
+  "modelCalls": 0,
+  "completedAt": "2026-10-03T22:39:33.060Z",
+  "requests": 1,
+  "totalRequestsUsed": 3,
+  "status": "success",
+  "httpStatus": 200,
+  "identity": {
+    "repository": "encode/httpx",
+    "number": 3035,
+    "mergedAt": "2024-01-03T05:11:45Z",
+    "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+    "baseTip": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+    "head": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+    "verification": "provider_declared_metadata_only"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "w0_source_acquisition_feasibility",
+  "observedMergedFrame": 70,
+  "selectedW0": 3,
+  "capturedPackages": 3,
+  "semanticEligibility": {
+    "eligible": null,
+    "unknown": 3
+  },
+  "excludedByContent": 0,
+  "priorFailedAttemptsRetained": 2,
+  "upstreamGetRequests": 48,
+  "budget": 50,
+  "requestRetries": 0,
+  "capturedSourceSides": 8,
+  "excludedSourceSides": 0,
+  "humanAnnotatorsAssigned": 0,
+  "independentLabels": 0,
+  "minedRules": 0,
+  "modelCalls": 0,
+  "effectiveness": "not_evaluated",
+  "historicalFeedbackCutoff": "unknown",
+  "lineageIndependence": "not_audited",
+  "futurePrContentRead": false,
+  "nextGate": "Offline protocol and lineage/readiness assessment; do not use current discussion as historical feedback."
+}
