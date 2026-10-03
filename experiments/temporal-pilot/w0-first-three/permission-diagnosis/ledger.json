@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-ruff-permission-diagnosis-and-behavior",
+  "baselinePr": 23,
+  "originalFailuresRetained": true,
+  "diagnosis": "A metadata-only reproduction with the original tmpfs options established noexec on /tmp. Installed ELF mode0755/uid65534/hash and loader path are correct, but executable access fails on that mount.",
+  "correction": "Verified existing wheel binaries copied mode0555 into immutable /opt/ruff image layers; no RUN, download, dynamic-loader bypass, or noexec removal.",
+  "baseImageOnBuild": null,
+  "imageBuilds": 1,
+  "imagePulls": 0,
+  "diagnosisContainers": 1,
+  "testContainers": 2,
+  "containersRemoved": 3,
+  "newHttpxApiOrGitRequests": 0,
+  "apiLedgerFrozen": 48,
+  "modelCalls": 0,
+  "independentHumanLabels": 0,
+  "ruffPairs": [
+    {
+      "side": "before",
+      "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+      "imageId": "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+      "elapsedSeconds": 1.358,
+      "sourceFiles": 114,
+      "binarySha256": "bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c",
+      "commands": [
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/before",
+            "--version"
+          ],
+          "exitCode": 0,
+          "stdout": "ruff 0.1.6\n",
+          "stderr": ""
+        },
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/before",
+            "format",
+            "httpx",
+            "tests",
+            "--diff"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": "60 files left unchanged\n"
+        },
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/before",
+            "check",
+            "httpx",
+            "tests"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "sourceUnchanged": true,
+      "removed": true
+    },
+    {
+      "side": "after",
+      "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+      "imageId": "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+      "elapsedSeconds": 2.545,
+      "sourceFiles": 114,
+      "binarySha256": "fa8f10bdef7ac67ef3b04c5bfbb95e2dd8feaacca577092f1b216c3d5d56e141",
+      "commands": [
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/after",
+            "--version"
+          ],
+          "exitCode": 0,
+          "stdout": "ruff 0.1.9\n",
+          "stderr": ""
+        },
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/after",
+            "format",
+            "httpx",
+            "tests",
+            "--diff"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": "60 files already formatted\n"
+        },
+        {
+          "kind": "command",
+          "command": [
+            "/opt/ruff/after",
+            "check",
+            "httpx",
+            "tests"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "sourceUnchanged": true,
+      "removed": true
+    }
+  ],
+  "behaviorMeaning": "One fixed W0 tool-bump pair is executable and both versions pass the selected official checks; no defect repair, rule yield, correctness label or general CI compatibility inference.",
+  "mkautodoc": {
+    "version": "0.2.0",
+    "officialRelease": "sdist-only",
+    "sdistBytes": 4827,
+    "sha256": "b6e0c89804ba39d453ce5795eb040e5615756f90438ac04f47e97893a86a10cd",
+    "inspection": "hash-verified in-memory archive read only",
+    "build": "not-run",
+    "reason": "Legacy setup.py executes Python; build backend and transitive dependencies are not frozen/validated here. No custom hooks observed is not proof of safe build.",
+    "docsBehavior": "unknown"
+  },
+  "otherSamples": {
+    "3035": "docs behavior unknown",
+    "3036": "action behavior unknown; prior static checks remain static"
+  },
+  "temporaryLogicalBytes": 78254756
+}
