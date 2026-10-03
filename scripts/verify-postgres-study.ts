@@ -53,7 +53,7 @@ if (phase === 'verify') {
   assert.equal((await audit()).length, 24);
   const evidence = { backend: 'real PostgreSQL server', sdk: 'installed official SDK with authored executable', modelExecution: 'not_run',
     driverCrashSignal: signal, completedBlocksBeforeCrash: 1, authoredCallsBeforeCrash: 12, expiredByDatabaseClock: true,
-    completedBlocksAfterRecovery: 2, authoredCallsAfterRecovery: 24, retainedBlockByteEquivalent: true,
+    completedBlocksAfterRecovery: 2, authoredCallsAfterRecovery: 24, retainedBlockStructurallyEqual: true,
     freshProcessReopenIdentical: true, additionalCallsOnReopen: 0, retries: first.counts.retries, reportDigest: first.digest };
   await writeFile(directory, JSON.stringify(evidence, null, 2) + '\n');
   console.log(JSON.stringify(evidence));

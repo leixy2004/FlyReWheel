@@ -151,6 +151,8 @@
     "verifyRestartWithoutActualRestart": "rejected with exit 1"
   },
   "interpretationCorrections": {
-    "prepareAndRestart.staleApplicationOwnerRejected": "Historical field name overstates this assertion: it rejects a non-winning application owner, not a former winning owner. True former-owner fencing is separately established by postgres-concurrency-2026-10-03.json. Raw evidence and original script hashes are preserved."
+    "prepareAndRestart.staleApplicationOwnerRejected": "Historical field name overstates this assertion: it rejects a non-winning application owner, not a former winning owner. True former-owner fencing is separately established by postgres-concurrency-2026-10-03.json. Raw evidence and original script hashes are preserved.",
+    "studyRecovery.retainedBlockByteEquivalent": "Historical field name means parsed-JSON structural equality, established by assert.deepEqual, not serialized byte equality. Current script output uses retainedBlockStructurallyEqual. The archived field and original hashes are preserved.",
+    "reproductionScriptHashes": "Recorded script hashes identify historical snapshots at evidence assembly, not a match to current reproduction scripts. Later fixes and runs require separate verification evidence."
   }
 }
