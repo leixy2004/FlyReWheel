@@ -418,6 +418,8 @@ def trial_quiescent_scan(owner):
 
 
 def trial_node(options):
+    if not getattr(options, "node_executable", None):
+        raise ValueError("explicit executable Node path required for launch")
     node = Path(options.node_executable)
     if not node.is_absolute() or not node.is_file() or not os.access(node, os.X_OK):
         raise ValueError("explicit executable Node path required")
@@ -425,10 +427,9 @@ def trial_node(options):
 
 
 def run_trial(options):
-    node = trial_node(options)
     state, admission = trial_admission(options)
     receipt = dict(schema=1, owner=admission["owner"], deadlineUnixMs=admission["deadlineUnixMs"],
-                   status="failed", cleanup={}, nodeExecutable=node, imagePolicy="retain-preexisting-no-image-removal")
+                   status="failed", cleanup={}, imagePolicy="retain-preexisting-no-image-removal")
     child = driver = None
     task = None
     messages = queue.Queue()
@@ -596,6 +597,9 @@ def run_trial(options):
             raise ValueError("one-shot outer claim already consumed; no second driver")
         if remaining() <= 0 or (state / "allocation.claim").exists():
             raise ValueError("expired or previously allocated trial")
+        # Launch-only dependencies must never prevent consumed-claim recovery.
+        node = trial_node(options)
+        receipt["nodeExecutable"] = node
         # Fail closed before either service or driver starts. esbuild is unref'd
         # by tsx and can outlive Node; keep it adoptable and waitable here.
         enable_child_subreaper()
@@ -709,8 +713,6 @@ def main(argv=None):
     if options.trial_supervisor and (not options.trial_state or options.supervisor):
         parser.error("trial supervisor requires outer trial mode")
     if options.trial_state and not options.supervisor:
-        if not options.node_executable:
-            parser.error("trial mode requires --node-executable")
         if options.trial_supervisor:
             return run_trial(options)
         command = [sys.executable, str(Path(__file__).resolve()),

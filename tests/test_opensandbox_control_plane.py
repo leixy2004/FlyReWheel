@@ -365,6 +365,57 @@ class TrialPrerequisiteTests(unittest.TestCase):
             self.assertFalse(receipt["cleanup"]["driverStopped"])
             self.assertEqual(receipt["status"], "cleanup-unverified")
 
+    def test_cleanup_only_ignores_missing_invalid_node_and_preserves_ambiguity(self):
+        for node in (None, "node", "/missing/removed-node"):
+            for group_present in (False, True):
+                with self.subTest(node=node, group_present=group_present), tempfile.TemporaryDirectory() as directory:
+                    options = self.options(directory)
+                    options.node_executable = node
+                    options.expires_unix_ms = 2000
+                    state, admission = control.trial_admission(options, now_ms=1000)
+                    control.exclusive_json(state / "outer.claim", {})
+                    control.exclusive_json(state / "allocation.claim", {})
+                    control.exclusive_json(state / "driver.json", {"pid": 12345,
+                        "processIdentity": {}, "deadlineUnixMs": admission["deadlineUnixMs"]})
+                    before = {p.name: p.read_bytes() for p in state.iterdir()}
+                    with patch.object(control, "trial_node", side_effect=AssertionError("launch-only validation")), \
+                         patch.object(control, "process_identity", side_effect=FileNotFoundError()), \
+                         patch.object(control, "group_exists", return_value=group_present), \
+                         patch.object(control, "public_command", side_effect=AssertionError("no Docker fixture")), \
+                         patch.object(control.os, "killpg", side_effect=AssertionError("unknown group")), \
+                         patch.object(control.subprocess, "Popen", side_effect=AssertionError("no spawn")):
+                        self.assertEqual(control.run_trial(options), 1)
+                    receipt = json.loads((state / "receipt.json").read_text())
+                    self.assertTrue(receipt["resumeCleanupOnly"])
+                    self.assertEqual(receipt["cleanup"]["driverStopped"], not group_present)
+                    self.assertFalse(receipt["cleanup"]["controlStopped"])
+                    self.assertEqual(receipt["status"], "cleanup-unverified")
+                    self.assertNotIn("nodeExecutable", receipt)
+                    for name, original in before.items():
+                        self.assertEqual((state / name).read_bytes(), original)
+
+    def test_fresh_launch_still_requires_valid_node_without_live_spawn(self):
+        for node in (None, "node", "/missing/removed-node"):
+            with self.subTest(node=node), tempfile.TemporaryDirectory() as directory:
+                options = self.options(directory)
+                options.node_executable = node
+                with patch.object(control, "validate", side_effect=AssertionError("no live preparation")), \
+                     patch.object(control, "public_command", side_effect=AssertionError("offline fixture")), \
+                     patch.object(control.subprocess, "Popen", side_effect=AssertionError("no spawn")):
+                    self.assertEqual(control.run_trial(options), 1)
+                receipt = json.loads((Path(options.trial_state) / "receipt.json").read_text())
+                self.assertEqual(receipt["errorClass"], "ValueError")
+                self.assertNotIn("driverChildSubreaperVerified", receipt)
+
+    def test_cli_routes_recovery_without_node_argument(self):
+        with patch.object(control, "run_trial", return_value=1) as trial:
+            result = control.main(["--execute", "--trial-supervisor", "--trial-state", "/fixture",
+                "--approval-ref", "fixture", "--source", "/unused", "--python", "/unused",
+                "--execd-image", control.EXECD_IMAGE, "--dedicated-daemon", "--network", "fixture",
+                "--network-owner", "fixture"])
+        self.assertEqual(result, 1)
+        self.assertIsNone(trial.call_args.args[0].node_executable)
+
     def test_active_driver_parent_eof_stops_driver_then_control_before_scan(self):
         from types import SimpleNamespace
         from unittest.mock import MagicMock
