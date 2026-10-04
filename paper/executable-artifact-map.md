@@ -33,6 +33,98 @@ require discovering a naturally complete historical rule-update chain. It does
 require truthful experimental provenance. The vLLM development cases and related
 lineages remain excluded; same-PR before/after pairs are not future instances.
 
+## PR #27 proposal: a distinct fixed-head evaluation scope
+
+The [annotation/temporal proposal at frozen PR #27 `1f5c680`](https://github.com/leixy2004/FlyReWheel/blob/1f5c68025b124f50bf683ab5cef0c85886a855a5/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md)
+was read separately during this update at integration head
+`d0aa35b134a392a5c79eeb8ca3cdfbe710e19219`. It is a retrospective design written
+after W0 inspection, not preregistration, collected labels or an execution result.
+Its proposed primary study must not silently replace the selected matched
+restriction experiment above:
+
+| Scope | Task / estimand | What must not be conflated |
+| --- | --- | --- |
+| Selected H2 restriction study | H−U and H−M future-case contrasts under shared diagnosis, evidence and gate; positive recall, legal-neighbor false alarms and resolution | The four-arm authored runner does not instantiate or validate PR #27's independent issue roster or frozen baseline. |
+| PR #27 fixed proposed-head study | Paired difference in detection proportions over independently enumerated known-positive issues in eligible W2 PR × family units, using the existing exact-anchor matcher | A repaired merge-base issue absent from the proposed head is not head-positive. Deleted-only targets are excluded; surviving in-scope pre-existing violations may count, with origin unknown unless supported. |
+| Current three-PR W0 feasibility pilot | Availability, packet/input integrity and preparation for PRs 3035/3031/3036 | Six before/after exports are three exposed development PRs, not six independent samples or independent future instances. Existing before-only drafts are calibration artifacts, not formal head-review examples. |
+
+PR #27 proposes a census of the 19 W2 frame candidates and at most eight real
+families, while retaining the 70-row frame flow and every excluded, unknown,
+unassessed, failed and not-run unit. This is a proposed later evaluation scope,
+not acquired W2 data. Family/rubric, baseline and matching rules must be frozen
+before W2 access; an independent issue roster is then discovered from authorized
+source inspection and locked before arm outputs. A real execution would need a
+versioned decision selecting this scope or explicitly relating it to H2; no merged
+estimand, shared success criterion or automatic protocol replacement is asserted.
+
+The proposed maximum initial-rating estimate is
+`19 PRs × 8 families × 2 raters × 30 minutes = 152 person-hours`, excluding
+calibration/adjudication. It is not measured work, assigned capacity, or a minimum
+entry requirement for the small three-W0 feasibility pilot. No people or time
+resources are assigned. The small pilot can continue authorized preparation and
+feasibility checks without pretending the largest annotation plan is staffed;
+actual annotation still requires real rubrics, qualified independent humans and
+controlled access. A revised formal budget must be frozen before W2, not after
+viewing outcomes.
+
+The [v0.2 staged-budget amendment, PR #27 `ea1d5e8`](https://github.com/leixy2004/FlyReWheel/blob/ea1d5e80a0e0f4bf1ef198012309defe87b27d5c/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md) makes
+smaller conditional work packages explicit without changing the frame or estimand:
+
+| Proposed stage | Rating + adjudication + administration | Gate and scope |
+| --- | --- | --- |
+| A: 3 exposed W0 × 1 family × 2 raters × 15 minutes | 1.5 + 0.75 + 0.5 = **2.75 person-hours** | Real rubric/family, independent personnel and approved access first; calibration only, not holdout labels. |
+| B: all 13 W1 × 1 family × 2 raters × 30 minutes | 13 + 3.25 + 1.75 = **18 person-hours** | Only after A's feasibility gate and separate acquisition/access authorization; development pilot, not current W1 release. |
+| Optional descriptive W2: all 19 × 1 family × 2 raters × 30 minutes | 19 + 4.75 + 2.25 = **26 person-hours** | Only after earlier gates and frozen formal task settings; bounded descriptive holdout, not powered confirmation. |
+
+All figures are proposal assumptions/caps, not completed annotations, measured
+productivity or assigned resources. The conditional sum is 46.75 hours; stopping
+after A caps this annotation/administration stage at 2.75. Substantive rule design,
+acquisition, access/security implementation, contamination auditing and model costs
+require separately visible budgets. The older 152-hour maximum covers initial
+rating only; with proposed reserves the eight-family option totals 208 hours.
+Neither maximum is the entry condition for A. No raters, labels, sampling changes
+or new collection are created by adopting this map.
+
+A needs a defensible family, at least two of three complete independent exercise
+submissions and resolved blocking rubric ambiguities within its cap. Unknown can
+be valid completed work but is not a positive signal. Zero observed positives does
+not justify replacing samples; no demonstrated family means stop, and a proposed
+W1 pilot without observed positives needs an explicit substantive rationale.
+Later confirmatory sizing requires observed uncertainty, disagreement, coverage,
+positive yield and PR/lineage dependence plus a prespecified worthwhile benefit.
+Illustrative worst-case cluster counts in v0.2 are not adopted sample sizes or
+confidence intervals for this deterministic frame. Without defensible precision,
+keep W2 descriptive or stop. This staged spending proposal does not replace the
+H−U/H−M estimand with the fixed-head study or create independent replication from
+anchors, exports, repeated model runs or raters.
+
+PR #27's primary visibility is **current-capture**: verified frozen static pairs,
+explicit scope and contamination accounting, without a historical-review claim.
+Missing historical public-availability evidence blocks only its optional as-of
+subanalysis, not this correctly labeled primary design. Current-capture does not
+waive lineage, source integrity or output-exposure gates. Exact Git objects and
+merge dates never establish an as-of checkpoint; checkpoint/cutoff fields remain
+null unless independently evidenced. The historical extension would additionally
+need a contemporaneous archived event tying the exact visible head/base and all
+included evidence to its declared review time.
+
+Its primary issue-detection metric deduplicates issues with frozen identities and
+exact anchors; finding-level useful-alert precision is a different quantity.
+Missing positives make detection undefined; incomplete issue search limits the
+claim to known issues. Unknown/disputed labels remain visible outside known-label
+denominators, and failed/not-run arms miss established positives. All-alert
+precision bounds require an exhaustive useful/non-useful/unresolved finding
+partition; the current `uniqueAlerts` counter is not semantic issue deduplication.
+PR-clustered descriptive comparisons, calibration/recognition records and independent
+adjudication are proposed procedures, not outputs supplied by a schema or CLI demo.
+
+Current substantive gaps are real reusable families/rubrics, independent raters and
+adjudicator with confirmed resources, an annotation interface and access assignment,
+and authorized acquisition/model budgets plus usable execution capabilities.
+No label, synthetic human identity, packet sharing, W1/W2 access or new model call
+is created by this mapping. See the frozen proposal for its precise annotation,
+unknown, contamination and optional historical rules.
+
 ## Temporal cutoffs and source artifacts
 
 | Stage | Fixed cutoff / denominator | Command and retained artifact | Present boundary |
@@ -178,7 +270,8 @@ That result predates the PR26/27/28 additions and does not validate them.
 
 Before claiming any empirical contrast, supply the missing trusted runtime/model
 and spending configuration, freeze the W0 rule artifacts, assign independent
-humans/adjudicator, audit lineage and visibility, and release W1/W2 stages only
+humans/adjudicator, audit lineage and the chosen visibility scope (historical proof only for as-of claims),
+and release W1/W2 stages only
 under their agreed exposure gates. Freeze matched settings, baseline behavior,
 rosters, budgets and analysis before inspecting policy outcomes. These are
 unmet requirements, not a claim that a study has been preregistered or run.
