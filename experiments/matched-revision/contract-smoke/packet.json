@@ -1,0 +1,635 @@
+{
+  "digest": "771843f194a1c93c48df5cd30cbcca594c8e903a06a80b1b2ffec34766145e19",
+  "episode": {
+    "schemaVersion": 1,
+    "kind": "matched-revision-frozen-episode",
+    "origin": "authored_fixture",
+    "id": "authored-episode",
+    "familyId": "fixture-family",
+    "frozenAt": "2026-10-02T00:00:00Z",
+    "revision": {
+      "request": {
+        "digest": "5d993c0fbd08d45d854f840c3cf045bc25f21b391d7641af239696994272a799",
+        "request": {
+          "id": "fixture-request",
+          "baseRuleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+          "requestedRuleVersion": "v1",
+          "feedbackIds": [
+            "feedback-b"
+          ],
+          "requestedChange": "Assess the supplied feedback",
+          "actor": "fixture-author",
+          "source": "fixture",
+          "createdAt": "2026-10-02T00:00:00Z",
+          "schemaVersion": 1,
+          "kind": "rule-revision-request",
+          "status": "pending",
+          "feedbackBindings": [
+            {
+              "id": "feedback-b",
+              "digest": "b073832f0274399c8a14e53ab91fd0c40eff03f348258df0d520332a86678c11"
+            }
+          ],
+          "synthesis": "not_run"
+        }
+      },
+      "baseRule": {
+        "digest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+        "rule": {
+          "schemaVersion": 2,
+          "ruleId": "fixture-rule",
+          "version": "v0",
+          "semantics": {
+            "title": "Guarded operations",
+            "mechanism": "Missing applicable guard",
+            "invariant": "An applicable guard protects a danger call",
+            "applicability": [
+              "Danger calls"
+            ],
+            "exceptions": [],
+            "requiredContext": [],
+            "expectedBehavior": "Identify unguarded calls"
+          },
+          "scope": {
+            "repositories": [
+              "synthetic:matched-revision"
+            ],
+            "paths": {
+              "include": [
+                "src"
+              ],
+              "exclude": []
+            }
+          },
+          "detectionAssets": [],
+          "regressionCases": [
+            {
+              "caseId": "source-a",
+              "role": "positive"
+            },
+            {
+              "caseId": "source-b",
+              "role": "negative"
+            }
+          ],
+          "provenance": {
+            "sourceCases": [
+              {
+                "caseId": "source-a",
+                "repository": "synthetic:matched-revision",
+                "commit": "2222222222222222222222222222222222222222",
+                "path": "src/a.ts",
+                "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279"
+              }
+            ],
+            "parentDigest": null,
+            "author": "authored-fixture",
+            "createdAt": "2026-10-02T00:00:00Z",
+            "rationale": "Authored mechanics only"
+          }
+        }
+      },
+      "cases": [
+        {
+          "id": "source-a",
+          "lineageId": "source-a",
+          "split": "training",
+          "expected": "violation",
+          "title": "Authored fixture obligation",
+          "repository": "synthetic:matched-revision",
+          "commit": "2222222222222222222222222222222222222222",
+          "path": "src/a.ts",
+          "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+          "provenance": {
+            "kind": "synthetic",
+            "reference": "authored-matched-fixture",
+            "reviewedBy": null,
+            "derivedFromCaseId": null
+          }
+        },
+        {
+          "id": "source-b",
+          "lineageId": "source-b",
+          "split": "training",
+          "expected": "safe",
+          "title": "Authored fixture obligation",
+          "repository": "synthetic:matched-revision",
+          "commit": "2222222222222222222222222222222222222222",
+          "path": "src/b.ts",
+          "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+          "provenance": {
+            "kind": "synthetic",
+            "reference": "authored-matched-fixture",
+            "reviewedBy": null,
+            "derivedFromCaseId": null
+          }
+        }
+      ],
+      "feedback": [
+        {
+          "feedback": {
+            "id": "feedback-b",
+            "findingId": "review_finding_e5051ee9fc75c6b338086739093afa634382ae57c976782162e9a74550a42ee1",
+            "reviewId": "review_3d0b874ba3bac2b11173cd9934aa26a127ebb5614ad2df2e51e8bf99ffe1f521",
+            "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+            "ruleVersion": "v0",
+            "source": "fixture",
+            "actor": "fixture-author",
+            "kind": "label",
+            "label": "FP",
+            "reason": "Authored label for the guarded call",
+            "createdAt": "2026-10-02T00:00:00Z"
+          },
+          "finding": {
+            "id": "review_finding_e5051ee9fc75c6b338086739093afa634382ae57c976782162e9a74550a42ee1",
+            "reviewId": "review_3d0b874ba3bac2b11173cd9934aa26a127ebb5614ad2df2e51e8bf99ffe1f521",
+            "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+            "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+            "ruleId": "fixture-rule",
+            "ruleVersion": "v0",
+            "targetId": "4cc14162da123bbc5da427bff0da15d6f1a8f67574e15f85115f1d4535533124",
+            "anchor": {
+              "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+              "side": "after",
+              "path": "src/b.ts",
+              "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+              "span": {
+                "start": {
+                  "line": 1,
+                  "column": 1,
+                  "offset": 0
+                },
+                "end": {
+                  "line": 2,
+                  "column": 1,
+                  "offset": 21
+                }
+              }
+            },
+            "occurrenceIds": [],
+            "status": "violation",
+            "origin": "fixture",
+            "reasoning": "Authored original fixture response",
+            "evidenceRefs": [
+              "6e39b8f037d327f4f3f0e0523317af57b4a6ed4b5e77e4fb326dc285af91cea5"
+            ],
+            "introduction": "unverified",
+            "notificationEligibility": "unverified"
+          },
+          "review": {
+            "schemaVersion": 1,
+            "kind": "semantic-snapshot-review",
+            "id": "review_3d0b874ba3bac2b11173cd9934aa26a127ebb5614ad2df2e51e8bf99ffe1f521",
+            "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+            "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+            "config": {
+              "runtime": "semantic-snapshot-review-v1",
+              "scanner": "ast-grep@0.45.3",
+              "mode": "offline_fixture",
+              "fixtureDigest": "859b11458bd95d6c10d025034bc9aa7920d799792fb982f69a19b66c15d5b53e",
+              "attempt": "initial"
+            },
+            "fixtures": {
+              "schemaVersion": 1,
+              "kind": "semantic-review-offline-fixtures",
+              "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+              "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+              "evidence": [
+                {
+                  "id": "3a75df604eb270f3ec748649871fef5b0585340e4cc122914bf80e14d7b6957d",
+                  "kind": "authored-source",
+                  "anchor": {
+                    "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                    "side": "after",
+                    "path": "src/a.ts",
+                    "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+                    "span": {
+                      "start": {
+                        "line": 1,
+                        "column": 1,
+                        "offset": 0
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 1,
+                        "offset": 11
+                      }
+                    }
+                  },
+                  "content": "danger(a);\n"
+                },
+                {
+                  "id": "6e39b8f037d327f4f3f0e0523317af57b4a6ed4b5e77e4fb326dc285af91cea5",
+                  "kind": "authored-source",
+                  "anchor": {
+                    "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                    "side": "after",
+                    "path": "src/b.ts",
+                    "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+                    "span": {
+                      "start": {
+                        "line": 1,
+                        "column": 1,
+                        "offset": 0
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 1,
+                        "offset": 21
+                      }
+                    }
+                  },
+                  "content": "guard(b); danger(b);\n"
+                }
+              ],
+              "judgments": [
+                {
+                  "targetId": "ed56af3577ec2433c1d7f8ca7ace6f26c0af82e941d118260da2223a02be0c7a",
+                  "decision": "violation",
+                  "reasoning": "Authored original fixture response",
+                  "evidenceRefs": [
+                    "3a75df604eb270f3ec748649871fef5b0585340e4cc122914bf80e14d7b6957d"
+                  ],
+                  "findingAnchors": [
+                    {
+                      "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                      "side": "after",
+                      "path": "src/a.ts",
+                      "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+                      "span": {
+                        "start": {
+                          "line": 1,
+                          "column": 1,
+                          "offset": 0
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 1,
+                          "offset": 11
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "targetId": "4cc14162da123bbc5da427bff0da15d6f1a8f67574e15f85115f1d4535533124",
+                  "decision": "violation",
+                  "reasoning": "Authored original fixture response",
+                  "evidenceRefs": [
+                    "6e39b8f037d327f4f3f0e0523317af57b4a6ed4b5e77e4fb326dc285af91cea5"
+                  ],
+                  "findingAnchors": [
+                    {
+                      "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                      "side": "after",
+                      "path": "src/b.ts",
+                      "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+                      "span": {
+                        "start": {
+                          "line": 1,
+                          "column": 1,
+                          "offset": 0
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 1,
+                          "offset": 21
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "coverage": {
+              "scope": "changed-entries-only",
+              "snapshotVerification": "package-integrity-only",
+              "repositoryContext": "incomplete",
+              "introduction": "unverified",
+              "targets": [
+                {
+                  "id": "ed56af3577ec2433c1d7f8ca7ace6f26c0af82e941d118260da2223a02be0c7a",
+                  "changeIndex": 0,
+                  "path": "src/a.ts",
+                  "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+                  "disposition": "captured",
+                  "reason": null,
+                  "scans": [],
+                  "semantic": {
+                    "state": "violation",
+                    "reasoning": "Authored original fixture response",
+                    "missingContext": []
+                  }
+                },
+                {
+                  "id": "4cc14162da123bbc5da427bff0da15d6f1a8f67574e15f85115f1d4535533124",
+                  "changeIndex": 1,
+                  "path": "src/b.ts",
+                  "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+                  "disposition": "captured",
+                  "reason": null,
+                  "scans": [],
+                  "semantic": {
+                    "state": "violation",
+                    "reasoning": "Authored original fixture response",
+                    "missingContext": []
+                  }
+                }
+              ]
+            },
+            "occurrences": [],
+            "findings": [
+              {
+                "id": "review_finding_0bb9247ed512d1d9501b96616feefa1467599ec0fd9949e9f8d63f97b3433024",
+                "reviewId": "review_3d0b874ba3bac2b11173cd9934aa26a127ebb5614ad2df2e51e8bf99ffe1f521",
+                "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+                "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                "ruleId": "fixture-rule",
+                "ruleVersion": "v0",
+                "targetId": "ed56af3577ec2433c1d7f8ca7ace6f26c0af82e941d118260da2223a02be0c7a",
+                "anchor": {
+                  "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                  "side": "after",
+                  "path": "src/a.ts",
+                  "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+                  "span": {
+                    "start": {
+                      "line": 1,
+                      "column": 1,
+                      "offset": 0
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 1,
+                      "offset": 11
+                    }
+                  }
+                },
+                "occurrenceIds": [],
+                "status": "violation",
+                "origin": "fixture",
+                "reasoning": "Authored original fixture response",
+                "evidenceRefs": [
+                  "3a75df604eb270f3ec748649871fef5b0585340e4cc122914bf80e14d7b6957d"
+                ],
+                "introduction": "unverified",
+                "notificationEligibility": "unverified"
+              },
+              {
+                "id": "review_finding_e5051ee9fc75c6b338086739093afa634382ae57c976782162e9a74550a42ee1",
+                "reviewId": "review_3d0b874ba3bac2b11173cd9934aa26a127ebb5614ad2df2e51e8bf99ffe1f521",
+                "ruleDigest": "ea2166babb24b9230b675427c2f9f7cd1bb3327d8e4ebe7510d1841087306717",
+                "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                "ruleId": "fixture-rule",
+                "ruleVersion": "v0",
+                "targetId": "4cc14162da123bbc5da427bff0da15d6f1a8f67574e15f85115f1d4535533124",
+                "anchor": {
+                  "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+                  "side": "after",
+                  "path": "src/b.ts",
+                  "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+                  "span": {
+                    "start": {
+                      "line": 1,
+                      "column": 1,
+                      "offset": 0
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 1,
+                      "offset": 21
+                    }
+                  }
+                },
+                "occurrenceIds": [],
+                "status": "violation",
+                "origin": "fixture",
+                "reasoning": "Authored original fixture response",
+                "evidenceRefs": [
+                  "6e39b8f037d327f4f3f0e0523317af57b4a6ed4b5e77e4fb326dc285af91cea5"
+                ],
+                "introduction": "unverified",
+                "notificationEligibility": "unverified"
+              }
+            ],
+            "notification": "not_performed"
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "digest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+          "snapshot": {
+            "schemaVersion": 1,
+            "kind": "git-change-snapshot",
+            "repository": {
+              "id": "synthetic:matched-revision",
+              "identityVerification": "caller-supplied-unverified",
+              "objectFormat": "sha1"
+            },
+            "baseTip": "1111111111111111111111111111111111111111",
+            "mergeBase": "1111111111111111111111111111111111111111",
+            "head": "2222222222222222222222222222222222222222",
+            "comparison": "merge-base-to-head",
+            "renamePolicy": "exact-content-only",
+            "limits": {
+              "maxChanges": 500,
+              "maxBlobBytes": 262144,
+              "maxTotalBytes": 2097152
+            },
+            "changes": [
+              {
+                "status": "M",
+                "before": {
+                  "path": "src/a.ts",
+                  "mode": "100644",
+                  "objectId": "69e19d6b95147b88ab2f912226f62ddb879693f5",
+                  "state": "captured",
+                  "byteLength": 10,
+                  "sha256": "4dd9d459144de616f95a24f69867fa18122763ba903241db15d3ebce2fbdc97d",
+                  "bytesBase64": "Ly8gYmVmb3JlCg=="
+                },
+                "after": {
+                  "path": "src/a.ts",
+                  "mode": "100644",
+                  "objectId": "549bdb28cb2a03612c8b665323fe6570538d6b65",
+                  "state": "captured",
+                  "byteLength": 11,
+                  "sha256": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+                  "bytesBase64": "ZGFuZ2VyKGEpOwo="
+                }
+              },
+              {
+                "status": "M",
+                "before": {
+                  "path": "src/b.ts",
+                  "mode": "100644",
+                  "objectId": "69e19d6b95147b88ab2f912226f62ddb879693f5",
+                  "state": "captured",
+                  "byteLength": 10,
+                  "sha256": "4dd9d459144de616f95a24f69867fa18122763ba903241db15d3ebce2fbdc97d",
+                  "bytesBase64": "Ly8gYmVmb3JlCg=="
+                },
+                "after": {
+                  "path": "src/b.ts",
+                  "mode": "100644",
+                  "objectId": "4f11869ac5b3b0749de50b6b1df2588faeaf2d63",
+                  "state": "captured",
+                  "byteLength": 21,
+                  "sha256": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+                  "bytesBase64": "Z3VhcmQoYik7IGRhbmdlcihiKTsK"
+                }
+              }
+            ],
+            "coverage": {
+              "changedPaths": 2,
+              "capturedSides": 4,
+              "excludedSides": 0,
+              "capturedBytes": 52,
+              "scope": "changed-entries-only"
+            }
+          }
+        }
+      ],
+      "candidateId": "fixture-candidate",
+      "candidateCreatedAt": "2026-10-02T00:00:00Z",
+      "context": {
+        "kind": "selected-evidence-no-tools",
+        "workspace": {
+          "repoPath": "/fixture/not-a-checkout",
+          "runId": "fixture",
+          "attemptId": "one"
+        },
+        "snapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204"
+      }
+    },
+    "diagnosis": {
+      "condition": "provided",
+      "lockedAt": "2026-10-02T00:00:00Z",
+      "diagnoses": [
+        {
+          "feedbackId": "feedback-b",
+          "category": "boundary",
+          "reasoning": "Authored diagnosis, not a human judgment or inference result",
+          "evidenceRefs": [
+            "feedback:feedback-b",
+            "finding:review_finding_e5051ee9fc75c6b338086739093afa634382ae57c976782162e9a74550a42ee1"
+          ],
+          "missingEvidence": [],
+          "claim": "proposal-not-established-fact"
+        }
+      ],
+      "originalContextStatus": "decisive_evidence_present",
+      "revisionContextStatus": "sufficient",
+      "provenance": {
+        "origin": "authored_fixture",
+        "sourceRecordDigest": "f83d8777ece518b4598704fd5d60ffd6ac91e417fa5e303f15fd21f435abfd47",
+        "description": "Authored supplied diagnosis for interface testing",
+        "upstreamModel": null,
+        "upstreamCalls": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicros": 0,
+        "elapsedMs": 0,
+        "rawFailure": null
+      }
+    },
+    "gate": [
+      {
+        "input": {
+          "id": "gate-0",
+          "prId": "pr-gate-0",
+          "familyId": "fixture-family",
+          "lineageId": "source-a",
+          "path": "src/a.ts",
+          "source": "danger(a);\n",
+          "sourceDigest": "1cc4c45b729bc99ebf4dd89d646dbf5f248bfcde793c25b8d4cd66844a7a7279",
+          "sourceSnapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+          "issueScope": {
+            "start": 0,
+            "end": 11
+          },
+          "evidence": [
+            {
+              "id": "evidence-gate-0",
+              "content": "danger(a);\n"
+            }
+          ],
+          "missingEvidence": []
+        },
+        "expected": "violation",
+        "role": "old_positive",
+        "obligationRefs": [
+          "case:source-a"
+        ],
+        "evidenceRecordDigest": "56808c0dde802e16a70e15ebb365eaa7d3bd14304e9917e3706b647a87704af7"
+      },
+      {
+        "input": {
+          "id": "gate-1",
+          "prId": "pr-gate-1",
+          "familyId": "fixture-family",
+          "lineageId": "source-b",
+          "path": "src/b.ts",
+          "source": "guard(b); danger(b);\n",
+          "sourceDigest": "0a40593680db31bfc08e181314dae433d14191676521f309148639d27960c7ab",
+          "sourceSnapshotDigest": "3908b45e2857779ba481e539f74c5fca700aa0753a86a9dd0429d97fe918b204",
+          "issueScope": {
+            "start": 0,
+            "end": 21
+          },
+          "evidence": [
+            {
+              "id": "evidence-gate-1",
+              "content": "guard(b); danger(b);\n"
+            }
+          ],
+          "missingEvidence": []
+        },
+        "expected": "safe",
+        "role": "feedback",
+        "obligationRefs": [
+          "case:source-b",
+          "feedback:feedback-b"
+        ],
+        "evidenceRecordDigest": "80309514ed1bdee45c4e7ef9cbdea92b6fb163ef80bb80cd0857bd09adf27082"
+      }
+    ],
+    "revisionLineageIds": [
+      "source-a",
+      "source-b"
+    ],
+    "visibilityAndMissingness": "Synthetic fixture. No historical visibility, human labels, or W0/W1/W2 freeze is established.",
+    "protocolRecordDigest": "3a3253ecd5d10c4a57178bd00922f9b64a36506679585b21afd6d636567e7451",
+    "settings": {
+      "revisionModel": "authored-no-live-model",
+      "reviewerModel": "authored-no-live-model",
+      "sampler": {
+        "temperature": 0,
+        "seed": 1
+      },
+      "armOrder": [
+        "U",
+        "F",
+        "M",
+        "H"
+      ],
+      "tokenizer": "fixture-utf8-byte-upper-bound-v1",
+      "limits": {
+        "revisionInputTokens": 100000,
+        "revisionOutputTokens": 20000,
+        "persistentStateTokens": 8000,
+        "reviewInputTokens": 100000,
+        "reviewOutputTokens": 20000,
+        "maxCallsPerArm": 3,
+        "maxInputBytes": 200000,
+        "maxOutputBytes": 100000,
+        "maxInputTokensPerArm": 300000,
+        "maxOutputTokensPerArm": 60000,
+        "timeoutMsPerCall": 1000,
+        "maxElapsedMsPerArm": 10000,
+        "maxCostMicrosPerArm": 0
+      }
+    }
+  }
+}

@@ -166,3 +166,10 @@ Focused integration coverage:
 ```sh
 npx vitest run tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=1
 ```
+
+## Minimal executable comparison contract
+
+[evaluation-contract.md](evaluation-contract.md) provides a runnable authored-only
+F/U/H/M admission profile over this existing runner, exact stage-input bindings,
+declared cutoff checks, mechanism-specific strict-resolution metrics and real-study
+prerequisites. It supplies no model/backend enablement or superiority evidence.

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "classification": "authored-contract-smoke-not-model-or-efficacy",
+  "implementationBaseCommit": "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+  "paperCommit": "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+  "commands": [
+    "npx vitest run tests/matched-revision.evaluation-contract.test.ts tests/matched-revision.experiment.test.ts --maxWorkers=1 --reporter=json --outputFile=/tmp/flyrewheel-contract-tests.json",
+    "npx tsc --noEmit",
+    "node --import tsx experiments/matched-revision/contract-replay.ts --authored-smoke /tmp/flyrewheel-contract-smoke-final"
+  ],
+  "checks": {
+    "testsPassed": 33,
+    "testsFailed": 0,
+    "typecheckExit": 0,
+    "smokeExit": 0,
+    "gitDiffCheck": "pass"
+  },
+  "counts": {
+    "arms": 4,
+    "transportCalls": 11,
+    "modelCalls": 0,
+    "humanAnnotations": 0,
+    "empiricalEpisodes": 0
+  },
+  "scientificConclusion": "not_estimated-authored-mechanics-only",
+  "perArm": [
+    {
+      "arm": "U",
+      "transportCalls": 3,
+      "persistentBytes": 366,
+      "scheduledTargets": 3,
+      "unknownReferenceCount": 1
+    },
+    {
+      "arm": "F",
+      "transportCalls": 2,
+      "persistentBytes": 318,
+      "scheduledTargets": 3,
+      "unknownReferenceCount": 1
+    },
+    {
+      "arm": "M",
+      "transportCalls": 3,
+      "persistentBytes": 953,
+      "scheduledTargets": 3,
+      "unknownReferenceCount": 1
+    },
+    {
+      "arm": "H",
+      "transportCalls": 3,
+      "persistentBytes": 366,
+      "scheduledTargets": 3,
+      "unknownReferenceCount": 1
+    }
+  ],
+  "independentReviews": {
+    "temporal": "identity_audit: complete input binding and declared lower-bound cutoff accepted; clarified synthetic timestamps and optional historical proof",
+    "fairness": "leakage_audit: L_mech silence metrics, unknown cost and production not_run accepted; base commit label fixed and full request equality strengthened"
+  },
+  "sourceFileHashes": [
+    {
+      "path": "experiments/matched-revision/evaluation-contract.ts",
+      "sha256": "e2c871f13c7fd57d90b7134845c8426283917478f5523ea2062b9059b74f164e"
+    },
+    {
+      "path": "experiments/matched-revision/contract-replay.ts",
+      "sha256": "b4fde1715ec2768ece603799336caadbd38064ed8211d36ef3073fd99119a29b"
+    },
+    {
+      "path": "experiments/matched-revision/runner.ts",
+      "sha256": "10e8cb79d25ac8fa00a5d4abc1bf61ec0c1c71ff06b99b456fb84291bb7007ac"
+    },
+    {
+      "path": "experiments/matched-revision/scoring.ts",
+      "sha256": "8dec32b78d8cb7c380ca59bbb3f68d6c6dc87f940c2fa7e59248fe6732ea8963"
+    },
+    {
+      "path": "tests/matched-revision.evaluation-contract.test.ts",
+      "sha256": "d62b0cd96d71e9be22c10048eaf047818a391043547461b12dfba5d777800ca5"
+    }
+  ],
+  "artifactHashes": [
+    {
+      "path": "contract.json",
+      "sha256": "d6e4cbafffa83f624ee23871381d7a89121383bf47034334c2f409b3bb4783f8",
+      "bytes": 2864
+    },
+    {
+      "path": "future.json",
+      "sha256": "281aa3eb1d6b995a5d2d1225bc4a8c9382a211e56673162a44dbc137dde419be",
+      "bytes": 2599
+    },
+    {
+      "path": "packet.json",
+      "sha256": "7428028c6f9162ab407734f1ebd25485ad432d6d03013a67efbe74a0121035f5",
+      "bytes": 24560
+    },
+    {
+      "path": "report.json",
+      "sha256": "5c12cf49ad0342836800cc768faa3ace3e49461cb17947dbbdea1c259c9ef841",
+      "bytes": 224894
+    }
+  ]
+}
