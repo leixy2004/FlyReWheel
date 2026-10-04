@@ -1,0 +1,122 @@
+{
+  "events": [
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "create",
+      "timeNano": 1791101492676341860,
+      "helper": false
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "create",
+      "timeNano": 1791101493330340394,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "archive-path",
+      "timeNano": 1791101493333175588,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "archive-path",
+      "timeNano": 1791101493664742139,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "archive-path",
+      "timeNano": 1791101493666335194,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "archive-path",
+      "timeNano": 1791101493668571109,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "archive-path",
+      "timeNano": 1791101493669971656,
+      "helper": true
+    },
+    {
+      "id": "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1",
+      "action": "destroy",
+      "timeNano": 1791101493689670311,
+      "helper": true
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493691471899,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493730139646,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493732280315,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493733452034,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493734890056,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493736256412,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "extract-to-dir",
+      "timeNano": 1791101493737427820,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "start",
+      "timeNano": 1791101493845869411,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "kill",
+      "timeNano": 1791101494110863422,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "die",
+      "timeNano": 1791101494172514705,
+      "helper": false
+    },
+    {
+      "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+      "action": "destroy",
+      "timeNano": 1791101495014132360,
+      "helper": false
+    }
+  ],
+  "helperIds": [
+    "68cd59f8cfb76dbebbc0c23250e545f9bc46d1377913abf2c6014eeef110c9f1"
+  ],
+  "helperStarted": false
+}

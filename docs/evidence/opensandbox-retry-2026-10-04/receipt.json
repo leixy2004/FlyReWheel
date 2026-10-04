@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "owner": "4280f8a6-5cba-4416-b437-9560863d0155",
+  "deadlineUnixMs": 1791101661958,
+  "status": "cleanup-unverified",
+  "cleanup": {
+    "driverStopped": false,
+    "controlStopped": true,
+    "secretsAbsent": true,
+    "containersAbsent": true,
+    "networkAbsent": true,
+    "finalContainersAbsent": true
+  },
+  "nodeExecutable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "imagePolicy": "retain-preexisting-no-image-removal",
+  "networkId": "a10588c6937319a3b247d5dea02d67d3363f5c5a783effa4d5f31a94952858e8",
+  "preexistingImageId": "sha256:e12d3de4b28e820bc966fe875484b35a5fad9322c4ef8a5b6751873da03bd214",
+  "controlEvents": [
+    {
+      "status": "process-started-readiness-unverified",
+      "pid": 14998,
+      "pgid": 14998,
+      "port": 41381,
+      "task": "/tmp/flyrewheel-control-a5nug5rs",
+      "deadlineSeconds": 900,
+      "scope": "control-plane-process-only-no-sandbox-requests"
+    },
+    {
+      "status": "stopping",
+      "reason": "parent-exited"
+    },
+    {
+      "status": "stopped-secrets-removed",
+      "task": "/tmp/flyrewheel-control-a5nug5rs",
+      "sandboxCleanup": "not-managed-no-api-requests-issued"
+    }
+  ],
+  "driverExitCode": 1
+}

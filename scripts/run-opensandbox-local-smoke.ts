@@ -4,7 +4,7 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {execFileSync,spawnSync} from 'node:child_process';
 import {Sandbox} from '@alibaba-group/opensandbox';
 import {Agent,fetch as scopedFetch} from 'undici';
-import {localRequest,TrialGuard,TRIAL_WORKER_IMAGE,observeRequest,startupCategories} from './opensandbox-smoke-request.js';
+import {localRequest,TrialGuard,TRIAL_WORKER_IMAGE,observeRequest,startupCategories,noNewPrivilegesEnabled} from './opensandbox-smoke-request.js';
 import {BoundedOpenSandboxConnection} from '../src/adapters/opensandbox-transport.js';
 const [task,owner,network,output,state]=process.argv.slice(2);
 assert(task&&owner&&network&&output&&state);
@@ -71,7 +71,9 @@ const inspect=()=>{
  assert.deepEqual(Object.keys(obj.NetworkSettings.Networks),[network]);
  assert.equal(obj.HostConfig.NetworkMode,network);
  assert.deepEqual(obj.HostConfig.CapDrop,['ALL']);
- assert(obj.HostConfig.SecurityOpt.includes('no-new-privileges'));
+ receipt.inspectionCheck='no-new-privileges';
+ assert(noNewPrivilegesEnabled(obj.HostConfig.SecurityOpt));
+ receipt.inspectionCheck='remaining-container-policy';
  assert(!obj.HostConfig.Privileged);assert.equal(obj.Mounts.length,0);
  for(const bindings of Object.values(obj.HostConfig.PortBindings??{}) as any[])for(const b of bindings)assert.equal(b.HostIp,'127.0.0.1');
  assert(!JSON.stringify(obj.Config.Env).includes(apiKey));
@@ -90,7 +92,8 @@ try{
   entrypoint:['/bin/sleep','300'],resource:{cpu:'1',memory:'512Mi'},timeoutSeconds:300,
   metadata:{'flyrewheel.lifecycle-owner':owner},env:{},volumes:[],
   connectionConfig:connection,readyTimeoutSeconds:30,signal:AbortSignal.timeout(60000)});
- receipt.sandboxId=sandbox.id;
+ receipt.sandboxId=sandbox.id;receipt.events.push('sdk-ready');
+ receipt.inspectionCheck='container-identity-network-capabilities';
  const before=inspect();receipt.containerId=before.Id;receipt.before={status:before.State.Status,paused:before.State.Paused,network:before.HostConfig.NetworkMode};
  assert(before.State.Running);receipt.events.push('reserved-and-ready');
  const result=await sandbox.commands.run(['/usr/bin/id','-u'],{timeoutSeconds:10,workingDirectory:'/tmp'},undefined,AbortSignal.timeout(15000));
