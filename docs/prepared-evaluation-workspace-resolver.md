@@ -80,36 +80,77 @@ This inspection does not accept stage/model/resource fields in selection JSON;
 unknown fields are rejected rather than discarded. Those settings belong to the
 separately validated execution configuration.
 
-## Native study chain: currently disconnected
+## Native study command chain
 
-The existing `runSdkNativeStudy` is an authored selected-evidence study driver.
-Its inputs are frozen packet/future blocks and schedule/configuration, not W0
-workspace selections. Native proposal/gate/future requests have stage and role
-settings but no evaluation binding; the authored transport has its own working
-directory. Existing checkpoint identities therefore do not bind these exports.
-Do not pass a resolver result through this interface and describe it as an
-evaluation-aware native run.
+Before main registration, use the identical source command chain directly with
+`node --import tsx experiments/matched-revision/native-evaluation-cli.ts native --help`.
+Replace `npm run cli -- evaluation` in the examples with that entrypoint.
 
-The remaining bridge must explicitly bind verified export provenance into study
-and per-call identities and reverify it on reopen, while preserving stage and
-resource settings. That requires coordinated native contract changes. Six valid
-exports alone do not supply frozen revision episodes, gate/future cases or human
-labels. No such objects or model results are synthesized by this command.
+After main registers the existing command module, the same source CLI provides
+`evaluation native init-authored`, `init-w0`, and `run`. The deployment build
+intentionally excludes research fixtures; compiled deployment commands explain
+that this offline research flow requires the source checkout and `tsx`. They do
+not fall back to production execution.
 
-Existing authored native recovery can be checked independently with:
+An authored eligible run creates a tiny independent Git export and frozen
+packet/future inputs, then uses the existing native study and checkpoint store:
 
 ```sh
-timeout 90s node node_modules/vitest/vitest.mjs run \
-  tests/matched-revision.sdk-native-contracts.test.ts \
-  tests/matched-revision.sdk-native-schedule.test.ts \
-  tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=2
-npm run experiment:matched -- --study-status STUDY_DIGEST --db EXISTING_PGLITE_DIR
+npm run cli -- evaluation native init-authored --directory /tmp/new-authored-study
+timeout --kill-after=5s 150s npm run cli -- evaluation native run \
+  --manifest /tmp/new-authored-study/manifest.json \
+  --checkpoint /tmp/new-authored-study/checkpoint --timeout-ms 120000
+# Repeat the identical command in a new process to reopen the checkpoint.
 ```
 
-The first command uses authored local executables and PGlite. The second only
-inspects an existing checkpoint. Neither proves a real W0 native run. Model
-authorization, deployment authority, and operational admission remain prerequisites
-for any future production path.
+All labels, replies and SDK script behavior in this lane are authored. The script
+is fixed repository code; JSON cannot choose an executable or transport. Model
+settings and resource limits are retained from the strict native configuration.
+Stage identity, full `evaluation` context and `purpose: offline-study` enter native
+request digests, study identity, immutable checkpoint input and final reports.
+Legacy studies without this context retain their existing identity algorithm.
+The resolver verifies the prepared exports before claim/reopen and each native
+call. Finished results are reused exactly, without repeating authored SDK calls;
+changed bindings, dirty exports and altered checkpoint artifacts fail closed.
+No schema migration is needed: the existing store retains the additional context
+inside its validated JSON manifest and receipts.
+
+The context semantics are explicitly `verified-source-provenance-only`. Native
+workers still operate on selected evidence in a separate authored directory;
+verification does not claim full-repository execution or prove that all supplied
+selected evidence was extracted from that repository. Actual packet/future
+contracts and schedule validation still apply. This path never grants model,
+monetary, or deployment lifecycle authority.
+
+For the real W0 artifacts, extract the six original context files and provenance
+ledger from the fixed GitHub commit, without fetching the upstream source:
+
+```sh
+npm run cli -- evaluation native init-w0 \
+  --contexts /local/context-3035-before.json /local/context-3035-after.json \
+    /local/context-3031-before.json /local/context-3031-after.json \
+    /local/context-3036-before.json /local/context-3036-after.json \
+  --provenance /local/provenance-ledger.json \
+  --source-commit 2cb82efbefc764f2b0b04f5ec64da3601da0ef64 \
+  --out /local/new-w0-bridge-manifest.json
+npm run cli -- evaluation native run --manifest /local/new-w0-bridge-manifest.json \
+  --checkpoint /local/w0-blocked-checkpoint
+# Repeat the same run command to reopen its byte-identical blocked record.
+```
+
+The data environment may add `--registry /local/six-prepared-exports.json` to
+`init-w0`. All six full bindings must match exactly once; every actual registry
+selection is then verified on run and reopen, including diagnostic job digests.
+Without a local registry the result explicitly says export workspace verification
+was not run; it verifies only frozen context/ledger identities.
+
+Real W0 remains non-executable because its ledger records no formal rule families,
+independent human annotations, developer feedback, or frozen revision packet/future
+cases. These exact blockers, all six bindings, original artifacts, source commit,
+and the manifest identity are persisted. The blocked branch allocates no database,
+SDK, worker or model and cannot be turned into an eligible study by adding stage,
+resource, executable or label fields. Actual semantic eligibility requires a
+separately valid input contract; missing labels are never fabricated.
 
 ## Checkout and evidence boundaries
 

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "classification": "independent-authored-and-real-artifact-checks-no-model",
+  "codeFileSha256": {
+    "src/core/matched-revision-model.ts": "f83b18d8bdb8a049ae43962f5094111921de0ba7ff616a3555c18327456cc6be",
+    "experiments/matched-revision/sdk-native-runner.ts": "eaa2fecf2d6fa974895fba60dee8db080d430a983b1c5eedf3734a1dd9452ca4",
+    "experiments/matched-revision/sdk-native-diagnosis.ts": "0c8101f186c705a104fd967d22dc7024b0ef330744d483edfae1b61521045476",
+    "experiments/matched-revision/sdk-native-study.ts": "5f98b06d34b450ff52b0dd10a3ff6712ca86e2b32134939f84a739dca164c907",
+    "src/storage/matched-studies.ts": "ac251b21bc8210ae17900d38453570548d69def9368990a2fc2a79dee248f28b",
+    "experiments/matched-revision/native-evaluation-bridge.ts": "6ccc90894ebb434da4787869e4bf2247b30430cee1e106996e174cb796418861",
+    "src/cli-native-evaluation.ts": "31564f8b83a621687a85cbfed436890cc696870ab594861a206159e55bad5fcc",
+    "src/native-evaluation-bridge.ts": "74641faa594717d90ec53cba42af3d77d61a7df2a1edd80bacb23facdccfd92f",
+    "experiments/matched-revision/native-evaluation-cli.ts": "5318cfdd6561ad4f635a7bb045e5a38c814876f7297c1e4ee3a61a8fbf87860c"
+  },
+  "authored": {
+    "commandComposition": "isolated Commander using registerEvaluationWorkspaceCommands; main owns default CLI registration",
+    "manifestDigest": "71517e6c2c776ab4725b088d24f5068f5f30f5f35af93e9921517abe09a86492",
+    "resultDigest": "9cef671ef23d56a94e0cba476b844eb372a07995c6bf520ee1eba2ab2754d3b0",
+    "resultFileSha256": "6a99d1562de502b1f431b7fb5ca2dff9f4f241c34e7474ab5bfd990c4009dfee",
+    "counts": {
+      "authoredEpisodeIdentities": 1,
+      "plannedBlocks": 1,
+      "completedBlocks": 1,
+      "failedBlocks": 0,
+      "missingBlocks": 0,
+      "repetitions": 1,
+      "retries": 0
+    },
+    "modelExecution": "not_run",
+    "providerModelCalls": 0,
+    "newProcessReopen": "Byte-identical canonical CLI output; initial JSONB key-order difference fixed. Separate child test verifies zero authored SDK launches and unchanged persisted result bytes.",
+    "stageIdentityAndFullBinding": "12 authored calls checked in regression",
+    "sourceExecution": "selected-evidence-authored-script-only"
+  },
+  "realW0": {
+    "sourceCommit": "2cb82efbefc764f2b0b04f5ec64da3601da0ef64",
+    "inputOrigin": "six context artifacts and provenance ledger fetched from FlyReWheel GitHub only",
+    "manifestDigest": "52fc76eeb230efa12af31957ae5b6ee36e0d6fe0f48c42eda11eb92907eb4bf3",
+    "resultDigest": "82c23697ad5e95e508451cd4209fd2ea66bfa756c330b3fac802c3a3dfb81888",
+    "resultFileSha256": "0dabe6ab282748754d361ea2a80ee8310e779557d9bcae27361568c656df5579",
+    "bindingCount": 6,
+    "exportIds": [
+      "httpx-w0-3035-before",
+      "httpx-w0-3035-after",
+      "httpx-w0-3031-before",
+      "httpx-w0-3031-after",
+      "httpx-w0-3036-before",
+      "httpx-w0-3036-after"
+    ],
+    "execution": "blocked",
+    "blockers": [
+      "semantic_rule_families_not_materialized",
+      "independent_human_annotations_absent",
+      "developer_feedback_absent",
+      "frozen_revision_packet_and_future_cases_absent"
+    ],
+    "workspaceVerification": "not_run-no-local-registry",
+    "newProcessReopen": "byte-identical",
+    "providerModelCalls": 0,
+    "dataLaneSeparateEvidence": "PR27 independently verifies actual six prepared exports; this local blocked replay does not repeat that object verification"
+  },
+  "tests": {
+    "targetedIntegration": {
+      "files": 5,
+      "passed": 28,
+      "seconds": 32.89
+    },
+    "afterRegistryCoverageFix": {
+      "files": 1,
+      "passed": 3,
+      "seconds": 15.61
+    },
+    "typecheck": "passed",
+    "build": "passed",
+    "newDatabaseMigrations": 0,
+    "afterCanonicalCliFix": {
+      "files": 1,
+      "passed": 3,
+      "seconds": 19.51
+    }
+  }
+}

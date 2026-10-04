@@ -3,12 +3,14 @@ import { z } from 'zod';
 import { readEvaluationJson, writeEvaluationJson } from './paired-evaluation.js';
 import { createPreparedEvaluationWorkspaceResolver, PreparedEvaluationWorkspaceResolverConfigSchema } from './prepared-evaluation-workspace-resolver.js';
 import { digestOf } from './core/identity.js';
+import { registerNativeEvaluationCommands } from './cli-native-evaluation.js';
 
 const Selection = PreparedEvaluationWorkspaceResolverConfigSchema.shape.entries.element.shape.selection;
 const Deadline = z.coerce.number().int().min(1).max(300_000);
 
 /** Read-only CLI composition. This does not load a transport or enter a study. */
 export function registerEvaluationWorkspaceCommands(evaluation: Command) {
+  registerNativeEvaluationCommands(evaluation);
   evaluation.command('workspace').description('Verify an existing prepared evaluation workspace; no model, runtime, or study dispatch')
     .command('resolve')
     .requiredOption('--registry <file>', 'Trusted offline-study registry JSON, at most 2 MB')
@@ -31,7 +33,7 @@ export function registerEvaluationWorkspaceCommands(evaluation: Command) {
           nativeStudyExecution: 'not_run', limits: { inputRegistryBytes: 2_000_000, inputSelectionBytes: 16_384, timeoutMs },
           nextActions: [
             'Application execution requires separately configured model settings, resource limits and verified lifecycle authority.',
-            'Native matched study requires frozen packet/future inputs and an evaluation-aware request/checkpoint contract; this lookup does not supply that bridge.',
+            'Use evaluation native init-authored or init-w0, then evaluation native run with a persistent checkpoint; real W0 without semantic inputs remains non-executable.',
           ] };
         if (options.out) await writeEvaluationJson(options.out, result);
         else process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

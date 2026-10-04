@@ -14,7 +14,7 @@ import { SdkNativeMatchedRequestSchema } from '../src/core/matched-revision-mode
 let root: string, fixture: Awaited<ReturnType<typeof prepareFixture>>;
 const fetch = vi.spyOn(globalThis, 'fetch').mockImplementation(async () => { throw new Error('NETWORK_FORBIDDEN'); });
 const git = async (cwd: string, ...args: string[]) => (await workspaceGit(cwd, ...args)).trim();
-test('native envelopes reject unsupported evaluation provenance instead of dropping it', () => {
+test('native envelopes reject malformed evaluation and unsupported side-channel fields', () => {
   for (const stage of ['diagnosis', 'proposal', 'gate', 'future']) {
     const request = { profile: 'paired-restriction-sdk-native-v1-draft', stage,
       model: 'authored-no-model', modelReasoningEffort: 'high', prompt: 'Authored contract probe', outputSchema: {} };
