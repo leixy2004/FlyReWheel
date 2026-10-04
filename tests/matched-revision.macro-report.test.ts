@@ -31,6 +31,13 @@ describe('paired repository/family macro reporting', () => {
     expect(boundedRepositoryDifference([0, 0]).lower).toBe(-1);
     expect(() => boundedRepositoryDifference([0])).toThrow();
     expect(() => boundedRepositoryDifference([0, 0], 0)).toThrow();
+    for (const alpha of [Number.MIN_VALUE, 1e-300, 1 - Number.EPSILON]) {
+      const extreme = boundedRepositoryDifference([-.5, .5], alpha);
+      expect(Number.isFinite(extreme.halfWidth)).toBe(true);
+      expect(JSON.parse(JSON.stringify(extreme)).halfWidth).toBe(extreme.halfWidth);
+      expect(extreme.lower).toBeGreaterThanOrEqual(-1); expect(extreme.upper).toBeLessThanOrEqual(1);
+    }
+    expect(boundedRepositoryDifference([0, 0], Number.MIN_VALUE).halfWidth).toBeCloseTo(27.2971284039538, 10);
   });
   it('recomputes scores and pairs identities, retaining missing executions and Unknown', async () => {
     const f = await fixture(); const mutated = structuredClone(f.report);

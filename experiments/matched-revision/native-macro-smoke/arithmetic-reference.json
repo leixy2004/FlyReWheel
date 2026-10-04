@@ -1,0 +1,12 @@
+{
+  "scope": "authored arithmetic references, not empirical intervals",
+  "extreme_alpha_binary64_min_n2_half_width": "27.2971284039537977117016457713274089348983693810834791288227",
+  "family_equal_weight": "9/20",
+  "repository_equal_weight": "3/4",
+  "nested_repetition_episode_family": "-1/8",
+  "hoeffding_n200_alpha_0_05_center_0_25": {
+    "halfWidth": "0.192064558263984152034017969236384726205200171174895596445508",
+    "lower": "0.057935441736015847965982030763615273794799828825104403554492",
+    "upper": "0.442064558263984152034017969236384726205200171174895596445508"
+  }
+}

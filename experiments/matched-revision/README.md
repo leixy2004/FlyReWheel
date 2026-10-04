@@ -181,3 +181,10 @@ existing legacy results, with equal repository/family/episode/repetition weights
 paired H−U/H−M contrasts, explicit missingness and nullable standalone costs.
 All empirical uncertainty intervals remain withheld. Independent arithmetic
 references and a saved no-model smoke report are included.
+
+[Native macro reporting](native-macro-report.md) now accepts the canonical native
+study schedule/results with complete frozen sources and explicit dependence
+clusters. `macro-replay.ts --native-authored-smoke <new-directory>` runs the
+existing authored SDK fixture; `--native-study <input.json> --out <new-file>`
+replays its report without dispatch. Missing/interrupted blocks stay on the
+schedule, costs remain unknown, and empirical intervals remain withheld.

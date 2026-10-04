@@ -4,10 +4,13 @@ import { ARMS, ProposalSchema, UsageSchema, type Proposal, type FrozenPacket, ty
 import { commonRevisionBlock, initialMemory, initialStructured, validatePacket, validateProposal } from './validation.js';
 import { scoreFuture, observations, evaluateGate } from './scoring.js';
 import { proposalRequest, reviewRequest } from './prompts.js';
+import { nativeProposalRequest, nativeReviewRequest } from './sdk-native-runner.js';
+import { checkNativeCall, checkNativeDiagnosis, type NativeMacroContext } from './native-macro-integrity.js';
+import { validateSdkNativeSchedule, validateSdkNativeScheduledInput } from './sdk-native-schedule.js';
 import { runMatchedRevision } from './runner.js';
 
 type Completed = Extract<Awaited<ReturnType<typeof runMatchedRevision>>, { execution: 'completed' }>;
-export interface PlannedResult { packet: FrozenPacket; future: FrozenFuture; repetition: number; report: Completed | null }
+export interface PlannedResult { packet: FrozenPacket; future: FrozenFuture; repetition: number; report: Completed | null; native?: NativeMacroContext }
 export const MACRO_METRICS = ['positiveRecall', 'repeatedFeedbackFalseAlarmRate',
   'repeatedFeedbackStrictResolution', 'repeatedFeedbackCoverage'] as const;
 type Metric = typeof MACRO_METRICS[number];
@@ -43,7 +46,7 @@ export function boundedRepositoryDifference(values: number[], alpha = 0.05) {
   if (values.length < 2 || !(alpha > 0 && alpha < 1) || values.some(v => !Number.isFinite(v) || Math.abs(v) > 1)) {
     throw new Error('Bound needs >=2 finite repository contrasts in [-1,1] and 0<alpha<1');
   }
-  const center = mean(values), halfWidth = Math.sqrt(2 * Math.log(2 / alpha) / values.length);
+  const center = mean(values), halfWidth = Math.sqrt(2 * (Math.log(2) - Math.log(alpha)) / values.length);
   return { center, halfWidth, lower: Math.max(-1, center - halfWidth), upper: Math.min(1, center + halfWidth),
     alpha, independentRepositoryCount: values.length, method: 'two-sided-Hoeffding-bounded-difference' as const,
     scope: 'mathematical-reference-not-empirical-interval' as const };
@@ -55,18 +58,35 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
   const reportDigests = new Set<string>();
   const identities = new Set<string>(), episodePins = new Map<string, string>();
   const units = planned.map(item => {
-    const { episode, cases, prepared } = validatePacket(item.packet, item.future);
+    const native = item.native, config = native?.configuration;
+    if (native) {
+      validateSdkNativeSchedule(native.schedule, native.configuration);
+      const expected = validateSdkNativeScheduledInput(native.schedule, native.block.blockId, item);
+      if (digestOf(expected) !== digestOf(native.block)) throw new Error('Native block substitution');
+    }
+    const validated = validatePacket(item.packet, item.future, config ? {
+      renderedPersistentStateBytes: config.limits.renderedPersistentStateBytes, model: config.roles.proposal.model,
+      maxOutputBytes: config.limits.answerBytes.proposal, timeoutMs: config.limits.deadlineMsPerCall } : undefined);
+    const { prepared } = validated;
+    let episode = validated.episode;
+    const cases = native ? native.block.futureTargetOrder.map(id => validated.cases.find(c => c.input.id === id)!) : validated.cases;
+    const scheduledDiagnosis = native?.schedule.counting.diagnosis === 'authored-sdk-once-per-inferred-block' && episode.diagnosis.condition === 'inferred';
+    if (item.report && scheduledDiagnosis) {
+      if (!item.report.diagnosisStage) throw new Error('Missing native diagnosis stage');
+      episode = { ...episode, diagnosis: checkNativeDiagnosis(item.report.diagnosisStage, episode, prepared, native!) };
+    } else if (item.report?.diagnosisStage) throw new Error('Unscheduled diagnosis stage');
     const repositories = [...new Set(episode.revision.snapshots.map(s => s.snapshot.repository.id))];
     if (repositories.length !== 1 || SemanticRuleVersionSchema.parse(episode.revision.baseRule.rule).scope.repositories.some(r => r !== repositories[0])) throw new Error('Ambiguous repository binding');
     if (!Number.isSafeInteger(item.repetition) || item.repetition < 1) throw new Error('Invalid repetition');
     const repository = repositories[0], family = episode.familyId;
     const stratum = digestOf({ condition: episode.diagnosis.condition,
-      diagnoses: [...new Set(episode.diagnosis.diagnoses.map(d => d.category))].sort(), settings: episode.settings,
+      ...(native ? { nativeConfigurationDigest: digestOf(config!), scheduleDigest: native.schedule.digest, evaluation: native.evaluation ?? null }
+        : { diagnoses: [...new Set(episode.diagnosis.diagnoses.map(d => d.category))].sort(), settings: episode.settings }),
       protocol: episode.protocolRecordDigest });
     const id = JSON.stringify([repository, family, episode.id, episode.diagnosis.condition, item.repetition]);
     if (identities.has(id)) throw new Error('Duplicate paired unit'); identities.add(id);
     const episodeKey = JSON.stringify([repository, family, episode.id, episode.diagnosis.condition]);
-    const pin = digestOf([item.packet.digest, item.future.digest]);
+    const pin = digestOf([native ? native.schedule.sources.find(s => digestOf(s) === native.block.sourceDigest)!.episodeInputDigest : item.packet.digest, item.future.digest]);
     if (episodePins.has(episodeKey) && episodePins.get(episodeKey) !== pin) throw new Error('Repetitions changed the frozen episode/future');
     episodePins.set(episodeKey, pin);
     const report = item.report;
@@ -81,13 +101,21 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
         || report.episodeId !== episode.id || report.condition !== episode.diagnosis.condition
         || report.arms.length !== 4 || new Set(report.arms.map(a => a.arm)).size !== 4
         || report.arms.some(a => !ARMS.includes(a.arm))) throw new Error('Report/paired roster identity mismatch');
-      if (report.nativeProfile) throw new Error('Native schedule aggregation requires its planned block roster; this reader accepts legacy reports only');
+      if (native) {
+        const profile = report.nativeProfile;
+        if (!profile || profile.configurationDigest !== digestOf(config!) || digestOf(profile.configuration) !== digestOf(config!)
+          || profile.blockId !== native.block.blockId || profile.repetition !== item.repetition
+          || profile.scheduleDigest !== native.schedule.digest || profile.declaredScheduleDigestsVerified !== true
+          || digestOf(profile.armOrder) !== digestOf(native.block.armOrder)
+          || digestOf(profile.futureTargetOrder) !== digestOf(native.block.futureTargetOrder)
+          || digestOf(report.arms.map(a => a.arm)) !== digestOf(native.block.armOrder)) throw new Error('Native profile/paired roster mismatch');
+      } else if (report.nativeProfile) throw new Error('Native reports require their frozen native schedule');
     }
     const arms = ARMS.map(arm => {
       const a = report?.arms.find(a => a.arm === arm);
       let observed = observations(cases.map(c => c.input), null, 'not_run');
       if (a) {
-        const common = commonRevisionBlock(episode, prepared);
+        const common = commonRevisionBlock(episode, prepared, config ?? episode.settings);
         if (a.condition !== episode.diagnosis.condition || a.sharedDiagnosisDigest !== digestOf(episode.diagnosis)
           || a.commonRevisionInputDigest !== digestOf(common)) throw new Error('Arm supervision identity mismatch');
         const incumbent = arm === 'M' ? initialMemory(prepared) : initialStructured(prepared);
@@ -101,7 +129,7 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
           else if (!ProposalSchema.safeParse(proposalCall.output).success) disposition = 'schema_invalid';
           else {
             try {
-              proposal = validateProposal(proposalCall.output, arm, episode, prepared);
+              proposal = validateProposal(proposalCall.output, arm, episode, prepared, config?.limits.renderedPersistentStateBytes);
               disposition = { revise: 'changed', retain: 'retained', abstain: 'abstained', request_context: 'context_requested' }[proposal.action];
             } catch { disposition = 'policy_invalid'; }
           }
@@ -121,11 +149,17 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
             throw new Error('Raw output digest mismatch');
           }
 
-          if ((!call.invoked && (call.status !== 'budget_exhausted' || call.usage !== null || call.output !== null))
-            || (call.status === 'completed' && !call.invoked)) throw new Error('Call invocation/status/usage mismatch');
-          const expected = call.stage === 'proposal' && arm !== 'F' ? proposalRequest(arm, common, episode.settings)
-            : call.stage === 'gate' ? reviewRequest('gate', proposal?.state ?? incumbent, episode.gate.map(g => g.input), episode.settings)
-            : reviewRequest('future', effectiveState, cases.map(c => c.input), episode.settings);
+          if (native) checkNativeCall(call, arm, native);
+          if (!native && ((!call.invoked && (call.status !== 'budget_exhausted' || call.usage !== null || call.output !== null))
+            || (call.status === 'completed' && !call.invoked))) throw new Error('Call invocation/status/usage mismatch');
+          const baseRequest = call.stage === 'proposal' && arm !== 'F'
+            ? config ? nativeProposalRequest(arm, common, config) : proposalRequest(arm, common, episode.settings)
+            : call.stage === 'gate'
+              ? config ? nativeReviewRequest('gate', proposal?.state ?? incumbent, episode.gate.map(g => g.input), config)
+                : reviewRequest('gate', proposal?.state ?? incumbent, episode.gate.map(g => g.input), episode.settings)
+              : config ? nativeReviewRequest('future', effectiveState, cases.map(c => c.input), config)
+                : reviewRequest('future', effectiveState, cases.map(c => c.input), episode.settings);
+          const expected = native?.evaluation ? { ...baseRequest, evaluation: native.evaluation } : baseRequest;
           if (digestOf(call.request) !== call.requestDigest || digestOf(call.request) !== digestOf(expected)) throw new Error('Request settings/context identity mismatch');
         }
         const call = a.calls.find(c => c.stage === 'future')!;
@@ -139,13 +173,14 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
       const metrics = scoreFuture(cases, observed);
       const costs = a?.calls.filter(c => c.invoked).map(c => c.usage ? UsageSchema.parse(c.usage).costMicros : null);
       const upstream = arm === 'F' ? 0 : episode.diagnosis.provenance.costMicros;
-      const costKnown = !!costs && costs.every(c => c !== null) && upstream !== null;
+      const costKnown = !native && !!costs && costs.every(c => c !== null) && upstream !== null;
       const lowerBound = (costs ?? []).reduce<number>((s, c) => s + (c ?? 0), 0) + (upstream ?? 0);
       return { arm, metrics, missingReport: !report, standaloneCostMicros: costKnown ? lowerBound : null,
         standaloneCostKnownLowerBound: lowerBound };
     });
     return { id, repository, family, episode: episode.id, repetition: item.repetition, stratum,
       condition: episode.diagnosis.condition, missingReport: !report, arms,
+      ...(native ? { blockId: native.block.blockId, scheduleDigest: native.schedule.digest } : {}),
       targetCount: cases.length, unknownReferences: cases.filter(c => ['unknown', 'disputed'].includes(c.label)).length,
       lineages: [...new Set(cases.map(c => c.input.lineageId))] };
   });
@@ -182,7 +217,8 @@ export function aggregateMatchedResults(planned: PlannedResult[]) {
     boundaries: ['Repository hierarchy is a declared descriptive extension of the single-repository protocol',
       'No IID finding/anchor/seed assumption; report strata are never pooled',
       'Complete-case numbers do not replace full-roster nulls; missing-report administrative scores never enter macros',
-      'Legacy repetition IDs are caller declarations, not native schedule or execution attestations',
+      planned.some(p => p.native) ? 'Native repetition IDs bind the declared schedule, not independent execution'
+        : 'Legacy repetition IDs are caller declarations, not native schedule or execution attestations',
       'Costs are standalone per arm; never sum them as physical shared-diagnosis billing',
       'Observed labels and usage remain declarations; hashes do not attest their truth'] };
   return { ...body, digest: digestOf(body) };

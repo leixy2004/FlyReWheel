@@ -8,6 +8,7 @@ with localcontext() as ctx:
     h = (Decimal(2) * Decimal(40).ln() / Decimal(200)).sqrt()
     result = {
         "scope": "authored arithmetic references, not empirical intervals",
+        "extreme_alpha_binary64_min_n2_half_width": str((Decimal(2).ln() - (Decimal(2) ** -1074).ln()).sqrt()),
         "family_equal_weight": str((Fraction(9, 10) + 0) / 2),
         "repository_equal_weight": str(((Fraction(1) + 0) / 2 + 1) / 2),
         "nested_repetition_episode_family": str((((Fraction(-1) + 0) / 2 + 1) / 2 + Fraction(-1, 2)) / 2),

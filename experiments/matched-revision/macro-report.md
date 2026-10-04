@@ -4,8 +4,8 @@
 legacy runner report. Supply every planned episode/repetition, including
 `report: null` for missing records. This is an authored-only reporting extension,
 not an empirical study or a replacement result/execution framework. The current
-single-repository protocol remains unchanged. SDK-native reports are rejected
-until their separate planned block roster can be bound by a reader.
+single-repository protocol remains unchanged. SDK-native studies use the supported [native input path](native-macro-report.md),
+which binds their canonical schedule and complete frozen source roster.
 
 ## Reproduce without model calls
 
