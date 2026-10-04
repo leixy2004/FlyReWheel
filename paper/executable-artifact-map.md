@@ -5,9 +5,10 @@ This map audits source baseline `37d31a2e2ab360fbb99ef3a81b5e51b30e152ffa`
 `ce9b9fbfc3abf5d1d542652e0b19ca01fca8e4fc`. The latter was inspected with
 `git show`, not executed or silently treated as part of the baseline. The later
 PR #25 follow-up is separately pinned to `a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760`.
-This mapping
-adds no observations, labels, acquisitions or model calls and makes no aggregate
-verification claim for its own tree.
+The current command mapping additionally references verified default-CLI baseline
+`9f51467` and the separately pinned follow-ups below. This document adds no
+observations, labels, acquisitions or model calls and makes no aggregate verification
+claim for later trees.
 
 The current empirical ledger is **0 completed real-model calls, 0 independent
 human labels, and unknown W0 semantic eligibility**. PR #25 supplies one bounded
@@ -24,7 +25,7 @@ source availability or application mechanics; none supplies a research outcome.
 | H1: conditional review knowledge transfers to independent future instances | The offline paired evaluator accepts frozen reviews and a separate annotation manifest: `node dist/cli.js evaluation score --dataset DATASET --annotations ANNOTATIONS --runs RUNS --out NEW_REPORT` | [Paired-evaluation contract](../docs/paired-review-evaluation.md). No independently annotated W2 roster or real-model output exists; H1 remains untested. |
 | H2: hard restriction H improves the false-alarm/recall tradeoff relative to U under the same diagnosis | `npm run experiment:matched -- --fixture NEW_DIRECTORY` exercises the [matched runner](../experiments/matched-revision/README.md), common gate and entire future roster | `packet.json`, `future.json`, `report.json` are authored demonstration outputs, not W0/W1/W2 data. The demonstration uses identical U/H proposals and scripted predictions, so it does not manufacture an H win. |
 | H versus competent memory M; frozen F reference | `runMatchedRevision` in [runner.ts](../experiments/matched-revision/runner.ts) renders the fixed rule for F, unrestricted structured state for U, constrained state for H, and scoped lesson/delta for M | M's replace/qualify/suppress interface is implemented, but competence of a real memory reviewer is unmeasured. Same gate and evidence do not prove actual live-model equivalence. |
-| Provided O versus shared inferred I diagnosis | The [SDK-native diagnosis and study interfaces](../experiments/matched-revision/sdk-native-contracts.md) separate provided/inferred conditions and repeated-block scheduling | `runSdkNativeStudy` in [sdk-native-study.ts](../experiments/matched-revision/sdk-native-study.ts) is an import API with authored transport verification, not an empirical CLI launcher. A schedule seed randomizes assignment/order, not model generation. |
+| Provided O versus shared inferred I diagnosis | The [SDK-native diagnosis and study interfaces](../experiments/matched-revision/sdk-native-contracts.md) separate provided/inferred conditions and repeated-block scheduling | `runSdkNativeStudy` in [sdk-native-study.ts](../experiments/matched-revision/sdk-native-study.ts) is also reached by the default source CLI `evaluation native init-authored/run`; the [copyable guide](../docs/offline-reproducibility.md) includes run/reopen and the separate real-W0 blocked path. This remains authored transport verification, not empirical model execution. A schedule seed randomizes assignment/order, not model generation. |
 | Durable execution of the repeated-block protocol | The separate [real PostgreSQL record](../docs/real-postgres-verification.md) tests crash/reopen and block reuse with authored SDK outputs | [Server evidence](../docs/evidence/real-postgres-2026-10-03.json) establishes its stated infrastructure assertions only. It cannot count as independent study repetitions or semantic quality. |
 
 The [selected study](discriminating-experiment.md) requires frozen W0 rules,
@@ -225,11 +226,17 @@ independent labels and actual model execution remain absent. See the
 
 ## Product execution is a separate gate
 
-The [offline reproducibility chain](../docs/offline-reproducibility.md) was
-actually run with the compiled CLI at `4be3720`. It prepares the three frozen W0
-inputs, exports jobs and inspects their blocked preflight/not-started state; a
-separate authored evaluator example generates its own inputs before scoring.
-It stops before the missing real execution and research gates.
+The [offline reproducibility guide](../docs/offline-reproducibility.md) now starts
+with the verified default source CLI: authored study/run/reopen and frozen W0
+blocked/run/reopen. It links the historical 13-command compiled-CLI preparation,
+job inspection and authored scorer chain at `4be3720`. These are distinct inputs
+and stop before missing real execution and research gates.
+
+Separately pinned [data evidence `1565fade`](https://github.com/leixy2004/FlyReWheel/blob/1565fade76e4fe640bcfc810415e491d7ac6e13b/experiments/temporal-pilot/w0-first-three/evaluation-preparation/bridge31/README.md)
+records six actual export bindings and one blocked checkpoint/reopen; its archived
+registry is stale after cleanup. [Deployment evidence `d5f0b49`](https://github.com/leixy2004/FlyReWheel/blob/d5f0b49db7da7cb53c5c8528433c8b3fc295651f/docs/evidence/kubernetes-offline-2026-10-04/README.md)
+records official-tool rendering and pinned-schema validation, not API-server
+admission or deployment. Neither follow-up is silently merged into this mapping.
 
 [Application operations](../docs/application-operations.md) exposes
 `application-jobs prepare-mining`, `preflight`, `bootstrap-check` and `recovery`.
@@ -275,6 +282,12 @@ The later intermediate PR24 head `4be3720` has a separately recorded hosted
 109-file / 1762-test pass and an identical synthetic-merge tree in the
 [context integration record](../docs/integration-context-composition-2026-10-03.md).
 That result predates the PR26/27/28 additions and does not validate them.
+
+Frozen `9f51467` later passed [typecheck/build and 123 files / 1849 tests](https://github.com/leixy2004/FlyReWheel/pull/24#issuecomment-5975239966),
+with the exact head tree verified against the logged CI checkout. Its independent
+[legacy checkpoint audit](https://github.com/leixy2004/FlyReWheel/pull/24#issuecomment-5975140204)
+observed zero duplicate authored SDK calls on reopen. These mechanics results do
+not transfer to later heads or prove real-model effectiveness.
 
 Before claiming any empirical contrast, supply the missing trusted runtime/model
 and spending configuration, freeze the W0 rule artifacts, assign independent
