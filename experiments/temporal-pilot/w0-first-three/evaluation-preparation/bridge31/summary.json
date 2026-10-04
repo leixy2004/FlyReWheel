@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "codeSha": "498e704dd91c76dd846fb64183df3ed20b887ec0",
+  "sourceArtifactsSha": "2cb82efbefc764f2b0b04f5ec64da3601da0ef64",
+  "classification": "actual-six-retained-W0-export-backed-blocked-bridge-and-process-reopen",
+  "preparationCommand": "timeout --kill-after=5s 180s node --import tsx /tmp/flyrewheel-bridge31-evidence/prepare.mts",
+  "verificationCommand": "python /tmp/flyrewheel-bridge31-evidence/run-check.py",
+  "negativeCleanupCommand": "timeout --kill-after=5s 90s node --import tsx /tmp/flyrewheel-bridge31-evidence/negative-cleanup.mts",
+  "counts": {
+    "actualExportsPrepared": 6,
+    "bindingsRetainedExactlyOnce": 6,
+    "successfulSeparateProcessRuns": 2,
+    "blockedCheckpointRecords": 1,
+    "semanticBlockers": 4,
+    "executableStudies": 0,
+    "nativeStudyDispatches": 0,
+    "providerModelCalls": 0,
+    "independentHumanLabels": 0,
+    "negativePurposeBindingChecks": 2,
+    "staleRegistryReopenRejected": 1,
+    "derivedWorkspacesCleaned": 6,
+    "baselineExportsReinspectedUnchanged": 6
+  },
+  "purpose": "offline-study",
+  "workspaceVerification": "verified-current-prepared-exports",
+  "blockers": [
+    "semantic_rule_families_not_materialized",
+    "independent_human_annotations_absent",
+    "developer_feedback_absent",
+    "frozen_revision_packet_and_future_cases_absent"
+  ],
+  "byteIdentity": {
+    "stdout": "2e6e79ede279b6cc47b196f5f562c2c964589738e7f5e42c76846168527f7dc7",
+    "firstAndReopenedResult": "1acea31924c7af69f1baede56060e58481f403acef02fceec1cca540c0e5ca39",
+    "firstAndReopenedManifest": "6cdf3ac2a81995aaa3b1fbffae9f669d4b604ab00fac680c6ff5a25e821b3975"
+  },
+  "evidenceForNoDispatch": [
+    "Real-W0 branch returns immutable blocked record before authored fixture/native study/PGlite allocation (reviewed frozen source lines99-110)",
+    "Both process outputs report nativeStudy=null, modelExecution=not_run, providerModelCalls=0, resources=not_allocated",
+    "Checkpoint directory contains only manifest.json and result.json; no native database directory"
+  ],
+  "limitations": [
+    "Blocked-path verification only, not eligible native execution or model efficacy",
+    "Diagnostic job selections reused unchanged; no actual job/execution authorization",
+    "Model-call evidence is observed blocked control flow and artifacts, not external provider telemetry",
+    "Historical visibility and semantic eligibility remain unproven",
+    "Prepared workspaces intentionally cleaned after successful reopen; archived registry is now stale and requires new preparation before later reuse"
+  ],
+  "retainedBaseline": "/tmp/flyrewheel-w0-full-context-attempt-1/{cache,exports}",
+  "upstreamSourceRequests": 0,
+  "originalCheckpointPreserved": true
+}

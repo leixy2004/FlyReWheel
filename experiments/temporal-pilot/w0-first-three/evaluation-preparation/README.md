@@ -171,3 +171,13 @@ established, and a 26-hour one-family W2 descriptive option if justified. The fr
 and samples do not change. Confirmation requires uncertainty-based design rather
 than arbitrary small N; 152 hours is only the eight-family initial-rating ceiling.
 No phase has started and all costs are planning assumptions, not measured effort.
+
+## PR31 real-export blocked bridge and reopen
+
+bridge31/ records actual frozen-PR31 verification on six retained W0 exports:
+all six complete bindings retained, one blocked checkpoint/four semantic blockers,
+two separate-process successful runs with byte-identical outputs and result/manifest.
+Wrong purpose/binding reject; reopening after deliberate derived-workspace cleanup
+rejects the stale registry while preserving the original checkpoint. All six baseline
+exports remain unchanged. This is blocked-path file persistence, not an eligible
+native study or a model run. See bridge31/summary.json and exact commands/artifacts.
