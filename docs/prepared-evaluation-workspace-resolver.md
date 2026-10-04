@@ -53,6 +53,64 @@ ordinary workspace fallback is forbidden. Returned bindings are deep copies.
 Execution still performs its own lease-time verification; resolution is not a
 lease and does not guarantee the repository remains unchanged afterward.
 
+## Bounded CLI inspection
+
+Integration must import `registerEvaluationWorkspaceCommands` from
+`./cli-evaluation-workspace.js` in `src/cli.ts` and call it with the existing
+`evaluation` command. This lane leaves that shared-file registration to the main
+integrator. After registration, preparation, and saving the exact registry and
+selection JSON, the default CLI can perform a read-only lookup:
+
+```sh
+timeout --kill-after=5s 90s npm run cli -- evaluation workspace resolve \
+  --registry /absolute/path/registry.json \
+  --selection /absolute/path/selection.json \
+  --timeout-ms 30000 --out /absolute/path/new-inspection.json
+```
+
+The registry is limited to 2 MB and the selection to 16 KB. `--out` refuses to
+replace an existing report; omission prints JSON. The result retains the complete
+selection and binding and their source digests. `--timeout-ms` is an acceptance
+deadline: no late result is accepted, but an active verification step finishes
+under its existing per-process bounds before cancellation is reported. The outer
+shell timeout bounds this invocation independently. It is not cleanup evidence.
+No database, model, SDK transport, worker, or queue is opened by this command.
+
+This inspection does not accept stage/model/resource fields in selection JSON;
+unknown fields are rejected rather than discarded. Those settings belong to the
+separately validated execution configuration.
+
+## Native study chain: currently disconnected
+
+The existing `runSdkNativeStudy` is an authored selected-evidence study driver.
+Its inputs are frozen packet/future blocks and schedule/configuration, not W0
+workspace selections. Native proposal/gate/future requests have stage and role
+settings but no evaluation binding; the authored transport has its own working
+directory. Existing checkpoint identities therefore do not bind these exports.
+Do not pass a resolver result through this interface and describe it as an
+evaluation-aware native run.
+
+The remaining bridge must explicitly bind verified export provenance into study
+and per-call identities and reverify it on reopen, while preserving stage and
+resource settings. That requires coordinated native contract changes. Six valid
+exports alone do not supply frozen revision episodes, gate/future cases or human
+labels. No such objects or model results are synthesized by this command.
+
+Existing authored native recovery can be checked independently with:
+
+```sh
+timeout 90s node node_modules/vitest/vitest.mjs run \
+  tests/matched-revision.sdk-native-contracts.test.ts \
+  tests/matched-revision.sdk-native-schedule.test.ts \
+  tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=2
+npm run experiment:matched -- --study-status STUDY_DIGEST --db EXISTING_PGLITE_DIR
+```
+
+The first command uses authored local executables and PGlite. The second only
+inspects an existing checkpoint. Neither proves a real W0 native run. Model
+authorization, deployment authority, and operational admission remain prerequisites
+for any future production path.
+
 ## Checkout and evidence boundaries
 
 The dispatcher selects **before** context for PR mining. An after-side registry
