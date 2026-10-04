@@ -1,0 +1,245 @@
+{
+  "kind": "post-allowance-w0-disposition",
+  "frozenManifestUnchanged": true,
+  "totalW0": 38,
+  "newRequests": 2,
+  "totalRESTRequests": 50,
+  "remainingRESTRequests": 0,
+  "receivedBytes": 6192,
+  "licenseReuse": {
+    "path": "experiments/temporal-pilot/w0-first-three/proxy-attempt-1/LICENSE.httpx.md",
+    "gitBlob": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+    "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+    "scope": "matches observed merge-root license; pinned PR head license membership still missing"
+  },
+  "rows": [
+    {
+      "order": 1,
+      "number": 3035,
+      "status": "unresolved",
+      "inspection": "previously exposed; insufficient evidence"
+    },
+    {
+      "order": 2,
+      "number": 3031,
+      "status": "unresolved",
+      "inspection": "previously exposed; insufficient evidence"
+    },
+    {
+      "order": 3,
+      "number": 3036,
+      "status": "unresolved",
+      "inspection": "previously exposed; insufficient evidence"
+    },
+    {
+      "order": 4,
+      "number": 3034,
+      "status": "budget_exhausted",
+      "inspection": "merge commit and root tree checked only; source incomplete"
+    },
+    {
+      "order": 5,
+      "number": 3032,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 6,
+      "number": 3038,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 7,
+      "number": 3042,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 8,
+      "number": 3045,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 9,
+      "number": 3054,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 10,
+      "number": 3049,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 11,
+      "number": 3055,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 12,
+      "number": 3058,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 13,
+      "number": 3056,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 14,
+      "number": 3057,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 15,
+      "number": 3063,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 16,
+      "number": 3061,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 17,
+      "number": 3068,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 18,
+      "number": 3066,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 19,
+      "number": 3077,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 20,
+      "number": 3050,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 21,
+      "number": 3080,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 22,
+      "number": 3081,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 23,
+      "number": 3097,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 24,
+      "number": 3095,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 25,
+      "number": 3107,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 26,
+      "number": 3106,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 27,
+      "number": 3109,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 28,
+      "number": 3064,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 29,
+      "number": 3062,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 30,
+      "number": 3112,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 31,
+      "number": 3116,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 32,
+      "number": 3123,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 33,
+      "number": 3124,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 34,
+      "number": 3122,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 35,
+      "number": 3120,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 36,
+      "number": 3131,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 37,
+      "number": 3129,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    },
+    {
+      "order": 38,
+      "number": 3139,
+      "status": "budget_exhausted",
+      "inspection": "not attempted; REST budget exhausted"
+    }
+  ]
+}
