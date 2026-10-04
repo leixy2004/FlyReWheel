@@ -1,10 +1,12 @@
 /** Single authorized no-model trial. Secret values never enter receipts or errors. */
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
+import {writeFileSync} from 'node:fs';
+import {inspectOwnedContainer,cleanupTrial,type Check} from './opensandbox-smoke-inspection.js';
 import {execFileSync,spawnSync} from 'node:child_process';
 import {Sandbox} from '@alibaba-group/opensandbox';
 import {Agent,fetch as scopedFetch} from 'undici';
-import {localRequest,TrialGuard,TRIAL_WORKER_IMAGE,observeRequest,startupCategories,noNewPrivilegesEnabled} from './opensandbox-smoke-request.js';
+import {localRequest,TrialGuard,TRIAL_WORKER_IMAGE,observeRequest,startupCategories} from './opensandbox-smoke-request.js';
 import {BoundedOpenSandboxConnection} from '../src/adapters/opensandbox-transport.js';
 const [task,owner,network,output,state]=process.argv.slice(2);
 assert(task&&owner&&network&&output&&state);
@@ -64,21 +66,16 @@ function captureDiagnostics(){
   catch{receipt.diagnostics.startupCategories=['log-read-failed'];}
  }catch{receipt.diagnostics={status:'capture-failed'};}
 }
-const inspect=()=>{
- const ids=docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean);
- assert.equal(ids.length,1);const obj=JSON.parse(docker(['inspect',ids[0]!]))[0];
- assert.equal(obj.Config.Labels['flyrewheel.lifecycle-owner'],owner);
- assert.deepEqual(Object.keys(obj.NetworkSettings.Networks),[network]);
- assert.equal(obj.HostConfig.NetworkMode,network);
- assert.deepEqual(obj.HostConfig.CapDrop,['ALL']);
- receipt.inspectionCheck='no-new-privileges';
- assert(noNewPrivilegesEnabled(obj.HostConfig.SecurityOpt));
- receipt.inspectionCheck='remaining-container-policy';
- assert(!obj.HostConfig.Privileged);assert.equal(obj.Mounts.length,0);
- for(const bindings of Object.values(obj.HostConfig.PortBindings??{}) as any[])for(const b of bindings)assert.equal(b.HostIp,'127.0.0.1');
- assert(!JSON.stringify(obj.Config.Env).includes(apiKey));
- return obj;
+const persist=()=>writeFileSync(output,JSON.stringify(receipt,null,2)+'\n',{mode:0o600});
+const journal=(entry:Check)=>{
+ receipt.inspectionChecks??=[];
+ assert(receipt.inspectionChecks.length<64,'inspection record bound');
+ receipt.inspectionCheck=entry.name;receipt.inspectionChecks.push(entry);persist();
 };
+const inspect=(phase:'ready'|'paused')=>inspectOwnedContainer(
+ ()=>docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean),
+ id=>JSON.parse(docker(['inspect',id])),owner,network,apiKey,phase,journal);
+
 try{
  let healthy=false;
  for(let i=0;i<40;i++){
@@ -93,8 +90,7 @@ try{
   metadata:{'flyrewheel.lifecycle-owner':owner},env:{},volumes:[],
   connectionConfig:connection,readyTimeoutSeconds:30,signal:AbortSignal.timeout(60000)});
  receipt.sandboxId=sandbox.id;receipt.events.push('sdk-ready');
- receipt.inspectionCheck='container-identity-network-capabilities';
- const before=inspect();receipt.containerId=before.Id;receipt.before={status:before.State.Status,paused:before.State.Paused,network:before.HostConfig.NetworkMode};
+ const before=inspect('ready');receipt.containerId=before.Id;receipt.before={status:before.State.Status,paused:before.State.Paused,network:before.HostConfig.NetworkMode};
  assert(before.State.Running);receipt.events.push('reserved-and-ready');
  const result=await sandbox.commands.run(['/usr/bin/id','-u'],{timeoutSeconds:10,workingDirectory:'/tmp'},undefined,AbortSignal.timeout(15000));
  assert(result.id);assert(result.complete&&!result.error);
@@ -102,15 +98,17 @@ try{
  const status=await sandbox.commands.getCommandStatus(result.id);
  assert.equal(status.running,false);assert.equal(status.exitCode,0);
  receipt.command={argv:['/usr/bin/id','-u'],stdout:stdout.trim(),exitCode:status.exitCode,running:status.running};
- await sandbox.pause();assert.equal(inspect().State.Paused,true);receipt.events.push('paused-independently-inspected');
+ await sandbox.pause();inspect('paused');receipt.events.push('paused-independently-inspected');
  await sandbox.kill();receipt.events.push('delete-api-succeeded');sandbox=undefined;
  assert.equal(docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim(),'');
  receipt.events.push('container-absence-independently-inspected');receipt.status='succeeded';
 }catch(e){receipt.errorClass=e instanceof Error&&['Error','AssertionError','SandboxReadyTimeoutException','SandboxApiException','TimeoutError','AbortError'].includes(e.name)?e.name:'Unknown';receipt.status='failed';}
 finally{
- if(sandbox){try{await sandbox.kill();receipt.cleanupDeleteApi=true;}catch{receipt.cleanupDeleteApi=false;}await sandbox.close().catch(()=>{});}
- try{await connection.closeTransport();}catch{receipt.transportCleanup=false;}
- await agent.destroy().catch(()=>{receipt.transportCleanup=false;});
- await writeFile(output,JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
+ await cleanupTrial(receipt,[
+  ...(sandbox?[{name:'cleanupDeleteApi' as const,run:()=>sandbox!.kill()},{name:'sandboxClosed' as const,run:()=>sandbox!.close()}]:[]),
+  {name:'transportClosed',run:()=>connection.closeTransport()},
+  {name:'agentClosed',run:()=>agent.destroy()},
+ ],persist);
+ persist();console.log(JSON.stringify(receipt));
 }
 process.exitCode=receipt.status==='succeeded'?0:1;

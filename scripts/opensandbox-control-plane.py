@@ -596,6 +596,10 @@ def run_trial(options):
             raise ValueError("one-shot outer claim already consumed; no second driver")
         if remaining() <= 0 or (state / "allocation.claim").exists():
             raise ValueError("expired or previously allocated trial")
+        # Fail closed before either service or driver starts. esbuild is unref'd
+        # by tsx and can outlive Node; keep it adoptable and waitable here.
+        enable_child_subreaper()
+        receipt["driverChildSubreaperVerified"] = True
         validate(options)
         obj = json.loads(public_command(["docker", "network", "inspect", options.network]))[0]
         network_id = obj["Id"]
@@ -605,10 +609,6 @@ def run_trial(options):
         exclusive_json(state / "provenance.json", {"networkId": network_id, "execdImageId": receipt["preexistingImageId"]})
         if remaining() <= 0:
             raise ValueError("trial deadline")
-        # Fail closed before either service or driver starts. esbuild is unref'd
-        # by tsx and can outlive Node; keep it adoptable and waitable here.
-        enable_child_subreaper()
-        receipt["driverChildSubreaperVerified"] = True
         args = [sys.executable, str(Path(__file__).resolve()), "--execute", "--supervisor",
                 "--approval-ref", options.approval_ref, "--source", options.source,
                 "--python", options.python, "--execd-image", options.execd_image,

@@ -151,8 +151,9 @@ class TrialPrerequisiteTests(unittest.TestCase):
                 if argv[1:3] == ["network", "inspect"]:
                     return json.dumps([{"Id": "fixture-network-id"}])
                 return "fixture-image-id"
-            with patch.object(control, "validate"), \
+            with patch.object(control, "validate", side_effect=AssertionError("preflight must precede validation")), \
                  patch.object(control, "public_command", side_effect=command), \
+                 patch.object(control.tempfile, "mkdtemp", side_effect=AssertionError("no credential directory")), \
                  patch.object(control, "enable_child_subreaper", side_effect=RuntimeError("unavailable")), \
                  patch.object(control.subprocess, "Popen", side_effect=AssertionError("no spawn")) as spawn:
                 self.assertEqual(control.run_trial(options), 1)
