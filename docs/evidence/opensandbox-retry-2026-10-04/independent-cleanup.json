@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "classification": "independent-read-only-cleanup-verification",
+  "checkedAtUtc": "2026-10-04T08:13:06.798193Z",
+  "trialSourceCommit": "c7985bcd45b90e6f9e17fb0dd7704af65b7ad440",
+  "owner": "4280f8a6-5cba-4416-b437-9560863d0155",
+  "allContainerIds": [],
+  "ownerContainerIds": [],
+  "worker": {
+    "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+    "inspectExitCode": 1,
+    "result": "no-such-container"
+  },
+  "network": {
+    "id": "a10588c6937319a3b247d5dea02d67d3363f5c5a783effa4d5f31a94952858e8",
+    "inspectExitCode": 1,
+    "result": "not-found"
+  },
+  "remainingNetworkNames": ["bridge", "host", "none"],
+  "remainingImageIds": [
+    "sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed",
+    "sha256:b37a4d56eedb5e42bca59c8d4782fa550e741fba5dbce943c53767d3ceee57e6"
+  ],
+  "introducedExecdImageListed": false,
+  "absentPids": [14998, 14959, 14999],
+  "matchingProcesses": [
+    {"pid": 15007, "comm": "esbuild", "state": "Z", "ppid": 1, "pgid": 14999, "session": 14999}
+  ],
+  "tcpListeningPorts": [1040],
+  "servicePort": 41381,
+  "servicePortListening": false,
+  "secretDirectory": "/tmp/flyrewheel-control-a5nug5rs",
+  "secretDirectoryLexists": false,
+  "driverProcessGroupAbsent": false,
+  "overallCleanup": "cleanup-unverified",
+  "limits": [
+    "Point-in-time absence observations do not prove that no future daemon event can occur.",
+    "PID 15007 is a non-executing zombie adopted by PID 1; the driver process group has not disappeared.",
+    "This verification does not retroactively change the failed trial into a successful lifecycle test."
+  ],
+  "actions": "Read-only Docker metadata, TCP listener inventory, proc stat metadata and directory existence checks; no signals, credentials, environment values or resource changes."
+}
