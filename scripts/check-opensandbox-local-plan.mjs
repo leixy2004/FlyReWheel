@@ -9,12 +9,12 @@ const GiB = 1024 ** 3;
 const Plan = z.object({
   serverHost: z.literal('127.0.0.1'),
   publishHost: z.literal('127.0.0.1'),
-  networkMode: z.enum(['bridge', 'none']),
+  networkMode: z.enum(['internal-bridge', 'bridge', 'none']),
   executionTransport: z.enum(['official-sdk', 'docker-exec']),
   useServerProxy: z.literal(true),
   proxyResolveInternal: z.literal(false),
   // These restrictions apply to the workload; the upstream extraction helper differs.
-  execdExtractionHelper: z.literal('official-defaults-pending-confirmation'),
+  execdExtractionHelper: z.literal('pinned-local-patch-never-started'),
   noNewPrivileges: z.literal(true),
   dropCapabilities: z.tuple([z.literal('ALL')]),
   pidsLimit: z.number().int().min(16).max(64),
@@ -27,7 +27,7 @@ const Plan = z.object({
   apiKeySource: z.literal('task-temporary-file'),
   tls: z.literal('task-certificate-scoped-client-trust'),
   maxSandboxes: z.literal(1),
-  sandboxTtlSeconds: z.number().int().min(1).max(300),
+  sandboxTtlSeconds: z.number().int().min(60).max(300),
   operationDeadlineSeconds: z.number().int().min(1).max(900),
   reserveBytes: z.number().int().min(5 * GiB),
   freeBytes: z.number().int().nonnegative().nullable(),
@@ -35,9 +35,9 @@ const Plan = z.object({
 }).strict();
 
 export const proposedPlan = {
-  serverHost: '127.0.0.1', publishHost: '127.0.0.1', networkMode: 'bridge',
+  serverHost: '127.0.0.1', publishHost: '127.0.0.1', networkMode: 'internal-bridge',
   executionTransport: 'official-sdk', useServerProxy: true, proxyResolveInternal: false,
-  execdExtractionHelper: 'official-defaults-pending-confirmation',
+  execdExtractionHelper: 'pinned-local-patch-never-started',
   noNewPrivileges: true, dropCapabilities: ['ALL'], pidsLimit: 64, networkPolicy: null,
   credentialProxy: false, isolationExtension: false, privileged: false,
   addedCapabilities: [], hostBinds: [], apiKeySource: 'task-temporary-file',
@@ -61,14 +61,13 @@ export function checkPlan(input) {
     networkMode: plan.networkMode, executionTransport: plan.executionTransport,
     needsNetAdmin: false, networkPolicyEnabled: false,
     hardeningScope: 'workload-only',
-    extractionHelper: 'upstream starts the image entrypoint with tail arguments, default root/network/capabilities and no configured resource limits',
+    extractionHelper: 'pinned local patch creates a network-none cap-drop-ALL read-only helper and never starts it',
     pendingActions: ['create task-only API key', 'create task-only TLS certificate/key with scoped client trust',
-      'start loopback-only server and sandbox port bindings',
-      'confirm one upstream execd extraction helper with Docker defaults and an external cleanup deadline'],
+      'start loopback-only server and sandbox port bindings'],
     blockers,
     limitation: plan.executionTransport === 'docker-exec'
       ? 'Docker exec is an out-of-band command check, not SDK execd verification'
-      : 'bridge without policy does not prove deny-default egress or production isolation',
+      : 'internal bridge blocks direct external routing but retains host/gateway reachability; production isolation is unproven',
   };
 }
 

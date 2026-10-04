@@ -59,15 +59,15 @@ describe('local OpenSandbox proposal validation', () => {
     const result = checkPlan(proposedPlan);
     expect(result.needsNetAdmin).toBe(false);
     expect(result.hardeningScope).toBe('workload-only');
-    expect(result.extractionHelper).toContain('default root/network/capabilities');
+    expect(result.extractionHelper).toContain('never starts it');
     expect(result.classification).toBe('static-plan-only-not-runtime-evidence');
     expect(result.blockers).toContain('expanded-image/container/dependency peak budget has not been measured');
-    expect(result.pendingActions).toHaveLength(4);
+    expect(result.pendingActions).toHaveLength(3);
   });
   it('rejects unsafe exposure, capability additions, credentials and unbounded time', () => {
     for (const change of [{ serverHost: '0.0.0.0' }, { publishHost: '0.0.0.0' }, { networkMode: 'host' },
       { addedCapabilities: ['NET_ADMIN'] }, { privileged: true }, { hostBinds: ['/var/run/docker.sock'] },
-      { proxyResolveInternal: true }, { noNewPrivileges: false }, { dropCapabilities: [] }, { pidsLimit: 10000 }, { apiKey: 'not-a-real-secret' }, { networkPolicy: { defaultAction: 'deny' } }, { sandboxTtlSeconds: 301 }]) {
+      { proxyResolveInternal: true }, { noNewPrivileges: false }, { dropCapabilities: [] }, { pidsLimit: 10000 }, { apiKey: 'not-a-real-secret' }, { networkPolicy: { defaultAction: 'deny' } }, { sandboxTtlSeconds: 301 }, { sandboxTtlSeconds: 59 }]) {
       expect(() => checkPlan({ ...proposedPlan, ...change })).toThrow();
     }
   });

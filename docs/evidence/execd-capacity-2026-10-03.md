@@ -118,3 +118,73 @@ handle both, plus ambiguous create responses and late allocations, without
 prefix-wide deletion or claiming cleanup merely because finally ran. Unknown
 ownership must be reported and reconciled, not guessed. These are implementation
 requirements for the later authorized executor, not completed runtime guarantees.
+
+## Authorized bounded payload measurement — completed follow-up
+
+The parent subsequently authorized layer payload inspection with an 80 MiB total
+compressed cap, 256 MiB aggregate decoded cap and 120-second deadline, without
+Docker pull/import, filesystem extraction or execution. The earlier metadata-only
+status above is historical; the following measurement supersedes its unknown-U
+finding. No mature OCI inspection tool (`skopeo`, `crane`, `regctl`, `oras`) was
+installed. Python standard-library HTTPS, gzip and streaming tar readers provided
+the bounded alternative; the exact executed procedure and receipt are committed
+in the metadata directory. This procedure is a historical evidence script using
+its recorded task-local input paths, not a general-purpose deployment CLI.
+
+| Observation | Result |
+| --- | ---: |
+| Completed layers | 13 / 13 |
+| Compressed payload read | 60,314,718 bytes (57.52 MiB) |
+| Full decoded tar streams | 121,012,224 bytes (115.40625 MiB) |
+| Sum of tar member logical sizes | 120,697,170 bytes |
+| Per-member 4 KiB rounded size plus 4 KiB overhead estimate | 123,195,392 bytes |
+| Entries / directories / links | 540 / 109 / 335 |
+| `.wh.*` whiteout entries observed | 0 |
+| Time | 9.759 seconds |
+| Hashes | All 13 compressed descriptors and decoded diff IDs matched |
+| Cleanup | Owned compressed cache removed; no extracted files or Docker resources |
+
+The reader used existing verified HTTPS/proxy handling and public-registry access;
+it stripped Authorization on cross-host registry redirects and rejected non-HTTPS
+redirects. Anonymous registry token stayed in process memory. It downloaded and
+verified each compressed layer before reading it through bounded gzip/tar streams.
+No layer path was extracted or executed. Unsupported sparse semantics and excess
+entries/bytes were rejection conditions. Completion remained below every bound.
+
+### Interpretation and revised admission
+
+Tar bytes and member sizes are **not final VFS allocated size**. Layer application
+merges paths, replaces entries, interprets whiteouts/opaque directories and
+hardlinks, and incurs inode, block and copy overhead. No `.wh.*` entry was seen,
+but no merged root filesystem was constructed or inspected. Summing all layers
+ignores deletions and deduplication; rounding every link as an entry is conservative
+for this planning purpose, not an exact filesystem-accounting algorithm. The
+reader's success also does not establish image safety or successful startup.
+
+Using the 123,195,392-byte rounded/member allowance in the earlier **16-copy**
+planning factor, plus the 3.783 GiB fixed subtotal, gives **5.619 GiB additional**.
+Against the post-measurement free value **17,735,331,840 bytes**, roughly **10.898
+GiB remains**, about **4.898 GiB above the 6 GiB reserve/reaction threshold**.
+The 8 GiB planning envelope therefore has comfortable room for this measured
+image; it is still not a quota or an observed VFS peak.
+
+**Image-capacity disposition: admissible for the bounded experiment plan**, subject
+to a fresh disk check before each allocation and the pending security permissions.
+The Python environment remains a 1 GiB allowance rather than a measured install;
+its installation must be bounded/observed independently and stop/re-plan if that
+allowance is exceeded. Keep the 500 ms free-space monitor and 6 GiB stop threshold,
+one workload plus at most one helper, no concurrent builds, and exact-owned-resource
+cleanup. Actual peak and cancellation lag must be recorded during the eventual
+execution. This measurement authorizes neither server startup nor helper defaults.
+
+Independent agent review of GitHub checkpoint `b1e7a3b` recomputed the totals:
+fixed **4,062,106,237 bytes**, plus 16 × 123,195,392 gives **6,033,232,509 bytes**
+(5.618886 GiB). It verified all manifest/config/receipt descriptor relationships
+and rehashed manifest/config; it did not redownload or independently rehash blob
+payloads. The original reader performed those payload validations. The reviewer
+confirmed no extraction/import and retained `measurement-complete-not-runtime-admission`
+as the receipt classification. The 120-second signal bounds the measurement phase;
+it is disabled before final cache removal, so it is not a hard cleanup deadline.
+The recorded 9.759 seconds includes successful cleanup in this run. Links were
+counted together, not separated into hardlinks and symlinks. These limitations do
+not overturn the capacity estimate and must accompany it.
