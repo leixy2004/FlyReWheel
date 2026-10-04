@@ -1,0 +1,43 @@
+{
+  "kind": "independent_native_agent_capture_audit",
+  "mode": "offline_only",
+  "newNetworkRequests": 0,
+  "reviewers": [
+    "identity_audit",
+    "leakage_audit"
+  ],
+  "result": "passed",
+  "actualPackages": 3,
+  "prNumbers": [
+    3035,
+    3031,
+    3036
+  ],
+  "checks": {
+    "frozenPrIdentity": "passed",
+    "packageAndSnapshotDigests": "passed",
+    "capturedSourceSideCount": 8,
+    "capturedSourceBytes": 5519,
+    "sourceSha256AndGitBlobSha1": "passed",
+    "treeObjectsRehashedAcrossPackages": 10,
+    "treeCountIsUnique": false,
+    "gitTreeObjectSha1": "passed",
+    "treePathReachabilityAndEntryBinding": "passed",
+    "pinnedHeadLicenseFiles": 3,
+    "licenseBytesEach": 1508,
+    "licenseBlobSha1AndSha256": "passed",
+    "captureRequests": 45,
+    "priorRequests": 3,
+    "totalRequests": 48,
+    "maximumRequests": 50,
+    "unselectedPrEndpointsObserved": 0
+  },
+  "limits": [
+    "Native-agent audit is not independent human annotation.",
+    "Internal Git object consistency does not establish historical public visibility or lineage independence.",
+    "Current API discussion is not a historical W0 feedback checkpoint.",
+    "License preservation and byte verification do not establish before-source coverage or automated publication permission."
+  ],
+  "mining": "not_run",
+  "modelCalls": 0
+}

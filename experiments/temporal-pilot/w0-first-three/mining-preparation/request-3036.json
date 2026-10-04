@@ -1,0 +1,114 @@
+{
+  "digest": "fceffa2a78a53080329a357218a05664a2cd261bc99cfe6d2f731cd3ddde40f1",
+  "request": {
+    "schemaVersion": 1,
+    "kind": "pr-rule-mining-request",
+    "input": {
+      "id": "w0-exploratory-3036",
+      "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+      "sources": [
+        {
+          "side": "before",
+          "path": ".github/workflows/publish.yml"
+        },
+        {
+          "side": "after",
+          "path": ".github/workflows/publish.yml"
+        },
+        {
+          "side": "before",
+          "path": ".github/workflows/test-suite.yml"
+        },
+        {
+          "side": "after",
+          "path": ".github/workflows/test-suite.yml"
+        }
+      ],
+      "statements": [
+        {
+          "kind": "pull"
+        }
+      ],
+      "requestedRule": {
+        "ruleId": "httpx-w0-3036",
+        "version": "exploratory-1",
+        "parentDigest": null
+      },
+      "objective": "Assess whether the selected changed sources support a reusable semantic invariant. Preserve unknowns; return insufficient_evidence when support is missing. Merge, approvals, version bumps and third-party release notes are not defect or correctness labels.",
+      "actor": "assistant-offline-exploratory-preparation-not-human-labeler",
+      "source": "supplied",
+      "createdAt": "2026-10-03T22:52:07Z"
+    },
+    "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+    "sourceBindings": [
+      {
+        "caseId": "pr-case_9b8fc211796721a369641683866e729df0938bf4baefd729b2a6a05a466a1497",
+        "repository": "github:encode/httpx",
+        "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+        "path": ".github/workflows/publish.yml",
+        "sourceDigest": "d0af2f9152ced371885aadc5b70cd9ec26c74b6bf8c42032ece5d7b31d489326",
+        "side": "before",
+        "objectId": "4ceb8c69e04017299f88b840938c967daf93981a",
+        "mode": "100644",
+        "byteLength": 606,
+        "caseDigest": "318e37361758b9946c2c85e5ac9d380839e757944cc5304eb1de7c9067be4149"
+      },
+      {
+        "caseId": "pr-case_7e3321f35cdc3fc0d6818ff708bd996efa7c5663502aba8f7e92874293842103",
+        "repository": "github:encode/httpx",
+        "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "path": ".github/workflows/publish.yml",
+        "sourceDigest": "9e5b75be0d18b01710a0aaa5cf9c9c74b2e5a9b6769642c95ad847f1d898dcc9",
+        "side": "after",
+        "objectId": "2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+        "mode": "100644",
+        "byteLength": 606,
+        "caseDigest": "14a0dc6a05e4d3cdb05a5711dce64dc6dd03729333d7aef7416c42958ca80d77"
+      },
+      {
+        "caseId": "pr-case_c261d2705ea80e3ffe5513b68e5bb127bb6624cc5deb5111835dd10a7fdbe7e1",
+        "repository": "github:encode/httpx",
+        "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+        "path": ".github/workflows/test-suite.yml",
+        "sourceDigest": "9dd92b4f6b1da94c634eff9b97d78f3c2e006faee544435f66567a96a62b53ed",
+        "side": "before",
+        "objectId": "c3ad08f14544d976a2520a74578ed41feb6fda71",
+        "mode": "100644",
+        "byteLength": 795,
+        "caseDigest": "4f960847029b6ca5ff36bb10c1448c7119b7223e0528669889df64cf4a45de93"
+      },
+      {
+        "caseId": "pr-case_d208af84a214984dd51f09dbc58e36169a83f1ee8cf653be1144bda2f728472a",
+        "repository": "github:encode/httpx",
+        "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "path": ".github/workflows/test-suite.yml",
+        "sourceDigest": "423ca34ed0426a83f90abdafc98ffffdfa2b63e59f9124b06549fc7fa8221844",
+        "side": "after",
+        "objectId": "0bb570cedb51dbc57b08f097523c5e9aa245f854",
+        "mode": "100644",
+        "byteLength": 795,
+        "caseDigest": "d61b43f1b48e4a0b0f22e7bfa57f9a32f7912e6b8069f2c81871c25d95368149"
+      }
+    ],
+    "statementBindings": [
+      {
+        "selection": {
+          "kind": "pull"
+        },
+        "digest": "6efd0defc61666d7b0453dd9357605ffcebcb2a753075e0e6dfecb118bf9e391"
+      }
+    ],
+    "status": "pending",
+    "synthesis": "not_run",
+    "trust": {
+      "evidence": "package-integrity-only",
+      "observation": "current-api-state",
+      "historicalReviewCheckpoint": false,
+      "statements": "untrusted-not-ground-truth-or-feedback",
+      "labels": "unknown-only",
+      "identity": "caller-declared-unverified",
+      "context": "selected-changed-sides-only",
+      "certification": "none"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "reviewers": [
+    "identity_audit",
+    "leakage_audit"
+  ],
+  "independentHumanLabels": 0,
+  "networkRequestsDuringRuffReview": 0,
+  "reviewed": {
+    "sameOptionsReproductionShowsNoexec": true,
+    "wheelMemberAndCopiedBinaryHashesMatch": true,
+    "baseAndDerivedOnBuildEmpty": true,
+    "dockerfileFixedFromTwoCopyOnly": true,
+    "imageLayersBasePlusTwo": true,
+    "sourceFilesEachSide": 114,
+    "allSixCommandExitCodesZero": true,
+    "formatFilesEachSide": 60,
+    "nonrootReadonlyNetworkNoneNoexecMaintained": true,
+    "sourceBytesUnchanged": true,
+    "noRemainingContainers": true
+  },
+  "limitations": [
+    "Container/harness exit is not an aggregate Ruff check status; consume individual command exits.",
+    "No defect labels, model mining results or general CI guarantee.",
+    "mkautodoc build not executed; docs/action behavior stays unknown."
+  ]
+}

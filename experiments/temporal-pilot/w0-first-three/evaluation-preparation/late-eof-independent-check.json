@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "codeSha": "6a1a8ac1d56f659f2e7d96b000739025f9755672",
+  "parentSha": "9b6789fcf746e25bd0bc98476ba75cb58975dd40",
+  "shellVerified": true,
+  "checkout": "/tmp/flyrewheel-late-eof-check",
+  "codeAcquisition": "Own GitHub git fetch exact published SHA; separate detached worktree",
+  "classification": "independent-execution-of-published-authored-tests-not-real-runtime",
+  "commands": [
+    {
+      "command": "timeout 90s node node_modules/vitest/vitest.mjs run tests/opensandbox-workspace.test.ts tests/opensandbox-stop-recovery.test.ts tests/opensandbox-late-result.test.ts --maxWorkers=1 --reporter=json --outputFile=/tmp/late-eof-vitest.json",
+      "exitCode": 0,
+      "passed": 47,
+      "failed": 0,
+      "files": [
+        {
+          "file": "opensandbox-late-result.test.ts",
+          "count": 9,
+          "status": "passed"
+        },
+        {
+          "file": "opensandbox-stop-recovery.test.ts",
+          "count": 16,
+          "status": "passed"
+        },
+        {
+          "file": "opensandbox-workspace.test.ts",
+          "count": 22,
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "command": "timeout 60s npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "audit": {
+    "findings": [],
+    "guards": [
+      "assertActive after command stream EOF",
+      "assertActive after prepare command resolves before accepting observation",
+      "assertActive after execute command resolves before accepting JSON",
+      "withSignal checks after outer action resolves before removing abort listener"
+    ],
+    "cleanup": "Stop fences and aborts synchronously; collection and destruction keep existing authority requirements. Guards do not move cleanup behind assertActive.",
+    "regressionCoverage": "Nine new authored regressions: prepare/execute EOF after verified cleanup, abort-only delayed iterator done, late EOF rejection, pending/false/rejected stop authority."
+  },
+  "limitations": [
+    "No independent pre-fix red reproduction in this check",
+    "No actual sandbox/container/model/network behavior established by SDK-shaped test doubles",
+    "No real persisted mining job or end-to-end dispatch",
+    "Evaluation-aware resolver not published at reviewed SHA; no positive resolver claim",
+    "Existing six W0 exports unchanged and not needed for this lifecycle check"
+  ],
+  "upstreamHttpxRequests": 0,
+  "modelCalls": 0,
+  "sourceEdits": 0,
+  "rawTestReportSha256": "15f8fededa7e6dc98b3b1d2af48b2b8331f5aa80b3264bded215a0bdbf95ccc5"
+}

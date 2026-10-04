@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-w0-permission-diagnosis",
+  "baseCommit": "ce9b9fbfc3abf5d1d542652e0b19ca01fca8e4fc",
+  "preserveOriginalFailure": true,
+  "samples": [
+    3035,
+    3031,
+    3036
+  ],
+  "newHttpxApiOrGitReads": 0,
+  "modelCalls": 0,
+  "steps": [
+    "Inspect existing wheel ELF/mode/interpreter and fixed image metadata without executing target code",
+    "One isolated diagnosis container: hash-locked offline wheel install using official pip; inspect file mode/uid/gid/interpreter and effective mount flags; do not execute Ruff",
+    "Only if ordinary packaging correction justified: one local COPY-only derived image from existing immutable official Python image, verified Ruff binaries mode0555 in /opt/ruff; no RUN/download/build hooks",
+    "Re-run exact original before/after Ruff --version, format httpx tests --diff, check httpx tests with source byte checks; preserve nonzero results and source unchanged",
+    "Inspect exact official mkautodoc sdist bytes/hash/build declarations without executing hooks; docs remains unknown unless safe build clearly established"
+  ],
+  "isolation": {
+    "uid": "65534:65534",
+    "network": "none",
+    "rootAndSource": "read-only",
+    "tmpfs": "/tmp rw,noexec,nosuid,nodev 128MiB",
+    "capabilities": "drop ALL",
+    "noNewPrivileges": true,
+    "cpus": 1,
+    "memoryMiB": 512,
+    "pids": 64,
+    "credentialsHostSockets": "none"
+  },
+  "budget": {
+    "diagnosisContainers": 1,
+    "testContainers": 2,
+    "copyOnlyImageBuilds": 1,
+    "imagePulls": 0,
+    "perContainerSeconds": 120,
+    "totalSeconds": 600,
+    "additionalDiskMiB": 512,
+    "retries": 0
+  },
+  "stop": "Stop on approval requirement or unexpected boundary; never remount noexec or invoke dynamic loader to evade noexec. No upstream changes/assertion edits. Only task-owned tool packaging changes."
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-behavior-availability-ledger",
+  "selection": [
+    3035,
+    3031,
+    3036
+  ],
+  "apiLedgerFrozen": 48,
+  "newHttpxGitOrRestRequests": 0,
+  "image": {
+    "id": "sha256:d3846bce6e97d0ef5c32fc023300d5e39251ad791e6fdfaee41d2ba75246766e",
+    "repoDigest": "python@sha256:bab1b7ef4b450c81002278d035eff85ebe394ae94df904f7a3ba14f7e16e487b",
+    "bytes": 133217288,
+    "source": "docker.io/library/python:3.11-slim",
+    "pulls": 1,
+    "builds": 0
+  },
+  "dependencyOrigin": "public PyPI wheels only; no source builds or package install hooks",
+  "wheelBytes": 13702726,
+  "temporaryLogicalBytes": 19721350,
+  "containersStarted": 2,
+  "containersRemoved": 2,
+  "maxConcurrentContainers": 1,
+  "ordinaryPermissionFailures": 2,
+  "approvalRequests": 0,
+  "automaticApprovalRejections": 0,
+  "isolationWeakened": false,
+  "initialExecutionCodeCommit": "1f4a69d",
+  "items": [
+    {
+      "number": 3035,
+      "before": "dependency-unavailable",
+      "after": "dependency-unavailable",
+      "reason": "mkautodoc==0.2.0 unavailable as wheel under the frozen Python3.11/manylinux2014_x86_64 selector",
+      "docsBuildsExecuted": 0,
+      "compatibility": "unknown"
+    },
+    {
+      "number": 3031,
+      "before": "infrastructure-execution-permission-failure",
+      "after": "not-run-stage-stopped",
+      "reason": "Initial helper unreadable; corrected staging attempt reached Ruff process launch but received PermissionError13 before --version. No Ruff check/format results. Cause beyond observed permission denial unverified.",
+      "lintChecksExecuted": 0,
+      "formatChecksExecuted": 0,
+      "compatibility": "unknown",
+      "upstreamSourceOrAssertionsModified": false
+    },
+    {
+      "number": 3036,
+      "before": "workflow-static-check-passed",
+      "after": "workflow-static-check-passed",
+      "actionExecution": "not-run",
+      "reason": "External setup-python action implementation unavailable in fixed HTTPX tree; local HTTPX tests cannot establish action behavior",
+      "behavior": "unknown"
+    }
+  ],
+  "miningInputQuality": "three full-context templates rederived; all8 cases unknown; no model or candidate",
+  "effectiveBehaviorTestPairs": 0,
+  "independentHumanLabels": 0,
+  "modelCalls": 0,
+  "semanticEligibility": "unknown",
+  "zeroYieldMeaning": "No paired tool behavior results were obtained; this is availability evidence, not rule mining yield or correctness labels.",
+  "limits": [
+    "No tool compatibility pass/fail can be inferred from container infrastructure failures.",
+    "Image/PyPI traffic occurred separately from frozen HTTPX API ledger; HTTP counts/wire bytes not instrumented.",
+    "No extra authorization was requested; observed failures were Unix permission errors, not approval-review rejection."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "ownership": "1039ceab-2003-4c09-a2c5-02b092362031",
+  "name": "flyrewheel-execd-archive-1039ceab-2003-4c09-a2c5-02b092362031",
+  "image": "opensandbox/execd@sha256:9b856dad9c73488660522361abfaaa1ddbb9032169bcfb44c83348f46bc1cd9a",
+  "status": "archive-succeeded-never-started",
+  "archives": [
+    {
+      "path": "/execd",
+      "archiveBytes": 34616832,
+      "fileBytes": 34615212,
+      "mode": "0o755",
+      "sha256": "55b0fb5647cc88034bf8d20c4e94966bbfcd4bc04c771101fb0c503297c0d7db"
+    },
+    {
+      "path": "/bootstrap.sh",
+      "archiveBytes": 23040,
+      "fileBytes": 21083,
+      "mode": "0o755",
+      "sha256": "6646c097e22a6da67c94c6b471a41da54874ab927ef5b52e3de3c5d9adb89289"
+    },
+    {
+      "path": "/usr/local/bin/bwrap",
+      "archiveBytes": 736768,
+      "fileBytes": 734864,
+      "mode": "0o755",
+      "sha256": "2eac825be98626a3a7e8daf17afdedcb65560951cb26ffaecea261f5686acb28"
+    },
+    {
+      "path": "/usr/local/libexec/opensandbox-session-gate",
+      "archiveBytes": 24064,
+      "fileBytes": 22144,
+      "mode": "0o755",
+      "sha256": "7782edee3e6af320dcbc91a7c4ce71acf4d5cb668a26ab4fa161fbe4da531782"
+    },
+    {
+      "path": "/usr/local/libexec/opensandbox-launcher",
+      "archiveBytes": 52736,
+      "fileBytes": 51080,
+      "mode": "0o755",
+      "sha256": "e22de6ab3154f997741e32e2da0283e95298e097477a10136a8b87f3bd77694d"
+    }
+  ],
+  "containerId": "c20ff032a48f263e466c3bc68fdc44c818357c67edacec46192ab0f08b1adad5",
+  "before": {
+    "Status": "created",
+    "Pid": 0,
+    "StartedAt": "0001-01-01T00:00:00Z",
+    "Running": false
+  },
+  "after": {
+    "Status": "created",
+    "Pid": 0,
+    "StartedAt": "0001-01-01T00:00:00Z",
+    "Running": false
+  },
+  "missingPathRejected": true,
+  "containerRemoved": true,
+  "newImageRemoved": true,
+  "imageWasPreexisting": false,
+  "minimumObservedFreeBytes": 16739540992,
+  "elapsedSeconds": 4.455
+}

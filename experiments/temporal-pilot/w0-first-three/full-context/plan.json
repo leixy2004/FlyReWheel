@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-git-materialization-plan",
+  "sourceCommit": "f02c9c483abd79533b29e52f41aca51f979c1320",
+  "repository": "https://github.com/encode/httpx.git",
+  "items": [
+    {
+      "number": 3035,
+      "commits": {
+        "baseTip": {
+          "sha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "tree": "ddddb6812f4e41c0c106fbd93d0e2ca2ff636f1a"
+        },
+        "mergeBase": {
+          "sha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "tree": "ddddb6812f4e41c0c106fbd93d0e2ca2ff636f1a"
+        },
+        "head": {
+          "sha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+        }
+      }
+    },
+    {
+      "number": 3031,
+      "commits": {
+        "baseTip": {
+          "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+        },
+        "mergeBase": {
+          "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+        },
+        "head": {
+          "sha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+        }
+      }
+    },
+    {
+      "number": 3036,
+      "commits": {
+        "baseTip": {
+          "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+        },
+        "mergeBase": {
+          "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+        },
+        "head": {
+          "sha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712"
+        }
+      }
+    }
+  ],
+  "apiLedger": {
+    "frozenRequests": 48,
+    "limit": 50,
+    "newApiRequestsAuthorized": 0
+  },
+  "gitBudget": {
+    "repositoryCaches": 1,
+    "specifiedShaFetches": 9,
+    "temporaryBytes": 536870912,
+    "elapsedMs": 600000,
+    "retries": 0
+  },
+  "transport": "standard-git-https-exact-full-sha-no-tags-no-default-branch-no-submodules",
+  "cachePolicy": "Probe only the listed SHAs in existing local Git stores; reuse available complete closures without reading other refs/content. One isolated acquisition cache. No ambient credential helpers or Git URL rewriting. Existing proxy environment retained without value logging; no TLS weakening or alternate route. Stop on first denial/failure.",
+  "exportPolicy": "Reuse existing exportEvaluationCheckout / inspectEvaluationCheckout; per-PR before and after export each allows ONLY its checkout SHA ancestor closure (not other selected PR heads). Reuse evaluation binding and pure mining input builder; no backend/model invocation.",
+  "executionPolicy": "Only Git object/checkout/hash inspection and application static checks; no upstream code/hooks/submodule or dependency execution. Source cache not supplied as a workspace.",
+  "budgetEnforcement": "Deadline and disk monitoring terminate the stage on breach; per-file subprocess resource cap complements existing export pack/object limits. Record enforcement limits honestly (no filesystem quota available). All temporary acquisition/export artifacts counted; failure artifacts retained; successful derived checkouts cleaned and immutable export availability recorded.",
+  "history": "Exact allowed object closure excludes unrelated/future refs; historical public visibility remains unproven, commit timestamps not proof.",
+  "outputs": [
+    "Git subprocess transfer counters/status/duration/disk observations",
+    "exact commit/tree checks",
+    "per-request full-context-ready or blocked status",
+    "export manifests and evaluation bindings",
+    "cleanup and dirty-worktree isolation observations"
+  ],
+  "publication": "Plan must be pushed before first upstream Git read. Code and evidence via own GitHub feature branch/draft PR stacked on #18. No main merge."
+}

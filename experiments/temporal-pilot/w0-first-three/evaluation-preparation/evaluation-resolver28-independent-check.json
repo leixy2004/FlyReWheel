@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "codeSha": "ba319f64eafc06b816975ee159c510a8404e0644",
+  "shellVerified": true,
+  "command": "timeout 260s node --import tsx /tmp/resolver28-real-probe.mts",
+  "classification": "real-retained-W0-export-diagnostic-resolver-contract-not-persisted-job-or-model",
+  "rows": [
+    {
+      "pr": 3035,
+      "side": "before",
+      "sha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+      "exportId": "httpx-w0-3035-before",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-before",
+        "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+        "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "allowedHeads": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ],
+        "inventory": {
+          "count": 9380,
+          "expandedBytes": 49367125,
+          "digest": "68583e5246c2a79a9cacf1ccd0081ed2cdda506f799fe1e2aceabc2b3b9c9dc7"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3035-before",
+        "jobDigest": "d5cb33b207e85a5080e3024192331143d7a7873e072caaefbbe42e711d896701",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "headSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "expectedSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "evaluationExportId": "httpx-w0-3035-before"
+      },
+      "manifestDigest": "98e54ac4a9d3a9118680f094e0f478cf31babde93cc33be5758a268b56b67145",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    },
+    {
+      "pr": 3035,
+      "side": "after",
+      "sha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+      "exportId": "httpx-w0-3035-after",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-after",
+        "requestDigest": "9920cc68957ce301ee74a714fc8425fd600b2e6df7f20f4a96f747dbe9a51052",
+        "recordDigest": "712345e35434b77127b830a41e23f8d09cc56ccd3bef71dd1890ce3fea23d18b",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "allowedHeads": [
+          "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369573,
+          "digest": "6988f6b218f3d48f7bc92987b816241d0b554d55152e1fb6b36a6de73f276415"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3035-after",
+        "jobDigest": "214475598257cbb970a0eb9295f64c6d1d3ff35d5ffd1a427221da8026405512",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "headSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "expectedSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "evaluationExportId": "httpx-w0-3035-after"
+      },
+      "manifestDigest": "c6df521bb6e4191a094f71dce1007ba00b81a1fb05bc44b9bf4c08384e5161df",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    },
+    {
+      "pr": 3031,
+      "side": "before",
+      "sha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "exportId": "httpx-w0-3031-before",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-before",
+        "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+        "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "allowedHeads": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369678,
+          "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3031-before",
+        "jobDigest": "421bd6119f2b96a03790a97470c9a86ac25a7663316d564f7eec4f3a9872e3f3",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "headSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "expectedSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "evaluationExportId": "httpx-w0-3031-before"
+      },
+      "manifestDigest": "336a3953763c56196ce830e16118af6a7d19742d3da5c9013d0b35bab22c7a8d",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    },
+    {
+      "pr": 3031,
+      "side": "after",
+      "sha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+      "exportId": "httpx-w0-3031-after",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-after",
+        "requestDigest": "d90bbf204f0ab36487d38be8a24c3488ad5e33f70e68bc468344f13575007c5d",
+        "recordDigest": "c6e538cee58b7987bd8430099d84aaa3d0cd61059c9a27b5eaaeaafdae78e5ed",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "allowedHeads": [
+          "abcfb791a03affbeee40c38eb8fedd6a02accbaa"
+        ],
+        "inventory": {
+          "count": 9389,
+          "expandedBytes": 49374024,
+          "digest": "32b83d9334feee788b9921577d6f308e81db251491c8087176a90f46a4e85420"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3031-after",
+        "jobDigest": "267fe7a1d5340b58de45fe99b0cd0dfb1a5f71b432beb38831d8edf861066a77",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "headSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "expectedSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "evaluationExportId": "httpx-w0-3031-after"
+      },
+      "manifestDigest": "287241fd66fc304640dfbfb0bfd3dea7a14a7f0ed92171b689eddb983c95e559",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    },
+    {
+      "pr": 3036,
+      "side": "before",
+      "sha": "ea3071642d12ed546d901861a5901da6fad37073",
+      "exportId": "httpx-w0-3036-before",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-before",
+        "requestDigest": "faa99b5f75787ad5dac22b42aad1aaf61d2fd103767066ae35dd58f019e6d33a",
+        "recordDigest": "3fdf738c5073c7a7e9690463f06aa02e883ea9fd128e368e2ae91ad6dd307c27",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "allowedHeads": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ],
+        "inventory": {
+          "count": 9386,
+          "expandedBytes": 49372234,
+          "digest": "56fd971d608953b6b0ede14f729630710857ebc73e0e9f4d742dc87a155bf3da"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3036-before",
+        "jobDigest": "c038c18f232e9d7d9d0d7f05de05961693807b6eb49844e6c428b4733f1b1c4f",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "headSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "expectedSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "evaluationExportId": "httpx-w0-3036-before"
+      },
+      "manifestDigest": "4c4081e5b78e2765aa398ee1552b087bbd80afec9931a054b67b65ff5046f97e",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    },
+    {
+      "pr": 3036,
+      "side": "after",
+      "sha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+      "exportId": "httpx-w0-3036-after",
+      "actualSuccess": true,
+      "bindingUnchanged": true,
+      "binding": {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-after",
+        "requestDigest": "5e45977fab6b22c6f4d757137432be4ffb324428117e5a948a714a62c18a5507",
+        "recordDigest": "4510f4b539e2e0c2256dd9bcf3f513bfb6894384dca8461b6065c687335e73a3",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "allowedHeads": [
+          "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+        ],
+        "inventory": {
+          "count": 9394,
+          "expandedBytes": 49376949,
+          "digest": "ac2394bc9e599b0953740bbb919b3efbbd2c22aab1e3d1a93af5f0c8be57fc76"
+        }
+      },
+      "selection": {
+        "workspaceId": "diagnostic-w0-3036-after",
+        "jobDigest": "e478d78f5855c0b887636e968497079bd5245897fb6abfe41a18165b386a45ab",
+        "repository": "github:encode/httpx",
+        "kind": "pr-mining",
+        "baseSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "headSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "expectedSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "evaluationExportId": "httpx-w0-3036-after"
+      },
+      "manifestDigest": "36eeae3e70fe6752befded935e857b07e41459ea0dba6c190586487f3149467d",
+      "wrongPurposeRejected": true,
+      "wrongBindingRejected": "Prepared evaluation workspace binding changed",
+      "wrongJobRejected": "Prepared evaluation workspace selection is not authorized",
+      "cleanup": {
+        "status": "closed-clean",
+        "worktreeExists": false
+      },
+      "derivedRepositoryRemoved": true,
+      "baselineVerifiedAfterCleanup": {
+        "bindingUnchanged": true,
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      },
+      "wrongExpectedShaRejected": "Prepared evaluation workspace selection is not authorized",
+      "expectedShaNegativeScope": "Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path"
+    }
+  ],
+  "elapsedMs": 93535,
+  "observedPeakBytes": 20968134,
+  "limits": {
+    "timeSeconds": 300,
+    "additionalDiskBytes": 536870912,
+    "measurement": "du apparent bytes after each preparation; sequential derivation and removal; observation not filesystem hard quota"
+  },
+  "cleanup": "all six cleanupWorkspace closed-clean then own derived repositories removed; retained exports/cache untouched",
+  "upstreamRequests": 0,
+  "modelCalls": 0,
+  "runtimeCalls": 0,
+  "limitations": [
+    "Diagnostic job digests explicitly authored; no persisted job or end-to-end dispatcher",
+    "After-side direct contract success does not establish dispatcher before-side mining compatibility",
+    "Full snapshot recapture may require both base and head within authorized closure; not executed",
+    "Historical public visibility remains unproven",
+    "Resolution is not an execution lease"
+  ],
+  "targetedTests": {
+    "command": "timeout 70s node node_modules/vitest/vitest.mjs run tests/prepared-evaluation-workspace-resolver.test.ts --maxWorkers=1 --reporter=json --outputFile=/tmp/resolver28-tests.json",
+    "exitCode": 0,
+    "passed": 7,
+    "failed": 0,
+    "classification": "authored Git fixtures, separate from six real export probes"
+  },
+  "postcheckCommand": "timeout 45s node --import tsx /tmp/resolver28-postcheck.mts",
+  "postcheckElapsedMs": 4620,
+  "codeCheckoutApparentBytes": 6653056,
+  "audit": {
+    "findings": [],
+    "checks": [
+      "Strict offline-study purpose and exact whole-selection authorization",
+      "Fresh workspace inspection and pinned complete manifest/binding digests",
+      "Existing verifyEvaluationWorkspace checks retained baseline and derived closure/tree",
+      "Abort checked before and after verification",
+      "No ordinary workspace fallback; no export expansion"
+    ],
+    "measurementLimits": "Recorded peak is sampled derived probe root apparent disk use, not continuously enforced physical disk quota; excludes shared existing node_modules/cache and authored-test temporary peak. Code checkout size separately recorded."
+  }
+}

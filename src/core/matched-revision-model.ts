@@ -1,3 +1,4 @@
+import { EvaluationWorkspaceBindingSchema } from '../workspace/history-policy.js';
 import { z } from 'zod';
 import { IdSchema } from './model.js';
 import { RuleProposalSchema } from './pr-mining-model.js';
@@ -54,7 +55,13 @@ export type MatchedModelRequest = z.infer<typeof MatchedModelRequestSchema>;
 
 /** Separately identified native request. Unsupported generation controls cannot
  * be smuggled into this envelope or confused with the frozen legacy request. */
+export const NativeEvaluationContextSchema = z.object({
+  purpose: z.literal('offline-study'), semantics: z.literal('verified-source-provenance-only'),
+  bindings: z.array(EvaluationWorkspaceBindingSchema).min(1).max(64),
+}).strict();
+export type NativeEvaluationContext = z.infer<typeof NativeEvaluationContextSchema>;
+
 export const SdkNativeMatchedRequestSchema = MatchedModelRequestSchema.omit({ sampler: true, maxOutputTokens: true })
   .extend({ stage: z.enum(['diagnosis', 'proposal', 'gate', 'future']),
-    profile: z.literal('paired-restriction-sdk-native-v1-draft') }).strict();
+    profile: z.literal('paired-restriction-sdk-native-v1-draft'), evaluation: NativeEvaluationContextSchema.optional() }).strict();
 export type SdkNativeMatchedRequest = z.infer<typeof SdkNativeMatchedRequestSchema> & { sampler?: never; maxOutputTokens?: never };

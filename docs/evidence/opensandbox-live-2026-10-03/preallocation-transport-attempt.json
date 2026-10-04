@@ -1,0 +1,55 @@
+{
+  "owner": "838ea356-4b1c-4bda-864e-2f467b7f2f7b",
+  "networkId": "83ef8e7b4939aa1743db593614399e026107690c6a42ba87222ee802a77dd4d0",
+  "network": "flyrewheel-internal-838ea356-4b1c-4bda-864e-2f467b7f2f7b",
+  "approval": "Sentinel_c3831d3b321881918d082b60d3eb958f",
+  "status": "failed",
+  "cleanup": {
+    "removedContainers": [],
+    "ownedContainersAbsent": true,
+    "taskSecretsAbsent": true,
+    "networkAbsent": true,
+    "newExecdImageRemoved": true
+  },
+  "events": [],
+  "controlEvents": [
+    {
+      "status": "process-started-readiness-unverified",
+      "pid": 9411,
+      "pgid": 9411,
+      "port": 39577,
+      "task": "/tmp/flyrewheel-control-i1jlu7hh",
+      "deadlineSeconds": 900,
+      "scope": "control-plane-process-only-no-sandbox-requests"
+    },
+    {
+      "status": "stopping",
+      "reason": "parent-exited"
+    },
+    {
+      "status": "stopped-secrets-removed",
+      "task": "/tmp/flyrewheel-control-i1jlu7hh",
+      "sandboxCleanup": "not-managed-no-api-requests-issued"
+    }
+  ],
+  "driverExitCode": 1,
+  "lifecycle": {
+    "classification": "single-no-model-lifecycle",
+    "owner": "838ea356-4b1c-4bda-864e-2f467b7f2f7b",
+    "network": "flyrewheel-internal-838ea356-4b1c-4bda-864e-2f467b7f2f7b",
+    "endpoint": "https://127.0.0.1:39577",
+    "createRequests": 0,
+    "events": [
+      "verified-TLS-health"
+    ],
+    "status": "failed",
+    "unauthenticatedStatus": 401,
+    "errorClass": "Error"
+  },
+  "helperIds": [],
+  "workerIds": [],
+  "eventErrors": [],
+  "helperStarted": false,
+  "minimumObservedFreeBytes": 16854720512,
+  "elapsedSeconds": 5.158
+}

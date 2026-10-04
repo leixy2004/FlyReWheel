@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "protocol-design-critique",
+  "status": "two-independent-native-agent-read-only-reviews-addressed",
+  "notHumanAnnotations": true,
+  "reviews": [
+    {
+      "agent": "identity_audit",
+      "focus": "temporal identity, estimand and falsifiability",
+      "findingsAddressed": [
+        "Specify head changed-surviving-line scope; repaired-before-head defects do not count",
+        "Separate current-capture eligibility from optional historical proof; unknown lineage separate",
+        "Inapplicability excluded, uncertain precondition unknown, negative requires assessed in-scope opportunity",
+        "Freeze issue and anchor alignment rules before W2",
+        "Define complete finding-level precision partition and undefined cases"
+      ]
+    },
+    {
+      "agent": "leakage_audit",
+      "focus": "annotation independence, leakage and denominator bias",
+      "findingsAddressed": [
+        "Unknown lineage excluded from uncontaminated primary subset",
+        "Use existing violation-finding counter for precision, not invented semantic deduplication",
+        "Specify scored head and existing/newly introduced defects",
+        "Freeze identity rules before W2 but actual issue roster only after independent search and before outputs",
+        "On context revision both raters restart on same packet with equal budget; retain originals",
+        "Record 152 person-hour maximum initial-rating resource requirement"
+      ]
+    }
+  ],
+  "residualLimitations": [
+    "No real labels, assigned human authors or adjudication",
+    "Public-source recognition and pretraining exposure cannot be ruled out",
+    "Current-capture merged-frame estimates do not establish historical replay or causal developer impact",
+    "Real substantive rules, controlled interface, human time and collection/execution authorization remain absent"
+  ],
+  "actions": {
+    "heldoutSourceReads": 0,
+    "upstreamRequests": 0,
+    "modelCalls": 0,
+    "externalRecruitment": false,
+    "paperEdits": false
+  },
+  "originalProtocolSha256": "b5190d27e0055bf74852efc7458f11e52143bee5f667a21009b7dd12667bfdf7",
+  "protocolSha256": "1bb73c90bcfb6f56cb40d77e2b55af8a716008eba34430ea89a0011046f3a0bc",
+  "stagedPlanFollowup": {
+    "status": "two-native-agents-reviewed-planning-and-budget-assumptions",
+    "reviews": [
+      {
+        "agent": "identity_audit",
+        "scope": "paired metric and conservative uncertainty illustration",
+        "addressed": [
+          "Define cluster contrast only when Pj>0; preserve zero-positive clusters in other denominators",
+          "Limit concentration bound to independent fixed-weight planning model; random label weights do not establish population inference",
+          "Keep current W2 frame unchanged, no power claim or automatic expansion"
+        ]
+      },
+      {
+        "agent": "leakage_audit",
+        "scope": "stage gates, human budget and selection bias",
+        "addressed": [
+          "Define complete dual search without erasing Unknown",
+          "Freeze single pilot family; no retry-until-success, retain development-selection limitation",
+          "Explicit person-hour caps and linear reserve assumptions; no forced consensus or borrowing",
+          "Stress-test higher discordance as well as lower benefit/yield"
+        ]
+      }
+    ],
+    "plannedHours": {
+      "w0Calibration": 2.75,
+      "w1OneFamilyPilot": 18,
+      "w2OneFamilyDescriptive": 26,
+      "allThreeOneFamily": 46.75,
+      "w2EightFamilyInitialOnly": 152,
+      "w2EightFamilyWithAssumedReserves": 208
+    },
+    "noNewLabelsOrSamplingChanges": true,
+    "worstCaseIllustration": {
+      "assumption": "hypothetical independent bounded cluster contrasts with fixed weights; not present census CI or power",
+      "halfWidthAt19EqualClusters": 0.6231397118087131,
+      "effectiveClustersForHalfWidthPoint2": 185,
+      "effectiveClustersForHalfWidthPoint1": 738
+    }
+  }
+}

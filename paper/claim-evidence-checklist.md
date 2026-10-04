@@ -2,6 +2,43 @@
 
 Audit date: 2026-10-02. The original audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; subsequent sections cover the diagnosis-operator extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84` and the mixed-anchor working-tree extension on `92b375e62f141127214188a70b9024eec5ae7c27`, each with a separate verification record. This checklist accompanies [the methods draft](method-draft.md). A checked item means the stated narrow implementation claim has supporting source and recorded verification. It does not indicate semantic efficacy. Each run retains its own scope; older test counts do not verify newer behavior. All operator and mixed-anchor verification uses authored fixtures, with no live model experiment.
 
+## Executable artifact mapping
+
+The [current methods-to-artifacts map](executable-artifact-map.md) binds hypotheses,
+baselines, temporal cutoffs and metric denominators to their actual commands and
+saved evidence at `37d31a2`, with PR #23 separately pinned to `ce9b9fb` and its
+PR #25 follow-up pinned to `a7adb0e`. It preserves the original negative attempts
+and distinguishes the later successful Ruff before/after lint/format pair from
+research effectiveness. Real-model calls and independent human labels remain zero;
+W0 semantic eligibility, docs behavior and external-action behavior remain unknown. Source capture, full committed
+repository context, authored demos and old CI passes do not establish an empirical
+result or validate a newer tree.
+
+## PR #27 protocol alignment without collected labels
+
+- [x] **Distinct estimands are mapped.** The [frozen annotation proposal](https://github.com/leixy2004/FlyReWheel/blob/1f5c68025b124f50bf683ab5cef0c85886a855a5/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md)
+  targets paired known-issue detection at frozen proposed heads. The H−U/H−M
+  restriction protocol retains its future-case/legal-neighbor estimand; neither
+  before/after exports nor before-only drafts become independent future cases.
+- [x] **Small feasibility and formal rating scale are separated.** The three-W0
+  pilot is not gated on staffing the maximum 152-person-hour initial-rating
+  estimate (19 × 8 × 2 × 30 minutes, excluding calibration/adjudication).
+  No annotator or time resource is assigned; this is not measured annotation cost.
+- [x] **Visibility requirements are scoped.** Current-capture is the proposed
+  primary analysis. Missing historical evidence blocks optional as-of analysis,
+  while identity, lineage and exposure checks still apply to current-capture.
+- [x] **Lower-budget stages are explicitly conditional.** [PR #27 v0.2](https://github.com/leixy2004/FlyReWheel/blob/ea1d5e80a0e0f4bf1ef198012309defe87b27d5c/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md)
+  proposes 2.75 hours for W0 calibration, 18 for a gated one-family W1 pilot and
+  26 for optional one-family descriptive W2, with reserves included and substantive
+  design/acquisition/access/audit/model costs separate. These are assumptions, not
+  assigned time, actual labels or sampling changes. Confirmation requires observed
+  uncertainty and PR/lineage dependence planning; illustrative worst-case counts
+  do not authorize a larger sample or establish power.
+- [ ] **Real evaluation prerequisites are supplied.** Reusable families/rubrics,
+  independent raters/adjudicator, controlled access, authorized acquisition/model
+  budgets and operational execution remain missing. The proposal is retrospective,
+  not preregistration; no labels or effectiveness results were added.
+
 ## Real PostgreSQL infrastructure evidence: 2026-10-03
 
 The [server-backed record](../docs/real-postgres-verification.md) and

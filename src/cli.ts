@@ -11,6 +11,8 @@ import { openSelectedStore, resolveDatabaseSelection } from './storage/connectio
 import { databaseCommand, storeFor, withSelectedQueue } from './cli-database.js';
 import { registerDatabaseMigrationCommands } from './cli-database-migrations.js';
 import { registerRevisionInspectionCommands } from './cli-revision-inspection.js';
+import { registerApplicationOperationCommands } from './cli-application-operations.js';
+import { registerEvaluationWorkspaceCommands } from './cli-evaluation-workspace.js';
 import { RevisionComparisonPageSchema } from './storage/store.js';
 import { ReplayDatasetSchema, replayDataset } from './pipeline.js';
 import { runDemo } from './demo.js';
@@ -49,6 +51,7 @@ async function output(value: unknown, path?: string) {
 const cli = new Command().name('flyrewheel').description('Evidence-backed quality rules; persistent commands require an explicit local or PostgreSQL database');
 registerDatabaseMigrationCommands(cli);
 const evaluation = cli.command('evaluation').description('Offline descriptive pairing of frozen reviews and separate annotations; never runs a model or certifies efficacy');
+registerEvaluationWorkspaceCommands(evaluation);
 evaluation.command('score').requiredOption('--dataset <file>').requiredOption('--annotations <file>').requiredOption('--runs <file>')
   .requiredOption('--out <new-file>', 'Immutable new report path; existing files are never replaced')
   .action(async options => {
@@ -501,6 +504,7 @@ databaseCommand(cli, 'enqueue', { postgresOnly: true }).requiredOption('--bundle
   await output({ jobId });
 });
 const applications = cli.command('application-jobs').description('Bounded workspace application queue; runtime dependencies are trusted service configuration');
+registerApplicationOperationCommands(applications, output);
 applications.command('validate').requiredOption('--file <file>').option('--out <file>').action(async options => {
   const job = ApplicationJobSchema.parse(await json(options.file));
   await output({ job, ...applicationJobGovernance(job), jobDigest: applicationJobDigest(job), jobId: applicationJobId(job), execution: 'not_run' }, options.out);

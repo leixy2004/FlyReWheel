@@ -1,0 +1,14 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {inspectEvaluationCheckout,evaluationWorkspaceBinding} from '/tmp/flyrewheel-resolver28-check/src/workspace/evaluation-checkout.ts';
+import {createPreparedEvaluationWorkspaceResolver} from '/tmp/flyrewheel-resolver28-check/src/prepared-evaluation-workspace-resolver.ts';
+import {digestOf} from '/tmp/flyrewheel-resolver28-check/src/core/identity.ts';
+const p='/tmp/evaluation-resolver28-independent-check.json',r=JSON.parse(await readFile(p,'utf8'));const start=Date.now();
+for(const row of r.rows){
+ const context=JSON.parse(await readFile(`/tmp/flyrewheel-w0-full-context-attempt-1/context-${row.pr}-${row.side}.json`,'utf8'));
+ const baseline=await inspectEvaluationCheckout({storePath:'/tmp/flyrewheel-w0-full-context-attempt-1/exports',manifest:context.manifest});
+ if(digestOf(evaluationWorkspaceBinding(context.binding.exportId,baseline))!==digestOf(context.binding))throw Error('BASELINE_CHANGED');
+ row.baselineVerifiedAfterCleanup={bindingUnchanged:true,...baseline.observation};
+ const resolver=createPreparedEvaluationWorkspaceResolver({schemaVersion:1,purpose:'offline-study',entries:[{selection:row.selection,workspace:{repoPath:'/tmp/diagnostic-unused-after-cleanup',runId:'offline-study',attemptId:'diagnostic-one'},manifestDigest:row.manifestDigest,evaluation:row.binding}]});
+ try{await resolver({...row.selection,expectedSha:'0'.repeat(40)},new AbortController().signal);throw Error('NEGATIVE_ACCEPTED')}catch(e){if(e.message!=='Prepared evaluation workspace selection is not authorized')throw e;row.wrongExpectedShaRejected=e.message;row.expectedShaNegativeScope='Strict selection authorization check only; after cleanup, rejects before inspecting any workspace path'}
+}
+const tests=JSON.parse(await readFile('/tmp/resolver28-tests.json','utf8'));r.targetedTests={command:'timeout 70s node node_modules/vitest/vitest.mjs run tests/prepared-evaluation-workspace-resolver.test.ts --maxWorkers=1 --reporter=json --outputFile=/tmp/resolver28-tests.json',exitCode:0,passed:tests.numPassedTests,failed:tests.numFailedTests,classification:'authored Git fixtures, separate from six real export probes'};r.postcheckCommand='timeout 45s node --import tsx /tmp/resolver28-postcheck.mts';r.postcheckElapsedMs=Date.now()-start;await writeFile(p,JSON.stringify(r,null,2)+'\n');console.log(JSON.stringify({realSuccesses:r.rows.length,postCleanupBaselineVerified:r.rows.length,authoredTestsPassed:tests.numPassedTests}));

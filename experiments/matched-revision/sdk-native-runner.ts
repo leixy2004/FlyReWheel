@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { canonicalJson, digestOf } from '../../src/core/identity.js';
 import { freeze } from '../../src/workspace/execution-receipt.js';
-import { SdkNativeMatchedRequestSchema, type SdkNativeMatchedRequest } from '../../src/core/matched-revision-model.js';
+import { NativeEvaluationContextSchema, type NativeEvaluationContext, SdkNativeMatchedRequestSchema, type SdkNativeMatchedRequest } from '../../src/core/matched-revision-model.js';
 import { isAuthoredCodexNativeMatchedTransport, type AuthoredCodexNativeMatchedTransport } from '../../src/adapters/matched-revision-codex.js';
 import { ProposalSchema, ReviewSchema, type Arm, type ModelRequest, type PersistentState, type SharedDiagnosis, type TargetInput } from './contracts.js';
 import { proposalPrompt, reviewPrompt } from './prompts.js';
@@ -12,6 +12,8 @@ import type { SdkNativeSchedule } from './sdk-native-schedule.js';
 import type { AuthoredSdkNativeDiagnosisRecord } from './sdk-native-diagnosis.js';
 
 export interface NativeMatchedExecution {
+  evaluation?: NativeEvaluationContext;
+  verifyEvaluation?: () => Promise<void>;
   configuration: SdkNativeConfiguration; repetition: number; transport: AuthoredCodexNativeMatchedTransport;
   schedule?: { manifest: SdkNativeSchedule; blockId: string };
   /** Audit hook only; the study driver retains records even on interruption. */
@@ -60,7 +62,12 @@ export class SdkNativeLedger {
     }
   }
   async call(rawRequest: ModelRequest | SdkNativeMatchedRequest, persistentStateBytes = 0): Promise<CallRecord> {
-    const started = performance.now(), request = freeze(structuredClone(rawRequest)) as SdkNativeMatchedRequest;
+    const started = performance.now();
+    const evaluation = this.execution.evaluation === undefined ? undefined : NativeEvaluationContextSchema.parse(this.execution.evaluation);
+    if (evaluation && !this.execution.verifyEvaluation) throw new Error('Native evaluation requires a trusted verification hook');
+    if ('evaluation' in rawRequest && rawRequest.evaluation !== undefined
+      && digestOf(rawRequest.evaluation) !== digestOf(evaluation ?? null)) throw new Error('Native request evaluation context mismatch');
+    const request = freeze(structuredClone({ ...rawRequest, ...(evaluation ? { evaluation } : {}) })) as SdkNativeMatchedRequest;
     const requestShape = SdkNativeMatchedRequestSchema.safeParse(request);
     const { configuration: config, repetition, transport } = this.execution, limits = config.limits;
     const role = request.stage === 'diagnosis' ? 'diagnosis' : request.stage === 'proposal' ? 'proposal' : 'review';
@@ -89,8 +96,10 @@ export class SdkNativeLedger {
       isolationEvidence: { sdkPolicyDigest: null, applicationChecksDigest: null, externalRuntimeEvidenceDigest: null,
         processGroupStopped: null, wholeRuntimeDestroyed: null, remoteGenerationStopped: null }, failure: null,
     };
-    const remainingTime = this.arm === null ? limits.deadlineMsPerCall
-      : limits.elapsedMsPerArm - (performance.now() - this.started) - (this.allocation?.elapsedMs ?? this.upstream?.elapsedMs ?? 0);
+    if (evaluation) await this.execution.verifyEvaluation!();
+    const callTime = limits.deadlineMsPerCall - (evaluation ? performance.now() - started : 0);
+    const remainingTime = this.arm === null ? callTime
+      : Math.min(callTime, limits.elapsedMsPerArm - (performance.now() - this.started) - (this.allocation?.elapsedMs ?? this.upstream?.elapsedMs ?? 0));
     const preflightFailure = this.blocked ?? (!requestShape.success ? 'Native request shape/size rejected before dispatch' : null)
       ?? (requestBytes > limits.serializedRequestBytes || schemaBytes > limits.outputSchemaBytes
       || persistentStateBytes > limits.renderedPersistentStateBytes || this.roleAttempts[role] >= limits.dispatchedAttemptsPerRole[role]

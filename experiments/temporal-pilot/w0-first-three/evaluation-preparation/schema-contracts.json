@@ -1,0 +1,7 @@
+{
+  "source": "src/core/paired-evaluation.ts",
+  "annotationSchemaDigest": "7f5b9a012f240678b03300a8a5f960cdff06d8cef65d4cf7909aef721f842e02",
+  "datasetSchemaDigest": "7a7190659d1e6c46f562d97bf2b78af6cff27e9bb52a7d8bcb219e208f591815",
+  "formalFormsGenerated": false,
+  "reason": "Existing schemas require real rules/families/authors; none are fabricated."
+}

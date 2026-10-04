@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "kind": "offline-w0-mining-input-and-workflow-check",
+  "items": [
+    {
+      "number": 3035,
+      "requestDigest": "d82c439e53ff66f157dea5c040e3936d3787e906720937e1e389f0730b484a85",
+      "exactFullContextTemplateRederived": true,
+      "sourceCases": 2,
+      "labels": "unknown-only",
+      "allCaseExpectationsUnknown": true,
+      "workflows": [],
+      "modelExecution": "not_run",
+      "executableTemplate": false,
+      "workspaceRequiresRederivation": true
+    },
+    {
+      "number": 3031,
+      "requestDigest": "649b2693c8fab5d2a76adc4aa0c98f801aca71af089258b531f19bf339497723",
+      "exactFullContextTemplateRederived": true,
+      "sourceCases": 2,
+      "labels": "unknown-only",
+      "allCaseExpectationsUnknown": true,
+      "workflows": [],
+      "modelExecution": "not_run",
+      "executableTemplate": false,
+      "workspaceRequiresRederivation": true
+    },
+    {
+      "number": 3036,
+      "requestDigest": "fceffa2a78a53080329a357218a05664a2cd261bc99cfe6d2f731cd3ddde40f1",
+      "exactFullContextTemplateRederived": true,
+      "sourceCases": 4,
+      "labels": "unknown-only",
+      "allCaseExpectationsUnknown": true,
+      "workflows": [
+        {
+          "path": ".github/workflows/publish.yml",
+          "side": "before",
+          "syntax": "valid",
+          "setupPython": "actions/setup-python@v4",
+          "actionExecution": "not_run"
+        },
+        {
+          "path": ".github/workflows/publish.yml",
+          "side": "after",
+          "syntax": "valid",
+          "setupPython": "actions/setup-python@v5",
+          "actionExecution": "not_run"
+        },
+        {
+          "path": ".github/workflows/test-suite.yml",
+          "side": "before",
+          "syntax": "valid",
+          "setupPython": "actions/setup-python@v4",
+          "actionExecution": "not_run"
+        },
+        {
+          "path": ".github/workflows/test-suite.yml",
+          "side": "after",
+          "syntax": "valid",
+          "setupPython": "actions/setup-python@v5",
+          "actionExecution": "not_run"
+        }
+      ],
+      "modelExecution": "not_run",
+      "executableTemplate": false,
+      "workspaceRequiresRederivation": true
+    }
+  ],
+  "upstreamRequests": 0,
+  "modelCalls": 0,
+  "independentHumanLabels": 0,
+  "behavioralOracle": "none"
+}

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { digestOf } from '../core/identity.js';
-import { MatchedDiagnosisSchema } from '../core/matched-revision-model.js';
+import { NativeEvaluationContextSchema, MatchedDiagnosisSchema } from '../core/matched-revision-model.js';
 import { DigestSchema } from '../core/model.js';
 import { freeze } from '../workspace/execution-receipt.js';
 import type { Database, Queryable } from './database.js';
@@ -17,7 +17,7 @@ type Row = Record<string, unknown> & { study_digest: string; manifest: MatchedSt
 const BlockBinding = z.object({ blockId: DigestSchema, repetition: z.number().int().positive(), episodeId: z.string(),
   armOrder: z.array(z.enum(['F','U','H','M'])), futureTargetOrder: z.array(z.string()) }).passthrough();
 const ManifestInput = z.object({ schedule: z.object({ digest: DigestSchema, blocks: z.array(BlockBinding) }).passthrough(),
-  configuration: z.unknown(), blocks: z.array(z.unknown()) }).strict();
+  evaluation: NativeEvaluationContextSchema.optional(), configuration: z.unknown(), blocks: z.array(z.unknown()) }).strict();
 const ObjectPayload = z.record(z.string(), z.unknown());
 function lockedDigest(value: unknown) {
   const record = ObjectPayload.parse(value), { digest, ...body } = record;
@@ -63,8 +63,9 @@ export function matchedStudyDigest(manifest: MatchedStudyManifest): string {
     || !Array.isArray(manifest.blockIds) || !manifest.blockIds.length
     || new Set(manifest.blockIds).size !== manifest.blockIds.length) fail('STUDY_INTEGRITY', 'Invalid frozen study manifest');
   [manifest.scheduleDigest, manifest.configurationDigest, ...manifest.blockIds].forEach(d => DigestSchema.parse(d));
-  digestOf(manifest); bindings(manifest);
-  return digestOf([manifest.kind, manifest.scheduleDigest, manifest.configurationDigest]);
+  digestOf(manifest); const input = bindings(manifest);
+  return digestOf([manifest.kind, manifest.scheduleDigest, manifest.configurationDigest,
+    ...(input.evaluation === undefined ? [] : [digestOf(input.evaluation)])]);
 }
 
 /** SQL transactions and row fencing, like application jobs. No broker, filesystem
@@ -95,6 +96,8 @@ export class MatchedStudyStore {
   private async validateResult(tx: Queryable, row: Row, raw: unknown) {
     const result = lockedDigest(raw);
     const recovery = ObjectPayload.parse(result.recovery);
+    if (digestOf(result.evaluation ?? null) !== digestOf(bindings(row.manifest).evaluation ?? null))
+      fail('STUDY_INTEGRITY', 'Final report evaluation context mismatch');
     if (result.scheduleDigest !== row.manifest.scheduleDigest || result.configurationDigest !== row.manifest.configurationDigest
       || recovery.studyDigest !== row.study_digest || result.kind !== 'matched-revision-sdk-native-authored-study-report'
       || result.execution !== 'completed' || result.modelExecution !== 'not_run' || result.providerModelCalls !== 0
@@ -121,6 +124,11 @@ export class MatchedStudyStore {
       const events: MatchedStudyEvent[] = rows.map(event => {
         if (!row.manifest.blockIds.includes(event.block_id) || digestOf(event.payload) !== event.payload_digest
           || event.fence > row.fence) fail('STUDY_INTEGRITY', 'Stored study checkpoint identity or digest mismatch');
+        if (event.event_key.startsWith('call-result:') || event.event_key === 'diagnosis') {
+          const call = ObjectPayload.parse(ObjectPayload.parse(event.payload).call);
+          if (digestOf(ObjectPayload.parse(call.request).evaluation ?? null) !== digestOf(bindings(row.manifest).evaluation ?? null))
+            fail('STUDY_INTEGRITY', 'Stored call evaluation context mismatch');
+        }
         return { blockId: event.block_id, key: event.event_key, fence: event.fence, payload: event.payload, digest: event.payload_digest };
       });
       return freeze({ studyDigest, manifest: row.manifest, state: row.state, fence: row.fence,
@@ -211,6 +219,9 @@ export class MatchedStudyStore {
         if (call && (native!.blockId !== blockId || native!.repetition !== planned.repetition || native!.arm !== arm
           || native!.configurationDigest !== row.manifest.configurationDigest || digestOf(call.request) !== call.requestDigest))
           fail('STUDY_INTEGRITY', 'Call result binding mismatch');
+        if (call && digestOf(ObjectPayload.parse(call.request).evaluation ?? null) !== digestOf(bindings(row.manifest).evaluation ?? null))
+          fail('STUDY_INTEGRITY', 'Call evaluation context differs from frozen study');
+
         const intent = (await tx.query<{payload: Record<string, unknown>}>(
           'SELECT payload FROM qe_matched_study_events WHERE study_digest=$1 AND block_id=$2 AND event_key=$3',
           [claim.studyDigest, blockId, `call-intent:${callId}`])).rows[0];

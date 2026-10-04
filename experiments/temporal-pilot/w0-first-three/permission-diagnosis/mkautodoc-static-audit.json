@@ -1,0 +1,135 @@
+{
+  "kind": "official-sdist-static-inspection",
+  "url": "https://files.pythonhosted.org/packages/66/a4/aa32093fb96c4d657cce0fbd7fa4ce28e54eb6df05ef24caf0c0c57acd2b/mkautodoc-0.2.0.tar.gz",
+  "size": 4827,
+  "sha256": "b6e0c89804ba39d453ce5795eb040e5615756f90438ac04f47e97893a86a10cd",
+  "members": [
+    {
+      "name": "mkautodoc-0.2.0",
+      "size": 0,
+      "regular": false,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/PKG-INFO",
+      "size": 649,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/README.md",
+      "size": 1787,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc",
+      "size": 0,
+      "regular": false,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc/__init__.py",
+      "size": 131,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc/extension.py",
+      "size": 8830,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info",
+      "size": 0,
+      "regular": false,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info/PKG-INFO",
+      "size": 649,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info/SOURCES.txt",
+      "size": 227,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info/dependency_links.txt",
+      "size": 1,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info/requires.txt",
+      "size": 9,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/mkautodoc.egg-info/top_level.txt",
+      "size": 10,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/setup.cfg",
+      "size": 38,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    },
+    {
+      "name": "mkautodoc-0.2.0/setup.py",
+      "size": 1379,
+      "regular": true,
+      "symlink": false,
+      "hardlink": false
+    }
+  ],
+  "buildMetadata": {
+    "mkautodoc-0.2.0/PKG-INFO": "Metadata-Version: 1.2\nName: mkautodoc\nVersion: 0.2.0\nSummary: AutoDoc for MarkDown\nHome-page: https://github.com/tomchristie/mkautodoc\nAuthor: Tom Christie\nAuthor-email: tom@tomchristie.com\nLicense: BSD\nDescription: UNKNOWN\nPlatform: UNKNOWN\nClassifier: Development Status :: 3 - Alpha\nClassifier: Intended Audience :: Developers\nClassifier: License :: OSI Approved :: BSD License\nClassifier: Operating System :: OS Independent\nClassifier: Programming Language :: Python :: 3\nClassifier: Programming Language :: Python :: 3.6\nClassifier: Programming Language :: Python :: 3.7\nClassifier: Programming Language :: Python :: 3.8\nRequires-Python: >=3.6\n",
+    "mkautodoc-0.2.0/mkautodoc.egg-info/PKG-INFO": "Metadata-Version: 1.2\nName: mkautodoc\nVersion: 0.2.0\nSummary: AutoDoc for MarkDown\nHome-page: https://github.com/tomchristie/mkautodoc\nAuthor: Tom Christie\nAuthor-email: tom@tomchristie.com\nLicense: BSD\nDescription: UNKNOWN\nPlatform: UNKNOWN\nClassifier: Development Status :: 3 - Alpha\nClassifier: Intended Audience :: Developers\nClassifier: License :: OSI Approved :: BSD License\nClassifier: Operating System :: OS Independent\nClassifier: Programming Language :: Python :: 3\nClassifier: Programming Language :: Python :: 3.6\nClassifier: Programming Language :: Python :: 3.7\nClassifier: Programming Language :: Python :: 3.8\nRequires-Python: >=3.6\n",
+    "mkautodoc-0.2.0/mkautodoc.egg-info/requires.txt": "Markdown\n",
+    "mkautodoc-0.2.0/setup.cfg": "[egg_info]\ntag_build = \ntag_date = 0\n\n",
+    "mkautodoc-0.2.0/setup.py": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n\nimport os\nimport re\nimport sys\n\nfrom setuptools import setup\n\n\ndef get_version(package):\n    \"\"\"\n    Return package version as listed in `__version__` in `init.py`.\n    \"\"\"\n    init_py = open(os.path.join(package, '__init__.py')).read()\n    return re.search(\"__version__ = ['\\\"]([^'\\\"]+)['\\\"]\", init_py).group(1)\n\n\ndef get_packages(package):\n    \"\"\"\n    Return root package and all sub-packages.\n    \"\"\"\n    return [dirpath\n            for dirpath, dirnames, filenames in os.walk(package)\n            if os.path.exists(os.path.join(dirpath, '__init__.py'))]\n\n\nversion = get_version('mkautodoc')\n\n\nsetup(\n    name='mkautodoc',\n    version=version,\n    url='https://github.com/tomchristie/mkautodoc',\n    license='BSD',\n    description='AutoDoc for MarkDown',\n    author='Tom Christie',\n    author_email='tom@tomchristie.com',\n    packages=get_packages('mkautodoc'),\n    install_requires=[\"Markdown\"],\n    python_requires='>=3.6',\n    classifiers=[\n        'Development Status :: 3 - Alpha',\n        'Intended Audience :: Developers',\n        'License :: OSI Approved :: BSD License',\n        'Operating System :: OS Independent',\n        'Programming Language :: Python :: 3',\n        'Programming Language :: Python :: 3.6',\n        'Programming Language :: Python :: 3.7',\n        'Programming Language :: Python :: 3.8',\n    ],\n)\n"
+  },
+  "archiveExtractedToDisk": false,
+  "installationOrBuildOrHooksExecuted": false,
+  "findings": {
+    "distribution": "sdist-only in official release metadata",
+    "buildMechanism": "legacy setuptools setup.py; no pyproject.toml in archive",
+    "observedSetupActions": [
+      "import standard library os/re/sys and setuptools.setup",
+      "read mkautodoc/__init__.py and regex-extract version",
+      "os.walk package directory to enumerate packages",
+      "invoke setuptools.setup"
+    ],
+    "customBuildHooksObserved": false,
+    "setupRequiresOrCmdclassOrExtensionBuildObserved": false,
+    "declaredRuntimeDependencies": [
+      "Markdown (unversioned)"
+    ],
+    "pythonRequires": ">=3.6",
+    "buildDependencyVersions": "not pinned in archive",
+    "buildExecution": "not_run",
+    "safetyBoundary": "setup.py is executable Python even without observed custom hooks; static inspection does not prove sandboxed build success or absence of all dynamic backend behavior",
+    "documentationBuild": "not_run; unavailable under wheel-only policy"
+  }
+}

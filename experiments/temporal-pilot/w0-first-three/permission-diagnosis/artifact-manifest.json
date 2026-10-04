@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "Dockerfile",
+      "bytes": 143,
+      "sha256": "ad042d3f71058eacdd452e8b3dce2423428aa788291b029f1b46ab575d90ccee"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4566,
+      "sha256": "5b76db23a87424706050ed0e7316b964ff9210f1b470098de5f2a61a5a0936a3"
+    },
+    {
+      "path": "binary-metadata.json",
+      "bytes": 970,
+      "sha256": "5f986a35b97222d57fe6ad22e21fbaa5cf2ac3a0c2d495a88f98a6ebb6a69a75"
+    },
+    {
+      "path": "diagnosis.json",
+      "bytes": 4467,
+      "sha256": "612b56b7e14d573b25d87b632c4bba6d301af197a1f17c5996dddf3c5fada584"
+    },
+    {
+      "path": "image-build.log",
+      "bytes": 575,
+      "sha256": "995bab0efd8899d896b8ebef483d293210826a93899b02a1f72a2a15acff21a2"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 897,
+      "sha256": "348c7cfa7216b331c50fc2988747e11041492227b829ea6d1c4e06dffa6d446f"
+    },
+    {
+      "path": "ledger.json",
+      "bytes": 4157,
+      "sha256": "c0a2c85859d25322fd041792e73019fb1dab5a1a33cb2249c9117937d1b40dd7"
+    },
+    {
+      "path": "mkautodoc-static-audit.json",
+      "bytes": 6629,
+      "sha256": "4795745d815e44815b0c984c6617a75e355bff92e2556faaf37560441825acca"
+    },
+    {
+      "path": "plan.json",
+      "bytes": 1853,
+      "sha256": "07a9e29a764e5fe8a5d06daf4e74f8bed16ff23a83ee4e4e227ba1a42c641e58"
+    },
+    {
+      "path": "result-after.json",
+      "bytes": 3066,
+      "sha256": "8e01611e6af1e44e9a28f2f48d91fab7f085b44ab6ee43e78fc4c3bdf2f23341"
+    },
+    {
+      "path": "result-before.json",
+      "bytes": 3072,
+      "sha256": "550e51d1d7200ae434c691f1a08c11d46b7775fc0da0d33b1676e7c2bf2e17ec"
+    }
+  ]
+}

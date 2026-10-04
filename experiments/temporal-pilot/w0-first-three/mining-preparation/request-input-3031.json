@@ -1,0 +1,28 @@
+{
+  "id": "w0-exploratory-3031",
+  "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+  "sources": [
+    {
+      "side": "before",
+      "path": "requirements.txt"
+    },
+    {
+      "side": "after",
+      "path": "requirements.txt"
+    }
+  ],
+  "statements": [
+    {
+      "kind": "pull"
+    }
+  ],
+  "requestedRule": {
+    "ruleId": "httpx-w0-3031",
+    "version": "exploratory-1",
+    "parentDigest": null
+  },
+  "objective": "Assess whether the selected changed sources support a reusable semantic invariant. Preserve unknowns; return insufficient_evidence when support is missing. Merge, approvals, version bumps and third-party release notes are not defect or correctness labels.",
+  "actor": "assistant-offline-exploratory-preparation-not-human-labeler",
+  "source": "supplied",
+  "createdAt": "2026-10-03T22:52:07Z"
+}

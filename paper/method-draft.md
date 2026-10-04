@@ -2,6 +2,49 @@
 
 Status: research methods draft, 2026-10-02. The earlier workflow audit inspected `e0e6c380d710434f4d0541b1a238784045130db8`; the diagnosis-operator sections now describe the working-tree extension on `000c50d670ac2bbd007eca2bdecde0bf53093c84`, with its own [source hashes and authored-fixture verification](../docs/evidence/revision-operators-verification-2026-10-02.txt). The mixed-anchor review extension has a separate [verification record](../docs/evidence/mixed-anchor-review-verification-2026-10-02.txt) and [compiled mocked-SDK smoke](../docs/evidence/compiled-mixed-anchor-review-smoke-2026-10-02.json). This document separates structural implementation support and authored-fixture evidence from the untested empirical hypotheses. It reports no new empirical experiment or model-quality result. The [claim and evidence checklist](claim-evidence-checklist.md) is the companion audit; the [three-window protocol](discriminating-experiment.md) is the selected pilot route, while the [Phase 0 protocol](phase0-protocol.md) remains deferred design history.
 
+## Executable artifact mapping
+
+The [current methods-to-artifacts map](executable-artifact-map.md) binds hypotheses,
+baselines, temporal cutoffs and metric denominators to their actual commands and
+saved evidence at `37d31a2`, with PR #23 separately pinned to `ce9b9fb` and its
+PR #25 follow-up pinned to `a7adb0e`. It preserves the original negative attempts
+and distinguishes the later successful Ruff before/after lint/format pair from
+research effectiveness. Real-model calls and independent human labels remain zero;
+W0 semantic eligibility, docs behavior and external-action behavior remain unknown. Source capture, full committed
+repository context, authored demos and old CI passes do not establish an empirical
+result or validate a newer tree.
+
+## Separate annotation protocol and feasibility scope
+
+The [PR #27 annotation/temporal proposal](https://github.com/leixy2004/FlyReWheel/blob/1f5c68025b124f50bf683ab5cef0c85886a855a5/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md) introduces a retrospective
+current-capture proposed-head evaluation: paired issue-level detection on an
+independently enumerated W2 roster. This is distinct from the selected H−U/H−M
+future-case restriction study with legal-neighbor outcomes below; it neither
+silently replaces that estimand nor makes before/after pairs independent future
+instances. The [artifact map](executable-artifact-map.md#pr-27-proposal-a-distinct-fixed-head-evaluation-scope)
+records the two scopes and the versioned decision still needed before execution.
+
+The three exposed W0 PRs remain a small feasibility pilot. The proposed maximum
+19 × 8 × 2 × 30-minute formal rating plan estimates 152 person-hours before
+calibration/adjudication; no such time or people are assigned, and that maximum
+is not a prerequisite for continuing authorized small-pilot preparation. Real
+families/rubrics, independent raters/adjudicator, controlled annotation access and
+execution/acquisition budgets remain missing. Current-capture does not need
+historical visibility proof; only an optional as-of claim needs that additional
+evidence. No labels, full preregistration or empirical result follow from either
+protocol proposal.
+
+The later [PR #27 v0.2 staged proposal](https://github.com/leixy2004/FlyReWheel/blob/ea1d5e80a0e0f4bf1ef198012309defe87b27d5c/experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md) offers an initial
+three-W0 calibration cap of **2.75 person-hours**, conditional on a defensible family,
+independent humans and approved access. A gated one-family W1 development pilot is
+**18 hours**; an optional one-family W2 descriptive stage is **26 hours**. These
+include stated rating/adjudication/administration reserves, exclude separately
+budgeted rule design/acquisition/access/audit/model costs, and are not assigned
+resources or completed labels. The frame remains 3 selected W0 / 13 W1 / 19 W2;
+there is no new sampling or access authorization. Confirmation requires pilot-informed
+uncertainty and dependence planning; otherwise W2 stays descriptive or stops.
+The two estimands above and their missing real inputs remain distinct.
+
 ## Research question and scope
 
 FlyReWheel studies whether repository-specific review knowledge can remain useful as code, assumptions, and interfaces change. A historical repair may support a conditional constraint without supporting a universal rule. Subsequent rejection of a finding may reveal an incorrect judgment, missing context, an omitted exception, or a changed repository contract. These explanations imply different maintenance actions. The research hypothesis is that choosing an update from an evidence-supported diagnosis reduces repeated review errors while preserving valid detections, compared with retaining the same history and feedback in general reviewer memory.
