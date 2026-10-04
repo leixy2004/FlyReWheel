@@ -18,6 +18,8 @@ must not be attributed to later heads. Main is not merged by this integration.
 | PR26 corrected recovery/resolver | `6a1a8ac1d56f659f2e7d96b000739025f9755672` | Late-EOF result acceptance corrected; authored protocol/local Git verification only. |
 | PR28 evaluation-aware resolver | `ba319f64eafc06b816975ee159c510a8404e0644` | Explicit offline-study registry, complete binding retained; no deployment authority. |
 | Runtime tooling follow-up | `036e64ae1182348491d6587d028a156d17f0f8be` | Persisted single-allocation/deadline and bounded cleanup diagnostics; no new real trial. |
+| PR30 deployment contract | `6c2185c7eb47e3856fd86f5aeb56d8ba7f3aed5f` + fix `066c69a` | Secret-free structural validation, documented S3/concurrency scope; real rendering skips retained. |
+| Staged annotation protocol | `ea1d5e80a0e0f4bf1ef198012309defe87b27d5c` | Proposed budgets and gates; no actual annotations/resources or sampling changes. |
 | PR29 registry inspection CLI | `8f26428d6723dd8792d8733301a4098c57138b06` + registration `0299179` | Actual compiled CLI verified on an authored local Git export. |
 | PR27 hardened drafts / real resolver record | `2cb82efbefc764f2b0b04f5ec64da3601da0ef64` | Six real W0 diagnostic resolver successes; no persisted job or mining run. |
 | PR27 evaluation provenance | `d778aba7c1abcd029bb90ce94d7f6f4e9f583cd8` | 3 requests, 8 source bindings, 6 contexts; no annotation or effectiveness result. |
@@ -143,8 +145,8 @@ checks passed. Independent actual compiled-CLI verification used an authored loc
 Git export, preserved complete selection/evaluation binding and rejected an existing
 output without changing bytes. The six real W0 resolver checks in `2cb82ef` are a
 separate data-environment diagnostic; combining these records does not establish an
-actual W0 CLI-to-model or native-study run. Native evaluation-aware request/study/
-checkpoint bridging remains independently owned follow-up work at this checkpoint.
+actual W0 CLI-to-model or native-study run. Native evaluation-aware request/study/checkpoint bridging was still pending at
+that earlier checkpoint; the next section records its subsequent integration.
 
 The runtime `036e64a` review ran 25 pure Python mock/archive tests and 14 authored
 TypeScript guard tests. Three control-plane Python cases requiring a real local
@@ -159,3 +161,57 @@ After these integrations, source checkpoint `12e7618` plus the documentation/hea
 clarification passed typecheck/build and 40 targeted tests across seven files
 (4.25 seconds). These include authored/local Git and local loopback fixture checks,
 not actual deployment. Each later aggregate still requires its own full CI result.
+
+## Second frozen aggregate full-suite result
+
+PR24 `b3cb77a70ddc406eba2d521eda68a43016ab5100` passed hosted
+[run 37164190621](https://github.com/leixy2004/FlyReWheel/actions/runs/37164190621):
+typecheck/build and **114 files / 1803 tests**, 1211.95 seconds. Logged checkout
+`86655ad150c108710742fe7e5e518d6d2d23ee61` has parents main `e79954c` and
+`b3cb77a`, with tree `c16b48d2ff89807d672c8f8dd53c415687115549` identical to
+the head tree. Full-log SHA256:
+`49059718d6c687951b0f5250358537ee0b079c2fa05b0c359f3963cc85be666c`.
+This predates the later runtime/data/CLI/deployment/protocol follow-ups above.
+
+## Deployment entrypoint regression and annotation scope
+
+PR30 independently passed 12 structural contract checks; two actual-renderer
+cases were skipped for missing kubectl/Kustomize. Main independently reproduced a
+new file-symlink entrypoint bug: invalid input silently exited 0 instead of executing
+validation. The regression first recorded one failure/two passes. Fix `066c69a`
+canonicalizes both launch/module paths and preserves import-only safety; combined
+checks then passed 15 with the same two explicit renderer skips, independently
+confirmed. No cluster/API schema/admission/deployment result follows from these
+project-contract checks; official-tool rendering is separately assigned work.
+
+The staged annotation proposal at `ea1d5e8` passed all 17 saved-artifact hashes.
+Its W0 2.75 / conditional W1 18 / optional W2 descriptive 26 person-hour figures
+are assumptions with stage gates and excluded costs, not assigned people or actual
+labels. The largest formal plan's initial 152 hours is not a prerequisite for the
+three-W0 feasibility pilot. Confirmatory sizing needs observed uncertainty and
+dependence; fixed-head issue detection remains distinct from H−U/H−M future-case
+comparisons. See the aligned paper map for the separate estimands and missing real
+rules/rubrics, controlled access, human resources and execution authorization.
+
+## Frozen functional candidate: native evaluation bridge
+
+PR31 `498e704dd91c76dd846fb64183df3ed20b887ec0` is the final functional
+input for this candidate. Independent review passed 99 tests across five files,
+typecheck and build, with no P0/P1/P2 finding. The bridge carries complete binding
+through requests, study identity, checkpoint and reopen while preserving legacy
+identities when evaluation context is absent.
+
+At integrated source `b71ac155592fe4992137f789957db8e8ef55007e`, seven actual
+default-CLI commands passed: authored initialization/run/new-process reopen, W0
+initialization/run/new-process reopen, and compiled-entrypoint rejection. Authored
+results were byte-identical across processes; independent regressions verify no
+repeat SDK dispatch. The W0 result retained all six bindings and four explicit
+semantic blockers; no local registry was supplied, so workspace verification was
+`not_run-no-local-registry`. The compiled bridge requires source checkout plus tsx.
+Command-log SHA256: `623122bd12792e076a61a8c93bd329433a87527720de4fbf7b2884af1b8b096f`.
+These are authored Git/PGlite/simulated SDK and frozen W0 metadata checks, with
+zero model calls, zero human labels and no runtime allocation or deployment.
+
+The separate data-environment result at PR27 `1565fade76e4fe640bcfc810415e491d7ac6e13b`
+is queued external evidence, not merged into this candidate. Later optional evidence
+will not move the frozen functional head. The candidate's own full CI remains required.

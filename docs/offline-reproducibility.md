@@ -172,3 +172,24 @@ tracked source; temporary artifacts are local evidence and may later be removed.
 For contract details see [application operations](application-operations.md),
 [paired evaluation](paired-review-evaluation.md) and the
 [methods/artifact mapping](../paper/executable-artifact-map.md).
+
+## Source-CLI native study and reopen
+
+PR31 adds the default source-entrypoint chain below (research modules intentionally
+require the source checkout; the compiled bridge rejects without execution):
+
+```sh
+npm run cli -- evaluation native init-authored --directory /tmp/new-authored-study
+npm run cli -- evaluation native run --manifest /tmp/new-authored-study/manifest.json --checkpoint /tmp/new-authored-study/checkpoint
+# Run the same command in a fresh process to reopen the completed checkpoint.
+```
+
+At integrated source `b71ac155`, actual default CLI initialization, run and fresh
+process reopen passed with byte-identical output. This uses authored local Git,
+PGlite and a fixed simulated SDK, with zero model calls. `evaluation native init-w0`
+accepts six frozen context files, provenance, source commit and optionally an
+existing administrator registry; its `native run` persists a non-executable blocked
+checkpoint. The actual CLI metadata-only check retained six bindings and four
+semantic blockers, with workspace verification explicitly not run because no local
+registry was supplied. Full evidence and command-log hash are in the
+[integration record](integration-context-composition-2026-10-03.md#frozen-functional-candidate-native-evaluation-bridge).

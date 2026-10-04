@@ -215,6 +215,14 @@ check, not persisted application or native-study execution. PR29 and CLI registr
 positive also preserves the full binding and refuses overwrite. These distinct
 records do not jointly imply a real W0 model run.
 
+PR31 `498e704` adds the source-CLI native evaluation bridge, including complete
+evaluation context in requests, identity and persistent checkpoints. The default
+CLI was exercised at integrated source `b71ac155`: authored run/reopen completed
+with identical output, while six-binding W0 metadata produced an explicit blocked
+checkpoint. This is authored Git/PGlite/simulated SDK evidence; semantic rules,
+independent labels and actual model execution remain absent. See the
+[verification record](../docs/integration-context-composition-2026-10-03.md#frozen-functional-candidate-native-evaluation-bridge).
+
 ## Product execution is a separate gate
 
 The [offline reproducibility chain](../docs/offline-reproducibility.md) was
