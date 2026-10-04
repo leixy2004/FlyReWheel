@@ -1,0 +1,1636 @@
+{
+  "schemaVersion": 1,
+  "kind": "matched-revision-descriptive-macro-report",
+  "modelExecution": "not_run",
+  "empiricalEpisodes": 0,
+  "inference": "not_estimated",
+  "plannedUnits": 1,
+  "missingReports": 0,
+  "inputIdentities": [
+    {
+      "packetDigest": "771843f194a1c93c48df5cd30cbcca594c8e903a06a80b1b2ffec34766145e19",
+      "futureDigest": "2a80283454697590f137e1aa340311c928b219b6bdd502db28d336c129cc37ba",
+      "repetition": 1,
+      "reportDigest": "d10a48fe00d652903a1b2217c0072f036c6608e1378e5d7cbf2727f1a4755766"
+    }
+  ],
+  "units": [
+    {
+      "id": "[\"synthetic:matched-revision\",\"fixture-family\",\"authored-episode\",\"provided\",1]",
+      "repository": "synthetic:matched-revision",
+      "family": "fixture-family",
+      "episode": "authored-episode",
+      "repetition": 1,
+      "stratum": "ecb66ea5e838b7f88c952509bdb4991f772a0d6d73875a9661164e5f9b6da143",
+      "condition": "provided",
+      "missingReport": false,
+      "arms": [
+        {
+          "arm": "F",
+          "metrics": {
+            "scheduledTargets": 3,
+            "rows": [
+              {
+                "targetId": "target-c",
+                "prId": "pr-target-c",
+                "familyId": "fixture-family",
+                "lineageId": "later-c",
+                "label": "violation",
+                "prediction": "violation",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": false,
+                "detected": true,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": true
+              },
+              {
+                "targetId": "target-d",
+                "prId": "pr-target-d",
+                "familyId": "fixture-family",
+                "lineageId": "later-d",
+                "label": "legal_neighbor",
+                "prediction": "safe",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": true,
+                "detected": false,
+                "legalResolved": true,
+                "safeResolved": true,
+                "determinate": true
+              },
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "positiveRecall": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "effectivePositiveMissRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "falseSafePositiveMisses": 0,
+            "unresolvedPositiveMisses": 0,
+            "legalFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictLegalResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "safeApplicableResolution": {
+              "numerator": 0,
+              "denominator": 0,
+              "state": "not_estimable",
+              "value": null
+            },
+            "repeatedFeedbackStrictResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackCoverage": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictBalancedResolution": 1,
+            "validJudgmentCoverage": {
+              "numerator": 2,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0.6666666666666666
+            },
+            "scopeLoss": {
+              "numerator": 0,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0
+            },
+            "unsupportedNotApplicable": 0,
+            "unresolvedReferences": [
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "uncertaintyBounds": "not_computed_no_frozen_feasible_label_constraints"
+          },
+          "missingReport": false,
+          "standaloneCostMicros": 0,
+          "standaloneCostKnownLowerBound": 0
+        },
+        {
+          "arm": "U",
+          "metrics": {
+            "scheduledTargets": 3,
+            "rows": [
+              {
+                "targetId": "target-c",
+                "prId": "pr-target-c",
+                "familyId": "fixture-family",
+                "lineageId": "later-c",
+                "label": "violation",
+                "prediction": "violation",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": false,
+                "detected": true,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": true
+              },
+              {
+                "targetId": "target-d",
+                "prId": "pr-target-d",
+                "familyId": "fixture-family",
+                "lineageId": "later-d",
+                "label": "legal_neighbor",
+                "prediction": "safe",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": true,
+                "detected": false,
+                "legalResolved": true,
+                "safeResolved": true,
+                "determinate": true
+              },
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "positiveRecall": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "effectivePositiveMissRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "falseSafePositiveMisses": 0,
+            "unresolvedPositiveMisses": 0,
+            "legalFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictLegalResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "safeApplicableResolution": {
+              "numerator": 0,
+              "denominator": 0,
+              "state": "not_estimable",
+              "value": null
+            },
+            "repeatedFeedbackStrictResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackCoverage": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictBalancedResolution": 1,
+            "validJudgmentCoverage": {
+              "numerator": 2,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0.6666666666666666
+            },
+            "scopeLoss": {
+              "numerator": 0,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0
+            },
+            "unsupportedNotApplicable": 0,
+            "unresolvedReferences": [
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "uncertaintyBounds": "not_computed_no_frozen_feasible_label_constraints"
+          },
+          "missingReport": false,
+          "standaloneCostMicros": 0,
+          "standaloneCostKnownLowerBound": 0
+        },
+        {
+          "arm": "H",
+          "metrics": {
+            "scheduledTargets": 3,
+            "rows": [
+              {
+                "targetId": "target-c",
+                "prId": "pr-target-c",
+                "familyId": "fixture-family",
+                "lineageId": "later-c",
+                "label": "violation",
+                "prediction": "violation",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": false,
+                "detected": true,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": true
+              },
+              {
+                "targetId": "target-d",
+                "prId": "pr-target-d",
+                "familyId": "fixture-family",
+                "lineageId": "later-d",
+                "label": "legal_neighbor",
+                "prediction": "safe",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": true,
+                "detected": false,
+                "legalResolved": true,
+                "safeResolved": true,
+                "determinate": true
+              },
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "positiveRecall": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "effectivePositiveMissRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "falseSafePositiveMisses": 0,
+            "unresolvedPositiveMisses": 0,
+            "legalFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictLegalResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "safeApplicableResolution": {
+              "numerator": 0,
+              "denominator": 0,
+              "state": "not_estimable",
+              "value": null
+            },
+            "repeatedFeedbackStrictResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackCoverage": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictBalancedResolution": 1,
+            "validJudgmentCoverage": {
+              "numerator": 2,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0.6666666666666666
+            },
+            "scopeLoss": {
+              "numerator": 0,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0
+            },
+            "unsupportedNotApplicable": 0,
+            "unresolvedReferences": [
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "uncertaintyBounds": "not_computed_no_frozen_feasible_label_constraints"
+          },
+          "missingReport": false,
+          "standaloneCostMicros": 0,
+          "standaloneCostKnownLowerBound": 0
+        },
+        {
+          "arm": "M",
+          "metrics": {
+            "scheduledTargets": 3,
+            "rows": [
+              {
+                "targetId": "target-c",
+                "prId": "pr-target-c",
+                "familyId": "fixture-family",
+                "lineageId": "later-c",
+                "label": "violation",
+                "prediction": "violation",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": false,
+                "detected": true,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": true
+              },
+              {
+                "targetId": "target-d",
+                "prId": "pr-target-d",
+                "familyId": "fixture-family",
+                "lineageId": "later-d",
+                "label": "legal_neighbor",
+                "prediction": "safe",
+                "reason": "judgment",
+                "evidenceSupport": "fixture-bound",
+                "repeatedFeedbackMechanism": true,
+                "detected": false,
+                "legalResolved": true,
+                "safeResolved": true,
+                "determinate": true
+              },
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "positiveRecall": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "effectivePositiveMissRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "falseSafePositiveMisses": 0,
+            "unresolvedPositiveMisses": 0,
+            "legalFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictLegalResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "safeApplicableResolution": {
+              "numerator": 0,
+              "denominator": 0,
+              "state": "not_estimable",
+              "value": null
+            },
+            "repeatedFeedbackStrictResolution": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackCoverage": {
+              "numerator": 1,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 1
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "numerator": 0,
+              "denominator": 1,
+              "state": "estimable",
+              "value": 0
+            },
+            "strictBalancedResolution": 1,
+            "validJudgmentCoverage": {
+              "numerator": 2,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0.6666666666666666
+            },
+            "scopeLoss": {
+              "numerator": 0,
+              "denominator": 3,
+              "state": "estimable",
+              "value": 0
+            },
+            "unsupportedNotApplicable": 0,
+            "unresolvedReferences": [
+              {
+                "targetId": "target-e",
+                "prId": "pr-target-e",
+                "familyId": "fixture-family",
+                "lineageId": "later-e",
+                "label": "unknown",
+                "prediction": "unresolved",
+                "reason": "abstained",
+                "evidenceSupport": "unsupported",
+                "repeatedFeedbackMechanism": false,
+                "detected": false,
+                "legalResolved": false,
+                "safeResolved": false,
+                "determinate": false
+              }
+            ],
+            "uncertaintyBounds": "not_computed_no_frozen_feasible_label_constraints"
+          },
+          "missingReport": false,
+          "standaloneCostMicros": 0,
+          "standaloneCostKnownLowerBound": 0
+        }
+      ],
+      "targetCount": 3,
+      "unknownReferences": 1,
+      "lineages": [
+        "later-c",
+        "later-d",
+        "later-e"
+      ]
+    }
+  ],
+  "strata": [
+    {
+      "id": "ecb66ea5e838b7f88c952509bdb4991f772a0d6d73875a9661164e5f9b6da143",
+      "condition": "provided",
+      "plannedUnits": 1,
+      "armMacros": [
+        {
+          "arm": "F",
+          "metrics": {
+            "positiveRecall": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        },
+        {
+          "arm": "U",
+          "metrics": {
+            "positiveRecall": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        },
+        {
+          "arm": "H",
+          "metrics": {
+            "positiveRecall": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        },
+        {
+          "arm": "M",
+          "metrics": {
+            "positiveRecall": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 1,
+              "completeCaseDescriptive": 1,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 1,
+                  "completeCaseDescriptive": 1,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 1,
+                      "completeCaseDescriptive": 1,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 1,
+                          "completeCaseDescriptive": 1,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 1
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        }
+      ],
+      "paired": [
+        {
+          "contrast": "H-U",
+          "metrics": {
+            "positiveRecall": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        },
+        {
+          "contrast": "H-M",
+          "metrics": {
+            "positiveRecall": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackFalseAlarmRate": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackStrictResolution": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            },
+            "repeatedFeedbackCoverage": {
+              "value": 0,
+              "completeCaseDescriptive": 0,
+              "planned": 1,
+              "estimable": 1,
+              "repositories": [
+                {
+                  "repository": "synthetic:matched-revision",
+                  "value": 0,
+                  "completeCaseDescriptive": 0,
+                  "planned": 1,
+                  "estimable": 1,
+                  "families": [
+                    {
+                      "family": "fixture-family",
+                      "value": 0,
+                      "completeCaseDescriptive": 0,
+                      "planned": 1,
+                      "estimable": 1,
+                      "episodes": [
+                        {
+                          "episode": "authored-episode",
+                          "value": 0,
+                          "completeCaseDescriptive": 0,
+                          "planned": 1,
+                          "estimable": 1,
+                          "repetitions": [
+                            {
+                              "repetition": 1,
+                              "value": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "weighting": "equal-repository/equal-family/equal-episode/equal-repetition"
+            }
+          }
+        }
+      ],
+      "costs": [
+        {
+          "arm": "F",
+          "totalStandaloneCostMicros": 0,
+          "knownLowerBound": 0,
+          "unknownUnits": 0
+        },
+        {
+          "arm": "U",
+          "totalStandaloneCostMicros": 0,
+          "knownLowerBound": 0,
+          "unknownUnits": 0
+        },
+        {
+          "arm": "H",
+          "totalStandaloneCostMicros": 0,
+          "knownLowerBound": 0,
+          "unknownUnits": 0
+        },
+        {
+          "arm": "M",
+          "totalStandaloneCostMicros": 0,
+          "knownLowerBound": 0,
+          "unknownUnits": 0
+        }
+      ],
+      "uncertainty": {
+        "state": "withheld",
+        "interval": null,
+        "reasons": [
+          "authored-inputs-zero-empirical-episodes",
+          "no-verified-probability-sampling-or-independent-repository-clusters",
+          "no-frozen-confirmatory-inference-plan",
+          "unresolved-reference-labels-not-covered-by-sampling-interval"
+        ]
+      }
+    }
+  ],
+  "boundaries": [
+    "Repository hierarchy is a declared descriptive extension of the single-repository protocol",
+    "No IID finding/anchor/seed assumption; report strata are never pooled",
+    "Complete-case numbers do not replace full-roster nulls; missing-report administrative scores never enter macros",
+    "Legacy repetition IDs are caller declarations, not native schedule or execution attestations",
+    "Costs are standalone per arm; never sum them as physical shared-diagnosis billing",
+    "Observed labels and usage remain declarations; hashes do not attest their truth"
+  ],
+  "digest": "28ca4f676e38de7ad825ed88a17bc769ec232f4c7ee941327cf1a72b948bc7fe"
+}

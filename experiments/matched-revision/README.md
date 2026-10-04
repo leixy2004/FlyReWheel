@@ -173,3 +173,11 @@ npx vitest run tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=1
 F/U/H/M admission profile over this existing runner, exact stage-input bindings,
 declared cutoff checks, mechanism-specific strict-resolution metrics and real-study
 prerequisites. It supplies no model/backend enablement or superiority evidence.
+
+## Descriptive macro report
+
+[macro-report.md](macro-report.md) adds a runnable, authored-only report over the
+existing legacy results, with equal repository/family/episode/repetition weights,
+paired H−U/H−M contrasts, explicit missingness and nullable standalone costs.
+All empirical uncertainty intervals remain withheld. Independent arithmetic
+references and a saved no-model smoke report are included.
