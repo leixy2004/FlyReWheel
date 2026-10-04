@@ -1,3 +1,4 @@
+import { isMainModule } from './lib/is-main.mjs';
 /** Bounded local runc smoke. Never establishes OpenSandbox production isolation. */
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
@@ -231,6 +232,6 @@ export async function main(args) {
     }
   }
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isMainModule(import.meta.url)) {
   main(process.argv.slice(2)).catch(error => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
 }

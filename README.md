@@ -4,7 +4,7 @@
 
 本目录是唯一持续维护的 FlyReWheel 版本：基于恢复的公开提交 `7bc18b4ac4cd932d8cde12d085b1d947c7816c4e`，现已合入固定版本 Sandcastle 的工作区生命周期。重启前报告的 425 项测试对应的后续源码未找回，不能将旧结果用于当前版本；恢复范围与本次实测见[验证记录](docs/verification.md)。旁边的 `workspace-proof/` 仅保留作历史实验归档，不是第二个产品版本。
 
-当前是 **0.1 验证版本**：领域证据、真实 AST 检测、规则版本、回放、反馈、晋升门禁、队列和 Codex 适配已经实现。它尚未覆盖完整的持续治理工作流。没有调用真实模型、连接你的 Codex 账号、部署 k3s，或向任何仓库发评论。
+当前是 **0.1 验证版本**：领域证据、真实 AST 检测、规则版本、回放、反馈、晋升门禁、队列和 Codex 适配已经实现。它尚未覆盖完整的持续治理工作流。没有完成真实模型调用或部署 k3s；开发验证不等于真实效果或生产就绪。
 
 ## 为什么这样选
 
@@ -34,6 +34,12 @@
 16. [领域命令与队列共用显式数据库](docs/database-selection.md)
 
 ## 无账号快速运行
+
+先按[离线复现指南](docs/offline-reproducibility.md)选择路径：默认 source CLI 的
+`evaluation native init-authored/run` 可完成模拟 SDK 研究并跨进程重开；
+`evaluation native init-w0/run` 只保存六份真实 W0 上下文的 blocked 状态。
+指南提供完整输入准备和可复制命令，并分别列出模型与实际部署的前提。
+以下保留原有产品本地闭环演示；它与研究路径使用各自的 authored 输入。
 
 完整本地闭环需要 Linux、Git、Node.js 22 或更新版本，以及 npm。
 
@@ -87,7 +93,7 @@ npm run cli -- workspace cleanup --repo /path/to/repo --run pilot-001 --attempt 
 
 通过真实 `@ai-hero/sandcastle@0.12.0` API 创建和清理工作区。不同提交可以独立编辑；同一身份不会默默复用。清理只移除已确认干净的工作区，保留分支、提交、身份记录和证据；未提交及 ignored 文件保留原地，命令返回 2，等待明确处理。详细限制、返回值和故障恢复见[工作区文档](docs/workspaces.md)。
 
-完整历史中可见后续提交，所以这不是防止未来信息泄漏的历史评测隔离。OpenSandbox 是后续执行后端选择，目前未接入、未部署；本命令不执行仓库代码，也未连接 Codex 工作区运行。暂不引入 Temporal。
+完整历史中可见后续提交，所以这不是防止未来信息泄漏的历史评测隔离。OpenSandbox 适配和离线保护已实现，单次真实试验在 SDK readiness 阶段超时；[该记录](deploy/opensandbox/README.md)不证明完整生命周期或生产就绪。本命令不执行仓库代码，也未连接 Codex 工作区运行。暂不引入 Temporal。
 
 ## 使用自己的样本
 

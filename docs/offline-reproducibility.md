@@ -1,195 +1,131 @@
-# Offline preparation and inspection, with an explicit execution stop
+# Reproduce the offline CLI without accounts
 
-This is a runnable path from the three saved HTTPX W0 source packages to a local
-PGlite store, immutable mining-job files and blocked preflight reports. It stops
-before queueing or executing those jobs. A separate optional example exercises
-an authored paired evaluator; its inputs are not HTTPX study data.
+Run from the repository root on Linux with Git and Node.js 22+ (verified with
+Node 24). Install locked dependencies with `npm ci --ignore-scripts` before going
+offline; installation itself may download packages. These research commands use
+the source checkout and `tsx`. `node dist/cli.js evaluation native ...` deliberately
+rejects with a source-checkout prerequisite; it has no production fallback.
 
-Verified at commit `4be3720f55dc3ac054f7b701ae6ff681fded68a6`, tree
-`c7e74132c472f5e299329e841d6cef7c15936bef`, in
-`/workspace/FlyReWheel-integration-context`. This local smoke is independent of
-pending hosted CI and does not borrow any earlier full-suite result.
+| Path | What you can reproduce | What it does not establish |
+| --- | --- | --- |
+| Authored native study below | Local Git export, PGlite checkpoint, fixed simulated SDK responses, completed-result reopen | Real model behavior, human labels, empirical benefit |
+| Frozen real W0 below | Six context bindings and an immutable blocked record, including reopen | Semantic eligibility or live source/export verification without a local registry |
+| [W0 mining preparation](application-operations.md) | Persisted requests, exported jobs, blocked preflight and not-started status | Enqueue, mining execution or a generated rule |
+| [Deployment checks](deployment.md) | Local manifest/renderer validation | Cluster admission, isolation or working production lifecycle |
 
-## Prerequisites and isolated paths
+## Use a new local directory
 
-Use Linux, Git, Node.js 22+ and the repository's already installed dependencies.
-This run reused existing dependencies and successfully ran `npm run build`;
-installation, downloads and the full test suite were not run. Actual environment:
-Node 24.19.0 and npm 11.9.0. Run commands sequentially from the repository root.
+Run all blocks in the same shell. Existing manifests/results are immutable. Keep
+the generated directory for sequential reopen; use a new root for a fresh run.
+Do not open the same PGlite directory from concurrent processes.
 
 ```sh
-RUN_ROOT=$(mktemp -d /tmp/flyrewheel-offline-repro-XXXXXX)
+RUN_ROOT=$(mktemp -d /tmp/flyrewheel-offline-XXXXXX)
 mkdir "$RUN_ROOT/home"
 offline() {
   env -i PATH="$PATH" HOME="$RUN_ROOT/home" TMPDIR="$RUN_ROOT" \
     LANG=C.UTF-8 QE_ENABLE_MODEL=false QE_S3_ENABLED=false "$@"
 }
-offline npm run build
+printf 'Artifacts: %s\n' "$RUN_ROOT"
 ```
 
-All executed CLI/preparation processes used that allowlist: no ambient
-DATABASE_URL, PG variables, credentials, proxy variables or NODE_OPTIONS were
-inherited. Empty HOME isolates account configuration. This is environment hygiene,
-not an operating-system network sandbox. The selected commands do not acquire
-sources or invoke models. Every store explicitly uses a local PGlite `--db`.
-Do not pre-create the `db` or `prepared` subdirectories: preparation requires new
-paths and refuses reuse. Existing recorded outputs should be preserved; create a
-new root for a new reproduction.
+The environment excludes ambient database URLs and credentials. This is
+environment hygiene, not a network sandbox. The commands below do not fetch
+upstream source, invoke real models, start workers or allocate a runtime.
 
-## Prepare frozen real-source inputs without mining
+## Complete and reopen an authored demonstration
 
 ```sh
-offline node --import tsx scripts/prepare-w0-mining.ts \
-  --db "$RUN_ROOT/db" --out "$RUN_ROOT/prepared" \
-  > "$RUN_ROOT/preparation.json"
+offline node --import tsx src/cli.ts evaluation native init-authored \
+  --directory "$RUN_ROOT/authored" > "$RUN_ROOT/init.json"
+offline node --import tsx src/cli.ts evaluation native run \
+  --manifest "$RUN_ROOT/authored/manifest.json" \
+  --checkpoint "$RUN_ROOT/authored/checkpoint" > "$RUN_ROOT/authored-first.json"
+offline node --import tsx src/cli.ts evaluation native run \
+  --manifest "$RUN_ROOT/authored/manifest.json" \
+  --checkpoint "$RUN_ROOT/authored/checkpoint" > "$RUN_ROOT/authored-reopened.json"
+cmp "$RUN_ROOT/authored-first.json" "$RUN_ROOT/authored-reopened.json"
 ```
 
-The script reads the fixed local packages for PRs 3035, 3031 and 3036, verifies
-their pinned bytes and provenance consistency, imports existing evidence, derives
-requests and closes/reopens the store. It makes no upstream request. Expected
-`prepared/` output is ten JSON files: three `request-input-N.json`, three
-`request-N.json`, three `generation-template-N.json`, and `ledger.json`.
+Expect `study.execution=completed`, `providerModelCalls=0`,
+`independentHumanLabels=0` and identical output across processes. The authored
+study exercises 12 simulated calls across diagnosis/proposal/gate/future. Completed
+reopen reuses saved results; changed bindings, dirty exports or changed checkpoint
+artifacts are rejected. Preserve the authored source/export directory with its
+checkpoint because each reopen verifies it. JSON output is captured directly from
+`node`, without npm's command banner.
 
-Actual reproduced ledger counts:
+## Preserve the real W0 blocked state
 
-| Database content | Rows |
-| --- | ---: |
-| `qe_github_pr_evidence` | 3 |
-| `qe_pr_mining_requests` | 3 |
-| `qe_problem_cases` | 8 |
-| `qe_pr_mining_candidates` | 0 |
-| `qe_rule_bundles` | 0 |
-| `qe_feedback` / `qe_semantic_review_feedback` | 0 / 0 |
-
-The ledger reported `reopenedAndVerified=true`, `idempotenceVerified=true`,
-`humanLabels=0`, `modelExecution=not_run`, `configuredModel=null` and
-`evaluationReady=false`. All eight source-case expectations remain unknown.
-Source packages are real captured material; neither import nor a pure prompt
-builder supplies a model proposal or independent label. These original
-changed-source templates also do not consume the later full-context or Ruff
-behavior artifacts merely because those artifacts exist elsewhere in Git.
-
-## Export jobs, inspect prerequisites, then stop
-
-The timestamp below is the actual authored attempt timestamp used in the smoke.
-It is at or after request creation and is not a historical source cutoff.
-`workspace-id` is a logical identifier for a future trusted resolver, not a local
-path or evidence that a runnable workspace has been provisioned.
+Extract the six saved context files and provenance from this exact local Git
+commit. This freezes their recorded bytes; it does not re-fetch HTTPX or prove
+historical visibility. No external workspace or registry is required for this
+metadata-only path.
 
 ```sh
+SOURCE_COMMIT=$(git rev-parse HEAD)
+W0=experiments/temporal-pilot/w0-first-three
 for PR in 3035 3031 3036; do
-  offline node dist/cli.js application-jobs prepare-mining \
-    --db "$RUN_ROOT/db" --request "$RUN_ROOT/prepared/request-input-$PR.json" \
-    --workspace-id "httpx-w0-$PR" --candidate-created-at 2026-10-03T23:00:00Z \
-    --attempt initial --job-out "$RUN_ROOT/job-$PR.json" \
-    > "$RUN_ROOT/prepare-$PR.json"
-  offline node dist/cli.js application-jobs preflight \
-    --db "$RUN_ROOT/db" --file "$RUN_ROOT/job-$PR.json" \
-    > "$RUN_ROOT/preflight-$PR.json"
-  offline node dist/cli.js application-jobs status \
-    --db "$RUN_ROOT/db" --file "$RUN_ROOT/job-$PR.json" \
-    > "$RUN_ROOT/status-$PR.json"
+  for SIDE in before after; do
+    git show "$SOURCE_COMMIT:$W0/full-context/context-$PR-$SIDE.json" \
+      > "$RUN_ROOT/context-$PR-$SIDE.json"
+  done
 done
-offline node dist/cli.js application-jobs bootstrap-check > "$RUN_ROOT/bootstrap.json"
+git show "$SOURCE_COMMIT:$W0/evaluation-preparation/provenance-ledger.json" \
+  > "$RUN_ROOT/provenance.json"
+offline node --import tsx src/cli.ts evaluation native init-w0 \
+  --contexts "$RUN_ROOT"/context-*.json --provenance "$RUN_ROOT/provenance.json" \
+  --source-commit "$SOURCE_COMMIT" --out "$RUN_ROOT/w0-manifest.json"
+offline node --import tsx src/cli.ts evaluation native run \
+  --manifest "$RUN_ROOT/w0-manifest.json" --checkpoint "$RUN_ROOT/w0-checkpoint" \
+  > "$RUN_ROOT/w0-first.json"
+offline node --import tsx src/cli.ts evaluation native run \
+  --manifest "$RUN_ROOT/w0-manifest.json" --checkpoint "$RUN_ROOT/w0-checkpoint" \
+  > "$RUN_ROOT/w0-reopened.json"
+cmp "$RUN_ROOT/w0-first.json" "$RUN_ROOT/w0-reopened.json"
 ```
 
-All ten operation invocations exited 0, but **exit 0 means the inspection ran**,
-not that execution is ready. Each preflight returned `status=blocked`,
-`execution=not_run`, `modelExecution=not_run`, `workspaceVerification=not_run`
-and `jobStateChecked=false`. Each separate local status returned
-`state=not_started`, `attempts=0`, `queueState=null` and `result=null`.
-`prepare-mining` creates a job file and persists its immutable request; it does
-not enqueue, claim, run or create a candidate. Local status reads domain storage,
-not a PostgreSQL queue. `bootstrap-check` returned `status=disabled`.
+Expect `execution=blocked`, `executable=false`, six evaluation bindings,
+`nativeStudy=null`, `resources=not_allocated` and
+`workspaceVerification=not_run-no-local-registry`. Exit 0 means the blocked record
+was successfully saved/checked, not that W0 ran. Its four blockers are absent
+semantic rule families, independent human annotations, developer feedback, and
+frozen revision packets/future cases.
 
-All three preflights listed the same six missing prerequisites:
+An administrator with **six existing matching exports** may supply `--registry`
+to `init-w0`; [the resolver contract](prepared-evaluation-workspace-resolver.md)
+explains exact binding and re-verification. A registry does not remove semantic
+blockers. Archived absolute registry paths cannot be reused after cleanup.
 
-- `disabled`: reviewed execution configuration is not enabled.
-- `model_required`: no explicit model selection.
-- `generation_limits_required`: no generation byte/time limits.
-- `runtime_required`: no reviewed runtime configuration.
-- `lifecycle_authority_required`: missing injected lifecycle verification/cleanup authority.
-- `workspace_resolver_required`: missing trusted resolver for prepared exact identities.
+## Before models or deployment
 
-Their bound mining base SHAs were respectively
-`dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2`,
-`b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5`, and
-`ea3071642d12ed546d901861a5901da6fad37073`.
-These are binding checks, not live verification of those workspaces.
+A model run needs separately authorized access and spending, an explicitly chosen
+model, supported frozen settings, enforced byte/time/call limits, cost admission,
+and an implemented trusted transport. These authored commands cannot be enabled
+for real models with an environment switch. Research additionally needs real
+rules, independent labels, feedback, future cases and a frozen evaluation scope.
 
-**Stop here for real W0 inputs.** This document deliberately has no enqueue,
-worker-start, model-enable, acquisition or credential-configuration command.
-Trusted code capabilities, deployment verification, model/spending authorization
-and configured budgets require a separate completed gate; configuration JSON
-alone cannot supply them. Human annotation, W0 rule freeze, lineage/availability
-checks and later-stage exposure remain missing study gates. W1/W2 source and
-labels are not opened. This is not a complete real-study command chain.
+Deployment additionally needs real PostgreSQL/queue configuration, explicitly
+prepared workspace bindings, and a trusted lifecycle authority proving isolation,
+fencing, bounded execution and cleanup. The default application worker remains
+blocked; HTTP health or `bootstrap-check` is not execution readiness. Consult
+[application operations](application-operations.md), [deployment prerequisites](deployment.md)
+and the [actual OpenSandbox trial boundary](../deploy/opensandbox/README.md) before
+requesting a separately authorized live run. No deployment command is needed here.
 
-`application-jobs recovery` is intentionally omitted: unlike the local `status`
-used here, recovery can reconcile an expired claim. Do not use it as a supposedly
-read-only readiness shortcut on an existing operational database.
+## Evidence and further commands
 
-## Separate authored evaluator smoke
+The frozen baseline `9f51467` passed [123 files / 1849 tests, typecheck and build](https://github.com/leixy2004/FlyReWheel/pull/24#issuecomment-5975239966).
+Its [independent default-CLI and legacy-checkpoint audit](https://github.com/leixy2004/FlyReWheel/pull/24#issuecomment-5975140204)
+includes zero duplicate authored SDK calls on old-version reopen. These results
+belong to that head, not automatically to later changes.
 
-This optional sequence first creates every required input file, then scores it.
-It has no connection to the prepared HTTPX database or jobs.
+Separate pinned evidence: [six real exports and blocked reopen, `1565fade`](https://github.com/leixy2004/FlyReWheel/blob/1565fade76e4fe640bcfc810415e491d7ac6e13b/experiments/temporal-pilot/w0-first-three/evaluation-preparation/bridge31/README.md),
+and [official-tool rendering/schema checks, `d5f0b49`](https://github.com/leixy2004/FlyReWheel/blob/d5f0b49db7da7cb53c5c8528433c8b3fc295651f/docs/evidence/kubernetes-offline-2026-10-04/README.md).
+They are linked evidence, not incorporated implementations or a live deployment.
 
-```sh
-offline node dist/cli.js evaluation demo --directory "$RUN_ROOT/authored-evaluation" \
-  > "$RUN_ROOT/evaluation-demo.json"
-offline node dist/cli.js evaluation score \
-  --dataset "$RUN_ROOT/authored-evaluation/dataset.json" \
-  --annotations "$RUN_ROOT/authored-evaluation/annotations.json" \
-  --runs "$RUN_ROOT/authored-evaluation/runs.json" \
-  --out "$RUN_ROOT/authored-score.json" > "$RUN_ROOT/evaluation-score.json"
-```
-
-Both exited 0. The demo generated `dataset.json`, `annotations.json`, `runs.json`
-and `report.json` with mode `authored-synthetic-no-model-no-human-annotation`.
-Rescoring produced the same report identity
-`paired_evaluation_b4ef714a908c1fca5cd43ef3ea0d60158a688cd0e452223df7ed7415dcd81f5f`.
-Each arm retains two PRs/two units, five synthetic positive instances, one negative,
-one unknown and one disputed instance. The authored comparison gains one positive
-and loses one while removing one false-alert instance. These are fixture assertions,
-not findings about H/U/M, HTTPX, live models or review improvement. No matched
-live-model runner, real model, annotator or target-repository code was executed.
-
-## Local evidence and limits
-
-The actual run root was `/tmp/flyrewheel-offline-repro-1l0oh5fv`.
-It retains 13 command records, per-command JSON/stdout and empty stderr, fresh
-PGlite data and generated outputs. All 13 commands exited 0. The separately
-executed build also exited 0. No real PostgreSQL, network acquisition, deployment,
-authentication operation or model call occurred. Only this document is added to
-tracked source; temporary artifacts are local evidence and may later be removed.
-
-| Artifact under that root | SHA-256 |
-| --- | --- |
-| `commands.json` | `456b1afdc066e7eea7aed7b1b20c99aacfe1f4b48728e7967545eb5ce0539a3b` |
-| `prepared/ledger.json` | `f061ba536fcb2f986a01a283e31e32d90d6f9c6087016d18af68f66e48fdb223` |
-| `authored-score.json` | `2e006426a82bef4ede489c2e4406ffaafbf3a6ef7660b6a5ba916b07eb7c97a6` |
-
-For contract details see [application operations](application-operations.md),
-[paired evaluation](paired-review-evaluation.md) and the
-[methods/artifact mapping](../paper/executable-artifact-map.md).
-
-## Source-CLI native study and reopen
-
-PR31 adds the default source-entrypoint chain below (research modules intentionally
-require the source checkout; the compiled bridge rejects without execution):
-
-```sh
-npm run cli -- evaluation native init-authored --directory /tmp/new-authored-study
-npm run cli -- evaluation native run --manifest /tmp/new-authored-study/manifest.json --checkpoint /tmp/new-authored-study/checkpoint
-# Run the same command in a fresh process to reopen the completed checkpoint.
-```
-
-At integrated source `b71ac155`, actual default CLI initialization, run and fresh
-process reopen passed with byte-identical output. This uses authored local Git,
-PGlite and a fixed simulated SDK, with zero model calls. `evaluation native init-w0`
-accepts six frozen context files, provenance, source commit and optionally an
-existing administrator registry; its `native run` persists a non-executable blocked
-checkpoint. The actual CLI metadata-only check retained six bindings and four
-semantic blockers, with workspace verification explicitly not run because no local
-registry was supplied. Full evidence and command-log hash are in the
-[integration record](integration-context-composition-2026-10-03.md#frozen-functional-candidate-native-evaluation-bridge).
+For the earlier request/preflight/scorer chain and its 13 command receipts, retain
+the [historical guide at `9f51467`](https://github.com/leixy2004/FlyReWheel/blob/9f51467e9135389bc86f616a6c303c86a22ee95c/docs/offline-reproducibility.md)
+and [integration record](integration-context-composition-2026-10-03.md). Product
+fixture commands remain in [local closed loop](local-closed-loop.md) and
+[paired scoring](paired-review-evaluation.md); neither supplies real W0 labels.

@@ -6,6 +6,9 @@ import { readEvaluationJson, writeEvaluationJson } from './paired-evaluation.js'
 import { loadNativeEvaluationBridge, runNativeEvaluationBridge } from './native-evaluation-bridge.js';
 import { canonicalJson, digestOf } from './core/identity.js';
 
+// This is a copyable POSIX-shell command, not a JSON string literal.
+const shellArgument = (value: string) => `'${value.replace(/'/g, "'\\''")}'`;
+
 export function registerNativeEvaluationCommands(evaluation: Command) {
   const native = evaluation.command('native').description('One offline evaluation chain: builtin authored study or explicit real-W0 blocked checkpoint; zero model calls');
   native.command('init-authored').requiredOption('--directory <new-directory>')
@@ -20,7 +23,7 @@ export function registerNativeEvaluationCommands(evaluation: Command) {
           configuration: studyInput.configuration, blocks: studyInput.blocks } });
       const path = join(root, 'manifest.json'); await writeEvaluationJson(path, manifest);
       process.stdout.write(`${JSON.stringify({ manifest: path, digest: digestOf(manifest), modelExecution: 'not_run',
-        nextCommand: `npm run cli -- evaluation native run --manifest ${JSON.stringify(path)} --checkpoint ${JSON.stringify(join(root, 'checkpoint'))}` })}\n`);
+        nextCommand: `npm run cli -- evaluation native run --manifest ${shellArgument(path)} --checkpoint ${shellArgument(join(root, 'checkpoint'))}` })}\n`);
     });
   native.command('init-w0').requiredOption('--contexts <files...>', 'Six frozen GitHub context JSON artifacts; no source fetch')
     .requiredOption('--provenance <file>', 'Existing W0 semantic eligibility/provenance ledger')
