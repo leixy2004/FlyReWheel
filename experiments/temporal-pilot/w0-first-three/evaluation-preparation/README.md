@@ -119,9 +119,10 @@ owner later initializing a new repository or copying files elsewhere.
 
 Blinding remains prospective and limited: public ledger source hashes can identify
 packet content even without the facilitator mapping. Do not give prospective
-annotators ledger/package access alongside packets. A human research owner still
-needs to decide the historical admissibility, substantive rubric and controlled
-annotation view before assignment; no person has been recruited or assigned.
+annotators ledger/package access alongside packets. The concrete default in ANNOTATION-TEMPORAL-PROTOCOL.md is a current-capture
+retrospective study, with historical replay treated as a separate evidence-gated
+claim. A real substantive rubric, independent human resources and controlled access
+are still absent; no person has been recruited or assigned.
 
 The six immutable W0 exports and acquisition cache remain retained for the resolver
 owner. The late-result correction at `6a1a8ac1d56f659f2e7d96b000739025f9755672` was
@@ -152,3 +153,14 @@ this contract check: no persisted mining job, execution lease, dispatcher/runtim
 model, new upstream read or full-snapshot recapture was performed. Before/after
 resolver acceptance alone must not be promoted to end-to-end mining compatibility.
 Historical visibility and annotation release remain unproven/blocked.
+
+## Proposed annotation and visibility protocol
+
+ANNOTATION-TEMPORAL-PROTOCOL.md defines the target estimand, evidence cutoffs,
+future-information exclusions, W2 frame census and denominators, two independent
+human raters and adjudication, Unknown handling, agreement, contamination checks,
+and actual pre-collection decisions/resources. It proposes current-capture defaults
+rather than assuming historical review visibility. It is a retrospective proposal,
+not preregistration, collection authorization or a completed human-label dataset.
+Protocol critique by two native agents is recorded separately in
+protocol-independent-critique.json; these reviews are not human annotations.
