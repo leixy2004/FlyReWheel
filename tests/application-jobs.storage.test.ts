@@ -52,76 +52,88 @@ describe('durable application job storage', () => {
     });
   });
 
-  it('persists immutable blocked outcomes and returns terminal retries without invoking domain persistence', async () => {
-    const { db, store } = await fixture(), input = job(), owner = randomUUID();
-    await store.claimApplicationJob(input, owner);
-    const terminal = await store.completeApplicationJob(input, owner, blocked), persist = vi.fn();
-    expect(await store.completeApplicationJob(input, owner, blocked, persist)).toEqual(terminal);
-    expect(persist).not.toHaveBeenCalled();
-    expect(await store.claimApplicationJob(input, randomUUID())).toEqual({ state: 'finished', record: terminal });
-    await expect(store.completeApplicationJob(input, owner, { ...blocked, reason: 'disabled' })).rejects.toMatchObject({ code: 'IMMUTABLE_CONFLICT' });
-    await expect(db.query('UPDATE qe_application_jobs SET attempts=attempts+1')).rejects.toThrow(/immutable/);
-    await expect(db.query('DELETE FROM qe_application_jobs')).rejects.toThrow(/cannot be deleted/);
-  });
-
-  it('makes only cleanup-safe failures retryable and fences the old owner after a retry', async () => {
-    const { store } = await fixture(), input = job(), owner = randomUUID(), next = randomUUID();
-    await store.claimApplicationJob(input, owner);
-    await expect(store.failApplicationJob(input, owner, { ...failed, cleanup: 'retained-for-recovery' })).rejects.toMatchObject({ code: 'APPLICATION_JOB_RETRY_UNSAFE' });
-    await expect(store.failApplicationJob(input, owner, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_RETRY_UNSAFE' });
-    await expect(store.completeApplicationJob(input, next, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
-    await store.failApplicationJob(input, owner, failed);
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'retryable', attempts: 1, result: failed });
-    expect(await store.claimApplicationJob(input, next)).toEqual({ state: 'claimed', owner: next });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', attempts: 2, result: null });
-    await expect(store.failApplicationJob(input, owner, failed)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
-    await expect(store.completeApplicationJob(input, owner, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
-    await store.failApplicationJob(input, next, { ...failed, modelExecution: 'completed', cleanup: 'verified' });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'retryable', attempts: 2 });
-  });
-
-  it('atomically blocks expired running claims rather than stealing or rerunning them', async () => {
-    const { db, store } = await fixture(), input = job(), owner = randomUUID(), digest = applicationJobDigest(input);
-    await store.claimApplicationJob(input, owner);
-    const lease = (await db.query<{ seconds: number }>('SELECT EXTRACT(EPOCH FROM lease_expires_at - clock_timestamp())::float8 AS seconds FROM qe_application_jobs')).rows[0];
-    expect(lease.seconds).toBeGreaterThan(890);
-    await withTamperedLedger(db, async (tx, scoped) => {
-      await tx.query("UPDATE qe_application_jobs SET lease_expires_at=clock_timestamp() - interval '1 second'");
-      const persist = vi.fn();
-      await expect(scoped.completeApplicationJob(input, owner, completed, persist)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
-      await expect(scoped.failApplicationJob(input, owner, failed)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('persists immutable blocked outcomes and returns terminal retries without invoking domain persistence', async context => {
+      const { db, store } = fresh(context), input = job(), owner = randomUUID();
+      await store.claimApplicationJob(input, owner);
+      const terminal = await store.completeApplicationJob(input, owner, blocked), persist = vi.fn();
+      expect(await store.completeApplicationJob(input, owner, blocked, persist)).toEqual(terminal);
       expect(persist).not.toHaveBeenCalled();
-      expect(await scoped.claimApplicationJob(input, randomUUID())).toMatchObject({ state: 'finished', record: { state: 'finished', attempts: 1,
-        result: { status: 'blocked', modelExecution: 'unknown', cleanup: 'retained-for-recovery', reason: 'interrupted_execution_requires_recovery' } } });
-      expect(await scoped.claimApplicationJob(input, randomUUID())).toMatchObject({ state: 'finished' });
+      expect(await store.claimApplicationJob(input, randomUUID())).toEqual({ state: 'finished', record: terminal });
+      await expect(store.completeApplicationJob(input, owner, { ...blocked, reason: 'disabled' })).rejects.toMatchObject({ code: 'IMMUTABLE_CONFLICT' });
+      await expect(db.query('UPDATE qe_application_jobs SET attempts=attempts+1')).rejects.toThrow(/immutable/);
+      await expect(db.query('DELETE FROM qe_application_jobs')).rejects.toThrow(/cannot be deleted/);
     });
-    expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'running', attempts: 1 });
   });
 
-  it('reconciles abandoned execution on read or a bounded sweep without requiring another delivery', async () => {
-    const { db, store } = await fixture();
-    const inputs = ['lazy-expired', 'selected-expired', 'sweep-a', 'sweep-b', 'still-active'].map(job);
-    const digests = inputs.map(applicationJobDigest);
-    for (const input of inputs) await store.claimApplicationJob(input, randomUUID());
-    await withTamperedLedger(db, async (tx, scoped) => {
-      await tx.query("UPDATE qe_application_jobs SET lease_expires_at=clock_timestamp() - interval '1 second' WHERE job_digest <> $1", [digests[4]]);
-      const claim = vi.spyOn(scoped, 'claimApplicationJob');
-      const abandoned = { state: 'finished', attempts: 1, result: { status: 'blocked', modelExecution: 'unknown',
-        cleanup: 'retained-for-recovery', reason: 'interrupted_execution_requires_recovery' } };
-      expect(await scoped.getApplicationJob(digests[0])).toMatchObject(abandoned);
-      expect(await scoped.getApplicationJob(digests[4])).toMatchObject({ state: 'running', attempts: 1, result: null });
-      await scoped.reconcileExpiredApplicationJobs(1, digests[1]);
-      const rows = () => tx.query<{ job_digest: string; state: string; attempts: number }>('SELECT job_digest,state,attempts FROM qe_application_jobs ORDER BY job_digest');
-      expect((await rows()).rows.find(row => row.job_digest === digests[1])).toMatchObject({ state: 'finished', attempts: 1 });
-      expect((await rows()).rows.filter(row => row.state === 'running')).toHaveLength(3);
-      await scoped.reconcileExpiredApplicationJobs(1);
-      expect((await rows()).rows.filter(row => row.state === 'running')).toHaveLength(2);
-      await scoped.reconcileExpiredApplicationJobs();
-      expect((await rows()).rows.filter(row => row.state === 'running')).toEqual([{ job_digest: digests[4], state: 'running', attempts: 1 }]);
-      for (const digest of digests.slice(0, 4)) expect(await scoped.getApplicationJob(digest)).toMatchObject(abandoned);
-      expect(claim).not.toHaveBeenCalled();
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('makes only cleanup-safe failures retryable and fences the old owner after a retry', async context => {
+      const { store } = fresh(context), input = job(), owner = randomUUID(), next = randomUUID();
+      await store.claimApplicationJob(input, owner);
+      await expect(store.failApplicationJob(input, owner, { ...failed, cleanup: 'retained-for-recovery' })).rejects.toMatchObject({ code: 'APPLICATION_JOB_RETRY_UNSAFE' });
+      await expect(store.failApplicationJob(input, owner, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_RETRY_UNSAFE' });
+      await expect(store.completeApplicationJob(input, next, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+      await store.failApplicationJob(input, owner, failed);
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'retryable', attempts: 1, result: failed });
+      expect(await store.claimApplicationJob(input, next)).toEqual({ state: 'claimed', owner: next });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', attempts: 2, result: null });
+      await expect(store.failApplicationJob(input, owner, failed)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+      await expect(store.completeApplicationJob(input, owner, blocked)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+      await store.failApplicationJob(input, next, { ...failed, modelExecution: 'completed', cleanup: 'verified' });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'retryable', attempts: 2 });
     });
-    for (const digest of digests) expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'running', attempts: 1, result: null });
+  });
+
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('atomically blocks expired running claims rather than stealing or rerunning them', async context => {
+      const { db, store } = fresh(context), input = job(), owner = randomUUID(), digest = applicationJobDigest(input);
+      await store.claimApplicationJob(input, owner);
+      const lease = (await db.query<{ seconds: number }>('SELECT EXTRACT(EPOCH FROM lease_expires_at - clock_timestamp())::float8 AS seconds FROM qe_application_jobs')).rows[0];
+      expect(lease.seconds).toBeGreaterThan(890);
+      await withTamperedLedger(db, async (tx, scoped) => {
+        await tx.query("UPDATE qe_application_jobs SET lease_expires_at=clock_timestamp() - interval '1 second'");
+        const persist = vi.fn();
+        await expect(scoped.completeApplicationJob(input, owner, completed, persist)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+        await expect(scoped.failApplicationJob(input, owner, failed)).rejects.toMatchObject({ code: 'APPLICATION_JOB_FENCED' });
+        expect(persist).not.toHaveBeenCalled();
+        expect(await scoped.claimApplicationJob(input, randomUUID())).toMatchObject({ state: 'finished', record: { state: 'finished', attempts: 1,
+          result: { status: 'blocked', modelExecution: 'unknown', cleanup: 'retained-for-recovery', reason: 'interrupted_execution_requires_recovery' } } });
+        expect(await scoped.claimApplicationJob(input, randomUUID())).toMatchObject({ state: 'finished' });
+      });
+      expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'running', attempts: 1 });
+    });
+  });
+
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('reconciles abandoned execution on read or a bounded sweep without requiring another delivery', async context => {
+      const { db, store } = fresh(context);
+      const inputs = ['lazy-expired', 'selected-expired', 'sweep-a', 'sweep-b', 'still-active'].map(job);
+      const digests = inputs.map(applicationJobDigest);
+      for (const input of inputs) await store.claimApplicationJob(input, randomUUID());
+      await withTamperedLedger(db, async (tx, scoped) => {
+        await tx.query("UPDATE qe_application_jobs SET lease_expires_at=clock_timestamp() - interval '1 second' WHERE job_digest <> $1", [digests[4]]);
+        const claim = vi.spyOn(scoped, 'claimApplicationJob');
+        const abandoned = { state: 'finished', attempts: 1, result: { status: 'blocked', modelExecution: 'unknown',
+          cleanup: 'retained-for-recovery', reason: 'interrupted_execution_requires_recovery' } };
+        expect(await scoped.getApplicationJob(digests[0])).toMatchObject(abandoned);
+        expect(await scoped.getApplicationJob(digests[4])).toMatchObject({ state: 'running', attempts: 1, result: null });
+        await scoped.reconcileExpiredApplicationJobs(1, digests[1]);
+        const rows = () => tx.query<{ job_digest: string; state: string; attempts: number }>('SELECT job_digest,state,attempts FROM qe_application_jobs ORDER BY job_digest');
+        expect((await rows()).rows.find(row => row.job_digest === digests[1])).toMatchObject({ state: 'finished', attempts: 1 });
+        expect((await rows()).rows.filter(row => row.state === 'running')).toHaveLength(3);
+        await scoped.reconcileExpiredApplicationJobs(1);
+        expect((await rows()).rows.filter(row => row.state === 'running')).toHaveLength(2);
+        await scoped.reconcileExpiredApplicationJobs();
+        expect((await rows()).rows.filter(row => row.state === 'running')).toEqual([{ job_digest: digests[4], state: 'running', attempts: 1 }]);
+        for (const digest of digests.slice(0, 4)) expect(await scoped.getApplicationJob(digest)).toMatchObject(abandoned);
+        expect(claim).not.toHaveBeenCalled();
+      });
+      for (const digest of digests) expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'running', attempts: 1, result: null });
+    });
   });
 
   describe('cancellation rollback setup', () => {
@@ -142,21 +154,24 @@ describe('durable application job storage', () => {
     });
   });
 
-  it('rolls back domain writes if persistence throws, and closes the scoped store', async () => {
-    const { store } = await fixture(), input = job(), owner = randomUUID(), problemCase = demoInputs().dataset.samples[0].problemCase;
-    await store.claimApplicationJob(input, owner);
-    let leaked: QualEvoStore | undefined;
-    await expect(store.completeApplicationJob(input, owner, completed, async scoped => {
-      leaked = scoped;
-      await scoped.importProblemCase(problemCase);
-      expect(await scoped.getProblemCase(problemCase.id)).toEqual(problemCase);
-      await expect(scoped.close()).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_INVALID' });
-      await expect(scoped.claimApplicationJob(job('nested'), randomUUID())).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_INVALID' });
-      throw new Error('Authored persistence failure');
-    })).rejects.toThrow('Authored persistence failure');
-    await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
-    await expect(leaked!.importProblemCase(problemCase)).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_CLOSED' });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null });
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('rolls back domain writes if persistence throws, and closes the scoped store', async context => {
+      const { store } = fresh(context), input = job(), owner = randomUUID(), problemCase = demoInputs().dataset.samples[0].problemCase;
+      await store.claimApplicationJob(input, owner);
+      let leaked: QualEvoStore | undefined;
+      await expect(store.completeApplicationJob(input, owner, completed, async scoped => {
+        leaked = scoped;
+        await scoped.importProblemCase(problemCase);
+        expect(await scoped.getProblemCase(problemCase.id)).toEqual(problemCase);
+        await expect(scoped.close()).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_INVALID' });
+        await expect(scoped.claimApplicationJob(job('nested'), randomUUID())).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_INVALID' });
+        throw new Error('Authored persistence failure');
+      })).rejects.toThrow('Authored persistence failure');
+      await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
+      await expect(leaked!.importProblemCase(problemCase)).rejects.toMatchObject({ code: 'APPLICATION_JOB_SCOPE_CLOSED' });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null });
+    });
   });
 
   it('rolls back domain writes if the final owner fence no longer matches', async () => {
@@ -173,34 +188,40 @@ describe('durable application job storage', () => {
     expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null });
   });
 
-  it('does not commit unbound, absent, or wrong-kind outcomes after domain writes', async () => {
-    const { store } = await fixture(), input = job(), owner = randomUUID(), problemCase = demoInputs().dataset.samples[0].problemCase;
-    await store.claimApplicationJob(input, owner);
-    await expect(store.completeApplicationJob(input, owner, completed, async scoped => { await scoped.importProblemCase(problemCase); }))
-      .rejects.toMatchObject({ code: 'NOT_FOUND' });
-    await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
-    await expect(store.completeApplicationJob(input, owner, { ...completed, outcome: { ...completed.outcome!, kind: 'revision-candidate' } }))
-      .rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
-    await expect(store.completeApplicationJob(input, owner, blocked, async scoped => { await scoped.importProblemCase(problemCase); }))
-      .rejects.toMatchObject({ code: 'APPLICATION_JOB_OUTCOME_INVALID' });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null });
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('does not commit unbound, absent, or wrong-kind outcomes after domain writes', async context => {
+      const { store } = fresh(context), input = job(), owner = randomUUID(), problemCase = demoInputs().dataset.samples[0].problemCase;
+      await store.claimApplicationJob(input, owner);
+      await expect(store.completeApplicationJob(input, owner, completed, async scoped => { await scoped.importProblemCase(problemCase); }))
+        .rejects.toMatchObject({ code: 'NOT_FOUND' });
+      await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
+      await expect(store.completeApplicationJob(input, owner, { ...completed, outcome: { ...completed.outcome!, kind: 'revision-candidate' } }))
+        .rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
+      await expect(store.completeApplicationJob(input, owner, blocked, async scoped => { await scoped.importProblemCase(problemCase); }))
+        .rejects.toMatchObject({ code: 'APPLICATION_JOB_OUTCOME_INVALID' });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null });
+    });
   });
 
-  it('checks durable normalized job hashes, outcome hashes, and result schemas on every read', async () => {
-    const { db, store } = await fixture(), input = job(), owner = randomUUID(), digest = applicationJobDigest(input);
-    await store.claimApplicationJob(input, owner); await store.completeApplicationJob(input, owner, blocked);
-    const corruptions = [
-      ["UPDATE qe_application_jobs SET job_payload=jsonb_set(job_payload,'{workspaceId}','\"different\"')", []],
-      ["UPDATE qe_application_jobs SET job_payload_digest=$1", ['f'.repeat(64)]],
-      ["UPDATE qe_application_jobs SET result_digest=$1", ['f'.repeat(64)]],
-      ["UPDATE qe_application_jobs SET result=$1::jsonb,result_digest=$2", [JSON.stringify({ ...blocked, reason: 'forged-reason' }), digestOf({ ...blocked, reason: 'forged-reason' })]],
-    ] as const;
-    for (const [sql, values] of corruptions) await withTamperedLedger(db, async (tx, scoped) => {
-      await tx.query(sql, [...values]);
-      await expect(scoped.getApplicationJob(digest)).rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
-      await expect(scoped.claimApplicationJob(input, randomUUID())).rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
+  describe('fresh application database setup', () => {
+    const fresh = useFreshPGlite();
+    it('checks durable normalized job hashes, outcome hashes, and result schemas on every read', async context => {
+      const { db, store } = fresh(context), input = job(), owner = randomUUID(), digest = applicationJobDigest(input);
+      await store.claimApplicationJob(input, owner); await store.completeApplicationJob(input, owner, blocked);
+      const corruptions = [
+        ["UPDATE qe_application_jobs SET job_payload=jsonb_set(job_payload,'{workspaceId}','\"different\"')", []],
+        ["UPDATE qe_application_jobs SET job_payload_digest=$1", ['f'.repeat(64)]],
+        ["UPDATE qe_application_jobs SET result_digest=$1", ['f'.repeat(64)]],
+        ["UPDATE qe_application_jobs SET result=$1::jsonb,result_digest=$2", [JSON.stringify({ ...blocked, reason: 'forged-reason' }), digestOf({ ...blocked, reason: 'forged-reason' })]],
+      ] as const;
+      for (const [sql, values] of corruptions) await withTamperedLedger(db, async (tx, scoped) => {
+        await tx.query(sql, [...values]);
+        await expect(scoped.getApplicationJob(digest)).rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
+        await expect(scoped.claimApplicationJob(input, randomUUID())).rejects.toMatchObject({ code: 'INTEGRITY_FAILURE' });
+      });
+      expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'finished', result: blocked });
     });
-    expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'finished', result: blocked });
   });
 
   it('atomically saves a trusted authored candidate, validates exact job bindings and survives reopen', async () => {

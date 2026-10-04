@@ -148,9 +148,10 @@ it('persists serial progress across database reopen, resumes only pending PRs an
     expect((await store.listGithubPrHistoryBatches({ after: plan.digest })).batches).toEqual([]);
   } finally { await store?.close(); await rm(directory, { recursive: true, force: true }); }
 }, 30_000);
-it('records failures, continues bounded non-rate failures, retries explicitly and never re-captures successes', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('records failures, continues bounded non-rate failures, retries explicitly and never re-captures successes', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
     f.setHook(url => url.pathname.endsWith('/pulls/7') ? { status: 404, data: { message: 'private diagnostic' } } : undefined);
     const first = await captureGithubPrHistoryBatch(store, plan.digest, {}, f);
@@ -160,17 +161,18 @@ it('records failures, continues bounded non-rate failures, retries explicitly an
     const retry = historyTransport(); const done = await captureGithubPrHistoryBatch(store, plan.digest, { retryFailed: true }, retry);
     expect(done.batch.items.map(item => item.attempts)).toEqual([2, 1]); expect(done.run.freshCaptures.map(item => item.number)).toEqual([7]);
     expect(done.batch.items[0]).not.toHaveProperty('failureDiagnostic');
-  } finally { await store.close(); }
+  });
 });
-it.each([403, 429])('stops a batch on HTTP %s, with remaining PRs pending', async status => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it.for([403, 429])('stops a batch on HTTP %s, with remaining PRs pending', async (status, context) => {
+    const { store } = fresh(context);
     const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
     f.setHook(() => ({ status, data: { message: 'rate limit' } }));
     const result = await captureGithubPrHistoryBatch(store, plan.digest, {}, f);
     expect(f.calls).toHaveLength(1); expect(result.run.stopReason).toBe(status === 403 ? 'forbidden-or-rate-limited' : 'rate-limited'); expect(result.batch.items.map(item => item.status)).toEqual(['failed', 'pending']);
     expect(result.batch.items[0].failureDiagnostic).toEqual({ status });
-  } finally { await store.close(); }
+  });
 });
 it('persists sanitized failure observations across reopen without inferring a 403 cause or retaining stale retry data', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'history-diagnostic-')); let store: QualEvoStore | undefined;
@@ -201,15 +203,16 @@ it('persists sanitized failure observations across reopen without inferring a 40
     expect(done.batch.items[0]).not.toHaveProperty('failureDiagnostic');
   } finally { await store?.close(); await rm(directory, { recursive: true, force: true }); }
 }, 30_000);
-it('enforces aggregate requests across failures and rejects malformed bounds before reading state', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('enforces aggregate requests across failures and rejects malformed bounds before reading state', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
     const result = await captureGithubPrHistoryBatch(store, plan.digest, { maxRequests: 3 }, f);
     expect(f.calls).toHaveLength(3); expect(result.run.requests).toBe(3); expect(result.run.stopReason).toBe('request-budget');
     expect(result.batch.items.map(item => item.status)).toEqual(['failed', 'pending']);
     await expect(captureGithubPrHistoryBatch(store, 'not-a-digest', { maxPulls: 6 }, f)).rejects.toThrow();
-  } finally { await store.close(); }
+  });
 });
 describe('interrupted history recovery setup', () => {
   const fresh = useFreshPGlite();
@@ -226,19 +229,21 @@ describe('interrupted history recovery setup', () => {
     await expect(store.importGithubPrHistoryPlan(result.batch)).rejects.toThrow();
   });
 });
-it('rejects captures whose current status moved outside the discovery filter', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('rejects captures whose current status moved outside the discovery filter', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan([7]); plan.plan.filter.status = 'open'; plan.digest = digestOf(plan.plan);
     await store.importGithubPrHistoryPlan(plan); const f = historyTransport([7]);
     const pull = f.routes.get('/repos/fixture/project/pulls/7') as any; pull.state = 'closed'; pull.closed_at = historyTime;
     const result = await captureGithubPrHistoryBatch(store, plan.digest, {}, f);
     expect(result.batch.items[0]).toMatchObject({ status: 'failed', failure: 'out-of-filter', evidenceDigest: null }); expect(result.run.freshCaptures).toEqual([]);
-  } finally { await store.close(); }
+  });
 });
-it('links explicit mining requests to exact captured IDs through the existing unknown-only derivation', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('links explicit mining requests to exact captured IDs through the existing unknown-only derivation', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan([7]), f = historyTransport([7]); await store.importGithubPrHistoryPlan(plan);
     const capture = await captureGithubPrHistoryBatch(store, plan.digest, {}, f), item = capture.batch.items[0];
     const input = { id: 'history-rule-request', evidenceDigest: item.evidenceDigest!, sources: [{ side: 'after' as const, path: 'file.ts' }], statements: [{ kind: 'pull' as const }],
@@ -249,16 +254,17 @@ it('links explicit mining requests to exact captured IDs through the existing un
     expect(await store.createGithubPrHistoryMiningRequest(plan.digest, 7, input)).toEqual(request);
     await expect(store.createGithubPrHistoryMiningRequest(plan.digest, 8, input)).rejects.toThrow('exact');
     await expect(store.createGithubPrHistoryMiningRequest(plan.digest, 7, { ...input, evidenceDigest: 'a'.repeat(64) })).rejects.toThrow('exact');
-  } finally { await store.close(); }
+  });
 });
-it('records per-PR budget failure distinctly while continuing within the aggregate allowance', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('records per-PR budget failure distinctly while continuing within the aggregate allowance', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
     const result = await captureGithubPrHistoryBatch(store, plan.digest, { maxRequestsPerPull: 1, maxRequests: 20 }, f);
     expect(f.calls).toHaveLength(2); expect(result.batch.items.map(item => item.failure)).toEqual(['request-budget', 'request-budget']);
     expect(result.run.stopReason).toBe('finished-selection'); expect(result.run.acceptedEvidenceBytes).toBe(0);
-  } finally { await store.close(); }
+  });
 });
 it('rolls back a 21st mining request and derived cases when the local linkage bound rejects it', async () => {
   const store = await QualEvoStore.openPGlite();
@@ -288,27 +294,31 @@ describe('stored history evidence setup', () => {
     await expect(db.query('UPDATE qe_github_pr_history SET repository=$1 WHERE digest=$2', ['other/repo', plan.digest])).rejects.toThrow('immutable');
   });
 });
-it('keeps an interruption recoverable when local persistence fails after a successful provider read', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('keeps an interruption recoverable when local persistence fails after a successful provider read', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan([7]), f = historyTransport([7]); await store.importGithubPrHistoryPlan(plan);
     const save = vi.spyOn(store, 'importGithubPrEvidence').mockRejectedValueOnce(new Error('local disk unavailable'));
     await expect(captureGithubPrHistoryBatch(store, plan.digest, {}, f)).rejects.toThrow('local disk unavailable');
     expect((await store.getGithubPrHistoryBatch(plan.digest)).items[0].status).toBe('capturing'); save.mockRestore();
     const result = await captureGithubPrHistoryBatch(store, plan.digest, { recoverInterrupted: true }, f);
     expect(result.batch.items[0]).toMatchObject({ status: 'captured', attempts: 2 });
-  } finally { await store.close(); }
+  });
 });
-it('shares the aggregate deadline with the existing capturer and leaves remaining PRs pending', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
-    const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
-    let elapsed = 0; const start = Date.now(); vi.spyOn(Date, 'now').mockImplementation(() => start + elapsed);
-    f.setHook(() => { elapsed = 101; return undefined; });
-    const result = await captureGithubPrHistoryBatch(store, plan.digest, { timeoutMs: 100 }, f);
-    expect(f.calls).toHaveLength(1); expect(result.run.stopReason).toBe('deadline');
-    expect(result.batch.items.map(item => item.status)).toEqual(['failed', 'pending']); expect(result.batch.items[0].failure).toBe('deadline');
-  } finally { vi.restoreAllMocks(); await store.close(); }
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('shares the aggregate deadline with the existing capturer and leaves remaining PRs pending', async context => {
+    const { store } = fresh(context);
+    try {
+      const plan = historyPlan(), f = historyTransport(); await store.importGithubPrHistoryPlan(plan);
+      let elapsed = 0; const start = Date.now(); vi.spyOn(Date, 'now').mockImplementation(() => start + elapsed);
+      f.setHook(() => { elapsed = 101; return undefined; });
+      const result = await captureGithubPrHistoryBatch(store, plan.digest, { timeoutMs: 100 }, f);
+      expect(f.calls).toHaveLength(1); expect(result.run.stopReason).toBe('deadline');
+      expect(result.batch.items.map(item => item.status)).toEqual(['failed', 'pending']); expect(result.batch.items[0].failure).toBe('deadline');
+    } finally { vi.restoreAllMocks(); }
+  });
 });
 it('enforces the aggregate accepted-evidence ceiling without counting the rejected capture', async () => {
   const { createHash } = await import('node:crypto');
@@ -334,14 +344,17 @@ it('enforces the aggregate accepted-evidence ceiling without counting the reject
     expect(result.run.freshCaptures).toHaveLength(2);
   } finally { await store.close(); }
 }, 60_000);
-it('retains a per-PR deadline reason when fetch aborts before the longer aggregate deadline', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
-    const plan = historyPlan([7]), f = historyTransport([7]); await store.importGithubPrHistoryPlan(plan);
-    let elapsed = 0; const start = Date.now(); vi.spyOn(Date, 'now').mockImplementation(() => start + elapsed);
-    f.setHook(() => { elapsed = 120_001; throw new Error('aborted transport body must not be echoed'); });
-    const result = await captureGithubPrHistoryBatch(store, plan.digest, { timeoutMs: 300_000 }, f);
-    expect(result.batch.items[0].failure).toBe('deadline'); expect(result.run.requests).toBe(1);
-    expect(JSON.stringify(result)).not.toContain('aborted transport body');
-  } finally { vi.restoreAllMocks(); await store.close(); }
+describe('fresh history database setup', () => {
+  const fresh = useFreshPGlite();
+  it('retains a per-PR deadline reason when fetch aborts before the longer aggregate deadline', async context => {
+    const { store } = fresh(context);
+    try {
+      const plan = historyPlan([7]), f = historyTransport([7]); await store.importGithubPrHistoryPlan(plan);
+      let elapsed = 0; const start = Date.now(); vi.spyOn(Date, 'now').mockImplementation(() => start + elapsed);
+      f.setHook(() => { elapsed = 120_001; throw new Error('aborted transport body must not be echoed'); });
+      const result = await captureGithubPrHistoryBatch(store, plan.digest, { timeoutMs: 300_000 }, f);
+      expect(result.batch.items[0].failure).toBe('deadline'); expect(result.run.requests).toBe(1);
+      expect(JSON.stringify(result)).not.toContain('aborted transport body');
+    } finally { vi.restoreAllMocks(); }
+  });
 });

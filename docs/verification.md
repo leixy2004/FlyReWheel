@@ -38,9 +38,14 @@ not a global timeout increase. A measured cold PGlite readiness phase took
 8321ms, and another readiness-plus-migration sequence took 4801ms + 560ms;
 neither belongs in the budget for claims, cancellation or evidence assertions.
 
-Scope is limited to the two history recovery/evidence cases, the storage claim
-case and both cancellation cases with the same fixture, and the disk semantic
-version recovery case. Each task owns a new database; no database is shared
+Scope is limited to default-5000ms cases with plain fresh in-memory database
+initialization in the history and application-job storage files, and the disk
+semantic version recovery case (23 existing cases in total). The first narrow
+candidate still timed out in another history case with initialization embedded
+in its behavioral budget, so the same setup ownership now covers the remaining
+17 cases of that pattern. That failure did not separately measure its phases.
+Existing 30000ms/60000ms cases, injected database wrappers and composite storage
+fixtures remain unchanged. Each task owns a new database; no database is shared
 between tests. The disk case no longer creates an unused outer memory database.
 Only its first database allocation moves to setup: imports, explicit close,
 public-API reopen and all identity assertions remain in the test body. In a
