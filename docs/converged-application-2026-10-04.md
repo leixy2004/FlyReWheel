@@ -21,7 +21,9 @@ The existing PostgreSQL recovery, workspace resolver/composition, evaluation
 registry, read-only revision preflight and measured PGlite setup fixes were
 already inherited. So were the paper source audit, matched contract and native
 macro reporting. These implementations are not applied twice. No dependency,
-queue topology, worker enablement or credential configuration is changed here.
+queue topology or credential configuration is changed here. Default worker
+execution remains blocked; this convergence also adds the explicit opt-in
+[worker bootstrap](worker-application-bootstrap.md) described below.
 
 ## Usable local paths
 
@@ -38,6 +40,16 @@ replays canonical authored schedules and receipts. Unknown costs and references,
 missing/interrupted results, declared clusters and withheld intervals remain
 explicit. Numeric fixture summaries are not empirical model effectiveness.
 
+## Explicit worker execution wiring
+
+The actual worker entrypoint now accepts explicit enable/module-path/SHA-256
+options and composes the existing mining/revision/review adapters before service
+startup. It requires a reviewed, immutable deployment module with strict config
+and real trusted dependency functions; it never discovers ambient modules or
+promotes a JSON claim to lifecycle authority. `--check` does not load the module.
+Authored persistence/recovery tests do not establish live runtime readiness.
+See [bootstrap contract and limits](worker-application-bootstrap.md).
+
 ## Current runtime and deployment limits
 
 PR35's retained [trial](evidence/opensandbox-retry-2026-10-04/README.md) observed
@@ -53,8 +65,9 @@ is now incorporated, while its original checkpoint receipts stay unchanged.
 It verifies pinned offline artifacts, not admission, storage, network enforcement,
 server defaults or actual cluster deployment. Missing renderer/schema dependencies
 must be reported as skipped/not run; old successful tool runs do not close current
-environment gaps. The default application worker remains blocked until explicit
-trusted runtime composition and lifecycle authority are supplied.
+environment gaps. The default application worker remains blocked. The opt-in entrypoint supplies
+the composition path, while a deployment must still provide and verify its trusted
+lifecycle authority, workspace bindings and authorized model access.
 
 ## Verification discipline
 

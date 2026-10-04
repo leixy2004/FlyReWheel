@@ -236,7 +236,7 @@ Separately pinned [data evidence `1565fade`](https://github.com/leixy2004/FlyReW
 records six actual export bindings and one blocked checkpoint/reopen; its archived
 registry is stale after cleanup. [Deployment evidence `d5f0b49`](https://github.com/leixy2004/FlyReWheel/blob/d5f0b49db7da7cb53c5c8528433c8b3fc295651f/docs/evidence/kubernetes-offline-2026-10-04/README.md)
 records official-tool rendering and pinned-schema validation, not API-server
-admission or deployment. Neither follow-up is silently merged into this mapping.
+admission or deployment. Both follow-ups are now explicitly incorporated in the [converged task branch](../docs/converged-application-2026-10-04.md); their receipts still describe their original commits.
 
 [Application operations](../docs/application-operations.md) exposes
 `application-jobs prepare-mining`, `preflight`, `bootstrap-check` and `recovery`.
@@ -244,8 +244,10 @@ Preparation exports a normalized job and persists its request, not a queued or
 completed mining result. Preflight reports missing dependencies without invoking
 a model/runtime. The PR #22 factory composes injected trusted capabilities; it
 does not install them in the default executable. Default worker processing
-remains `blocked/runtime_unavailable`. The deployment bootstrap belongs to its
-separate implementation owner and is not assumed complete by this map.
+remains `blocked/runtime_unavailable`. The [explicit worker bootstrap](../docs/worker-application-bootstrap.md) now
+provides a CLI opt-in path to compose these existing adapters with reviewed code.
+Its authored wiring tests do not supply verified live lifecycle authority or
+authorize model execution.
 
 `closed-loop demo --out-dir NEW_OUTPUT --db NEW_LOCAL_DB` demonstrates authored
 mining/review/feedback/revision and persistence through the product interfaces.

@@ -2,6 +2,13 @@
 
 Audited baseline: `6dea779` on 2026-10-02. This is a read-only source, test, and documentation review, not a new execution result. No tests, model calls, services, authentication, installations, deployment, or publication were performed for this audit. Separate fixes may be in progress; findings below describe the named baseline until their own verification records establish otherwise.
 
+
+Current follow-up: the [converged application](converged-application-2026-10-04.md)
+now includes an explicit executable worker bootstrap and authored governance
+recovery. The findings below remain an audit of `6dea779`; they are not a claim
+that those later code paths are absent. Live authority/model/deployment gates
+remain unverified.
+
 ## Bottom line
 
 FlyReWheel has substantial reusable domain machinery, but the main semantic-v2 product is still a collection of composable APIs and offline commands rather than a usable operator workflow. The authored closed-loop demo proves those chosen paths can connect; it does not make an arbitrary repository usable through the same entry point.

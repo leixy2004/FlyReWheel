@@ -5,6 +5,11 @@ service interfaces. It does not implement a deployment lifecycle authority or
 authorize model spending. The default executable remains fail closed. No JSON
 field can enable a fixture fallback, load a module, or supply a trusted resolver.
 
+The [explicit worker bootstrap](worker-application-bootstrap.md) now connects the
+actual executable to those injected capabilities using explicit CLI opt-in and
+a reviewed module digest. Default behavior and queue/JSON authority boundaries
+remain unchanged.
+
 ## Prepare and inspect real inputs without inference
 
 Use one explicit database for domain records and jobs. `--db` selects local

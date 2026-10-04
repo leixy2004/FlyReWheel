@@ -9,7 +9,7 @@ import { S3ArtifactStore } from './artifacts.js';
 
 export interface WorkerServiceOptions {
   store: QualEvoStore; boss: PgBoss; environment?: NodeJS.ProcessEnv; port?: number; host?: string;
-  /** Trusted bootstrap injection only. The checked-in executable has none. */
+  /** Trusted bootstrap injection only; the executable requires explicit reviewed-module opt-in. */
   application?: Omit<ApplicationDispatcherDependencies, 'store'>;
   onResult?: (result: unknown) => void;
 }

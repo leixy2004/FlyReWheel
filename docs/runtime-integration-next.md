@@ -29,7 +29,7 @@ changes: the recorded HEAD/tree identifies the baseline, not all observed bytes.
 
 | Boundary | Present implementation | Required real evidence |
 | --- | --- | --- |
-| Service bootstrap | `src/worker.ts` deliberately supplies no trusted application runtime/resolver; the service supports injected dependencies | A reviewed deployment bootstrap supplying the repository workspace resolver and OpenSandbox backend |
+| Service bootstrap | `src/worker.ts` defaults blocked and now accepts the [explicit reviewed-module bootstrap](worker-application-bootstrap.md); the service reuses injected dependencies | A reviewed deployment bootstrap supplying the repository workspace resolver and OpenSandbox backend |
 | Sandbox allocation | Official OpenSandbox SDK adapter, bounded transport, Sandcastle transfer and strict worker protocols | Available control plane, audited digest-pinned image, real checkout verification and isolation/quota checks |
 | Lifecycle | `OpenSandboxLifecycleAuthority` interface and authored tests | Deployment implementation of admission fencing, late/unknown allocation reconciliation, whole-runtime stop, frozen out-of-band evidence and independent physical destruction verification |
 | Request ingress | Adapter creates mode `0700` directory and uploads mode `0600` request; image reserves root-owned `0750` control parent | Trusted ownership/ingress yielding worker-readable but repository-unmodifiable input and protected supervisor/evidence storage |

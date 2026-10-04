@@ -10,7 +10,7 @@ npx vitest run tests/matched-revision.experiment.test.ts --maxWorkers=2
 npx vitest run tests/matched-revision.codex.test.ts tests/workspace-worker-entrypoint.test.ts --maxWorkers=2
 ```
 
-The output directory must be new. `packet.json`, `future.json`, and `report.json` contain all inputs, requests, bounded raw outputs/failures, effective states, gate diagnostics, per-target observations, usage and paired H−U/H−M differences. Existing files are never replaced. The TypeScript API is `runMatchedRevision({ mode, packet, future, transport })`; it accepts an already digest-locked episode plus a separately locked future roster. The CLI intentionally exposes only the built-in authored fixture.
+The output directory must be new. `packet.json`, `future.json`, and `report.json` contain all inputs, requests, bounded raw outputs/failures, effective states, gate diagnostics, per-target observations, usage and paired H−U/H−M differences. Existing files are never replaced. The TypeScript API is `runMatchedRevision({ mode, packet, future, transport })`; it accepts an already digest-locked episode plus a separately locked future roster. The `replay.ts` CLI above intentionally exposes only the built-in authored fixture. The separate source application CLI also exposes the authored/blocked native workflow described below; neither path enables real-model execution.
 
 The fixture uses the **same authored candidate in U/H**, an equivalent authored memory delta in M, and **identical scripted review predictions in every arm**, including F. Consequently the demonstration does not manufacture a method win. It reports zero model executions, zero empirical episodes and zero independent human annotations. These outputs test plumbing, not accuracy, diagnosis quality, memory competence, chronology, or effect size.
 
@@ -70,13 +70,13 @@ An SDK-native study could instead explicitly freeze temperature/seed as **unset 
 A separately versioned [SDK-native configuration and call-record contract](sdk-native-contracts.md)
 validates supported role settings, schedule-only seeds, unavailable generation
 controls, declared byte/time/call bounds, nullable usage/cost and explicit monetary
-admission records. Its import-only authored transport now runs a supplied block
+admission records. Its authored transport API runs a supplied block
 through this existing F/U/H/M loop and the supervised SDK fake executable, with
 separate native requests and validated `authored_completed` no-model records.
 It retains complete failure/target rosters and measures byte/time/call limits;
 unknown usage or exceeded bounds stop further work in an arm, and unverified
-cleanup stops later launches across arms. The default source CLI now exposes `evaluation native init-authored`, `init-w0`
-and `run`; use the [offline reproducibility guide](../../docs/offline-reproducibility.md)
+cleanup stops later launches across arms. The source CLI (`node --import tsx src/cli.ts`) exposes `evaluation native init-authored`, `init-w0`
+and `run`; the compiled CLI reports the source-checkout prerequisite instead of dispatching these research commands; use the [offline reproducibility guide](../../docs/offline-reproducibility.md)
 for complete runnable commands and reopen. This authored/blocked bridge does not
 provide a real-model operational dispatch path. Legacy packet validation, frozen controls and production
 `not_run` remain unchanged. Authored repeated-block scheduling and an optional
