@@ -1,0 +1,155 @@
+{
+  "owner": "2b34366b-66fd-4327-9f68-634b46acf30e",
+  "networkId": "a7c8d62038ad7cb441c1f5e5b7d134ec304b1524c40bf1cfbe02bdca43c318cc",
+  "network": "flyrewheel-internal-2b34366b-66fd-4327-9f68-634b46acf30e",
+  "approval": "Sentinel_c3831d3b321881918d082b60d3eb958f",
+  "status": "failed",
+  "cleanup": {
+    "removedContainers": [],
+    "ownedContainersAbsent": true,
+    "taskSecretsAbsent": true,
+    "networkAbsent": true,
+    "newExecdImageRemoved": true
+  },
+  "events": [
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "create",
+      "helper": false
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "create",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "archive-path",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "archive-path",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "archive-path",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "archive-path",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "archive-path",
+      "helper": true
+    },
+    {
+      "id": "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277",
+      "action": "destroy",
+      "helper": true
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "extract-to-dir",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "start",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "kill",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "die",
+      "helper": false
+    },
+    {
+      "id": "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620",
+      "action": "destroy",
+      "helper": false
+    }
+  ],
+  "controlEvents": [
+    {
+      "status": "process-started-readiness-unverified",
+      "pid": 9936,
+      "pgid": 9936,
+      "port": 47257,
+      "task": "/tmp/flyrewheel-control-zld2q38g",
+      "deadlineSeconds": 900,
+      "scope": "control-plane-process-only-no-sandbox-requests"
+    },
+    {
+      "status": "stopping",
+      "reason": "parent-exited"
+    },
+    {
+      "status": "stopped-secrets-removed",
+      "task": "/tmp/flyrewheel-control-zld2q38g",
+      "sandboxCleanup": "not-managed-no-api-requests-issued"
+    }
+  ],
+  "driverExitCode": 1,
+  "lifecycle": {
+    "classification": "single-no-model-lifecycle",
+    "owner": "2b34366b-66fd-4327-9f68-634b46acf30e",
+    "network": "flyrewheel-internal-2b34366b-66fd-4327-9f68-634b46acf30e",
+    "endpoint": "https://127.0.0.1:47257",
+    "createRequests": 1,
+    "events": [
+      "verified-TLS-health"
+    ],
+    "status": "failed",
+    "unauthenticatedStatus": 401,
+    "errorClass": "SandboxReadyTimeoutException"
+  },
+  "helperIds": [
+    "2f13f734276304e854a5693438bfb697a8d4ad350e36e78d4533229a9e076277"
+  ],
+  "workerIds": [
+    "8d9e5bdffefc4eefc4fd44c7a49b7c4d44104a4d4400bc486fe2715e2fb0d620"
+  ],
+  "eventErrors": [],
+  "helperStarted": false,
+  "minimumObservedFreeBytes": 12941807616,
+  "elapsedSeconds": 53.005
+}

@@ -1,0 +1,8 @@
+{
+  "conservativeWindowStart": "2026-10-03T23:32:24.469857+00:00",
+  "finalCleanupReceiptWritten": "2026-10-03T23:36:50.288775+00:00",
+  "conservativeTotalWindowSeconds": 265.819,
+  "limitSeconds": 900,
+  "withinLimit": true,
+  "method": "first outer admission file mtime precedes first key/service creation; final receipt mtime follows final cleanup; no clock reset between sessions"
+}
