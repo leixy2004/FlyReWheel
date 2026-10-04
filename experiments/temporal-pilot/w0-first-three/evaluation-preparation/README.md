@@ -63,8 +63,8 @@ application feedback/store state and shares no annotation task externally.
 
 ## Reproduce offline
 
-Use new directories with existing parents. The script rejects private paths inside
-the repository, including symlinked parents, and prevents output/private overlap.
+Use new directories with existing parents. The script rejects private paths inside any existing Git worktree, including gitfiles
+and symlinked parents, before creating outputs, and prevents output/private overlap.
 
 ```sh
 prep_run=$(mktemp -d /tmp/flyrewheel-w0-evaluation.XXXXXX)
@@ -101,3 +101,54 @@ The diagnostic uses a dummy job digest and tests only the early rejection guard;
 it is not an end-to-end queued mining run or a positive authorization check.
 `resolver26-check.json` gives commands, code paths and six bindings; the exact
 executed probe is archived as text and the successful CLI result is retained.
+
+## Blind packet safety follow-up
+
+Schema parsing validates shape only; the actual write path now additionally calls
+`validateBlindDraft`, which derives the complete expected before-source list from
+the original SHA256-pinned package and compares every path/content, count and order.
+After-source substitution, appended answers and duplicate sources are rejected.
+Reference-answer, split, commit and tool-result fields are rejected by the strict
+envelope. Source evidence is never rewritten using keyword filters.
+
+A private destination inside a different Git checkout or linked worktree is also
+rejected. Empty protected `.git` placeholders supplied by this cloud environment
+are not repositories; a directory with HEAD or any gitfile/symlink is rejected.
+This prevents accidental generation into existing Git working trees, not a malicious
+owner later initializing a new repository or copying files elsewhere.
+
+Blinding remains prospective and limited: public ledger source hashes can identify
+packet content even without the facilitator mapping. Do not give prospective
+annotators ledger/package access alongside packets. A human research owner still
+needs to decide the historical admissibility, substantive rubric and controlled
+annotation view before assignment; no person has been recruited or assigned.
+
+The six immutable W0 exports and acquisition cache remain retained for the resolver
+owner. The late-result correction at `6a1a8ac1d56f659f2e7d96b000739025f9755672` was
+independently fetched and checked: 47 authored SDK-shaped tests in three files and
+typecheck passed. `late-eof-independent-check.json` records the exact commands and
+limits. This establishes regression-test behavior, not actual sandbox execution.
+The earlier PR #26 rejection-guard audit remains a separate historical checkpoint.
+
+## PR #28 real evaluation-aware resolver audit
+
+Exact GitHub code `ba319f64eafc06b816975ee159c510a8404e0644` was reviewed in a
+separate checkout. All six retained W0 exports were actually prepared and positively
+resolved by `createPreparedEvaluationWorkspaceResolver` under explicit offline-study
+purpose, preserving each entire binding. Wrong purpose, binding, job digest and
+expected SHA were rejected. Seven authored resolver tests also passed, separately
+from these six real-object probes.
+
+Every new prepared worktree reached cleanupWorkspace closed-clean, then its own
+derived repository was removed. Reinspection confirmed the original baseline
+objects/refs/tree and binding unchanged; all six cache commits and exports remain
+available. The main probe took 93.535 seconds and final checks 4.620 seconds; observed
+derived-root apparent-byte peak was 20,968,134 bytes, not a hard quota or an inclusive
+measurement of shared dependencies and authored-test temporaries.
+
+Evidence is `evaluation-resolver28-independent-check.json`, with exact executed
+probe/postcheck sources archived as text. Diagnostic job digests were authored for
+this contract check: no persisted mining job, execution lease, dispatcher/runtime,
+model, new upstream read or full-snapshot recapture was performed. Before/after
+resolver acceptance alone must not be promoted to end-to-end mining compatibility.
+Historical visibility and annotation release remain unproven/blocked.

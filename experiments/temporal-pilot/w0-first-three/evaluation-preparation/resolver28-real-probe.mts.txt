@@ -1,0 +1,36 @@
+import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {prepareEvaluationWorkspace} from '/tmp/flyrewheel-resolver28-check/src/workspace/evaluation-workspace.ts';
+import {cleanupWorkspace} from '/tmp/flyrewheel-resolver28-check/src/workspace/index.ts';
+import {createPreparedEvaluationWorkspaceResolver} from '/tmp/flyrewheel-resolver28-check/src/prepared-evaluation-workspace-resolver.ts';
+import {digestOf} from '/tmp/flyrewheel-resolver28-check/src/core/identity.ts';
+const start=Date.now(), root=await mkdtemp('/tmp/w0-resolver28-real-');const rows=[];let peak=0;
+globalThis.fetch=async()=>{throw Error('NETWORK_FORBIDDEN')};
+const usage=()=>{const n=Number(execFileSync('du',['-sb',root],{encoding:'utf8'}).split(/\s/)[0]);peak=Math.max(peak,n);if(n>512*1024*1024)throw Error('DISK_LIMIT');return n};
+for(const pr of [3035,3031,3036])for(const side of ['before','after']){
+ if(Date.now()-start>240000)throw Error('TIME_LIMIT');
+ const c=JSON.parse(await readFile(`/tmp/flyrewheel-w0-full-context-attempt-1/context-${pr}-${side}.json`,'utf8'));
+ const before=JSON.parse(await readFile(`/tmp/flyrewheel-w0-full-context-attempt-1/context-${pr}-before.json`,'utf8'));
+ const after=JSON.parse(await readFile(`/tmp/flyrewheel-w0-full-context-attempt-1/context-${pr}-after.json`,'utf8'));
+ const workspace={repoPath:`${root}/derived-${pr}-${side}`,runId:'offline-study',attemptId:'diagnostic-one'};
+ const row={pr,side,sha:c.sha,exportId:c.binding.exportId,actualSuccess:false};rows.push(row);let prepared;
+ try {
+ prepared=await prepareEvaluationWorkspace({...workspace,exportId:c.binding.exportId,storePath:'/tmp/flyrewheel-w0-full-context-attempt-1/exports',manifest:c.manifest});
+ usage();
+ if(digestOf(prepared.evaluation)!==digestOf(c.binding))throw Error('ORIGINAL_BINDING_MISMATCH');
+ const selection={workspaceId:`diagnostic-w0-${pr}-${side}`,jobDigest:digestOf({diagnosticOnly:true,pr,side,exportId:c.binding.exportId}),repository:c.binding.repositoryId,kind:'pr-mining',baseSha:before.sha,headSha:after.sha,expectedSha:c.sha,evaluationExportId:c.binding.exportId};
+ const config={schemaVersion:1,purpose:'offline-study',entries:[{selection,workspace,manifestDigest:digestOf(prepared.record),evaluation:prepared.evaluation}]};
+ const registryPath=`${root}/registry-${pr}-${side}.json`;await writeFile(registryPath,JSON.stringify(config));
+ const resolver=createPreparedEvaluationWorkspaceResolver(JSON.parse(await readFile(registryPath,'utf8')));
+ const resolved=await resolver(selection,new AbortController().signal);
+ if(digestOf(resolved.evaluation)!==digestOf(c.binding)||digestOf(resolved.workspace)!==digestOf(workspace))throw Error('RESOLUTION_MISMATCH');
+ row.actualSuccess=true;row.bindingUnchanged=true;row.binding=c.binding;row.selection=selection;row.manifestDigest=digestOf(prepared.record);
+ try{createPreparedEvaluationWorkspaceResolver({...config,purpose:'production'});throw Error('NEGATIVE_ACCEPTED')}catch(e){if(e.message==='NEGATIVE_ACCEPTED')throw e;row.wrongPurposeRejected=true}
+ const bad=structuredClone(config);bad.entries[0].evaluation.inventory.digest='0'.repeat(64);
+ try{await createPreparedEvaluationWorkspaceResolver(bad)(selection,new AbortController().signal);throw Error('NEGATIVE_ACCEPTED')}catch(e){if(e.message==='NEGATIVE_ACCEPTED')throw e;row.wrongBindingRejected=e.message}
+ try{await resolver({...selection,jobDigest:'0'.repeat(64)},new AbortController().signal);throw Error('NEGATIVE_ACCEPTED')}catch(e){if(e.message==='NEGATIVE_ACCEPTED')throw e;row.wrongJobRejected=e.message}
+ }finally{if(prepared){const cleaned=await cleanupWorkspace(workspace);row.cleanup={status:cleaned.record.status,worktreeExists:cleaned.observation.worktreeExists};if(cleaned.record.status!=='closed-clean'||cleaned.observation.worktreeExists)throw Error('CLEANUP_FAILED');await rm(workspace.repoPath,{recursive:true});row.derivedRepositoryRemoved=true}}
+ await writeFile('/tmp/resolver28-real-progress.json',JSON.stringify({rows,elapsedMs:Date.now()-start,observedPeakBytes:peak},null,2));
+ console.log(JSON.stringify({pr,side,actualSuccess:row.actualSuccess,cleanup:row.cleanup,elapsedMs:Date.now()-start}));
+}
+await rm(root,{recursive:true});await writeFile('/tmp/evaluation-resolver28-independent-check.json',JSON.stringify({schemaVersion:1,codeSha:'ba319f64eafc06b816975ee159c510a8404e0644',shellVerified:true,command:'timeout 260s node --import tsx /tmp/resolver28-real-probe.mts',classification:'real-retained-W0-export-diagnostic-resolver-contract-not-persisted-job-or-model',rows,elapsedMs:Date.now()-start,observedPeakBytes:peak,limits:{timeSeconds:300,additionalDiskBytes:536870912,measurement:'du apparent bytes after each preparation; sequential derivation and removal; observation not filesystem hard quota'},cleanup:'all six cleanupWorkspace closed-clean then own derived repositories removed; retained exports/cache untouched',upstreamRequests:0,modelCalls:0,runtimeCalls:0,limitations:['Diagnostic job digests explicitly authored; no persisted job or end-to-end dispatcher','After-side direct contract success does not establish dispatcher before-side mining compatibility','Full snapshot recapture may require both base and head within authorized closure; not executed','Historical public visibility remains unproven','Resolution is not an execution lease']},null,2)+'\n');

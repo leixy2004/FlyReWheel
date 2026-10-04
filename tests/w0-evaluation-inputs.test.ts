@@ -1,8 +1,9 @@
-import { mkdtemp, readFile, readdir, rm, symlink } from 'node:fs/promises';
+import { lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { expect, it, vi } from 'vitest';
-import { BlindDraftSchema, prepareW0EvaluationInputs, verifyContextRecord, verifyRuffPairRecords } from '../scripts/prepare-w0-evaluation-inputs.js';
+import { BlindDraftSchema, validateBlindDraft, prepareW0EvaluationInputs, verifyContextRecord, verifyRuffPairRecords } from '../scripts/prepare-w0-evaluation-inputs.js';
+import { MEMBERS } from '../scripts/prepare-w0-mining.js';
 const load = async (file: string) => JSON.parse(await readFile(new URL(`../experiments/temporal-pilot/w0-first-three/${file}`, import.meta.url), 'utf8'));
 it('reproduces provenance offline while keeping unassigned packets and identity map outside Git', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'w0-eval-test-'));
@@ -10,10 +11,20 @@ it('reproduces provenance offline while keeping unassigned packets and identity 
   try {
     const ledger = await prepareW0EvaluationInputs(join(dir, 'out'), join(dir, 'private'));
     expect(ledger).toEqual(await load('evaluation-preparation/provenance-ledger.json'));
+    const mapping = JSON.parse(await readFile(join(dir, 'private', 'facilitator', 'facilitator-only.json'), 'utf8'));
     const names = await readdir(join(dir, 'private', 'packets'));
     expect(names).toHaveLength(3);
     for (const name of names) {
       const packet = BlindDraftSchema.parse(JSON.parse(await readFile(join(dir, 'private', 'packets', name), 'utf8')));
+      const member = MEMBERS.find(m => m.number === mapping.find((r: { packetId: string }) => r.packetId === packet.packetId).number)!;
+      const bytes = await readFile(new URL(`../experiments/temporal-pilot/w0-first-three/proxy-attempt-1/package-${member.number}.json`, import.meta.url));
+      expect(validateBlindDraft(packet, bytes, member)).toEqual(packet);
+      const pkg = JSON.parse(bytes.toString('utf8'));
+      const after = Buffer.from(pkg.evidence.evidence.snapshot.changes[0].after.bytesBase64, 'base64').toString('utf8');
+      expect(() => validateBlindDraft({ ...packet, sources: [{ ...packet.sources[0], content: after }, ...packet.sources.slice(1)] }, bytes, member)).toThrow('frozen before');
+      expect(() => validateBlindDraft({ ...packet, sources: [{ ...packet.sources[0], content: packet.sources[0]!.content + '\nReference answer: negative' }, ...packet.sources.slice(1)] }, bytes, member)).toThrow('frozen before');
+      expect(() => validateBlindDraft({ ...packet, sources: [...packet.sources, packet.sources[0]] }, bytes, member)).toThrow('frozen before');
+      for (const key of ['split', 'referenceAnswers', 'toolResult', 'commit']) expect(() => validateBlindDraft({ ...packet, [key]: null }, bytes, member)).toThrow();
       expect(packet.label).toBeNull();
       expect(packet.ruleDefinition).toBeNull();
       expect(() => BlindDraftSchema.parse({ ...packet, label: 'negative' })).toThrow();
@@ -46,4 +57,18 @@ it('rejects incomplete or relabelled behavior and context records', async () => 
   verifyContextRecord(context, expected);
   expect(() => verifyContextRecord({ ...context, tree: 'f'.repeat(40) }, expected)).toThrow();
   expect(() => verifyContextRecord({ ...context, observation: { fullCommittedTreeVerified: false } }, expected)).toThrow();
+});
+
+it('rejects another repository or linked worktree before creating any output', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'w0-eval-other-git-'));
+  try {
+    for (const kind of ['repository', 'linked-worktree']) {
+      const repo = join(dir, kind); await mkdir(repo);
+      if (kind === 'repository') { await mkdir(join(repo, '.git')); await writeFile(join(repo, '.git', 'HEAD'), 'ref: refs/heads/main\n'); }
+      else await writeFile(join(repo, '.git'), 'gitdir: /nonexistent/example\n');
+      await expect(prepareW0EvaluationInputs(join(dir, `out-${kind}`), join(repo, 'private'))).rejects.toThrow('outside every Git worktree');
+      await expect(lstat(join(dir, `out-${kind}`))).rejects.toMatchObject({ code: 'ENOENT' });
+      await expect(lstat(join(repo, 'private'))).rejects.toMatchObject({ code: 'ENOENT' });
+    }
+  } finally { await rm(dir, { recursive: true, force: true }); }
 });
