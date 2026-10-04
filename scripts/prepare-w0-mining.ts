@@ -1,7 +1,7 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { W0SourcePackageSchema, validateW0SourcePackage } from './validate-w0-source-package.js';
 import { PrMiningRequestInputSchema } from '../src/core/pr-mining.js';
@@ -111,7 +111,7 @@ export async function prepareW0Mining(dbPath: string, output: string) {
   return report;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (await isMainModule(import.meta.url)) {
   const { values } = parseArgs({ options: { db: { type: 'string' }, out: { type: 'string' } }, strict: true });
   if (!values.db || !values.out) throw new Error('Usage: node --import tsx scripts/prepare-w0-mining.ts --db NEW_ISOLATED_DIRECTORY --out OUTPUT_DIRECTORY');
   console.log(JSON.stringify(await prepareW0Mining(values.db, values.out), null, 2));

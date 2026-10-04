@@ -1,8 +1,8 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { createHash } from 'node:crypto';
 import { readFile, writeFile, mkdir, mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { captureGithubPrEvidence, GithubCaptureLimitError } from '../src/github-pr.js';
 import { GithubReadError } from '../src/github-pr-diagnostics.js';
@@ -82,7 +82,7 @@ export async function runW0Capture(rawPlan: unknown, capture: typeof captureGith
     authentication: 'none', retries: 0 }, packages };
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isMainModule(import.meta.url)) {
   try {
     const pushedCommit = process.argv[3];
     if (process.argv.length !== 4 || process.argv[2] !== '--execute-after-plan-push' || !/^[a-f0-9]{40}$/.test(pushedCommit ?? ''))

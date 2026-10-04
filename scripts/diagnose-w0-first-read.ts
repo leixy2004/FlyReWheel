@@ -1,8 +1,7 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { Octokit } from '@octokit/rest';
 import { createHash } from 'node:crypto';
 import { open, readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { classifyGithubReadFailure, githubHttpFailureDiagnostic } from '../src/github-pr-diagnostics.js';
 
 const endpoint = 'GET /repos/encode/httpx/pulls/3035';
@@ -65,7 +64,7 @@ export async function diagnoseW0FirstRead(testing: { fetch?: typeof globalThis.f
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isMainModule(import.meta.url)) {
   if (process.argv.length !== 3 || process.argv[2] !== '--execute-one-get') throw new Error('REQUIRE_EXECUTE_ONE_GET');
   const directory = new URL('../experiments/temporal-pilot/w0-first-three/', import.meta.url);
   const previousBytes = await readFile(new URL('capture-run/run.json', directory));

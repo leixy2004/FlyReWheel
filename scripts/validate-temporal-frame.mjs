@@ -1,9 +1,10 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const execute = promisify(execFile);
@@ -53,7 +54,7 @@ export async function validateTemporalFrame(frame, collectorBytes) {
   }
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isMainModule(import.meta.url)) {
   try {
     if (process.argv.length > 3) throw new Error('USAGE: node scripts/validate-temporal-frame.mjs [frame.json]');
     const path = process.argv[2] ?? fileURLToPath(new URL('../experiments/temporal-pilot/httpx-2024-frame.json', import.meta.url));
