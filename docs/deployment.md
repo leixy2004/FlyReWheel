@@ -246,3 +246,9 @@ node deploy/validate.mjs --rendered single-node-dev /tmp/flyrewheel-dev.yaml
 或 NetworkPolicy 验证。测试会在存在 kubectl 或 Kustomize 时调用真实 renderer，
 使用不存在的 KUBECONFIG；它只渲染本地资源，不连接集群。完整 schema/准入、
 真实渲染和 live prerequisites 仍按本节列出的边界验收，不能标为部署成功。
+
+后续固定工具验证已完成：使用经官方 SHA-256 校验的 kubectl v1.34.1 / Kustomize
+v5.7.1，两个 profile 的真实渲染及 14 项契约测试均通过，零跳过；29 个资源检查
+通过固定官方 Kubernetes OpenAPI 3.0 schema，另有 9 项负例/边界测试。
+[完整版本、哈希、渲染输出和范围限制](evidence/kubernetes-offline-2026-10-04/README.md)。
+这关闭了上面的工具缺失项；仍未验证 API server 准入或实际集群行为。
