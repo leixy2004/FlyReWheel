@@ -78,3 +78,7 @@ first-run and replay, and stored-render contract checks. Actual cluster/model or
 sandbox provisioning is not part of these checks. Preserve old failed aggregates
 and record the new candidate SHA, terminal exit codes and log hashes separately;
 no result from an input branch is inherited as a current-tree pass.
+
+## Blinded development annotation integration
+
+Commit `5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb` adds the [local annotation workflow](../experiments/annotation/README.md): source-bound blinded packets, two declared independent submissions, immutable local locks and distinct adjudication. Fixed source/cutoff bindings and missing/Unknown distinctions are retained. Authored validation supplies no actual human annotations, model results or historical visibility; the HTTPX before-only draft remains blocked. Overlapping paper and native CLI corrections were reconciled without duplicating them.
