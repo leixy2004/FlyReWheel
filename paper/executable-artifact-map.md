@@ -253,6 +253,14 @@ Its fixture accept/reject, unknown human verdicts and zero activation cannot
 substitute for operating the real W0 jobs. Neither a help screen, valid template,
 queue completion nor a `context-ready` artifact is a mined rule or a model turn.
 
+`closed-loop governance-demo --out-dir NEW_OUTPUT` extends that authored chain
+through explicit local-shadow governance and a subsequent governed review. The
+[persistent example](../docs/local-governance-loop.md) checks exact accepted-rule,
+plan and admission bindings, rejects stale selection, and retains fixture feedback
+as human `Unknown`. It is a deterministic PGlite integration artifact, not a real
+PostgreSQL, model, deployment or efficacy result. Local-shadow selection is not
+production activation; fixture acceptance alone does not select a rule.
+
 ## Metrics mapped to code and missing denominators
 
 | Planned quantity | Executable calculation | Required interpretation |

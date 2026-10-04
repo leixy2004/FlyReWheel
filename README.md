@@ -55,6 +55,14 @@ node dist/cli.js closed-loop demo --out-dir .flyrewheel/closed-loop
 
 所有提案、语义判断和反馈均为 authored fixture；`modelExecution: not_run`、人工 verdict 为 `Unknown`，没有规则激活。compatible 场景保留正例并修正负例，regressed 场景验证接受被阻止。这些场景只验证功能链路，不能作为真实效果。完整命令、产物和故障恢复见[本地闭环快速上手](docs/local-closed-loop.md)。
 
+要继续验证显式治理和后续审查，使用独立输出目录：
+
+```bash
+node dist/cli.js closed-loop governance-demo --out-dir .flyrewheel/governance-loop
+```
+
+此[持久化治理示例](docs/local-governance-loop.md)复用上述闭环，显式选择获接受的修订版本进入 `local-shadow`，验证旧计划失效，并执行 authored governed review。PGlite 与模拟判断只验证功能接线；`local-shadow` 不代表生产激活，fixture 反馈不改变人工 `Unknown`。
+
 ### 旧版检测器演示
 
 ```bash
