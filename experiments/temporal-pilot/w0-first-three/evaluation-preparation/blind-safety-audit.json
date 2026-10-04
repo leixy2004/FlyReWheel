@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "kind": "blind-draft-safety-followup",
+  "reviewers": [
+    "identity_audit",
+    "leakage_audit"
+  ],
+  "concreteFindings": [
+    {
+      "finding": "Other Git worktree allowed as private destination",
+      "fix": "Canonical ancestor marker check before mkdir; reject repository HEAD/gitfile/symlink."
+    },
+    {
+      "finding": "Schema alone accepts arbitrary source content",
+      "fix": "Actual write path validates exact path/content/count/order against SHA256-pinned before sources."
+    }
+  ],
+  "tests": {
+    "file": "tests/w0-evaluation-inputs.test.ts",
+    "passed": 4,
+    "typecheck": "passed",
+    "cases": [
+      "after substitution",
+      "appended reference answer",
+      "duplicate source",
+      "forbidden identity/split/result fields",
+      "other repository",
+      "linked worktree",
+      "symlinked parent",
+      "no output on rejection"
+    ]
+  },
+  "packetRelease": "blocked",
+  "assignedAnnotators": 0,
+  "labels": 0,
+  "models": 0,
+  "newDataCollection": false,
+  "remainingHumanDecision": "Historical admissibility, substantive rubric and controlled packet-only annotation view; no recruitment requested.",
+  "residualRisk": "Public code and published source hashes can reidentify packets; identity blinding not guaranteed."
+}

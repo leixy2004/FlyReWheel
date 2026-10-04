@@ -63,8 +63,8 @@ application feedback/store state and shares no annotation task externally.
 
 ## Reproduce offline
 
-Use new directories with existing parents. The script rejects private paths inside
-the repository, including symlinked parents, and prevents output/private overlap.
+Use new directories with existing parents. The script rejects private paths inside any existing Git worktree, including gitfiles
+and symlinked parents, before creating outputs, and prevents output/private overlap.
 
 ```sh
 prep_run=$(mktemp -d /tmp/flyrewheel-w0-evaluation.XXXXXX)
@@ -101,3 +101,29 @@ The diagnostic uses a dummy job digest and tests only the early rejection guard;
 it is not an end-to-end queued mining run or a positive authorization check.
 `resolver26-check.json` gives commands, code paths and six bindings; the exact
 executed probe is archived as text and the successful CLI result is retained.
+
+## Blind packet safety follow-up
+
+Schema parsing validates shape only; the actual write path now additionally calls
+`validateBlindDraft`, which derives the complete expected before-source list from
+the original SHA256-pinned package and compares every path/content, count and order.
+After-source substitution, appended answers and duplicate sources are rejected.
+Reference-answer, split, commit and tool-result fields are rejected by the strict
+envelope. Source evidence is never rewritten using keyword filters.
+
+A private destination inside a different Git checkout or linked worktree is also
+rejected. Empty protected `.git` placeholders supplied by this cloud environment
+are not repositories; a directory with HEAD or any gitfile/symlink is rejected.
+This prevents accidental generation into existing Git working trees, not a malicious
+owner later initializing a new repository or copying files elsewhere.
+
+Blinding remains prospective and limited: public ledger source hashes can identify
+packet content even without the facilitator mapping. Do not give prospective
+annotators ledger/package access alongside packets. A human research owner still
+needs to decide the historical admissibility, substantive rubric and controlled
+annotation view before assignment; no person has been recruited or assigned.
+
+The six immutable W0 exports and acquisition cache remain retained for the resolver
+owner. Audit of the evaluation-aware resolver/late-EOF correction is pending the
+review lane's explicitly supplied corrected SHA; the earlier PR #26 guard audit is
+not evidence for that future revision.

@@ -8,13 +8,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 6437,
-      "sha256": "da22c1cf93ec7c3f605503bd589a7096e35b93e77a46a23c8351fc5c9188de52"
+      "bytes": 8085,
+      "sha256": "86f214ab79804eca2ad4ffd01943d1db9a66144f3ef93b65f430fe9ac2c90074"
     },
     {
       "path": "blind-draft.schema.json",
-      "bytes": 1850,
-      "sha256": "987be49f575055d0062c929cf610747d57f1eb0f575e64732ada0ccd2556582e"
+      "bytes": 1936,
+      "sha256": "6ac9b9e1c5c448f7db5692d9002b13096e3d4cf773d167832e0b1485448d0f63"
+    },
+    {
+      "path": "blind-safety-audit.json",
+      "bytes": 1293,
+      "sha256": "108cdd4393a3f5edaff9cfb9f2c0dc6cf0d659d6c71ac7f30057fca02bbd281e"
     },
     {
       "path": "heldout-selection.json",

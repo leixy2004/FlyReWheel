@@ -1,13 +1,14 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
+import { lstat, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { resolve, join, dirname, basename, relative, isAbsolute } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { z } from 'zod';
 import { digestOf } from '../src/core/identity.js';
 import { EvaluationAnnotationSchema, EvaluationDatasetSchema } from '../src/core/paired-evaluation.js';
+import { RepositoryPathSchema } from '../src/core/semantic-rule.js';
 import { PrMiningRequestSchema } from '../src/core/pr-mining.js';
 import { EvaluationWorkspaceBindingSchema } from '../src/workspace/history-policy.js';
 import { derivePrMiningRequest } from '../src/pr-mining.js';
@@ -24,8 +25,33 @@ export const BlindDraftSchema = z.object({ schemaVersion: z.literal(1), kind: z.
   coverage: EvaluationAnnotationSchema.shape.coverage.element.shape.state.extract(['unassessed']),
   label: z.null(), ruleDefinition: z.null(), response: z.null(),
   instruction: z.literal('Do not assign correctness labels. Historical visibility and rule rubric are unverified. Record missing context only after assignment; do not search external sources.'),
-  sources: z.array(z.object({ path: z.string().min(1), content: z.string() }).strict()).min(1),
+  sources: z.array(z.object({ path: RepositoryPathSchema, content: z.string().max(262144) }).strict()).min(1).max(32),
 }).strict();
+
+/** Shape validation alone cannot prove blinded content; bind every source to the pinned BEFORE bytes. */
+export function validateBlindDraft(input: unknown, packageBytes: Buffer, member: typeof MEMBERS[number]) {
+  const pkg = validateFrozenPackage(packageBytes, member);
+  const packet = BlindDraftSchema.parse(input);
+  const expected = pkg.evidence.evidence.snapshot.changes.flatMap(change => change.before.state === 'captured'
+    ? [{ path: change.before.path, content: Buffer.from(change.before.bytesBase64, 'base64').toString('utf8') }] : []);
+  if (digestOf(packet.sources) !== digestOf(expected)) throw new Error('Blind draft must contain exactly the frozen before sources');
+  return packet;
+}
+
+async function rejectGitAncestors(path: string) {
+  for (let parent = dirname(path); ; parent = dirname(parent)) {
+    const marker = join(parent, '.git');
+    try {
+      const stat = await lstat(marker);
+      // This environment has empty protected .git placeholders in /tmp and /workspace.
+      // A real repository directory has HEAD; gitfiles/symlinks are conservatively rejected.
+      if (!stat.isDirectory()) throw new Error('Private annotation directory must be outside every Git worktree');
+      try { await lstat(join(marker, 'HEAD')); throw new Error('Private annotation directory must be outside every Git worktree'); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    if (parent === dirname(parent)) break;
+  }
+}
 
 export function verifyRuffPairRecords(pairs: { side: string; commands: { command: string[]; exitCode: number; stdout: string }[] }[]) {
   if (pairs.length !== 2 || [...new Set(pairs.map(p => p.side))].sort().join(',') !== 'after,before') throw new Error('Exact before/after pair required');
@@ -55,6 +81,7 @@ export async function prepareW0EvaluationInputs(output: string, privateDirectory
   const repo = resolve(fileURLToPath(new URL('../', import.meta.url)));
   output = await canonical(output); privateDirectory = await canonical(privateDirectory);
   if (inside(repo, privateDirectory) || inside(output, privateDirectory) || inside(privateDirectory, output)) throw new Error('Private annotation directory must be outside repository and output');
+  await rejectGitAncestors(privateDirectory);
   const frameBytes = await readFile(new URL('../httpx-2024-frame.json', root));
   const frameHash = hash(frameBytes);
   if (frameHash !== '07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b') throw new Error('Frozen frame changed');
@@ -68,7 +95,8 @@ export async function prepareW0EvaluationInputs(output: string, privateDirectory
   const behavior = await read('permission-diagnosis/ledger.json');
   verifyRuffPairRecords(behavior.ruffPairs);
   for (const member of MEMBERS) {
-    const pkg = validateFrozenPackage(await readFile(new URL(`proxy-attempt-1/package-${member.number}.json`, root)), member);
+    const packageBytes = await readFile(new URL(`proxy-attempt-1/package-${member.number}.json`, root));
+    const pkg = validateFrozenPackage(packageBytes, member);
     const evidence = validateGithubPrEvidence(pkg.evidence.evidence);
     const savedRequest = await read(`mining-preparation/request-${member.number}.json`);
     const request = PrMiningRequestSchema.parse(savedRequest.request);
@@ -84,9 +112,9 @@ export async function prepareW0EvaluationInputs(output: string, privateDirectory
     const frameRow = frame.pullRequests.find((row: { number: number }) => row.number === member.number);
     const sources = evidence.evidence.snapshot.changes.flatMap(change => change.before.state === 'captured'
       ? [{ path: change.before.path, content: Buffer.from(change.before.bytesBase64, 'base64').toString('utf8') }] : []);
-    const packet = BlindDraftSchema.parse({ schemaVersion: 1, kind: 'unassigned-source-inspection-draft', packetId: randomUUID(),
+    const packet = validateBlindDraft({ schemaVersion: 1, kind: 'unassigned-source-inspection-draft', packetId: randomUUID(),
       assignment: 'unassigned', formalRelease: 'blocked-history-and-rubric-unverified', coverage: 'unassessed', label: null, ruleDefinition: null, response: null,
-      instruction: 'Do not assign correctness labels. Historical visibility and rule rubric are unverified. Record missing context only after assignment; do not search external sources.', sources });
+      instruction: 'Do not assign correctness labels. Historical visibility and rule rubric are unverified. Record missing context only after assignment; do not search external sources.', sources }, packageBytes, member);
     await put(join(privateDirectory, 'packets', `${packet.packetId}.json`), packet); packets.push(packet);
     facilitator.push({ packetId: packet.packetId, number: member.number, packetDigest: digestOf(packet), beforeContext: contexts[0], evidenceDigest: evidence.digest,
       withheld: ['after source', 'PR identity/title/author/merge state', 'discussions', 'tool results', 'assistant eligibility interpretation'], residualRisk: 'Public source paths/content may identify project or change; no guaranteed identity blinding.' });
