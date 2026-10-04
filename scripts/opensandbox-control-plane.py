@@ -6,6 +6,7 @@ receipts. This manages its process group only, never Docker sandbox resources.
 Use a dedicated idle Docker daemon; the empty inventory check is not a lock.
 """
 import argparse
+import ctypes
 import hashlib
 import json
 import os
@@ -62,7 +63,36 @@ def group_exists(pid):
         return False
 
 
-def stop_group(child, grace=3):
+def enable_child_subreaper():
+    """Own future orphaned descendants in this dedicated Linux supervisor only."""
+    if sys.platform != "linux":
+        raise RuntimeError("Linux child subreaper required")
+    libc = ctypes.CDLL(None, use_errno=True)
+    # prctl is variadic: pass pointer-sized arguments explicitly.
+    if libc.prctl(36, ctypes.c_ulong(1), ctypes.c_ulong(0), ctypes.c_ulong(0), ctypes.c_ulong(0)) != 0:
+        raise OSError(ctypes.get_errno(), "cannot enable child subreaper")
+    enabled = ctypes.c_int()
+    if libc.prctl(37, ctypes.byref(enabled), ctypes.c_ulong(0), ctypes.c_ulong(0), ctypes.c_ulong(0)) != 0 or enabled.value != 1:
+        raise RuntimeError("child subreaper verification failed")
+
+
+def reap_group_descendants(child):
+    # Popen must collect its leader's status first. A generic waitpid(-1) would
+    # steal status from the independently supervised control service.
+    if child.poll() is None:
+        return
+    if child.pid <= 1:
+        raise ValueError("dedicated process group required")
+    for _ in range(1024):  # bounded even if a defective descendant keeps forking
+        try:
+            pid, _ = os.waitpid(-child.pid, os.WNOHANG)
+        except ChildProcessError:
+            return
+        if pid == 0:
+            return
+
+
+def stop_group(child, grace=3, *, reap_descendants=False):
     """Return evidence of group disappearance, not merely a signal result."""
     for sig in (signal.SIGTERM, signal.SIGKILL):
         try:
@@ -72,6 +102,8 @@ def stop_group(child, grace=3):
         until = time.monotonic() + grace
         while time.monotonic() < until:
             child.poll()  # Reap our leader before checking the group.
+            if reap_descendants:
+                reap_group_descendants(child)
             if not group_exists(child.pid):
                 return True
             time.sleep(0.03)
@@ -468,7 +500,7 @@ def run_trial(options):
         if driver is not None:
             if driver.poll() is None:
                 receipt["allocationOutcomeAmbiguous"] = True
-            return stop_group(driver)
+            return stop_group(driver, reap_descendants=True)
         if not receipt.get("resumeCleanupOnly", False):
             return True
         record = json.loads((state / "driver.json").read_text())
@@ -573,6 +605,10 @@ def run_trial(options):
         exclusive_json(state / "provenance.json", {"networkId": network_id, "execdImageId": receipt["preexistingImageId"]})
         if remaining() <= 0:
             raise ValueError("trial deadline")
+        # Fail closed before either service or driver starts. esbuild is unref'd
+        # by tsx and can outlive Node; keep it adoptable and waitable here.
+        enable_child_subreaper()
+        receipt["driverChildSubreaperVerified"] = True
         args = [sys.executable, str(Path(__file__).resolve()), "--execute", "--supervisor",
                 "--approval-ref", options.approval_ref, "--source", options.source,
                 "--python", options.python, "--execd-image", options.execd_image,

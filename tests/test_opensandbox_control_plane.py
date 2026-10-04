@@ -123,6 +123,12 @@ print(json.dumps({'reason':reason,'stopped':m.stop_group(p),'pid':p.pid}),flush=
 
 
 class TrialPrerequisiteTests(unittest.TestCase):
+    def setUp(self):
+        # Real process-local adoption is tested in isolated subprocesses below.
+        subreaper = patch.object(control, "enable_child_subreaper")
+        subreaper.start()
+        self.addCleanup(subreaper.stop)
+
     def options(self, directory):
         from types import SimpleNamespace
         now = int(time.time() * 1000)
@@ -137,6 +143,23 @@ class TrialPrerequisiteTests(unittest.TestCase):
         for path in ("node", "/nonexistent/flyrewheel-node"):
             with self.assertRaises(ValueError):
                 control.trial_node(SimpleNamespace(node_executable=path))
+
+    def test_subreaper_failure_prevents_any_live_spawn(self):
+        with tempfile.TemporaryDirectory() as directory:
+            options = self.options(directory)
+            def command(argv):
+                if argv[1:3] == ["network", "inspect"]:
+                    return json.dumps([{"Id": "fixture-network-id"}])
+                return "fixture-image-id"
+            with patch.object(control, "validate"), \
+                 patch.object(control, "public_command", side_effect=command), \
+                 patch.object(control, "enable_child_subreaper", side_effect=RuntimeError("unavailable")), \
+                 patch.object(control.subprocess, "Popen", side_effect=AssertionError("no spawn")) as spawn:
+                self.assertEqual(control.run_trial(options), 1)
+            spawn.assert_not_called()
+            receipt = json.loads((Path(options.trial_state) / "receipt.json").read_text())
+            self.assertEqual(receipt["errorClass"], "RuntimeError")
+            self.assertNotIn("driverChildSubreaperVerified", receipt)
 
     def test_immutable_admission_and_durable_exclusive_claim(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -375,8 +398,9 @@ class TrialPrerequisiteTests(unittest.TestCase):
                 if argv[1:3] == ["network", "ls"]:
                     return ""  # fake network already absent
                 return "fixture-image-id"
-            def stop_group(process):
+            def stop_group(process, *, reap_descendants=False):
                 self.assertIs(process, driver)
+                self.assertTrue(reap_descendants)
                 calls.append("stop-driver")
                 return True
             def scan(owner):
@@ -402,6 +426,102 @@ class TrialPrerequisiteTests(unittest.TestCase):
             self.assertTrue(receipt["cleanup"]["controlStopped"])
             self.assertTrue(receipt["allocationOutcomeAmbiguous"])
             self.assertEqual(receipt["status"], "cleanup-unverified")
+
+
+class DescendantReapingTests(unittest.TestCase):
+    def test_subreaper_setup_failure_and_readback_failure(self):
+        from unittest.mock import MagicMock
+        for results in ([-1], [0, -1], [0, 0]):
+            libc = MagicMock()
+            libc.prctl.side_effect = results
+            with patch.object(control.ctypes, "CDLL", return_value=libc), \
+                 self.assertRaises((OSError, RuntimeError)):
+                control.enable_child_subreaper()
+
+    def test_reaping_never_steals_live_leader_status(self):
+        from unittest.mock import MagicMock
+        child = MagicMock()
+        child.poll.return_value = None
+        with patch.object(control.os, "waitpid", side_effect=AssertionError("leader still running")):
+            control.reap_group_descendants(child)
+
+    def test_persistent_group_is_not_reported_as_clean(self):
+        from unittest.mock import MagicMock
+        child = MagicMock()
+        child.pid = 12345
+        child.poll.return_value = 7
+        with patch.object(control.os, "killpg"), \
+             patch.object(control.os, "waitpid", side_effect=ChildProcessError), \
+             patch.object(control, "group_exists", return_value=True):
+            self.assertFalse(control.stop_group(child, grace=0.002, reap_descendants=True))
+
+    @unittest.skipUnless(sys.platform == "linux", "Linux process adoption")
+    def test_real_orphans_term_escalation_eof_and_unrelated_status(self):
+        # All processes are inert fixtures. Run adoption in a dedicated Python
+        # process; do not change the test runner's child ownership.
+        program = r'''
+import importlib.util, json, os, signal, subprocess, sys, tempfile, time
+from pathlib import Path
+s=importlib.util.spec_from_file_location('control', sys.argv[1]); m=importlib.util.module_from_spec(s); s.loader.exec_module(m)
+m.enable_child_subreaper()
+mode=sys.argv[2]
+grandchild="""import os, signal, sys, time
+from pathlib import Path
+if sys.argv[2] == 'kill': signal.signal(signal.SIGTERM, signal.SIG_IGN)
+Path(sys.argv[1]).write_text(str(os.getpid()))
+time.sleep(0.05 if sys.argv[2] == 'natural' else 30)
+"""
+leader="""import subprocess, sys, time
+from pathlib import Path
+subprocess.Popen([sys.executable, '-c', sys.argv[1], sys.argv[2], sys.argv[3]])
+while not Path(sys.argv[2]).exists(): time.sleep(0.005)
+print(Path(sys.argv[2]).read_text(), flush=True)
+if sys.argv[3] == 'eof': time.sleep(30)
+sys.exit(7)
+"""
+with tempfile.TemporaryDirectory() as directory:
+    other=subprocess.Popen([sys.executable, '-c', 'raise SystemExit(23)'], start_new_session=True)
+    child=subprocess.Popen([sys.executable, '-c', leader, grandchild, str(Path(directory)/'ready'), mode],
+                           stdout=subprocess.PIPE, text=True, start_new_session=True)
+    try:
+        orphan=int(child.stdout.readline())
+        if mode == 'eof':
+            readfd, writefd=os.pipe(); os.close(writefd)
+            try: assert m.supervise(child,readfd,time.monotonic()+2)=='parent-exited'
+            finally: os.close(readfd)
+        else:
+            assert child.wait(timeout=3)==7
+            if mode == 'natural':
+                until=time.monotonic()+3
+                while time.monotonic()<until:
+                    fields=Path(f'/proc/{orphan}/stat').read_text().rsplit(')',1)[1].split()
+                    if fields[0]=='Z': break
+                    time.sleep(0.005)
+                assert fields[0]=='Z'
+                assert int(fields[1])==os.getpid(), 'must be adopted by this supervisor'
+        started=time.monotonic()
+        assert m.stop_group(child,grace=0.2,reap_descendants=True)
+        assert time.monotonic()-started<2
+        assert not m.group_exists(child.pid)
+        assert not Path(f'/proc/{orphan}').exists()
+        # waitpid(-1) would steal this completed unrelated child's status.
+        assert other.wait(timeout=3)==23
+        if mode!='eof': assert child.returncode==7
+        print(json.dumps({'mode':mode,'groupAbsent':True,'descendantReaped':True,'unrelatedExit':other.returncode}))
+    finally:
+        m.stop_group(child,grace=0.2,reap_descendants=True)
+        child.stdout.close()
+        if other.poll() is None: other.terminate()
+        other.wait(timeout=3)
+'''
+        for mode in ("natural", "kill", "eof"):
+            with self.subTest(mode=mode):
+                result = subprocess.run([sys.executable, "-B", "-c", program, str(SCRIPT), mode],
+                                        capture_output=True, text=True, timeout=10, check=True)
+                observed = json.loads(result.stdout)
+                self.assertTrue(observed["descendantReaped"])
+                self.assertTrue(observed["groupAbsent"])
+                self.assertEqual(observed["unrelatedExit"], 23)
 
 
 if __name__ == "__main__":
