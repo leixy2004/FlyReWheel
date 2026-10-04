@@ -164,3 +164,10 @@ rather than assuming historical review visibility. It is a retrospective proposa
 not preregistration, collection authorization or a completed human-label dataset.
 Protocol critique by two native agents is recorded separately in
 protocol-independent-critique.json; these reviews are not human annotations.
+
+Protocol v0.2 adds staged expenditure gates: a 2.75-person-hour existing-W0
+calibration proposal, then an 18-hour one-family W1 pilot only if feasibility is
+established, and a 26-hour one-family W2 descriptive option if justified. The frame
+and samples do not change. Confirmation requires uncertainty-based design rather
+than arbitrary small N; 152 hours is only the eight-family initial-rating ceiling.
+No phase has started and all costs are planning assumptions, not measured effort.
