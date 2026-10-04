@@ -104,6 +104,15 @@ checks; external action behavior is unknown. Human labels and model calls remain
 zero. PR #23's zero paired results remain its historical outcome; PR #25's one
 bounded successful pair is the later availability result, not a rewritten old run.
 
+## Subsequent evaluation provenance
+
+PR #27 at `d778aba7c1abcd029bb90ce94d7f6f4e9f583cd8` adds a
+[provenance and annotation-preparation audit](../experiments/temporal-pilot/w0-first-three/evaluation-preparation/PAPER-DATA-AUDIT.md):
+three requests, eight source bindings and six contexts. Eligibility remains
+unknown and effect metrics null. W1/W2 remain metadata only; private unassigned
+drafts are not published annotations. The saved resolver probe shows the ordinary
+resolver rejecting evaluation identities, not a successful authorized model job.
+
 ## Product execution is a separate gate
 
 The [offline reproducibility chain](../docs/offline-reproducibility.md) was
