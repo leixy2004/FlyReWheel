@@ -124,6 +124,31 @@ needs to decide the historical admissibility, substantive rubric and controlled
 annotation view before assignment; no person has been recruited or assigned.
 
 The six immutable W0 exports and acquisition cache remain retained for the resolver
-owner. Audit of the evaluation-aware resolver/late-EOF correction is pending the
-review lane's explicitly supplied corrected SHA; the earlier PR #26 guard audit is
-not evidence for that future revision.
+owner. The late-result correction at `6a1a8ac1d56f659f2e7d96b000739025f9755672` was
+independently fetched and checked: 47 authored SDK-shaped tests in three files and
+typecheck passed. `late-eof-independent-check.json` records the exact commands and
+limits. This establishes regression-test behavior, not actual sandbox execution.
+The earlier PR #26 rejection-guard audit remains a separate historical checkpoint.
+
+## PR #28 real evaluation-aware resolver audit
+
+Exact GitHub code `ba319f64eafc06b816975ee159c510a8404e0644` was reviewed in a
+separate checkout. All six retained W0 exports were actually prepared and positively
+resolved by `createPreparedEvaluationWorkspaceResolver` under explicit offline-study
+purpose, preserving each entire binding. Wrong purpose, binding, job digest and
+expected SHA were rejected. Seven authored resolver tests also passed, separately
+from these six real-object probes.
+
+Every new prepared worktree reached cleanupWorkspace closed-clean, then its own
+derived repository was removed. Reinspection confirmed the original baseline
+objects/refs/tree and binding unchanged; all six cache commits and exports remain
+available. The main probe took 93.535 seconds and final checks 4.620 seconds; observed
+derived-root apparent-byte peak was 20,968,134 bytes, not a hard quota or an inclusive
+measurement of shared dependencies and authored-test temporaries.
+
+Evidence is `evaluation-resolver28-independent-check.json`, with exact executed
+probe/postcheck sources archived as text. Diagnostic job digests were authored for
+this contract check: no persisted mining job, execution lease, dispatcher/runtime,
+model, new upstream read or full-snapshot recapture was performed. Before/after
+resolver acceptance alone must not be promoted to end-to-end mining compatibility.
+Historical visibility and annotation release remain unproven/blocked.
