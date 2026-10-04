@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "ANNOTATION-TEMPORAL-PROTOCOL.md",
+      "bytes": 32174,
+      "sha256": "1bb73c90bcfb6f56cb40d77e2b55af8a716008eba34430ea89a0011046f3a0bc"
+    },
+    {
+      "path": "PAPER-DATA-AUDIT.md",
+      "bytes": 2090,
+      "sha256": "8760b0209454d8b138248d25f4927575632e06ddedfadecb86ec758ab0d7eb12"
+    },
+    {
+      "path": "README.md",
+      "bytes": 11667,
+      "sha256": "9cbdf3cf0280cf1b0fda50ff9767039aa219af1845890db1065f79c7aeab55bc"
+    },
+    {
+      "path": "blind-draft.schema.json",
+      "bytes": 1936,
+      "sha256": "6ac9b9e1c5c448f7db5692d9002b13096e3d4cf773d167832e0b1485448d0f63"
+    },
+    {
+      "path": "blind-safety-audit.json",
+      "bytes": 1293,
+      "sha256": "108cdd4393a3f5edaff9cfb9f2c0dc6cf0d659d6c71ac7f30057fca02bbd281e"
+    },
+    {
+      "path": "bridge31/README.md",
+      "bytes": 1884,
+      "sha256": "44adc9b7a0f2a0c6b693d5000ffe892ad4e664f43a926b2ce9089354e72fa62d"
+    },
+    {
+      "path": "bridge31/after-cleanup-check.json",
+      "bytes": 745,
+      "sha256": "78e888961e68a33bc0adee4dc7c1f5d64382dc893467238365aff33300231084"
+    },
+    {
+      "path": "bridge31/after-cleanup.stderr",
+      "bytes": 112,
+      "sha256": "99f041c4a574624718b56031f0f580f71728fc40b88ad4fc9c99eb53e13fd742"
+    },
+    {
+      "path": "bridge31/after-cleanup.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bridge31/artifact-manifest.json",
+      "bytes": 3070,
+      "sha256": "a6656bd158466388ab6cde8584b16b2d5d55f4fe75d22472201c80fcd4356c69"
+    },
+    {
+      "path": "bridge31/command-0.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bridge31/command-0.stdout",
+      "bytes": 296,
+      "sha256": "6d78ba64ab49427659d7bf20f5bf25b9b0874d7209d18c18809edb2188f2cb41"
+    },
+    {
+      "path": "bridge31/command-1.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bridge31/command-1.stdout",
+      "bytes": 4915,
+      "sha256": "2e6e79ede279b6cc47b196f5f562c2c964589738e7f5e42c76846168527f7dc7"
+    },
+    {
+      "path": "bridge31/command-2.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "bridge31/command-2.stdout",
+      "bytes": 4915,
+      "sha256": "2e6e79ede279b6cc47b196f5f562c2c964589738e7f5e42c76846168527f7dc7"
+    },
+    {
+      "path": "bridge31/commands.json",
+      "bytes": 2121,
+      "sha256": "4242ea652b9571e19a645b96e31820bcff7dd90e945ee5b6da660dee2578acf7"
+    },
+    {
+      "path": "bridge31/first-manifest.json",
+      "bytes": 149895,
+      "sha256": "6cdf3ac2a81995aaa3b1fbffae9f669d4b604ab00fac680c6ff5a25e821b3975"
+    },
+    {
+      "path": "bridge31/first-result.json",
+      "bytes": 4915,
+      "sha256": "1acea31924c7af69f1baede56060e58481f403acef02fceec1cca540c0e5ca39"
+    },
+    {
+      "path": "bridge31/native-manifest.json",
+      "bytes": 149895,
+      "sha256": "6cdf3ac2a81995aaa3b1fbffae9f669d4b604ab00fac680c6ff5a25e821b3975"
+    },
+    {
+      "path": "bridge31/negative-cleanup.json",
+      "bytes": 3123,
+      "sha256": "10b48ae644321f5f8a610f4d4b0c3740e290b278612e04e8ea1d32f3b1e1e621"
+    },
+    {
+      "path": "bridge31/negative-cleanup.mts.txt",
+      "bytes": 2225,
+      "sha256": "6d751d15a8fcd25d68f4468d647d9dff62f7bf4932e4c93970f3ed615ffaac8f"
+    },
+    {
+      "path": "bridge31/prepare.mts.txt",
+      "bytes": 1910,
+      "sha256": "0e96953227c634e1adc90a429a4ea8834576329c0d7ce1186a580e54034b6ec8"
+    },
+    {
+      "path": "bridge31/registry.json",
+      "bytes": 8780,
+      "sha256": "6363d359a7e3ec13f8355241a22642963510e1bbffbbcf39e280c1c563ba408e"
+    },
+    {
+      "path": "bridge31/run-check.py.txt",
+      "bytes": 2778,
+      "sha256": "73f8243b1426f873451ec71de8870c51c65148ffda49249423948becae92236f"
+    },
+    {
+      "path": "bridge31/summary.json",
+      "bytes": 2731,
+      "sha256": "a76108d3747148b563728c5d826f90e673939d815f28e5ea883fe16df26583a6"
+    },
+    {
+      "path": "evaluation-resolver28-independent-check.json",
+      "bytes": 16316,
+      "sha256": "f57b23f1dfd8bb364715acf2fe7a578da062c96506c21c5625953496c5f751c9"
+    },
+    {
+      "path": "heldout-selection.json",
+      "bytes": 12417,
+      "sha256": "4ec61bac4681a6e8b428cba9f96e6e336ab59678120ab86b252d8abbb8ce1bae"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 876,
+      "sha256": "e5088428f71ec0499747bae88f37150c72accb9fb687bbca5a06c4dbc66ee1aa"
+    },
+    {
+      "path": "late-eof-independent-check.json",
+      "bytes": 2589,
+      "sha256": "6a5f7f16154f6fcb3d5de229f716db9974f55e3ea2c6e63dcb3359a9eb274431"
+    },
+    {
+      "path": "protocol-independent-critique.json",
+      "bytes": 3939,
+      "sha256": "d8da793f517aa8e780d303f5e0cd4b4877a562fe902f05800984141776cf7827"
+    },
+    {
+      "path": "provenance-ledger.json",
+      "bytes": 23091,
+      "sha256": "9d6835f5a00eb84037c0dcdada00bc50495a1483a42f31cbcc5ab32ac0f69d93"
+    },
+    {
+      "path": "resolver26-check.json",
+      "bytes": 11036,
+      "sha256": "deb243b2b43db8631f36617eb02726e1b1999ae290c1f54f9ac4c380eebcbcc3"
+    },
+    {
+      "path": "resolver26-inspect.json",
+      "bytes": 2119,
+      "sha256": "0fb94969d28c629126b23b860a6a11075a8f0b994908daf694b504d96473f80d"
+    },
+    {
+      "path": "resolver26-probe.mts.txt",
+      "bytes": 2611,
+      "sha256": "94aab4dd4f568318f6a95c2d4d883a8348e31b79eea0515a592ca1f2e3c4a40a"
+    },
+    {
+      "path": "resolver28-postcheck.mts.txt",
+      "bytes": 2486,
+      "sha256": "f52fd3fb20931107fee7aa7fb239afc84ef831c9d7d2f019861769cc067fe64c"
+    },
+    {
+      "path": "resolver28-real-probe.mts.txt",
+      "bytes": 5386,
+      "sha256": "9e0c5d558a4e15f9439e9941679e0e298898029bd28ec1af94bc4f611eb6202a"
+    },
+    {
+      "path": "schema-contracts.json",
+      "bytes": 360,
+      "sha256": "a396bc5c6a30f318eb6539067cb520b9ecaf0ad058abc1baa62b74a9242d9bef"
+    }
+  ]
+}

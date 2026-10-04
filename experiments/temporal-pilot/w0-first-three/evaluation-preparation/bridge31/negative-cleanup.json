@@ -1,0 +1,114 @@
+{
+  "negatives": [
+    {
+      "kind": "wrong-purpose",
+      "rejected": true,
+      "error": "[\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"offline-study\"\n    ],\n    \"path\": [\n      \"purpose\"\n    ],\n    \"message\": \"Invalid input: expected \\\"offline-study\\\"\"\n  }\n]"
+    },
+    {
+      "kind": "wrong-binding",
+      "rejected": true,
+      "error": "Bridge registry must match every frozen source binding"
+    }
+  ],
+  "cleanup": [
+    {
+      "exportId": "httpx-w0-3035-before",
+      "status": "closed-clean",
+      "worktreeExists": false
+    },
+    {
+      "exportId": "httpx-w0-3035-after",
+      "status": "closed-clean",
+      "worktreeExists": false
+    },
+    {
+      "exportId": "httpx-w0-3031-before",
+      "status": "closed-clean",
+      "worktreeExists": false
+    },
+    {
+      "exportId": "httpx-w0-3031-after",
+      "status": "closed-clean",
+      "worktreeExists": false
+    },
+    {
+      "exportId": "httpx-w0-3036-before",
+      "status": "closed-clean",
+      "worktreeExists": false
+    },
+    {
+      "exportId": "httpx-w0-3036-after",
+      "status": "closed-clean",
+      "worktreeExists": false
+    }
+  ],
+  "baseline": [
+    {
+      "exportId": "httpx-w0-3035-before",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    },
+    {
+      "exportId": "httpx-w0-3035-after",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    },
+    {
+      "exportId": "httpx-w0-3031-before",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    },
+    {
+      "exportId": "httpx-w0-3031-after",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    },
+    {
+      "exportId": "httpx-w0-3036-before",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    },
+    {
+      "exportId": "httpx-w0-3036-after",
+      "bindingUnchanged": true,
+      "observation": {
+        "objectClosureVerified": true,
+        "exactRefsVerified": true,
+        "fullCommittedTreeVerified": true,
+        "historicalPublicAvailability": "unproven",
+        "executionSandbox": false
+      }
+    }
+  ]
+}

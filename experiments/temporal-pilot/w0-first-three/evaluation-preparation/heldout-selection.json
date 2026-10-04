@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "kind": "metadata-only-future-selection-specification",
+  "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+  "rule": "All members of each existing half-open UTC window, sorted by mergedAt then PR number; no content/outcome filtering or replacements.",
+  "status": "pending-independent-review-not-authorized-for-acquisition",
+  "windows": [
+    {
+      "id": "W1",
+      "start": "2024-04-01T00:00:00Z",
+      "endExclusive": "2024-07-01T00:00:00Z",
+      "role": "future-feedback-development-candidates-not-holdout",
+      "members": [
+        {
+          "number": 3160,
+          "mergedAt": "2024-04-06T06:30:16Z",
+          "window": "W1",
+          "mergeCommit": "45bb65bba12360d94b8c512e6b13ac4b775a402d",
+          "parents": [
+            "392dbe45f086d0877bd288c5d68abf860653b680"
+          ],
+          "tree": "2588e31d2325cb8b7c62acd75de0875abb712d71"
+        },
+        {
+          "number": 3159,
+          "mergedAt": "2024-04-06T11:55:27Z",
+          "window": "W1",
+          "mergeCommit": "5bb2ea0f4e1274730ef85f50f5a6bf07eb74eef4",
+          "parents": [
+            "45bb65bba12360d94b8c512e6b13ac4b775a402d"
+          ],
+          "tree": "a70bd896abe5ddc55adeefeb03818d9fad571a9d"
+        },
+        {
+          "number": 3156,
+          "mergedAt": "2024-04-09T20:38:43Z",
+          "window": "W1",
+          "mergeCommit": "7354ed70ceb1a0f072af82e2cb784ef6b2512ed3",
+          "parents": [
+            "5bb2ea0f4e1274730ef85f50f5a6bf07eb74eef4"
+          ],
+          "tree": "f015f57fc74708641520cdb783316981b37e9d31"
+        },
+        {
+          "number": 3138,
+          "mergedAt": "2024-04-12T06:11:12Z",
+          "window": "W1",
+          "mergeCommit": "4b85e6c3898b94e686b427afd83138c87520b479",
+          "parents": [
+            "7354ed70ceb1a0f072af82e2cb784ef6b2512ed3"
+          ],
+          "tree": "85b31de4fc5ce745225bc87ab020e19fb123c1eb"
+        },
+        {
+          "number": 3185,
+          "mergedAt": "2024-05-01T16:56:18Z",
+          "window": "W1",
+          "mergeCommit": "2f5ae50726b1a2ca78340a25054f81cf4ed926c7",
+          "parents": [
+            "4b85e6c3898b94e686b427afd83138c87520b479"
+          ],
+          "tree": "9a6e293fe5bafe6c016119c330f4b60fe1b3cfd1"
+        },
+        {
+          "number": 3186,
+          "mergedAt": "2024-05-02T10:07:10Z",
+          "window": "W1",
+          "mergeCommit": "be56b747350008b7b0456242691919f9086c0f32",
+          "parents": [
+            "2f5ae50726b1a2ca78340a25054f81cf4ed926c7"
+          ],
+          "tree": "f183c6e84bb235fa0838cc923063968e5b91202e"
+        },
+        {
+          "number": 3187,
+          "mergedAt": "2024-05-03T00:09:08Z",
+          "window": "W1",
+          "mergeCommit": "a7092af2fda78d92daaad7627e4cf0cf5e94b019",
+          "parents": [
+            "be56b747350008b7b0456242691919f9086c0f32"
+          ],
+          "tree": "f71f75a0c4f132667f2a68728eeec2a531b167f9"
+        },
+        {
+          "number": 3174,
+          "mergedAt": "2024-05-05T16:24:16Z",
+          "window": "W1",
+          "mergeCommit": "fa6dac8383541669f42086d4f07c71b0f8d6a279",
+          "parents": [
+            "a7092af2fda78d92daaad7627e4cf0cf5e94b019"
+          ],
+          "tree": "0f987f83f51e0e6762e64c447dc107bb7d5f4a66"
+        },
+        {
+          "number": 3175,
+          "mergedAt": "2024-05-10T10:42:50Z",
+          "window": "W1",
+          "mergeCommit": "88a81c5d31a4a8b4bd0a860dedd3bb12dc09ff86",
+          "parents": [
+            "fa6dac8383541669f42086d4f07c71b0f8d6a279"
+          ],
+          "tree": "09cf30c9ac0002be1c1d57ba6a0e017bfffaea9d"
+        },
+        {
+          "number": 3189,
+          "mergedAt": "2024-05-17T17:25:38Z",
+          "window": "W1",
+          "mergeCommit": "37593c1952f4972040f6163da67e3777fd3d2e94",
+          "parents": [
+            "88a81c5d31a4a8b4bd0a860dedd3bb12dc09ff86"
+          ],
+          "tree": "da9b6d735b7470e54de9c715e1b6c853f23becb0"
+        },
+        {
+          "number": 3213,
+          "mergedAt": "2024-06-03T10:38:14Z",
+          "window": "W1",
+          "mergeCommit": "e186ecc9f82c9a45c031e70f0a153ac54235bd10",
+          "parents": [
+            "37593c1952f4972040f6163da67e3777fd3d2e94"
+          ],
+          "tree": "dfea05df8d38a6bb4604d4d6471f09aca65016a6"
+        },
+        {
+          "number": 3210,
+          "mergedAt": "2024-06-06T15:36:07Z",
+          "window": "W1",
+          "mergeCommit": "92e9dfb3997ab07353bbe98f9b5a6e69b7701c70",
+          "parents": [
+            "e186ecc9f82c9a45c031e70f0a153ac54235bd10"
+          ],
+          "tree": "e36222ccd47f95df667ba950b90dc25c99e05524"
+        },
+        {
+          "number": 3188,
+          "mergedAt": "2024-06-13T13:46:37Z",
+          "window": "W1",
+          "mergeCommit": "db9072f998b53ff66d50778bf5edee8e2cc8ede1",
+          "parents": [
+            "92e9dfb3997ab07353bbe98f9b5a6e69b7701c70"
+          ],
+          "tree": "8731486256fa3fcc4198d5f3a6794180737c7018"
+        }
+      ],
+      "sourceAccess": "not-performed",
+      "exclusionsApplied": [],
+      "readiness": "blocked-lineage-visibility-labels-unverified"
+    },
+    {
+      "id": "W2",
+      "start": "2024-07-01T00:00:00Z",
+      "endExclusive": "2024-10-01T00:00:00Z",
+      "role": "future-holdout-candidates",
+      "members": [
+        {
+          "number": 3246,
+          "mergedAt": "2024-07-23T14:43:47Z",
+          "window": "W2",
+          "mergeCommit": "b351a44fb6e97dbe3119b738ddff7125cc5dc7af",
+          "parents": [
+            "db9072f998b53ff66d50778bf5edee8e2cc8ede1"
+          ],
+          "tree": "d7cec590d15cf7e93bf7c573eb17aa5dd554855f"
+        },
+        {
+          "number": 3245,
+          "mergedAt": "2024-07-23T14:46:47Z",
+          "window": "W2",
+          "mergeCommit": "359f77d4f6ea722d02c3731e9581456c6386e188",
+          "parents": [
+            "b351a44fb6e97dbe3119b738ddff7125cc5dc7af"
+          ],
+          "tree": "eaa54186111b32d5e00f0c79c7363956a253e619"
+        },
+        {
+          "number": 3247,
+          "mergedAt": "2024-07-23T14:54:34Z",
+          "window": "W2",
+          "mergeCommit": "beb501fc28cb24ef7cd584159bc6ac55d2244dea",
+          "parents": [
+            "359f77d4f6ea722d02c3731e9581456c6386e188"
+          ],
+          "tree": "4eed771aa6115351ba059909c6e6835143d0be74"
+        },
+        {
+          "number": 3250,
+          "mergedAt": "2024-07-26T08:36:03Z",
+          "window": "W2",
+          "mergeCommit": "7c0cda153d301bde9a011e1dd7157d7e2b20889d",
+          "parents": [
+            "beb501fc28cb24ef7cd584159bc6ac55d2244dea"
+          ],
+          "tree": "773d503e5d7a7b4059cbe27862824317b7e1ee5c"
+        },
+        {
+          "number": 3275,
+          "mergedAt": "2024-08-22T15:03:23Z",
+          "window": "W2",
+          "mergeCommit": "1bf1ba51242e6433f6a4cfa45a9338eb85bd7559",
+          "parents": [
+            "7c0cda153d301bde9a011e1dd7157d7e2b20889d"
+          ],
+          "tree": "4e491b65e361a962bb92e4cc5dc31087828edcc3"
+        },
+        {
+          "number": 3285,
+          "mergedAt": "2024-08-27T11:27:08Z",
+          "window": "W2",
+          "mergeCommit": "1d6b6634331686c0701c75b6ff4830925269f23d",
+          "parents": [
+            "1bf1ba51242e6433f6a4cfa45a9338eb85bd7559"
+          ],
+          "tree": "ce8ad921de7fa63e0be08a7bd0b6ce539583e953"
+        },
+        {
+          "number": 3288,
+          "mergedAt": "2024-08-27T12:52:05Z",
+          "window": "W2",
+          "mergeCommit": "609df7ecc0f7cb10a1c998aa9c269bba77337c5f",
+          "parents": [
+            "1d6b6634331686c0701c75b6ff4830925269f23d"
+          ],
+          "tree": "eb588c22adc997f4cff844ffd0c71e77c4ee9a7e"
+        },
+        {
+          "number": 3292,
+          "mergedAt": "2024-09-01T17:45:25Z",
+          "window": "W2",
+          "mergeCommit": "d46fa57a6a5163e39af9eda6e026c60ca646f573",
+          "parents": [
+            "609df7ecc0f7cb10a1c998aa9c269bba77337c5f"
+          ],
+          "tree": "e7ebfff8865f0777890b53d7ce6525d79fbc7b96"
+        },
+        {
+          "number": 3295,
+          "mergedAt": "2024-09-04T12:24:25Z",
+          "window": "W2",
+          "mergeCommit": "0aa20e449e742f81fbc518ce793878015226652d",
+          "parents": [
+            "d46fa57a6a5163e39af9eda6e026c60ca646f573"
+          ],
+          "tree": "4989f88bc673568eaf4e00678ffb09bded8e47a2"
+        },
+        {
+          "number": 3305,
+          "mergedAt": "2024-09-17T10:31:15Z",
+          "window": "W2",
+          "mergeCommit": "d4961b9f8e7f00b654dbdbf200562bd273f598c7",
+          "parents": [
+            "0aa20e449e742f81fbc518ce793878015226652d"
+          ],
+          "tree": "6a918db262a6905ab970c22763b2ca2250d2b89f"
+        },
+        {
+          "number": 3192,
+          "mergedAt": "2024-09-22T20:16:32Z",
+          "window": "W2",
+          "mergeCommit": "f06171fd5a86cf89387f4ee860ea0da207160418",
+          "parents": [
+            "d4961b9f8e7f00b654dbdbf200562bd273f598c7"
+          ],
+          "tree": "83cc686a86ae5a52637a57d7b9c6af23d6f68a01"
+        },
+        {
+          "number": 3318,
+          "mergedAt": "2024-09-24T16:21:56Z",
+          "window": "W2",
+          "mergeCommit": "2e01aa0075327c5c30632207e8b7a1961dda5303",
+          "parents": [
+            "f06171fd5a86cf89387f4ee860ea0da207160418"
+          ],
+          "tree": "a1352cc8d28886a3a9021ddbb51944fa9bc283cd"
+        },
+        {
+          "number": 3317,
+          "mergedAt": "2024-09-24T16:53:13Z",
+          "window": "W2",
+          "mergeCommit": "a18f79610141500cf540b2cf4783559731109d7d",
+          "parents": [
+            "f06171fd5a86cf89387f4ee860ea0da207160418"
+          ],
+          "tree": "5bfe2771c723d64cf401d98bfbebe0f8feb0bfd3"
+        },
+        {
+          "number": 3315,
+          "mergedAt": "2024-09-24T20:52:34Z",
+          "window": "W2",
+          "mergeCommit": "34e1110a9b3f8ff875fd2f61e1721cf68e18e564",
+          "parents": [
+            "a18f79610141500cf540b2cf4783559731109d7d"
+          ],
+          "tree": "d26bcdb5c0f6ae38dbacc5b9574d0e8d4f5a1009"
+        },
+        {
+          "number": 3314,
+          "mergedAt": "2024-09-26T11:01:22Z",
+          "window": "W2",
+          "mergeCommit": "dece72d8cddde56060a3493843abc9ba7c85df81",
+          "parents": [
+            "34e1110a9b3f8ff875fd2f61e1721cf68e18e564"
+          ],
+          "tree": "4f357586afacf7593d2c8fc1e3bb8dbde8d2ff60"
+        },
+        {
+          "number": 3312,
+          "mergedAt": "2024-09-26T17:01:47Z",
+          "window": "W2",
+          "mergeCommit": "49d74a2e7f773f88a84dd4af900d7a8543636ae2",
+          "parents": [
+            "2e01aa0075327c5c30632207e8b7a1961dda5303"
+          ],
+          "tree": "8c1b6f3c9341af3131f09134185a563bf0eae142"
+        },
+        {
+          "number": 3323,
+          "mergedAt": "2024-09-27T09:55:41Z",
+          "window": "W2",
+          "mergeCommit": "7a046618f748c24ab05bd2adf683b8c24a72887b",
+          "parents": [
+            "5766bf58e20548f106e13e95d7064635a9b06941"
+          ],
+          "tree": "c39a7afff5abaae3718891608f08232b2c89c59d"
+        },
+        {
+          "number": 3326,
+          "mergedAt": "2024-09-27T15:36:34Z",
+          "window": "W2",
+          "mergeCommit": "3849e1518f342dd8cd08f8c0537b565d54e6d2a2",
+          "parents": [
+            "49d74a2e7f773f88a84dd4af900d7a8543636ae2"
+          ],
+          "tree": "7a12c2c11d9a51d3f92f39e9c01a28244c042da8"
+        },
+        {
+          "number": 3325,
+          "mergedAt": "2024-09-27T15:41:17Z",
+          "window": "W2",
+          "mergeCommit": "95a9527ed6a8b9a8e53ddee2f61447fb1a37e2a9",
+          "parents": [
+            "3849e1518f342dd8cd08f8c0537b565d54e6d2a2"
+          ],
+          "tree": "1c4f66fd8a102f5242ddadb2fea05bfabee6ef26"
+        }
+      ],
+      "sourceAccess": "not-performed",
+      "exclusionsApplied": [],
+      "readiness": "blocked-lineage-visibility-labels-unverified"
+    }
+  ],
+  "exclusions": [
+    "All three exposed W0 samples excluded from holdout and evaluation denominators.",
+    "Unknown/disputed/unassigned labels never converted to negative.",
+    "Do not score until semantic lineage, cherry-pick/backport and source-overlap audit is completed.",
+    "Exact tree/commit duplication is a flag, not proof of shared or independent defect lineage."
+  ],
+  "comparisonDenominator": null,
+  "labels": 0,
+  "sourceOrDiscussionReads": 0
+}

@@ -1,0 +1,31 @@
+import subprocess,json,time,pathlib,hashlib
+root=pathlib.Path('/tmp/flyrewheel-bridge31-evidence');cwd='/tmp/flyrewheel-bridge31-check'
+base=['node','--import','tsx','experiments/matched-revision/native-evaluation-cli.ts','native']
+contexts=[str(root/'inputs'/f'context-{pr}-{side}.json') for pr in [3035,3031,3036] for side in ['before','after']]
+commands=[base+['init-w0','--contexts',*contexts,'--provenance',str(root/'inputs/provenance-ledger.json'),'--source-commit','2cb82efbefc764f2b0b04f5ec64da3601da0ef64','--registry',str(root/'registry.json'),'--out',str(root/'native-manifest.json')]]
+run=['timeout','--kill-after=5s','180s',*base,'run','--manifest',str(root/'native-manifest.json'),'--checkpoint',str(root/'checkpoint'),'--timeout-ms','150000']
+commands += [run,run]
+records=[]
+for i,cmd in enumerate(commands):
+ t=time.monotonic();p=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=190)
+ (root/f'command-{i}.stdout').write_bytes(p.stdout);(root/f'command-{i}.stderr').write_bytes(p.stderr)
+ records.append({'argv':cmd,'cwd':cwd,'exitCode':p.returncode,'elapsedSeconds':time.monotonic()-t})
+ (root/'commands.json').write_text(json.dumps(records,indent=2)+'\n')
+ print(json.dumps({'command':i,'exitCode':p.returncode,'elapsedSeconds':records[-1]['elapsedSeconds']}),flush=True)
+ if p.returncode:raise SystemExit(p.stderr.decode())
+ if i==1:
+  (root/'first-result.json').write_bytes((root/'checkpoint/result.json').read_bytes())
+  (root/'first-manifest.json').write_bytes((root/'checkpoint/manifest.json').read_bytes())
+assert (root/'command-1.stdout').read_bytes()==(root/'command-2.stdout').read_bytes()
+assert (root/'first-result.json').read_bytes()==(root/'checkpoint/result.json').read_bytes()
+assert (root/'first-manifest.json').read_bytes()==(root/'checkpoint/manifest.json').read_bytes()
+r=json.loads((root/'first-result.json').read_text());reg=json.loads((root/'registry.json').read_text())
+assert r['purpose']==r['evaluation']['purpose']==reg['purpose']=='offline-study'
+assert r['execution']=='blocked' and r['executable'] is False and r['providerModelCalls']==0 and r['nativeStudy'] is None and r['resources']=='not_allocated'
+assert r['workspaceVerification']=='verified-current-prepared-exports'
+assert len(r['blockers'])==4 and len(set(r['blockers']))==4
+canon=lambda x:json.dumps(x,sort_keys=True)
+assert sorted(map(canon,r['evaluation']['bindings']))==sorted(canon(x['evaluation']) for x in reg['entries'])
+assert len(set(x['exportId'] for x in r['evaluation']['bindings']))==6
+assert sorted(p.name for p in (root/'checkpoint').iterdir())==['manifest.json','result.json']
+print('PASS: six bindings, offline purpose, four blockers, byte-identical process reopen, zero reported model calls; checkpoint contains only manifest/result.',flush=True)

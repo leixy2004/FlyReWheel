@@ -1,0 +1,15 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {inspectEvaluationCheckout,evaluationWorkspaceBinding} from '/tmp/flyrewheel-pr26-check/src/workspace/evaluation-checkout.ts';
+import {createPreparedWorkspaceResolver} from '/tmp/flyrewheel-pr26-check/src/prepared-workspace-resolver.ts';
+import {digestOf} from '/tmp/flyrewheel-pr26-check/src/core/identity.ts';
+const rows=[]; const resolve=createPreparedWorkspaceResolver({schemaVersion:1,entries:[]});
+for(const pr of [3035,3031,3036]) for(const side of ['before','after']) {
+ const context=JSON.parse(await readFile(`/tmp/flyrewheel-w0-full-context-attempt-1/context-${pr}-${side}.json`,'utf8'));
+ const inspected=await inspectEvaluationCheckout({storePath:'/tmp/flyrewheel-w0-full-context-attempt-1/exports',manifest:context.manifest});
+ const binding=evaluationWorkspaceBinding(context.binding.exportId,inspected);
+ let rejection='';try{await resolve({workspaceId:`w0-${pr}-${side}`,jobDigest:'0'.repeat(64),kind:'pr-mining',repository:binding.repositoryId,expectedSha:context.sha,baseSha:context.sha,headSha:context.sha,evaluationExportId:binding.exportId},new AbortController().signal)}catch(e){rejection=e.message}
+ if(digestOf(binding)!==digestOf(context.binding)||rejection!=='Prepared workspace resolver does not support evaluation exports')throw Error('unexpected boundary result');
+ rows.push({pr,side,sha:context.sha,bindingUnchanged:true,recordDigest:inspected.recordDigest,observation:inspected.observation,resolverRejection:rejection});
+}
+await writeFile('/tmp/resolver26-check.json',JSON.stringify({schemaVersion:1,codeSha:'9b6789fcf746e25bd0bc98476ba75cb58975dd40',shellAvailable:true,publishedCommand:{command:'node --import tsx src/cli.ts evaluation checkout inspect --store /tmp/flyrewheel-w0-full-context-attempt-1/exports --manifest /tmp/w0-manifest-3035-before.json',exitCode:0,output:'/tmp/resolver26-inspect.json'},rows,upstreamRequests:0,modelCalls:0,derivedWorkspacesCreated:0,existingRoute:'prepareEvaluationWorkspace performs export inspection, exact binding derivation, isolated repository derivation and prepareWorkspace; application dispatcher accepts {workspace,evaluation} and checks export/repository/checkout.',integrationGap:'PR26 concrete administrator-configured resolver intentionally only supports ordinary workspaces. No supplied evaluation-aware resolver registry implementation exists in this code SHA. Do not remove binding.',historicalVisibility:'unproven'},null,2)+'\n');
+console.log(JSON.stringify({records:rows.length,allInspected:true,allBindingsRetained:true,allResolverRejectionsExpected:true}));

@@ -1,0 +1,21 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {prepareEvaluationWorkspace} from '/tmp/flyrewheel-bridge31-check/src/workspace/evaluation-workspace.ts';
+import {digestOf} from '/tmp/flyrewheel-bridge31-check/src/core/identity.ts';
+const root='/tmp/flyrewheel-bridge31-evidence';
+globalThis.fetch=async()=>{throw Error('NETWORK_FORBIDDEN')};
+const old=JSON.parse(await readFile('/tmp/evaluation-resolver28-independent-check.json','utf8'));
+const registry={schemaVersion:1,purpose:'offline-study',entries:[]};
+for(const row of old.rows){
+ const name=`context-${row.pr}-${row.side}.json`;
+ const bytes=execFileSync('git',['show',`2cb82efbefc764f2b0b04f5ec64da3601da0ef64:experiments/temporal-pilot/w0-first-three/full-context/${name}`],{cwd:'/workspace/FlyReWheel'});
+ await writeFile(`${root}/inputs/${name}`,bytes);
+ const c=JSON.parse(bytes.toString());
+ const workspace={repoPath:`${root}/derived-${row.pr}-${row.side}`,runId:'offline-study',attemptId:'bridge31-diagnostic'};
+ const prepared=await prepareEvaluationWorkspace({...workspace,storePath:'/tmp/flyrewheel-w0-full-context-attempt-1/exports',exportId:c.binding.exportId,manifest:c.manifest});
+ if(digestOf(prepared.evaluation)!==digestOf(c.binding)||digestOf(c.binding)!==digestOf(row.binding))throw Error('BINDING_CHANGED');
+ registry.entries.push({selection:row.selection,workspace,manifestDigest:digestOf(prepared.record),evaluation:prepared.evaluation});
+ await writeFile(`${root}/registry.json`,JSON.stringify(registry,null,2)+'\n');
+ console.log(JSON.stringify({exportId:c.binding.exportId,prepared:true,selectionUnchanged:true}));
+}
+await writeFile(`${root}/inputs/provenance-ledger.json`,execFileSync('git',['show','2cb82efbefc764f2b0b04f5ec64da3601da0ef64:experiments/temporal-pilot/w0-first-three/evaluation-preparation/provenance-ledger.json'],{cwd:'/workspace/FlyReWheel'}));
