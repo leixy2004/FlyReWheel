@@ -165,6 +165,11 @@ again in this offline audit. These belong to their exact heads, not to
 [integration record](../docs/integration-candidate-2026-10-03.md) and
 [W0 integration record](../docs/integration-w0-candidate-2026-10-03.md).
 
+The later intermediate PR24 head `4be3720` has a separately recorded hosted
+109-file / 1762-test pass and an identical synthetic-merge tree in the
+[context integration record](../docs/integration-context-composition-2026-10-03.md).
+That result predates the PR26/27/28 additions and does not validate them.
+
 Before claiming any empirical contrast, supply the missing trusted runtime/model
 and spending configuration, freeze the W0 rule artifacts, assign independent
 humans/adjudicator, audit lineage and visibility, and release W1/W2 stages only

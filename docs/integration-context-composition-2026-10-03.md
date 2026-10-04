@@ -112,3 +112,20 @@ After merging both corrected inputs, source checkpoint
 tests across five files in 6.19 seconds. The subsequent changes only reconcile
 this record and the paper map. Full hosted validation of the later published head
 must be recorded separately; focused passes do not replace it.
+
+## Frozen intermediate full-suite result
+
+PR24 head `4be3720f55dc3ac054f7b701ae6ff681fded68a6` completed
+[hosted run 37163076893](https://github.com/leixy2004/FlyReWheel/actions/runs/37163076893)
+successfully: typecheck/build and **109 files / 1762 tests**, test duration
+1117.16 seconds. The log's actual checkout is synthetic merge
+`fe625ec618294484bc702617dd56dd20daec14bd`, parents main `e79954c` and
+`4be3720`; its tree `c7e74132c472f5e299329e841d6cef7c15936bef` exactly equals
+the tested head tree. Saved full-log SHA256:
+`7429769049c133515358c9d56c734279341cf0cd7aac34bba1ca894e6cfd77a0`.
+
+The earlier `37d31a2` run 37162283942 was cancelled by the subsequent push, not a
+pass. The 1762-pass checkpoint predates PR26/27/28 and the executable CLI guide;
+none of those later changes inherit that full-suite result. The next published
+head requires its own aggregate run. Hosted tests are authored fixtures/local
+PGlite/local Git checks, not a fresh real PostgreSQL/model/deployment experiment.
