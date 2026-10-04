@@ -1,4 +1,4 @@
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { discoverGithubPrHistory, validateHistoryPlan, HISTORY_PAGE_SIZE } from '../src/github-pr-history.js';
 import { captureGithubPrHistoryBatch } from '../src/github-pr-history-batch.js';
 import { QualEvoStore } from '../src/storage/store.js';
@@ -7,6 +7,8 @@ import { historyPlan, historyTransport, searchItem, historyRepository, historyTi
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+
+import { useFreshPGlite } from './helpers/fresh-pglite.js';
 
 const filter = { repository: historyRepository, createdFrom: historyTime, createdBefore: '2026-10-02T00:00:00Z', status: 'all' as const };
 afterEach(() => vi.restoreAllMocks());
@@ -209,9 +211,10 @@ it('enforces aggregate requests across failures and rejects malformed bounds bef
     await expect(captureGithubPrHistoryBatch(store, 'not-a-digest', { maxPulls: 6 }, f)).rejects.toThrow();
   } finally { await store.close(); }
 });
-it('requires explicit interrupted recovery, rejects concurrent CAS claims and never imports forged progress', async () => {
-  const store = await QualEvoStore.openPGlite();
-  try {
+describe('interrupted history recovery setup', () => {
+  const fresh = useFreshPGlite();
+  it('requires explicit interrupted recovery, rejects concurrent CAS claims and never imports forged progress', async context => {
+    const { store } = fresh(context);
     const plan = historyPlan(), initial = await store.importGithubPrHistoryPlan(plan), f = historyTransport();
     const active = { ...initial.items[0], status: 'capturing' as const, attempts: 1, lastAttemptAt: '2026-10-01T00:00:00.000Z' };
     const running = await store.updateGithubPrHistoryItem(plan.digest, 0, active);
@@ -221,7 +224,7 @@ it('requires explicit interrupted recovery, rejects concurrent CAS claims and ne
     const result = await captureGithubPrHistoryBatch(store, plan.digest, { recoverInterrupted: true }, f);
     expect(result.batch.items.map(item => item.attempts)).toEqual([2, 1]);
     await expect(store.importGithubPrHistoryPlan(result.batch)).rejects.toThrow();
-  } finally { await store.close(); }
+  });
 });
 it('rejects captures whose current status moved outside the discovery filter', async () => {
   const store = await QualEvoStore.openPGlite();
@@ -270,10 +273,10 @@ it('rolls back a 21st mining request and derived cases when the local linkage bo
     expect((await store.getGithubPrHistoryBatch(plan.digest)).items[0].miningRequestDigests).toHaveLength(20);
   } finally { await store.close(); }
 }, 30_000);
-it('revalidates stored captured evidence and mining links on read and resume', async () => {
-  const { openPGliteDatabase } = await import('../src/storage/database.js');
-  const db = await openPGliteDatabase(), store = await QualEvoStore.initialize(db);
-  try {
+describe('stored history evidence setup', () => {
+  const fresh = useFreshPGlite();
+  it('revalidates stored captured evidence and mining links on read and resume', async context => {
+    const { db, store } = fresh(context);
     const plan = historyPlan([7]), f = historyTransport([7]); await store.importGithubPrHistoryPlan(plan);
     const result = await captureGithubPrHistoryBatch(store, plan.digest, {}, f);
     const original = result.batch.items;
@@ -283,7 +286,7 @@ it('revalidates stored captured evidence and mining links on read and resume', a
       await expect(captureGithubPrHistoryBatch(store, plan.digest, {}, f)).rejects.toThrow();
     }
     await expect(db.query('UPDATE qe_github_pr_history SET repository=$1 WHERE digest=$2', ['other/repo', plan.digest])).rejects.toThrow('immutable');
-  } finally { await store.close(); }
+  });
 });
 it('keeps an interruption recoverable when local persistence fails after a successful provider read', async () => {
   const store = await QualEvoStore.openPGlite();

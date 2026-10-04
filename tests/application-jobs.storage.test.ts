@@ -9,6 +9,8 @@ import { revisionDate, revisionGenerationFixture } from './helpers/revision-gene
 import { applicationJobsFixture } from './helpers/application-jobs-fixture.js';
 import { createPrMiningWorkspaceModelAdapter, type TrustedPrMiningNoCandidate } from '../src/adapters/pr-mining-model.js';
 
+import { useFreshPGlite } from './helpers/fresh-pglite.js';
+
 const cleanup: Array<() => Promise<void>> = [];
 afterEach(async () => { while (cleanup.length) await cleanup.pop()!(); });
 async function fixture(wrap?: (db: Database) => Database) {
@@ -36,15 +38,18 @@ async function withTamperedLedger(db: Database, fn: (tx: Queryable, store: QualE
 }
 
 describe('durable application job storage', () => {
-  it('normalizes stable input and serializes competing claims without starting a second owner', async () => {
-    const { store } = await fixture(), input = job(), owner = randomUUID(), contender = randomUUID();
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toBeNull();
-    const results = await Promise.all([store.claimApplicationJob(input, owner), store.claimApplicationJob(input, contender)]);
-    expect(results.map(result => result.state).sort()).toEqual(['busy', 'claimed']);
-    expect(await store.claimApplicationJob(input, owner)).toEqual({ state: 'busy' });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toEqual({ jobDigest: applicationJobDigest(input), job: input,
-      state: 'running', result: null, attempts: 1 });
-    await expect(store.claimApplicationJob(input, 'not-a-uuid')).rejects.toThrow();
+  describe('fresh database claim setup', () => {
+    const fresh = useFreshPGlite();
+    it('normalizes stable input and serializes competing claims without starting a second owner', async context => {
+      const { store } = fresh(context), input = job(), owner = randomUUID(), contender = randomUUID();
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toBeNull();
+      const results = await Promise.all([store.claimApplicationJob(input, owner), store.claimApplicationJob(input, contender)]);
+      expect(results.map(result => result.state).sort()).toEqual(['busy', 'claimed']);
+      expect(await store.claimApplicationJob(input, owner)).toEqual({ state: 'busy' });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toEqual({ jobDigest: applicationJobDigest(input), job: input,
+        state: 'running', result: null, attempts: 1 });
+      await expect(store.claimApplicationJob(input, 'not-a-uuid')).rejects.toThrow();
+    });
   });
 
   it('persists immutable blocked outcomes and returns terminal retries without invoking domain persistence', async () => {
@@ -119,19 +124,22 @@ describe('durable application job storage', () => {
     for (const digest of digests) expect(await store.getApplicationJob(digest)).toMatchObject({ state: 'running', attempts: 1, result: null });
   });
 
-  it.each(['before-persistence', 'during-persistence'] as const)('rolls back cancellation %s without a durable domain result', async phase => {
-    const { store } = await fixture(), input = job(), owner = randomUUID(), controller = new AbortController();
-    const problemCase = demoInputs().dataset.samples[0].problemCase, reason = new Error('Authored cancellation before commit');
-    await store.claimApplicationJob(input, owner);
-    if (phase === 'before-persistence') controller.abort(reason);
-    const persist = vi.fn(async (scoped: QualEvoStore) => {
-      await scoped.importProblemCase(problemCase);
-      controller.abort(reason);
+  describe('cancellation rollback setup', () => {
+    const fresh = useFreshPGlite();
+    it.for(['before-persistence', 'during-persistence'] as const)('rolls back cancellation %s without a durable domain result', async (phase, context) => {
+      const { store } = fresh(context), input = job(), owner = randomUUID(), controller = new AbortController();
+      const problemCase = demoInputs().dataset.samples[0].problemCase, reason = new Error('Authored cancellation before commit');
+      await store.claimApplicationJob(input, owner);
+      if (phase === 'before-persistence') controller.abort(reason);
+      const persist = vi.fn(async (scoped: QualEvoStore) => {
+        await scoped.importProblemCase(problemCase);
+        controller.abort(reason);
+      });
+      await expect(store.completeApplicationJob(input, owner, completed, persist, controller.signal)).rejects.toBe(reason);
+      expect(persist).toHaveBeenCalledTimes(phase === 'before-persistence' ? 0 : 1);
+      await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
+      expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null, attempts: 1 });
     });
-    await expect(store.completeApplicationJob(input, owner, completed, persist, controller.signal)).rejects.toBe(reason);
-    expect(persist).toHaveBeenCalledTimes(phase === 'before-persistence' ? 0 : 1);
-    await expect(store.getProblemCase(problemCase.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
-    expect(await store.getApplicationJob(applicationJobDigest(input))).toMatchObject({ state: 'running', result: null, attempts: 1 });
   });
 
   it('rolls back domain writes if persistence throws, and closes the scoped store', async () => {

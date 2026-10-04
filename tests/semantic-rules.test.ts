@@ -1,13 +1,14 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, aroundEach, beforeEach, describe, expect, it, type TestContext } from 'vitest';
 import {
   bundleDigest, digestOf, ruleVersionDigest, matchesRuleScope, SemanticRuleVersionSchema,
   RuleVersionSchema, RuleBundleSchema, DEFAULT_PROMOTION_POLICY,
   type SemanticRuleVersion, type RuleBundle, type ProblemCase,
 } from '../src/core/index.js';
 import { QualEvoStore, openPGliteDatabase, type Database } from '../src/storage/index.js';
+import { ownPendingResource, withFreshPGlite, withCleanup, DATABASE_SETUP_TIMEOUT } from './helpers/fresh-pglite.js';
 import { demoInputs } from '../src/demo.js';
 import { replayDataset } from '../src/pipeline.js';
 import { ReplayJobSchema } from '../src/jobs.js';
@@ -186,28 +187,6 @@ describe('semantic versions in the existing append-only store', () => {
     expect(results.filter(result => result.status === 'rejected')).toHaveLength(1);
     expect(await store.listRuleVersions()).toHaveLength(1);
   });
-  it('reopens a disk database with mixed v1/v2 versions and all exact identities intact', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'semantic-rules-db-'));
-    let disk: QualEvoStore | undefined;
-    try {
-      disk = await QualEvoStore.openPGlite(directory);
-      const first = await disk.importRuleVersion(legacy(), [sourceCase]);
-      const next: SemanticRuleVersion = {
-        ...rule(), provenance: { ...rule().provenance, parentDigest: first.digest },
-        detectionAssets: [
-          { id: 'typescript-waits', detector: { kind: 'ast-grep', language: 'typescript', pattern: 'waitUntilReady()' } },
-          { id: 'python-waits', detector: { kind: 'semgrep', language: 'python', yaml: 'rules: []' } },
-        ],
-      };
-      const second = await disk.importRuleVersion(next);
-      await disk.close(); disk = undefined;
-      disk = await QualEvoStore.openPGlite(directory);
-      expect(await disk.getRuleVersion(first.digest)).toEqual(first);
-      expect(await disk.getRuleVersion(second.digest)).toEqual(second);
-      expect(await disk.importRuleVersion(next)).toEqual(second);
-      expect(await disk.listRuleVersions(example.ruleId)).toHaveLength(2);
-    } finally { await disk?.close(); await rm(directory, { recursive: true, force: true }); }
-  });
   it('fails closed before replay, queueing, run creation, evaluation or promotion of v2', async () => {
     const saved = await store.importRuleVersion(rule(), [sourceCase]);
     const identity = { key: 'semantic-run', repository: sourceCase.repository, commit: sourceCase.commit, bundleDigest: saved.digest, configDigest: digestOf('test-config') };
@@ -238,5 +217,54 @@ describe('semantic versions in the existing append-only store', () => {
     await db.query('INSERT INTO qe_rule_bundles(digest,rule_id,version,payload) VALUES($1,$2,$3,$4::jsonb)', [hash, input.ruleId, input.version, JSON.stringify({ ...input, semantics: { ...input.semantics, title: 'Tampered content' } })]);
     await expect(store.getRuleVersion(hash)).rejects.toMatchObject({ code: 'CORRUPT_RULE_VERSION' });
     await expect(store.listRuleVersions()).rejects.toMatchObject({ code: 'CORRUPT_RULE_VERSION' });
+  });
+});
+
+// Initial allocation is setup; close/reopen and all identity assertions remain in
+// the original behavioral budget. This suite does not allocate the unused memory DB.
+describe('disk semantic version recovery', () => {
+  interface DiskResource {
+    directory: string;
+    initial: QualEvoStore;
+    disposed: boolean;
+    reopening?: ReturnType<typeof ownPendingResource<QualEvoStore>>;
+  }
+  const resources = new WeakMap<TestContext['task'], DiskResource>();
+  aroundEach(async (runTest, context) => {
+    const directory = await mkdtemp(join(tmpdir(), 'semantic-rules-db-'));
+    await withCleanup(async () => {
+      await withFreshPGlite(async ({ store }) => {
+        const resource: DiskResource = { directory, initial: store, disposed: false };
+        resources.set(context.task, resource);
+        try { await runTest(); }
+        finally {
+          resource.disposed = true;
+          resources.delete(context.task);
+          // Wait for a pending reopen before closing it or removing its directory.
+          await resource.reopening?.close();
+        }
+      }, directory);
+    }, () => rm(directory, { recursive: true, force: true }));
+  }, DATABASE_SETUP_TIMEOUT);
+  it('reopens a disk database with mixed v1/v2 versions and all exact identities intact', async context => {
+    const resource = resources.get(context.task)!;
+    let disk = resource.initial;
+    const first = await disk.importRuleVersion(legacy(), [sourceCase]);
+    const next: SemanticRuleVersion = {
+      ...rule(), provenance: { ...rule().provenance, parentDigest: first.digest },
+      detectionAssets: [
+        { id: 'typescript-waits', detector: { kind: 'ast-grep', language: 'typescript', pattern: 'waitUntilReady()' } },
+        { id: 'python-waits', detector: { kind: 'semgrep', language: 'python', yaml: 'rules: []' } },
+      ],
+    };
+    const second = await disk.importRuleVersion(next);
+    await disk.close();
+    if (resource.disposed) throw new Error('Test ended before disk reopen could start');
+    resource.reopening = ownPendingResource(QualEvoStore.openPGlite(resource.directory), reopened => reopened.close());
+    disk = await resource.reopening.value();
+    expect(await disk.getRuleVersion(first.digest)).toEqual(first);
+    expect(await disk.getRuleVersion(second.digest)).toEqual(second);
+    expect(await disk.importRuleVersion(next)).toEqual(second);
+    expect(await disk.listRuleVersions(example.ruleId)).toHaveLength(2);
   });
 });
