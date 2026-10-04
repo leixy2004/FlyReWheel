@@ -12,6 +12,7 @@ import { databaseCommand, storeFor, withSelectedQueue } from './cli-database.js'
 import { registerDatabaseMigrationCommands } from './cli-database-migrations.js';
 import { registerRevisionInspectionCommands } from './cli-revision-inspection.js';
 import { registerApplicationOperationCommands } from './cli-application-operations.js';
+import { registerEvaluationWorkspaceCommands } from './cli-evaluation-workspace.js';
 import { RevisionComparisonPageSchema } from './storage/store.js';
 import { ReplayDatasetSchema, replayDataset } from './pipeline.js';
 import { runDemo } from './demo.js';
@@ -50,6 +51,7 @@ async function output(value: unknown, path?: string) {
 const cli = new Command().name('flyrewheel').description('Evidence-backed quality rules; persistent commands require an explicit local or PostgreSQL database');
 registerDatabaseMigrationCommands(cli);
 const evaluation = cli.command('evaluation').description('Offline descriptive pairing of frozen reviews and separate annotations; never runs a model or certifies efficacy');
+registerEvaluationWorkspaceCommands(evaluation);
 evaluation.command('score').requiredOption('--dataset <file>').requiredOption('--annotations <file>').requiredOption('--runs <file>')
   .requiredOption('--out <new-file>', 'Immutable new report path; existing files are never replaced')
   .action(async options => {
