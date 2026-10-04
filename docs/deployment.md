@@ -1,6 +1,6 @@
 # 将 FlyReWheel 部署到一个 k3s 集群
 
-核查日期：2026-09-30。当前交付是可审查的容器构建与 Kustomize 清单，**尚未构建镜像、推送仓库或连接真实集群**。应用、pg-boss、PostgreSQL 和 S3 存储可以放在自己的同一个 k3s 集群；Codex 模型推理可以在外部运行。没有 Redis、Claude SDK、托管任务平台或必须购买的云端基础设施。
+静态复核日期：2026-10-04；源码基线为 PR #24 `b3cb77a70ddc406eba2d521eda68a43016ab5100`。当前交付是可审查的容器构建与 Kustomize 清单，**本轮未构建或推送队列服务镜像，也未连接真实集群**。独立 workspace 镜像试验不等于这些清单已部署。应用、pg-boss、PostgreSQL 和 S3 存储可以放在自己的同一个 k3s 集群；Codex 模型推理可以在外部运行。没有 Redis、Claude SDK、托管任务平台或必须购买的云端基础设施。
 
 ## 1. 先选部署路径
 
@@ -98,13 +98,15 @@ Dev overlay 显式设置：
 - `QE_S3_ALLOW_INSECURE=true`，仅此隔离开发路径允许 HTTP
 - worker 的 `QE_S3_ACCESS_KEY_ID`、`QE_S3_SECRET_ACCESS_KEY` 分别引用 S3 Secret 中对应键
 
-启用后，worker 上传有大小上限的任务输入和最终结果，按内容 hash 寻址，使用条件写入，并在重复冲突时读回验证。领域记录仍保存于 PostgreSQL；这不是数据库备份。S3 adapter 不创建 bucket，接已有自托管 S3 时必须预先准备桶。生产要启用经过证书验证的 HTTPS，并按实际目标 namespace、Pod 标签和 TLS 端口调整出站/入站策略；不要照搬开发 HTTP 例外。限制 worker 凭据到所需 bucket/prefix 的读写，不授予对象存储管理权限。
+启用后，**legacy replay handler** 上传有大小上限的任务输入和最终结果，按内容 hash 寻址，使用条件写入，并在重复冲突时读回验证。当前 application handler 不调用这条 S3 上传路径；不能据此声称 workspace application 的输入、输出或冻结证据已经归档。领域记录仍保存于 PostgreSQL；这不是数据库备份。S3 adapter 不创建 bucket，接已有自托管 S3 时必须预先准备桶。生产要启用经过证书验证的 HTTPS，并按实际目标 namespace、Pod 标签和 TLS 端口调整出站/入站策略；不要照搬开发 HTTP 例外。限制 worker 凭据到所需 bucket/prefix 的读写，不授予对象存储管理权限。
 
 SeaweedFS 的 TCP 探针只确认端口，不证明签名、条件写入和持久化正确。首次上线必须用真实 S3 集成测试核验 Put/Get、重复 If-None-Match、错误凭据被拒绝、重启后校验和一致。当前没有在容器或集群完成这些测试。
 
 ## 5. Codex 账号只在目标环境授权
 
 默认 `QE_ENABLE_MODEL=false`；部署、启动和离线 fixture 任务不应自动触发推理。账户状态 PVC 是**可写、专属、持久化**的 `/codex-home`，为了保留 Codex 自己刷新后的状态。它不是凭据分发机制：不要把别的机器的 `auth.json` 复制进镜像、Secret、对象存储、CI 或多个 Pod。[官方账号自动化边界](https://learn.chatgpt.com/docs/auth/ci-cd-auth)
+
+以下配置只适用于 legacy replay 的 `configuredCodex(environment, job.modelConfig)`。它不会调用 `startConfiguredWorkerService`，也不会为 workspace application 注入 resolver、运行后端或 lifecycle authority；后者继续 `blocked`。
 
 启用账号路径时：
 
@@ -126,7 +128,7 @@ kubectl -n flyrewheel exec deployment/flyrewheel-worker -- \
 
 Dedicated home 只用于登录和 SDK 自有状态，不应存放个人 `config.toml`、MCP server、插件、hooks 或项目指令。当前 adapter 会拒绝不在允许范围内的文件名；若 CLI 新版本新增状态文件，应先审查并更新兼容测试，不要绕过校验。PVC 应只有此可信 runner 能挂载。底层存储需支持 `fsGroup` 权限处理；不支持时由运营者选择兼容存储或安全地预置目录，不要添加 root/privileged init container 来掩盖问题。
 
-保持 `replicas: 1` 和 `strategy: Recreate`。pg-boss 入口对统一任务 group 使用全局并发 1，worker 本地并发也是 1。`ReadWriteOnce` 只表示单节点挂载模式，**不保证同一节点只能有一个 Pod 使用它**；不能靠 PVC 访问模式代替串行与 runner 生命周期约束。不要配置 HPA，不要另开一个持有同一认证状态的 model CLI/worker，不要在强制删 Pod 后未确认旧进程停止就启动第二份。每次请求仍可建立独立 Codex thread。[SDK/认证说明](./codex-integration.md)
+保持 `replicas: 1` 和 `strategy: Recreate`。replay 与 application 使用两个独立 queue/group（`codex-personal-serialized` 和 `workspace-application-serialized`），各自设置 `localConcurrency: 1`、`groupConcurrency: 1`；这不保证两类任务合计并发为 1。当前 application 被阻断，也不能作为未来显式启用后的跨队列串行保证。`ReadWriteOnce` 只表示单节点挂载模式，**不保证同一节点只能有一个 Pod 使用它**；不能靠 PVC 访问模式代替串行与 runner 生命周期约束。不要配置 HPA，不要另开一个持有同一认证状态的 model CLI/worker，不要在强制删 Pod 后未确认旧进程停止就启动第二份。每次请求仍可建立独立 Codex thread。[SDK/认证说明](./codex-integration.md)
 
 API key 是另一条显式选择，有独立 API 计费。base 没有挂载 `QE_CODEX_API_KEY`；如另行授权采用 API 模式，运营者才添加所需 Secret 引用、选择 `QE_CODEX_AUTH_MODE=api`。登录失效、额度耗尽或服务故障都不应自动切换计费方式。
 
@@ -170,14 +172,14 @@ PVC 分别声明 Codex 1Gi、Postgres 10Gi、SeaweedFS 20Gi。**local-path 的 P
 
 ## 8. 验收状态
 
-本次完成：
+最初模板验证记录（保留历史边界；本轮结果见后面的静态审计）：
 
 - 使用项目的 YAML parser 解析全部 30 个 YAML 文档，验证本地引用、空 Secret 模板、模型关闭默认值、安全上下文和单 runner 约束
 - TypeScript deployment 构建配置编译通过，SQL migration 已随编译产物验证
 - 本地 `node dist/cli.js demo` 通过，6 个合成案例、0 个执行错误；resolve 示例仍为 Unknown。它验证编译后的离线链路，不代表真实模型精度
 - 核对官方 Node/Postgres 镜像 tag、SeaweedFS 4.48 的 mini 命令及参数
 
-未执行：
+该模板验证当时未执行：
 
 - Docker/Podman 镜像构建、拉取、漏洞扫描、推送与多架构运行
 - Kustomize 真正渲染、kubectl schema/准入验证、helm 操作或集群部署；当前环境没有这些可执行文件
@@ -198,3 +200,49 @@ fallback. `/readyz` covers the queue service and includes `applicationRuntime`; 
 is not a workspace-execution readiness attestation. See [application jobs](application-jobs.md)
 for enqueue/status commands, atomic outcome persistence, retry/cleanup fencing, and
 the production lifecycle/gateway components still required.
+
+
+## 2026-10-04 静态部署契约审计
+
+本轮从 GitHub 获取 PR #24 的固定源码；未修改 `src/worker.ts`、composition、
+恢复 authority 或网络策略。两名独立审查者未发现当前入口、环境变量名、
+Service selector 或探针端口的确定性错配。修正了上面的 S3 范围及并发描述，
+并使 Secret 模板校验同时拒绝非空 `data` 和 `stringData`。
+
+| 契约 | 当前实际行为 | 上线前仍缺少的证据 |
+| --- | --- | --- |
+| 队列服务镜像 | 根目录 Dockerfile 的 `/app`、`node dist/worker.js` 与 base command 一致；UID/GID 10001 | 该集成版本镜像构建、目标架构与容器启动 |
+| 隔离 workspace 镜像 | `deploy/workspace-worker` 的工作目录为 `/workspace/repo`，入口为 `/opt/flyrewheel/bin/workspace-worker`；默认 CMD 仅 sleep，recipe gateway 为 blocked | 不能替换成 base 的 `flyrewheel:dev` 后继续使用相对 `dist/worker.js`；需独立固定镜像和实际 authority/gateway |
+| 显式 application composition | `worker-bootstrap.ts` 提供组合函数，但 checked-in `worker.ts` 未调用；配置环境变量不能替代可信代码注入 | 已授权的精确 workspace resolver、实际 lifecycle authority、固定 OpenSandbox/模型配置与凭据门禁 |
+| 环境变量 | `DATABASE_URL` 明确选择 PostgreSQL；`PORT=8080`；`QE_S3_*` 对应 replay artifacts；`QE_ENABLE_MODEL`、`QE_CODEX_*`、`QE_MODEL_*` 对应 legacy replay | 不存在一个已接线的 ambient bootstrap JSON/module 环境变量；不要发明该入口 |
+| 迁移顺序 | `openSelectedStore` 完成领域迁移后才调用 `openQueue`，再注册两类 handler 并监听健康端口；SQL 随 build 复制到 dist/storage/migrations | 旧库备份/显式接管、实际数据库 DDL 权限、真实恢复核验 |
+| readiness | `/readyz` 可在 `applicationRuntime=blocked` 时返回 200；后续 maintenance 每 30 秒核对过期 job reconciliation 和 application queue | 不证明模型、S3 签名、runtime/frozen-read 或请求入口可用；HTTP 探针不检查 JSON 字段 |
+| 资源与可写目录 | base 2 CPU/2Gi/2Gi ephemeral 上限，tmp 1Gi、home 64Mi、Codex PVC 1Gi；与 UID/只读代码契约无静态冲突 | 数值是起点，尚未做负载/驱逐测试；workspace 分配资源由独立 runtime 配置，不能从 base Pod 上限推导 |
+
+`kubectl apply -k` 不保证数据库先 Ready 再启动 worker。上面的 rollout 等待顺序
+只是观察顺序；worker 可能先因数据库不可用而退出并由 kubelet 重启。健康端口在
+领域迁移、队列启动和 handler 注册之后才监听；当前 startup probe 约给 150 秒。
+大型升级应先在独立维护窗口完成既有迁移/接管流程，不能把 Pod 反复重启当作迁移
+成功证据，也不应添加绕过检查的 init 脚本。
+
+本轮静态验证：
+
+- `node deploy/validate.mjs` 解析 30 个 YAML 文档，并检查 base 的项目结构契约。
+- `tests/deployment-contract.test.ts`：12 项通过；2 项真实 Kustomize 渲染测试因当前
+  环境没有 kubectl/Kustomize **明确跳过**。这些工具未被下载或安装；没有自制渲染器。
+- `npm run build` 通过；`node dist/worker.js --check` 返回两条 queue 和
+  `applicationRuntime: blocked`，未打开数据库、端口或模型。
+
+验证器还可检查真实渲染结果；在具备现有工具的工作站执行：
+
+```sh
+kubectl kustomize deploy/base > /tmp/flyrewheel-base.yaml
+node deploy/validate.mjs --rendered base /tmp/flyrewheel-base.yaml
+kubectl kustomize deploy/overlays/single-node-dev > /tmp/flyrewheel-dev.yaml
+node deploy/validate.mjs --rendered single-node-dev /tmp/flyrewheel-dev.yaml
+```
+
+这是 Zod/断言实现的**项目字段契约**，不是完整 Kubernetes API schema、服务端准入
+或 NetworkPolicy 验证。测试会在存在 kubectl 或 Kustomize 时调用真实 renderer，
+使用不存在的 KUBECONFIG；它只渲染本地资源，不连接集群。完整 schema/准入、
+真实渲染和 live prerequisites 仍按本节列出的边界验收，不能标为部署成功。
