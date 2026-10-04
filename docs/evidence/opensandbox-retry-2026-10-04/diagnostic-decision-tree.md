@@ -11,7 +11,7 @@ insufficient policy evidence. Complete test objects are explicitly synthetic.
 `paused`), check name, expected value, actual value and passed boolean. The driver
 writes the receipt **before** throwing on a failed assertion. Owner and network
 names become match booleans or fixed classifications. Capabilities, mounts and
-security flags use bounded counts and enums. Receipt summary IDs must match the listed 64-hex ID and state names must belong
+security flags use bounded counts and enums. Owned-container listing explicitly uses `--no-trunc`. Receipt summary IDs must match the listed 64-hex ID and state names must belong
 to a fixed Docker enum before use. Raw Docker objects, arbitrary flag
 values, env entries and exception messages are never retained. Secret detection
 records only a boolean. Acquisition/JSON errors have fixed named failure records.
@@ -67,7 +67,7 @@ status; other owned control groups retain their separate supervision. No global
 waitpid or shared init/security change is made. The old PID-1-owned zombie remains
 unreapable by this task; neither this change nor its tests upgrades old cleanup.
 
-29 Python tests and 25 targeted TypeScript tests passed; standalone driver/test
+29 Python tests and 26 targeted TypeScript tests passed; standalone driver/test
 TypeScript checking passed. Fixtures cover partial historical evidence, enabled
 Docker forms, missing policy fields, restriction violations, redaction, acquisition
 errors, paused-state evidence, cleanup failure and receipt-write failure. Python

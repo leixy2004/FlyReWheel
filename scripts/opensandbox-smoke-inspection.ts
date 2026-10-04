@@ -1,6 +1,9 @@
 /** Trial-only diagnostics: never serialize Docker objects or exception messages. */
 import assert from 'node:assert/strict';
 import {noNewPrivilegesEnabled} from './opensandbox-smoke-request.js';
+export function listOwnedContainers(docker:(args:string[])=>string,owner:string):string[]{
+ return docker(['ps','-aq','--no-trunc','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean);
+}
 export type Check = {phase:string;name:string;expected:unknown;actual:unknown;passed:boolean};
 export type Journal = (check:Check)=>void;
 const object=(x:any)=>x!==null&&typeof x==='object'&&!Array.isArray(x);

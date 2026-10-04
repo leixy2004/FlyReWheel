@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {writeFileSync} from 'node:fs';
-import {inspectOwnedContainer,cleanupTrial,type Check} from './opensandbox-smoke-inspection.js';
+import {inspectOwnedContainer,listOwnedContainers,cleanupTrial,type Check} from './opensandbox-smoke-inspection.js';
 import {execFileSync,spawnSync} from 'node:child_process';
 import {Sandbox} from '@alibaba-group/opensandbox';
 import {Agent,fetch as scopedFetch} from 'undici';
@@ -45,7 +45,7 @@ function captureDiagnostics(){
  if(captured)return;captured=true;
  const safeDocker=(args:string[])=>execFileSync('docker',args,{encoding:'utf8',timeout:1500,maxBuffer:65536,stdio:['ignore','pipe','pipe']});
  try{
-  const ids=safeDocker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean);
+  const ids=listOwnedContainers(safeDocker,owner);
   if(ids.length!==1){receipt.diagnostics={status:'owned-container-unavailable',count:Math.min(ids.length,2)};return;}
   const obj=JSON.parse(safeDocker(['inspect',ids[0]!]))[0];
   assert.equal(obj.Config.Labels['flyrewheel.lifecycle-owner'],owner);
@@ -73,7 +73,7 @@ const journal=(entry:Check)=>{
  receipt.inspectionCheck=entry.name;receipt.inspectionChecks.push(entry);persist();
 };
 const inspect=(phase:'ready'|'paused')=>inspectOwnedContainer(
- ()=>docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean),
+ ()=>listOwnedContainers(docker,owner),
  id=>JSON.parse(docker(['inspect',id])),owner,network,apiKey,phase,journal);
 
 try{
@@ -100,7 +100,7 @@ try{
  receipt.command={argv:['/usr/bin/id','-u'],stdout:stdout.trim(),exitCode:status.exitCode,running:status.running};
  await sandbox.pause();inspect('paused');receipt.events.push('paused-independently-inspected');
  await sandbox.kill();receipt.events.push('delete-api-succeeded');sandbox=undefined;
- assert.equal(docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim(),'');
+ assert.equal(listOwnedContainers(docker,owner).length,0);
  receipt.events.push('container-absence-independently-inspected');receipt.status='succeeded';
 }catch(e){receipt.errorClass=e instanceof Error&&['Error','AssertionError','SandboxReadyTimeoutException','SandboxApiException','TimeoutError','AbortError'].includes(e.name)?e.name:'Unknown';receipt.status='failed';}
 finally{

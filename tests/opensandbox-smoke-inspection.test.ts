@@ -1,6 +1,6 @@
 import {expect,it} from 'vitest';
 import {readFileSync} from 'node:fs';
-import {inspectOwnedContainer,cleanupTrial,type Check} from '../scripts/opensandbox-smoke-inspection.js';
+import {inspectOwnedContainer,listOwnedContainers,cleanupTrial,type Check} from '../scripts/opensandbox-smoke-inspection.js';
 const owner='fixture-owner',network='fixture-network',key='fixture-secret-value';
 // Synthetic HostConfig: historical evidence did not retain the real HostConfig.
 const fixture=()=>({Id:'a'.repeat(64),Config:{Labels:{'flyrewheel.lifecycle-owner':owner},Env:['PATH=/usr/bin']},
@@ -87,4 +87,14 @@ it('rejects secret-shaped receipt summary fields before exposing the raw object'
 });
 it('rejects a well-formed ID that differs from the independently listed container',()=>{
  const obj=fixture();obj.Id='b'.repeat(64);expect(()=>inspect(obj)).toThrow('inspection:container-id');
+});
+
+it('queries full owned IDs so inspect ID matching does not compare Docker short IDs',()=>{
+ const obj=fixture();const checks:Check[]=[];
+ const list=()=>listOwnedContainers(args=>{
+  expect(args).toEqual(['ps','-aq','--no-trunc','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]);
+  return obj.Id+'\n';
+ },owner);
+ inspectOwnedContainer(list,()=>[obj],owner,network,key,'ready',c=>checks.push(c));
+ expect(checks.find(c=>c.name==='container-id')?.passed).toBe(true);
 });
