@@ -2,8 +2,8 @@
  * See deploy/opensandbox/README.md. Optional HTTPS /health probe never allocates. */
 import assert from 'node:assert/strict';
 import https from 'node:https';
-import { readFile, realpath } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
+import { readFile } from 'node:fs/promises';
+import { isMainModule } from './lib/is-main.mjs';
 import { z } from 'zod';
 
 const GiB = 1024 ** 3;
@@ -129,9 +129,7 @@ async function main(args) {
   }
   throw new Error('Use no arguments, --plan JSON_FILE, or --health https://127.0.0.1:PORT/health [--ca-file PUBLIC_CERT]');
 }
-// Module URLs resolve symlinks while argv can retain the launch alias.
-const launchPath = process.argv[1] ? await realpath(process.argv[1]).catch(() => undefined) : undefined;
-if (launchPath && launchPath === await realpath(fileURLToPath(import.meta.url))) {
+if (await isMainModule(import.meta.url)) {
   main(process.argv.slice(2)).then(result => {
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
     if (result.ok === false) process.exitCode = 1;
