@@ -151,3 +151,8 @@ admission; formal W1/W2 labels and any H2-specific adapter; matched model/runtim
 admission and budgets; competent baselines and frozen scientific analysis. Current
 capture is the primary design. Historical reconstruction is an additional gate only
 for an optional historical replay, never inferred from present-day discussion.
+
+[Guarded-family measurement v1](GUARDED-FAMILY-v1.md) adds a single versioned,
+authored-only family binding and a fail-closed label-route audit. Retained HTTPX
+W0 evidence admits no substantive defect family; no real family or H2 reference
+labels are manufactured from the developmental changes.
