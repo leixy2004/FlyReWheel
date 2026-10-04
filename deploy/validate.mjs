@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, dirname, relative } from 'node:path';
+import { realpath } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { parseAllDocuments } from 'yaml';
 import { z } from 'zod';
@@ -133,7 +134,9 @@ export function validateRenderedDocuments(documents, profile, rendered = true) {
  }
  return {profile,documents:documents.length,contract:'project-only',applicationRuntime:'blocked'};
 }
-if(process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+// argv may preserve a file symlink while the module URL resolves it.
+const launchPath = process.argv[1] ? await realpath(process.argv[1]).catch(() => undefined) : undefined;
+if (launchPath && launchPath === await realpath(fileURLToPath(import.meta.url))) {
  const [mode,profile,path]=process.argv.slice(2);
  if(mode==='--rendered'){
   assert.ok(path,'Usage: --rendered base|single-node-dev FILE');
