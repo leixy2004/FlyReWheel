@@ -163,7 +163,17 @@ export async function runLocalGovernanceLoop(options: { outDir: string }): Promi
       assert.equal((await store.getReviewFinding(item.findingId)).verdict, 'Unknown');
     }
     assert.equal(await store.getActive(base.rule.ruleId), null);
-    if (resolved) assert.equal((await cleanupWorkspace(workspace)).record.status, 'closed-clean');
+    // Completed jobs bypass the resolver on replay. Finalize their persisted workspace too.
+    assert.equal(record.result.cleanup, 'verified');
+    assert.equal(review.snapshotDigest, snapshot.digest);
+    assert.equal(review.executionReceipt.cleanup, 'verified');
+    assert.equal(review.executionReceipt.ruleDigest, accepted.digest);
+    assert.equal(review.executionReceipt.snapshotDigest, snapshot.digest);
+    assert.equal(review.executionReceipt.expectedSha, snapshot.snapshot.head);
+    assert.deepEqual(review.executionReceipt.context.workspace, workspace);
+    const finalized = await cleanupWorkspace(review.executionReceipt.context.workspace);
+    assert.equal(finalized.record.status, 'closed-clean');
+    assert.equal(finalized.observation.branchHeadSha, snapshot.snapshot.head, 'Retained workspace branch SHA changed');
     const history = await store.getSemanticGovernanceHistory(base.rule.ruleId);
     assert.equal(history.length, 5);
     await immutable(join(artifacts, 'governed-review.json'), review);
