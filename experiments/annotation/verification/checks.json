@@ -1,0 +1,76 @@
+{
+  "baseCommit": "a05af56c4427859a2e003e7581f129c75aafb73b",
+  "scope": "offline development fixed-opportunity blinded annotation workflow",
+  "actualHumanAssignments": 0,
+  "actualHumanLabels": 0,
+  "modelCalls": 0,
+  "upstreamAcquisitions": 0,
+  "tests": {
+    "numTotalTests": 69,
+    "numPassedTests": 69,
+    "numFailedTests": 0,
+    "success": true
+  },
+  "finalExpandedCliWorkflowTests": {
+    "numTotalTests": 12,
+    "numPassedTests": 12,
+    "numFailedTests": 0,
+    "success": true
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "commands": [
+    "npx vitest run tests/blinded-annotation-workflow.test.ts tests/paired-evaluation.test.ts tests/paired-evaluation.context.test.ts tests/paired-evaluation.cli.test.ts --maxWorkers=1",
+    "npx vitest run tests/blinded-annotation-workflow.test.ts --maxWorkers=1",
+    "npx tsc --noEmit",
+    "npm run build",
+    "node --import tsx experiments/annotation/replay.ts init-authored --out /tmp/flyrewheel-annotation-blank-smoke",
+    "node --import tsx experiments/annotation/replay.ts status --workspace /tmp/flyrewheel-annotation-blank-smoke"
+  ],
+  "blankSmoke": {
+    "origin": "authored-fixture",
+    "responseLabels": "all null",
+    "raterSlots": [
+      "missing",
+      "missing"
+    ],
+    "readyForAdjudication": false,
+    "privatePacketsAndMappingsPublished": false
+  },
+  "independentReviews": [
+    {
+      "reviewer": "identity_audit",
+      "executedTests": 12,
+      "passed": 12,
+      "independentArithmetic": "Fraction: observed agreement 2/3; expected agreement 1/3; kappa 1/2",
+      "result": "no remaining blocker"
+    },
+    {
+      "reviewer": "leakage_audit",
+      "executedTests": 12,
+      "passed": 12,
+      "independentAttack": "coordinated packet + manifest hash replacement rejected by frozen allowlist reconstruction",
+      "result": "no remaining blocker"
+    }
+  ],
+  "environmentNote": "Read-only empty /tmp/.git and /workspace/.git guards were inspected, not changed. Empty directories are not treated as repositories; nonempty Git directories, gitfiles and links remain rejected.",
+  "remainingExperimentalGates": [
+    "real independent humans/assignments and actual submissions",
+    "substantive rubric and scope release; source/exposure/lineage admission",
+    "formal W1/W2 labels and distinct H2 label adapter",
+    "model/runtime/budget and baseline competence",
+    "frozen analysis; no efficacy claim"
+  ],
+  "retainedW0Disposition": "before-only drafts remain blocked; no present-day discussion becomes historical feedback",
+  "fileSha256": {
+    "experiments/annotation/contracts.ts": "03d287e6c06fe45c4120e8a253ccbf2fe0f674fd5e0dcfb1daf163b3872faec9",
+    "experiments/annotation/workflow.ts": "35c3f685377c2776632503635eee1412e638ca322a039c96456f06025073e80a",
+    "experiments/annotation/fixture.ts": "0d08149caf621f020483ba5f7fd5da0d975873a1a36fcea98a79ddd54ecda3fd",
+    "experiments/annotation/replay.ts": "9411665bd31c8dc45b226e4a9f98dd3ecf272844713be5ec6b4fd97220d7ec9a",
+    "experiments/annotation/README.md": "db28a03f7a561e91c2b95ccab4c1d6dcc572fa799c92b0883067c67a38c1eafb",
+    "src/paired-evaluation.ts": "03a3f63da35a7670912cba39ed040bfd562b74ebc5a38e1e6492b44d1e090995",
+    "tests/blinded-annotation-workflow.test.ts": "9a2c156392c1c6f9a306a776a7c49a8265f05171a8ecce1d4ca3eb7deb004ad3",
+    "paper/manuscript-readiness.md": "87df3b46c9a020617210283c19cabfcdcc9a7600adb6e966deb6a6a732fe51d3",
+    "experiments/matched-revision/README.md": "f2e6979ac6137ad05068f3c605073c916ee1c0aeaca273c428f38580bf2675c3"
+  }
+}

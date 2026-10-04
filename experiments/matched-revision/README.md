@@ -75,8 +75,12 @@ through this existing F/U/H/M loop and the supervised SDK fake executable, with
 separate native requests and validated `authored_completed` no-model records.
 It retains complete failure/target rosters and measures byte/time/call limits;
 unknown usage or exceeded bounds stop further work in an arm, and unverified
-cleanup stops later launches across arms. There is no native CLI switch or
-operational dispatch path. Legacy packet validation, frozen controls and production
+cleanup stops later launches across arms. The source CLI exposes
+`evaluation native init-authored`, `init-w0` and `run`: authored fixtures execute local no-model scripts,
+while retained real-W0 inputs persist an explicitly blocked checkpoint. This is
+not operational model dispatch. The current bridge dynamically loads the TypeScript
+research modules; the standalone compiled CLI lacks that experiment-loader path
+and is not a supported replacement for the source CLI here. Legacy packet validation, frozen controls and production
 `not_run` remain unchanged. Authored repeated-block scheduling and an optional
 [independent diagnosis-only stage](sdk-native-contracts.md#independent-authored-diagnosis-only-stage)
 are implemented: each inferred episode/repeat starts from an explicitly unexecuted
