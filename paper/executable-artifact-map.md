@@ -112,6 +112,10 @@ three requests, eight source bindings and six contexts. Eligibility remains
 unknown and effect metrics null. W1/W2 remain metadata only; private unassigned
 drafts are not published annotations. The saved resolver probe shows the ordinary
 resolver rejecting evaluation identities, not a successful authorized model job.
+Subsequent PR #28 `ba319f64eafc06b816975ee159c510a8404e0644` supplies a
+[separate evaluation-aware registry resolver](../docs/prepared-evaluation-workspace-resolver.md)
+that preserves the full binding and re-verifies the exported workspace. Its
+authored/local Git tests do not establish deployed authority or model execution.
 
 ## Product execution is a separate gate
 

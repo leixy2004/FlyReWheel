@@ -16,6 +16,7 @@ must not be attributed to later heads. Main is not merged by this integration.
 | PR23 behavior failures | `ce9b9fbfc3abf5d1d542652e0b19ca01fca8e4fc` | Original missing docs wheel and Ruff launch failures retained; zero effective paired behavior results at this head. |
 | PR25 Ruff retry | `a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760` | One subsequent bounded before/after lint+format pair passes. No effectiveness or defect label. |
 | PR26 corrected recovery/resolver | `6a1a8ac1d56f659f2e7d96b000739025f9755672` | Late-EOF result acceptance corrected; authored protocol/local Git verification only. |
+| PR28 evaluation-aware resolver | `ba319f64eafc06b816975ee159c510a8404e0644` | Explicit offline-study registry, complete binding retained; no deployment authority. |
 | PR27 evaluation provenance | `d778aba7c1abcd029bb90ce94d7f6f4e9f583cd8` | 3 requests, 8 source bindings, 6 contexts; no annotation or effectiveness result. |
 | Offline CLI reproduction | `084eb9c` | 13 actual offline commands; blocked real jobs and separate authored evaluator. |
 | Preparation cleanup | `a5784fc` | Local PGlite failure injection verifies primary-error preservation and single close of released handles. |
@@ -96,8 +97,12 @@ repeat them. The resolver probe intentionally exercises early rejection with a
 dummy job digest, not positive authorization or an end-to-end job.
 
 The concrete PR26 resolver supports ordinary prepared workspaces, explicitly not
-evaluation exports. An evaluation-aware resolver and an actual configured worker
-entrypoint remain separately owned work. The default worker still does not call
+evaluation exports. PR28 now adds a separate explicitly selected offline-study
+evaluation-aware resolver; 27 related authored/local Git tests and typecheck passed
+independently, and the external late-EOF probe still rejects. Six real W0 positive
+resolutions remain a separate data-environment validation, not inferred from those
+fixtures. An actual configured worker entrypoint remains separately owned work.
+The default worker still does not call
 `startConfiguredWorkerService`; runtime lifecycle authority is not proven. The
 [offline CLI chain](offline-reproducibility.md) executes available preparation and
 inspection honestly, and stops at those missing dependencies.
