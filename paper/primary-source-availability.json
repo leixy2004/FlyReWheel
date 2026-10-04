@@ -1,0 +1,339 @@
+{
+  "checkedAt": "2026-10-04",
+  "baseCommit": "17879c170b7ba6bdbbe86a5c977a9b4de88da386",
+  "scope": "primary papers and official research documentation only; no corpus payloads or model weights downloaded",
+  "repositories": [
+    {
+      "repository": "microsoft/CodeBERT",
+      "commit": "c0de43d3aaf38e89290f1efb771f8de845e7a489",
+      "inspectedPath": "CodeReviewer/README.md",
+      "url": "https://github.com/microsoft/CodeBERT/blob/c0de43d3aaf38e89290f1efb771f8de845e7a489/CodeReviewer/README.md",
+      "bytes": 4988,
+      "sha256": "0f40d6140044c391fc500670330966fd88434434b163333fec297b0341582263",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "cuhk-s3/Archer",
+      "commit": "05b2fcfa9336de0e449f362009820ed558f2fad3",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/cuhk-s3/Archer/blob/05b2fcfa9336de0e449f362009820ed558f2fad3/README.md",
+      "bytes": 4496,
+      "sha256": "861fb3d0f277525a9357c4ad979ff5c712e42203b34d5cea710332a48afd6311",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "ace-agent/ace",
+      "commit": "82709de050e1db6e6ef2f07bcb0393560b94992a",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/ace-agent/ace/blob/82709de050e1db6e6ef2f07bcb0393560b94992a/README.md",
+      "bytes": 14482,
+      "sha256": "49ade80bc5d5947a439f8c9861b57bde31531e2962638f78ff53b57b90428cd0",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "madaan/self-refine",
+      "commit": "9a206d41e5d2d0c241bb441f41eeadb945afaa55",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/madaan/self-refine/blob/9a206d41e5d2d0c241bb441f41eeadb945afaa55/README.md",
+      "bytes": 7178,
+      "sha256": "54f667a07214567976b2966fcb87ce881afdc1aeb745ce07d1f139ae8747882a",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "noahshinn/reflexion",
+      "commit": "218cf0ef1df84b05ce379dd4a8e47f17766733a0",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/noahshinn/reflexion/blob/218cf0ef1df84b05ce379dd4a8e47f17766733a0/README.md",
+      "bytes": 4342,
+      "sha256": "5209db116381e7c067dd0ee4085da26b7d00fd19cbe66b6367051a2f95ef9024",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "FoundryHQ-AI/swe-prbench",
+      "commit": "379f0bfd8978a1734cd8399e115d04d4fdceeb89",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/FoundryHQ-AI/swe-prbench/blob/379f0bfd8978a1734cd8399e115d04d4fdceeb89/README.md",
+      "bytes": 4951,
+      "sha256": "9667ba3808e76a87c5b317ae32ca25e113eef7ea15839e1d04689bbdc60c23f6",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    },
+    {
+      "repository": "SWE-bench/SWE-bench",
+      "commit": "02e7a74ffd0b707aab73d203fe87bdc7c76afc8e",
+      "inspectedPath": "README.md",
+      "url": "https://github.com/SWE-bench/SWE-bench/blob/02e7a74ffd0b707aab73d203fe87bdc7c76afc8e/README.md",
+      "bytes": 13302,
+      "sha256": "06841624d7b5130dfe3cc6714642e9a8fd2a608c95c66ae0180e409f12b73aaa",
+      "check": "read-only GitHub contents API; no installation or execution; README hash is not data checksum"
+    }
+  ],
+  "unavailableOrNotConfirmed": [
+    {
+      "resource": "RhoSynth implementation/data",
+      "status": "not confirmed in inspected author publication/arXiv sources; not proof of nonexistence"
+    },
+    {
+      "resource": "AutoCommenter complete deployed system/internal data/checkpoint",
+      "status": "not confirmed in inspected primary paper"
+    },
+    {
+      "resource": "Learning to Commit internal repository/code",
+      "status": "not confirmed public in inspected v1"
+    },
+    {
+      "resource": "Scoped-ORC author code repository",
+      "status": "paper describes supplement; public runnable repository not independently located"
+    }
+  ],
+  "papers": [
+    {
+      "id": "rhosynth",
+      "title": "Example-based Synthesis of Static Analysis Rules",
+      "authors": [
+        "Pranav Garg",
+        "Srinivasan Sengamedu SHS"
+      ],
+      "year": 2022,
+      "arxivVersion": "2204.08643v1",
+      "versionDateOrFirstSubmission": "2022-04-19",
+      "primaryPaper": "https://arxiv.org/abs/2204.08643v1",
+      "additionalPrimaryLink": "https://www.amazon.science/publications/synthesizing-code-quality-rules-from-examples",
+      "scope": "OOPSLA 2022 title: Synthesizing Code Quality Rules from Examples; rule synthesis/counterexample refinement, not a new FlyReWheel claim"
+    },
+    {
+      "id": "archer",
+      "title": "Archer: Towards Agentic Review for Compiler Optimizations",
+      "authors": [
+        "Yunbo Ni",
+        "Shaohua Li"
+      ],
+      "year": 2026,
+      "arxivVersion": "2607.01808v1",
+      "versionDateOrFirstSubmission": "2026-07-02",
+      "primaryPaper": "https://arxiv.org/abs/2607.01808v1",
+      "additionalPrimaryLink": "https://github.com/cuhk-s3/Archer",
+      "scope": "Review implemented; Section VI iterative maintenance is future direction"
+    },
+    {
+      "id": "autocommenter",
+      "title": "AI-Assisted Assessment of Coding Practices in Modern Code Review",
+      "authors": [
+        "Manushree Vijayvergiya",
+        "Małgorzata Salawa",
+        "Ivan Budiselić",
+        "Dan Zheng",
+        "Pascal Lamblin",
+        "Marko Ivanković",
+        "Juanjo Carin",
+        "Mateusz Lewko",
+        "Jovan Andonov",
+        "Goran Petrović",
+        "Daniel Tarlow",
+        "Petros Maniatis",
+        "René Just"
+      ],
+      "year": 2024,
+      "arxivVersion": "2405.13565v1",
+      "versionDateOrFirstSubmission": "2024-05-22",
+      "primaryPaper": "https://arxiv.org/abs/2405.13565v1",
+      "additionalPrimaryLink": "https://doi.org/10.1145/3664646.3665664",
+      "scope": "Deployed review calibration; sections 3.3 and 4.2–4.3 inspected by literature auditor"
+    },
+    {
+      "id": "learning-to-commit",
+      "title": "Learning to Commit: Generating Organic Pull Requests via Online Repository Memory",
+      "authors": [
+        "Mo Li",
+        "L. H. Xu",
+        "Qitai Tan",
+        "Ting Cao",
+        "Yunxin Liu"
+      ],
+      "year": 2026,
+      "arxivVersion": "2603.26664v1",
+      "versionDateOrFirstSubmission": "2026-03-27",
+      "primaryPaper": "https://arxiv.org/abs/2603.26664v1",
+      "additionalPrimaryLink": null,
+      "scope": "Work in progress; internal-repository PR-generation study, not public review-maintenance replication"
+    },
+    {
+      "id": "codereviewer",
+      "title": "Automating Code Review Activities by Large-Scale Pre-training",
+      "authors": [
+        "Zhiyu Li",
+        "Shuai Lu",
+        "Daya Guo",
+        "Nan Duan",
+        "Shailesh Jannu",
+        "Grant Jenks",
+        "Deep Majumder",
+        "Jared Green",
+        "Alexey Svyatkovskiy",
+        "Shengyu Fu",
+        "Neel Sundaresan"
+      ],
+      "year": 2022,
+      "arxivVersion": "2203.09095v2",
+      "versionDateOrFirstSubmission": "2022-10-11",
+      "primaryPaper": "https://arxiv.org/abs/2203.09095v2",
+      "additionalPrimaryLink": "https://zenodo.org/records/6900648",
+      "scope": "FSE camera-ready; v1/README title differs; public weights https://huggingface.co/microsoft/codereviewer"
+    },
+    {
+      "id": "ace",
+      "title": "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models",
+      "authors": [
+        "Qizheng Zhang",
+        "Changran Hu",
+        "Shubhangi Upasani",
+        "Boyuan Ma",
+        "Fenglu Hong",
+        "Vamsidhar Kamanuru",
+        "Jay Rainton",
+        "Chen Wu",
+        "Mengmeng Ji",
+        "Hanchen Li",
+        "Urmish Thakker",
+        "James Zou",
+        "Kunle Olukotun"
+      ],
+      "year": 2025,
+      "arxivVersion": "2510.04618v1",
+      "versionDateOrFirstSubmission": "2025-10-06",
+      "primaryPaper": "https://arxiv.org/abs/2510.04618v1",
+      "additionalPrimaryLink": "https://github.com/ace-agent/ace",
+      "scope": "Version-1 method/prompts inspected; current pinned repository is separate from v1 paper and not asserted identical"
+    },
+    {
+      "id": "self-refine",
+      "title": "Self-Refine: Iterative Refinement with Self-Feedback",
+      "authors": [
+        "Aman Madaan",
+        "Niket Tandon",
+        "Prakhar Gupta",
+        "Skyler Hallinan",
+        "Luyu Gao",
+        "Sarah Wiegreffe",
+        "Uri Alon",
+        "Nouha Dziri",
+        "Shrimai Prabhumoye",
+        "Yiming Yang",
+        "Shashank Gupta",
+        "Bodhisattwa Prasad Majumder",
+        "Katherine Hermann",
+        "Sean Welleck",
+        "Amir Yazdanbakhsh",
+        "Peter Clark"
+      ],
+      "year": 2023,
+      "arxivVersion": "2303.17651v2",
+      "versionDateOrFirstSubmission": "2023-05-25",
+      "primaryPaper": "https://arxiv.org/abs/2303.17651v2",
+      "additionalPrimaryLink": "https://github.com/madaan/self-refine",
+      "scope": "Iterative self-feedback is not identical to one-step U with fixed external diagnosis"
+    },
+    {
+      "id": "reflexion",
+      "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+      "authors": [
+        "Noah Shinn",
+        "Federico Cassano",
+        "Edward Berman",
+        "Ashwin Gopinath",
+        "Karthik Narasimhan",
+        "Shunyu Yao"
+      ],
+      "year": 2023,
+      "arxivVersion": "2303.11366v4",
+      "versionDateOrFirstSubmission": "2023-10-10",
+      "primaryPaper": "https://arxiv.org/abs/2303.11366v4",
+      "additionalPrimaryLink": "https://github.com/noahshinn/reflexion",
+      "scope": "Metadata follows arXiv v4 author list; episodic feedback memory, not off-the-shelf PR maintenance"
+    },
+    {
+      "id": "scoped-orc",
+      "title": "Scope Before You Persist: Preventing Cross-Family Interference in Agent Memory",
+      "authors": [
+        "Yezhou Cheng",
+        "Runjia Du",
+        "Zeming Liu",
+        "Qibai Chen",
+        "Hang Lyu",
+        "Yankai Zeng",
+        "Yilan Wei",
+        "Bojun Lin"
+      ],
+      "year": 2026,
+      "arxivVersion": "2609.29144v1",
+      "versionDateOrFirstSubmission": "2026-09-24",
+      "primaryPaper": "https://arxiv.org/abs/2609.29144v1",
+      "additionalPrimaryLink": null,
+      "scope": "Generated repair streams; scoped retrieval/gating evaluated; public author implementation not independently located"
+    },
+    {
+      "id": "swe-prbench",
+      "title": "SWE-PRBench: Benchmarking AI Code Review Quality Against Pull Request Feedback",
+      "authors": [
+        "Deepak Kumar"
+      ],
+      "year": 2026,
+      "arxivVersion": "2603.26130v1",
+      "versionDateOrFirstSubmission": "2026-03-27",
+      "primaryPaper": "https://arxiv.org/abs/2603.26130v1",
+      "additionalPrimaryLink": "https://github.com/FoundryHQ-AI/swe-prbench",
+      "scope": "Paper title used, not slightly different README BibTeX; data card https://huggingface.co/datasets/foundry-ai/swe-prbench/blob/main/README.md; no corpus downloaded"
+    },
+    {
+      "id": "swe-bench",
+      "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+      "authors": [
+        "Carlos E. Jimenez",
+        "John Yang",
+        "Alexander Wettig",
+        "Shunyu Yao",
+        "Kexin Pei",
+        "Ofir Press",
+        "Karthik Narasimhan"
+      ],
+      "year": 2023,
+      "versionDateOrFirstSubmission": "2023-10-10",
+      "primaryPaper": "https://arxiv.org/abs/2310.06770",
+      "additionalPrimaryLink": "https://github.com/SWE-bench/SWE-bench",
+      "scope": "Original arXiv identifier and first-submission date; task/official harness checked, no repair corpus acquired; landing-page version not pinned, unlike explicitly versioned records",
+      "arxivId": "2310.06770",
+      "version": null
+    }
+  ],
+  "independentReviews": [
+    {
+      "agent": "identity_audit",
+      "mode": "read-only primary-literature verification",
+      "sources": [
+        "rhosynth",
+        "archer",
+        "autocommenter",
+        "learning-to-commit",
+        "codereviewer"
+      ],
+      "findings": "Exact version titles; maintenance-proposed vs evaluated; resources unconfirmed is not nonexistent"
+    },
+    {
+      "agent": "leakage_audit",
+      "mode": "read-only evaluation and primary-source critique",
+      "sources": [
+        "ace",
+        "reflexion",
+        "self-refine",
+        "scoped-orc",
+        "swe-bench",
+        "swe-prbench"
+      ],
+      "findings": "Preserve H-U estimand; strong-memory competence; adaptation not original-algorithm reproduction; no public benchmark supplies this project labels"
+    }
+  ],
+  "finalReview": {
+    "literature": "Five assigned primary sources rechecked for metadata/availability overclaims; README hashes assessed for claim scope, not independently reacquired",
+    "evaluation": "Addressed all five findings: historical C1 conditional; current-capture applies to declared study; availability qualified; L_mech denominator and family macro-averaging aligned; strict legal resolution prevents selective silence claim",
+    "status": "addressed read-only independent critiques"
+  }
+}

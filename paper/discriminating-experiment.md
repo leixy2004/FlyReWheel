@@ -12,6 +12,35 @@ Build the prior rule inside the experiment instead of requiring a historical dev
 
 The experiment can fail usefully. Restrictions may prevent damaging invariant edits, make no difference after the shared gate, or block a helpful change after a wrong diagnosis. All are admissible outcomes. There is presently no evidence selecting among them.
 
+## 2026-10-04 evidence and claim reconciliation
+
+The [primary-source audit](related-work-evaluation-gap.md) supplies five baseline
+families with pinned official implementation availability. F/U/H/M remains the
+mechanism design. U and M are controlled adaptations, not claimed reproductions of
+Self-Refine or ACE; validate memory competence on development data before W2.
+
+The newer [annotation protocol](../experiments/temporal-pilot/w0-first-three/evaluation-preparation/ANNOTATION-TEMPORAL-PROTOCOL.md)
+uses a retrospective current-capture default. That default supersedes the historical
+visibility prerequisites below **for the declared current-capture study**. Keep all
+experimental lock/exposure ordering; apply historical cutoff rules below only to
+an explicitly declared as-of subanalysis with event evidence. HTTPX's existing
+70-row frame (38/13/19), three exposed W0 cases and six verified exports supersede
+the earlier unfilled-repository/403 status. They supply no labels or eligible episodes.
+
+For H2, retain H−U as the mechanism contrast. The primary endpoint is the fraction
+of independently labeled later mechanism-relevant legal opportunities L_mech with
+a repeated feedback-mechanism false alert; L_mech is the prespecified subset of L
+in §7, never selected from arm failures; report H minus U (negative favors H), with a prespecified noninferiority
+margin on known-positive detection H minus U. M uses the same endpoints. The
+annotation protocol's detection contrast measures reference-set/feasibility behavior
+and does not replace this maintenance claim. Freeze mechanism matching and
+scientifically justified margins before outputs; use §7 equal-family macro-averaging
+and show nonestimable episodes. Require non-degrading strict resolution on L_mech
+and report coverage/unresolved mass, so selective silence cannot masquerade as
+maintenance success; currently no numerical margin or
+powered size exists. An empty denominator stays not estimable. These clarifications
+are a dated prospective design proposal, not a completed protocol freeze.
+
 ## 1 Question and estimand
 
 Conditional on the eligible episode roster, fixed reviewer and revision models, evidence packages, retrieval scope, resource limits, and acceptance gate, what changes in later review when a diagnosis **enforces** an edit permission rather than merely informs the updater?
@@ -200,7 +229,7 @@ A confirmatory study requires fresh heldout episodes, a predeclared meaningful f
 
 ### Present blockers and permitted local preparation
 
-- **Fresh real PR data:** the saved latest acquisition stopped at its first GET with HTTP 403 and zero fresh captures. Its cause remains `forbidden-or-rate-limited`; it is not established as rate limiting. Existing development source files do not provide a fresh complete three-window frame. This pass performs no network retry or access workaround
+- **Real PR data:** the earlier HTTP 403/zero-capture attempt remains historical evidence, not the latest availability state. The frozen HTTPX 70-row metadata frame and six W0 exports now exist; W1/W2 content, historical visibility and independent labels remain unestablished. This research audit performs no source acquisition or access workaround
 - **Real model execution:** the recorded runtime remains blocked pending a trusted authenticated backend and operational configuration. Authored SDK outputs do not verify real inference. Model choice, exact configuration, budget and permitted execution are not supplied by selecting this study route
 - **Independent humans:** two qualified annotators and an arbitrator remain unassigned; no one has been contacted. Assistant/model judgments cannot substitute for independent human responses
 - **Research execution:** the [matched F/U/H/M fixture runner](../experiments/matched-revision/README.md) now exercises shared-diagnosis orchestration, neutral proposals, U/M validators and the local-delta memory/common-gate interface. Production mode returns `not_run: production_adapter_unconfigured`; a competent real memory baseline and empirical execution remain unverified. The production H validator is not used to constrain U/M proposals

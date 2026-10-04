@@ -2,6 +2,19 @@
 
 **2026-10-02; checkout `2a204ab`.** Source-only research audit of the [manuscript](manuscript-draft.md), [readiness checklist](manuscript-readiness.md), and [implemented revision contract](../docs/rule-revision-generation.md). No model inference, experiment, external write, or publication was performed. This is a targeted novelty search, not a systematic review or a priority certification. Paper citations below refer to the inspected versions, without claiming an accepted venue.
 
+## 2026-10-04 primary-source and availability follow-up
+
+The [related-work/evaluation gap audit](related-work-evaluation-gap.md) rechecks
+core claims, adds five implementable baseline families with adaptation limits, and
+[records exact source metadata and seven official repository pins](primary-source-availability.json).
+RhoSynth's journal title is *Synthesizing Code Quality Rules from Examples*;
+CodeReviewer v2 uses *Automating Code Review Activities by Large-Scale Pre-training*.
+Archer's maintenance loop remains proposed. Scoped-ORC's paper is verified, but a
+public author implementation was not located in this audit; do not claim runnable
+replication. The older cards below remain historical audit notes, not blanket
+verification of every production claim or code release. Figma and product-blog
+claims were not re-audited and are not used as the new baseline availability evidence.
+
 ## Bottom line
 
 **Broad novelty is weak.** Learning review knowledge from repairs, refining overbroad rules from feedback, preserving lessons in repository instructions, and gating persistent updates on regression evidence all have direct antecedents. Six additional primary sources materially strengthen the four-source related-work section. Figma's production account is especially close to the proposed application; Scoped-ORC is especially close to the update gate.
