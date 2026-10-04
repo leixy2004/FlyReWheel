@@ -3,11 +3,11 @@ import {readFileSync} from 'node:fs';
 import {inspectOwnedContainer,cleanupTrial,type Check} from '../scripts/opensandbox-smoke-inspection.js';
 const owner='fixture-owner',network='fixture-network',key='fixture-secret-value';
 // Synthetic HostConfig: historical evidence did not retain the real HostConfig.
-const fixture=()=>({Config:{Labels:{'flyrewheel.lifecycle-owner':owner},Env:['PATH=/usr/bin']},
+const fixture=()=>({Id:'a'.repeat(64),Config:{Labels:{'flyrewheel.lifecycle-owner':owner},Env:['PATH=/usr/bin']},
  NetworkSettings:{Networks:{[network]:{}}},HostConfig:{NetworkMode:network,CapDrop:['ALL'],SecurityOpt:['no-new-privileges=true'],Privileged:false,PortBindings:{}},
- Mounts:[],State:{Running:true,Paused:false}});
+ Mounts:[],State:{Status:'running',Running:true,Paused:false}});
 function inspect(obj:any,checks:Check[]=[],phase:'ready'|'paused'='ready'){
- return inspectOwnedContainer(()=>['fixture-id'],()=>[obj],owner,network,key,phase,c=>checks.push(c));
+ return inspectOwnedContainer(()=>['a'.repeat(64)],()=>[obj],owner,network,key,phase,c=>checks.push(c));
 }
 it('records bounded named expected/actual results, preserving the failing check before throw',()=>{
  const obj=fixture();obj.HostConfig.SecurityOpt=['no-new-privileges=false',key];const checks:Check[]=[];
@@ -19,7 +19,7 @@ it('records bounded named expected/actual results, preserving the failing check 
 it('accepts equivalent enabled Docker forms and empty bindings representations',()=>{
  for(const opt of ['no-new-privileges','no-new-privileges=true'])for(const ports of [{},null,{'44772/tcp':null},{'44772/tcp':[{HostIp:'127.0.0.1',HostPort:'12345'}]}]){
   const obj:any=fixture();obj.HostConfig.SecurityOpt=[opt];obj.HostConfig.PortBindings=ports;
-  const checks:Check[]=[];inspect(obj,checks);expect(checks).toHaveLength(14);expect(checks.every(x=>x.passed)).toBe(true);
+  const checks:Check[]=[];inspect(obj,checks);expect(checks).toHaveLength(16);expect(checks.every(x=>x.passed)).toBe(true);
  }
 });
 it('rejects absent, disabled, malformed and conflicting security forms',()=>{
@@ -52,7 +52,7 @@ it('historical recorded shape is partial evidence, never a fabricated policy pas
  expect(receipt.errorClass).toBe('AssertionError');expect(receipt.diagnostics.ownerMatched).toBe(true);
  expect(receipt.diagnostics.running).toBe(true);expect(receipt.diagnostics.paused).toBe(false);
  expect(receipt.diagnostics).not.toHaveProperty('HostConfig');
- const checks:Check[]=[];expect(()=>inspect(receipt.diagnostics,checks)).toThrow('inspection:owner-match');
+ const checks:Check[]=[];expect(()=>inspect(receipt.diagnostics,checks)).toThrow('inspection:container-id');
  // The true historical inspect object was not retained; this proves no upgrade from its projection.
  expect(checks.at(-1)?.passed).toBe(false);
 });
@@ -75,4 +75,16 @@ it('receipt write failure cannot skip later cleanup actions',async()=>{
  const receipt:any={status:'succeeded'};const calls:string[]=[];
  await expect(cleanupTrial(receipt,[{name:'cleanupDeleteApi',run:async()=>{calls.push('delete');}},{name:'agentClosed',run:async()=>{calls.push('agent');}}],()=>{throw Error(key);})).rejects.toThrow('cleanup receipt persistence failed');
  expect(calls).toEqual(['delete','agent']);expect(receipt.status).toBe('failed');expect(receipt.agentClosed).toBe(true);
+});
+
+it('rejects secret-shaped receipt summary fields before exposing the raw object',()=>{
+ for(const field of ['Id','Status']){
+  const obj=fixture();if(field==='Id')obj.Id=key;else obj.State.Status=key;
+  const receipt:any={inspectionChecks:[]};
+  expect(()=>{const before=inspect(obj,receipt.inspectionChecks);receipt.containerId=before.Id;receipt.before={status:before.State.Status};}).toThrow();
+  expect(JSON.stringify(receipt)).not.toContain(key);expect(receipt).not.toHaveProperty('containerId');
+ }
+});
+it('rejects a well-formed ID that differs from the independently listed container',()=>{
+ const obj=fixture();obj.Id='b'.repeat(64);expect(()=>inspect(obj)).toThrow('inspection:container-id');
 });

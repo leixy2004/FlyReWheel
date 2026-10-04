@@ -20,6 +20,8 @@ export function inspectOwnedContainer(list:()=>string[],read:(id:string)=>unknow
  try{objects=read(ids[0]!);}catch{c('docker-inspect','parseable-response','error',false);}
  c('inspect-shape','one-object',Array.isArray(objects)?count(objects):shape(objects),Array.isArray(objects)&&objects.length===1&&object(objects[0]));
  const obj=objects[0];
+ const idValid=typeof obj.Id==='string'&&/^[a-f0-9]{64}$/.test(obj.Id)&&obj.Id===ids[0];
+ c('container-id','exact-listed-64hex-id',idValid?'match':'invalid-or-mismatch',idValid);
  c('owner-match',true,obj.Config?.Labels?.['flyrewheel.lifecycle-owner']===owner,obj.Config?.Labels?.['flyrewheel.lifecycle-owner']===owner);
  const nets=obj.NetworkSettings?.Networks;
  c('network-set','sole-owned-network',object(nets)?{count:count(Object.keys(nets)),owned:Object.hasOwn(nets,network)}:shape(nets),object(nets)&&Object.keys(nets).length===1&&Object.hasOwn(nets,network));
@@ -41,6 +43,9 @@ export function inspectOwnedContainer(list:()=>string[],read:(id:string)=>unknow
  c('env-shape','string-array',shape(env),envValid);
  const leaked=envValid&&env.some((x:string)=>x.includes(apiKey));
  c('api-key-absent',true,!leaked,!leaked);
+ const statuses=['created','running','paused','restarting','removing','exited','dead'];
+ const statusValid=typeof obj.State?.Status==='string'&&statuses.includes(obj.State.Status);
+ c('state-status','known-docker-state',statusValid?obj.State.Status:'invalid',statusValid);
  c('running',true,typeof obj.State?.Running==='boolean'?obj.State.Running:shape(obj.State?.Running),obj.State?.Running===true);
  c('paused',phase==='paused',typeof obj.State?.Paused==='boolean'?obj.State.Paused:shape(obj.State?.Paused),obj.State?.Paused===(phase==='paused'));
  return obj;
