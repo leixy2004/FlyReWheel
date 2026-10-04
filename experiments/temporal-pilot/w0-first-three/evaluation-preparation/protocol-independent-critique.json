@@ -3,7 +3,6 @@
   "kind": "protocol-design-critique",
   "status": "two-independent-native-agent-read-only-reviews-addressed",
   "notHumanAnnotations": true,
-  "protocolSha256": "b5190d27e0055bf74852efc7458f11e52143bee5f667a21009b7dd12667bfdf7",
   "reviews": [
     {
       "agent": "identity_audit",
@@ -41,5 +40,46 @@
     "modelCalls": 0,
     "externalRecruitment": false,
     "paperEdits": false
+  },
+  "originalProtocolSha256": "b5190d27e0055bf74852efc7458f11e52143bee5f667a21009b7dd12667bfdf7",
+  "protocolSha256": "1bb73c90bcfb6f56cb40d77e2b55af8a716008eba34430ea89a0011046f3a0bc",
+  "stagedPlanFollowup": {
+    "status": "two-native-agents-reviewed-planning-and-budget-assumptions",
+    "reviews": [
+      {
+        "agent": "identity_audit",
+        "scope": "paired metric and conservative uncertainty illustration",
+        "addressed": [
+          "Define cluster contrast only when Pj>0; preserve zero-positive clusters in other denominators",
+          "Limit concentration bound to independent fixed-weight planning model; random label weights do not establish population inference",
+          "Keep current W2 frame unchanged, no power claim or automatic expansion"
+        ]
+      },
+      {
+        "agent": "leakage_audit",
+        "scope": "stage gates, human budget and selection bias",
+        "addressed": [
+          "Define complete dual search without erasing Unknown",
+          "Freeze single pilot family; no retry-until-success, retain development-selection limitation",
+          "Explicit person-hour caps and linear reserve assumptions; no forced consensus or borrowing",
+          "Stress-test higher discordance as well as lower benefit/yield"
+        ]
+      }
+    ],
+    "plannedHours": {
+      "w0Calibration": 2.75,
+      "w1OneFamilyPilot": 18,
+      "w2OneFamilyDescriptive": 26,
+      "allThreeOneFamily": 46.75,
+      "w2EightFamilyInitialOnly": 152,
+      "w2EightFamilyWithAssumedReserves": 208
+    },
+    "noNewLabelsOrSamplingChanges": true,
+    "worstCaseIllustration": {
+      "assumption": "hypothetical independent bounded cluster contrasts with fixed weights; not present census CI or power",
+      "halfWidthAt19EqualClusters": 0.6231397118087131,
+      "effectiveClustersForHalfWidthPoint2": 185,
+      "effectiveClustersForHalfWidthPoint1": 738
+    }
   }
 }

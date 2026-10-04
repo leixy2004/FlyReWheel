@@ -1,4 +1,4 @@
-# Proposed annotation and temporal-visibility protocol, v0.1
+# Proposed annotation and temporal-visibility protocol, v0.2
 
 Status: retrospective design proposal written after W0 inspection; not preregistered,
 not an approved collection, and not evidence of labels, annotator assignment or model
@@ -244,6 +244,181 @@ flags/lineage and exclusion flow. Keep identity mapping private and publish aggr
 counts. This is a procedural sidecar proposal, not a second label schema or a
 materialized participant record. Add a strict sidecar schema only when real inputs
 and the collection interface are approved; existing schemas need no change now.
+
+## Minimal staged plan: spend only after feasibility is established
+
+This section narrows expenditure, not the frozen sampling frame. It proposes no new
+PR selection or immediate collection. W0 remains the same three exposed PRs; W1
+remains the 13 development candidates; W2 remains the 19 untouched candidates.
+Start with **one substantive family**, selected on development evidence before W2,
+only if one can be specified honestly. Eight families and 152 initial-rating hours
+are a maximum option, not a minimum or an established need. A one-family conclusion
+is limited to that family; it is not evidence for general reusable-rule efficacy.
+
+The essential research claim is improved detection of actionable head-snapshot
+violations under matched information and total budgets, without concealing false
+alerts or missing coverage. The primary metric stays the paired, issue-level
+detection difference defined above. Issues are measurement opportunities nested in
+PR×family units; independent replication is at PR or linked-lineage cluster level,
+never at anchor, export, repeated run or rater level. A process-feasibility gate is
+not a test of that efficacy claim.
+
+### Stage A: tiny calibration and task feasibility
+
+Use the three already exposed W0 cases only, one candidate family, two independent
+initial judgments capped at 15 minutes per case per person. These are disclosed
+calibration exercises, not blinded holdout labels or formal head-review instances;
+existing before-only drafts test packet/rubric usability only. Any head-side exercise
+requires a separately versioned packet under the formal task rules. No new content
+is required to draft this plan. Cap initial rating at 1.5 person-hours, adjudication
+at 45 minutes and preparation/logging at 30 minutes: **2.75 person-hours total**,
+conditional on personnel, approved access and a real rubric already being available.
+Rule discovery/creation is not hidden in this cap; log it separately, and stop rather
+than assume free or unlimited design work.
+
+Progress only if a real checkable family exists, at least two of three exercises
+receive complete independent submissions within budget, and every rubric ambiguity
+preventing a reproducible judgment is resolved in a dated rubric revision. Unknown
+judgments can be valid completed work but do not establish that actionable violations
+are measurable. Zero positives in these tooling-heavy cases is a legitimate outcome,
+not grounds to replace a PR or manufacture a rule. If no defensible family exists,
+stop with “no eligible family demonstrated.” If a family exists but no positive
+opportunity is observed, a W1 feasibility pilot may still be proposed on a documented
+substantive rationale; it must not be represented as demonstrated defect signal.
+Allow at most one wording-only recalibration within the stated cap; if it requires
+more time/context, record unmet feasibility and revise a later proposal, not this run.
+
+### Stage B: bounded development pilot, only after Stage A gate
+
+Proposed pilot is all 13 existing W1 metadata candidates, one frozen candidate family,
+two raters × 30 minutes per PR: **13 initial-rating hours**. Reserve 3.25 hours for
+adjudication (15 minutes per PR) and 1.75 for packet/ledger administration: **18
+person-hours total**, excluding explicitly costed source acquisition, contamination
+auditing, rule creation and any later model experiment. This is a future authorized
+work package, not a current instruction to acquire W1 or assign anyone. Full W1 avoids
+introducing a new convenient subset or silently changing selection. A smaller time
+budget must be approved and frozen after Stage A but before W1 access; do not cut
+search time after seeing hard cases.
+
+Here complete dual search means both real independent raters searched the same
+locked packet/rubric scope and locked their submissions; it does not mean all labels
+are known or merely schema-valid. Unknown remains an allowed completed judgment.
+At the single scheduled end-of-pilot review, require at least 10/13 PR units with
+complete independent search coverage by both raters and resolved procedure issues,
+and known-positive head-snapshot issues on at least two distinct PRs after the
+existing adjudication procedure, to say the primary metric is operationally
+measurable beyond a single case. These are proposed resource/feasibility thresholds,
+not empirical power thresholds or evidence of improvement. Positives must be
+supported by the independent reference process, not merge status, Ruff output or a
+single unchecked assertion. Freeze one family for this pilot; do not rotate families
+or repeatedly tune the rubric until a gate passes. Any later W2 result is conditional
+on this development-stage family selection, not an unbiased all-family claim. All 13 remain in the
+flow; completion, positive yield, negative opportunities, Unknown, disputed and
+unassessed counts are reported separately. If positives occur in only one lineage,
+record that dependence and do not claim independent replication.
+
+If zero positives, report “zero observed eligible positives in this development
+pilot; detection metric undefined,” not zero defect prevalence or zero method yield.
+If fewer than two positive-bearing PRs, fewer than 10 complete units, unresolved
+rubric ambiguity, or exceeded budget, stop progression as measurement/resource
+futility. Do not replace cases, widen families opportunistically, move W2 into
+calibration, or request more labels until success. A later redesigned study is a
+new version and retains this failed/zero-yield pilot in the record.
+
+The annotation pilot alone cannot estimate model discordance or efficacy. If a
+separate matched two-arm development run is later authorized, lock labels first,
+then observe positive opportunities per lineage, paired detection discordance,
+Unknown/coverage, false-alert burden, cost and runtime failure. No favorable observed
+point estimate is required for reporting the pilot; negative or zero differences
+remain publishable. No efficacy early stopping or repeated significance peeking.
+A stronger efficacy study is not launched on authored fixtures or annotation yield
+alone; missing arm/uncertainty evidence stays an explicit planning limitation.
+
+### Stage C: size a proposed confirmation from uncertainty, not arbitrary N
+
+Before W2 access, freeze the minimum scientifically worthwhile improvement and
+maximum acceptable false-alert/cost burden, together with the desired uncertainty
+width and analysis assumptions. A suggested **planning precision target** is a
+95% interval half-width of 0.10 in paired detection difference; this is not a claimed
+achievable precision, a power calculation, or the minimum worthwhile effect.
+Effect and burden tolerances need a substantive task rationale before execution.
+
+Use the pilot's distribution of independent lineages, positive counts per lineage,
+paired outcomes, annotation missingness and cost to simulate the prespecified metric
+under no benefit and worthwhile-benefit scenarios. Include pessimistic higher
+within-lineage dependence, more missing labels, lower positive yield and smaller
+attainable benefit than the pilot suggests. Vary discordance across a plausible
+range, including higher discordance that can increase paired-difference variance. Account for pilot estimation uncertainty; never size from
+only its most favorable point estimate. Without real paired outputs, use an explicit
+conservative design envelope or postpone efficacy sizing. Fit/simulation results,
+assumptions, seed and stopping target must be frozen before confirmation. These are
+future planning computations, not analyses completed in this checkpoint.
+
+Worst-case current knowledge permits any detection difference in [-1, 1]. Unknown
+positives and incomplete search mean even a precise known-positive result is not
+population recall. For a *hypothetical independently sampled cluster design*, write
+D_j=(treatment detections minus baseline detections)/P_j in [-1,1] for cluster j
+with P_j>0 known positives, and w_j=P_j/sum(P_j) for its
+fixed positive-count weight. Conditional on fixed weights and independent clusters,
+a conservative 95% bounded-variable half-width is
+`sqrt(2 * log(40) * sum(w_j^2))`; the effective cluster count is
+`1 / sum(w_j^2)`. This follows from bounding each weighted contrast in an interval
+of length 2w_j. Dependence or outcome-related weights invalidate treating it as a
+sampling guarantee. In particular P_j is learned during annotation, so conditioning
+on realized weights does not by itself validate population-ratio inference. The
+concentration center in this planning model is sum(w_j * E[D_j]). Zero-positive
+clusters have no defined D_j and no primary weight but remain in coverage, cost and
+false-alert denominators; if total P=0 the primary metric is undefined. Unequal
+weights and lineage aggregation reduce the effective count. Clip resulting limits to [-1,1], not the raw half-width.
+
+Even the optimistic equal-weight 19-independent-cluster scenario gives about **0.623**
+half-width under that conservative bound; 13 gives about **0.753**. Achieving
+half-width 0.20 by that bound would require at least **185** effective clusters;
+0.10 would require **738**. These are illustrative worst-case sufficient counts,
+not required sample sizes, powered estimates, an adopted sampling change or
+confidence intervals for the present deterministic merged-PR frame. Observed
+variance may support a smaller justified design, while clustered/uneven issues can
+make nominal N misleading. A full census describes its frame; it does not create
+random-sample inference to new PRs. Rater agreement alone cannot certify ground truth.
+
+The current W2 cap remains 19 PRs. If pilot-informed planning cannot justify the
+chosen precision/claim within those candidates and resources, retain W2 as a bounded
+descriptive holdout or stop; do not call it powered confirmation. Expanding to other
+windows/repositories requires a separately authorized protocol and sampling frame,
+not opportunistic expansion here. If confirmation is eventually viable, use one
+final analysis, retain failures/Unknown and all selected denominators, and interpret
+an interval spanning no benefit as inconclusive for improvement. If its upper bound
+is below the prespecified worthwhile benefit, report futility for that benefit.
+Neither a small positive point estimate nor a nominal p-value overrides coverage,
+contamination, false-alert or budget failures.
+
+### Concrete lower-budget options and limits
+
+| Option, not current assignment | Initial double rating | Adjudication reserve | Administration reserve | Bounded subtotal |
+| --- | ---: | ---: | ---: | ---: |
+| A only: existing 3 W0 × 1 family × 15 min/rater | 1.5 h | 0.75 h | 0.5 h | 2.75 h |
+| B only: all 13 W1 × 1 family × 30 min/rater | 13 h | 3.25 h | 1.75 h | 18 h |
+| W2 descriptive option: all 19 × 1 family × 30 min/rater | 19 h | 4.75 h | 2.25 h | 26 h |
+| W2 broader option: all 19 × 2 families × 30 min/rater | 38 h | 9.5 h | 4.5 h | 52 h |
+| W2 maximum option: all 19 × 8 families × 30 min/rater | 152 h | 38 h | 18 h | 208 h |
+
+The staged one-family A+B+W2 option totals **46.75 annotation/administration hours**
+only if each gate passes; stopping after A spends at most 2.75. These are transparent
+caps/assumptions, not measured productivity or guaranteed completed labels. Preparation
+is counted only within the small ledger/packet administration reserve; substantive
+rule design, acquisition, security/interface work, contamination audit and model cost
+must have separate visible budgets before commitment. Two/eight-family reserve
+amounts assume linear scaling, not measured productivity; there is no borrowing from
+later stage budgets after a cap is reached. Detection uncertainty does not substitute
+for separate false-alert/precision uncertainty and exhaustive alert accounting. Third-rater overflow or missing
+context becomes disputed/partial and can trigger futility, never rushed consensus or
+unrecorded unpaid work. Fewer families narrows the claim while preserving the PR frame.
+No lower-budget option removes the two-rater independence requirement.
+
+The immediate deliverable is this staged proposal, with all labels unassigned. True
+next blockers are a defensible family and independent human/access resources even
+for Stage A; later collection and model budgets are separate gates. Bridge validation
+on retained W0 exports can proceed independently and supplies no efficacy signal.
 
 ## Decisions and actual blockers before collection
 
