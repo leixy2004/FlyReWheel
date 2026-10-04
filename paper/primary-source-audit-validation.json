@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "baseCommit": "17879c170b7ba6bdbbe86a5c977a9b4de88da386",
+  "branch": "codex/paper-primary-source-gap-audit",
+  "checks": {
+    "localLinksResolved": 50,
+    "citationRecords": 11,
+    "officialRepositoryPins": 7,
+    "manuscriptReferenceNumbering": "1-11 sequential",
+    "independentReviewers": [
+      "identity_audit",
+      "leakage_audit"
+    ],
+    "reviewFindingsAddressed": true,
+    "gitDiffCheck": "pass"
+  },
+  "scope": {
+    "modelCalls": 0,
+    "datasetPayloadDownloads": 0,
+    "humanRecruitment": false,
+    "sourceTransfer": "GitHub only for repository files; primary research pages read via web",
+    "prMetadataWrites": 0,
+    "experimentsRun": false
+  },
+  "files": [
+    {
+      "path": "paper/manuscript-draft.md",
+      "bytes": 39118,
+      "sha256": "16021dfd0459e639a13d738925b4c5bea2db3f37058b844c2ce9944d80581c7f"
+    },
+    {
+      "path": "paper/discriminating-experiment.md",
+      "bytes": 45905,
+      "sha256": "76e578ec9517ce91e06af48676846bdebcd33e54419007cd74c373cb8cee3d0a"
+    },
+    {
+      "path": "paper/novelty-audit.md",
+      "bytes": 19259,
+      "sha256": "f2b28639913d630360d2023a79ba1f9fe8d465b6bb33528ba2e9b1b8f25e6b5f"
+    },
+    {
+      "path": "paper/related-work-evaluation-gap.md",
+      "bytes": 12776,
+      "sha256": "875e391f1fbb452794c0fb1142a2d5ec3f2f24298403cd853700b731f296aa13"
+    },
+    {
+      "path": "paper/primary-source-availability.json",
+      "bytes": 13415,
+      "sha256": "dbf10e55eec0d3516bf8866e37c90437e1a1e003b4d0c4245cf24b443f3bd53d"
+    }
+  ]
+}
