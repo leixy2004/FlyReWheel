@@ -6,6 +6,7 @@ receipts. This manages its process group only, never Docker sandbox resources.
 Use a dedicated idle Docker daemon; the empty inventory check is not a lock.
 """
 import argparse
+import ctypes
 import hashlib
 import json
 import os
@@ -62,7 +63,36 @@ def group_exists(pid):
         return False
 
 
-def stop_group(child, grace=3):
+def enable_child_subreaper():
+    """Own future orphaned descendants in this dedicated Linux supervisor only."""
+    if sys.platform != "linux":
+        raise RuntimeError("Linux child subreaper required")
+    libc = ctypes.CDLL(None, use_errno=True)
+    # prctl is variadic: pass pointer-sized arguments explicitly.
+    if libc.prctl(36, ctypes.c_ulong(1), ctypes.c_ulong(0), ctypes.c_ulong(0), ctypes.c_ulong(0)) != 0:
+        raise OSError(ctypes.get_errno(), "cannot enable child subreaper")
+    enabled = ctypes.c_int()
+    if libc.prctl(37, ctypes.byref(enabled), ctypes.c_ulong(0), ctypes.c_ulong(0), ctypes.c_ulong(0)) != 0 or enabled.value != 1:
+        raise RuntimeError("child subreaper verification failed")
+
+
+def reap_group_descendants(child):
+    # Popen must collect its leader's status first. A generic waitpid(-1) would
+    # steal status from the independently supervised control service.
+    if child.poll() is None:
+        return
+    if child.pid <= 1:
+        raise ValueError("dedicated process group required")
+    for _ in range(1024):  # bounded even if a defective descendant keeps forking
+        try:
+            pid, _ = os.waitpid(-child.pid, os.WNOHANG)
+        except ChildProcessError:
+            return
+        if pid == 0:
+            return
+
+
+def stop_group(child, grace=3, *, reap_descendants=False):
     """Return evidence of group disappearance, not merely a signal result."""
     for sig in (signal.SIGTERM, signal.SIGKILL):
         try:
@@ -72,6 +102,8 @@ def stop_group(child, grace=3):
         until = time.monotonic() + grace
         while time.monotonic() < until:
             child.poll()  # Reap our leader before checking the group.
+            if reap_descendants:
+                reap_group_descendants(child)
             if not group_exists(child.pid):
                 return True
             time.sleep(0.03)
@@ -385,6 +417,15 @@ def trial_quiescent_scan(owner):
     return verified
 
 
+def trial_node(options):
+    if not getattr(options, "node_executable", None):
+        raise ValueError("explicit executable Node path required for launch")
+    node = Path(options.node_executable)
+    if not node.is_absolute() or not node.is_file() or not os.access(node, os.X_OK):
+        raise ValueError("explicit executable Node path required")
+    return str(node.resolve())
+
+
 def run_trial(options):
     state, admission = trial_admission(options)
     receipt = dict(schema=1, owner=admission["owner"], deadlineUnixMs=admission["deadlineUnixMs"],
@@ -460,7 +501,7 @@ def run_trial(options):
         if driver is not None:
             if driver.poll() is None:
                 receipt["allocationOutcomeAmbiguous"] = True
-            return stop_group(driver)
+            return stop_group(driver, reap_descendants=True)
         if not receipt.get("resumeCleanupOnly", False):
             return True
         record = json.loads((state / "driver.json").read_text())
@@ -556,6 +597,13 @@ def run_trial(options):
             raise ValueError("one-shot outer claim already consumed; no second driver")
         if remaining() <= 0 or (state / "allocation.claim").exists():
             raise ValueError("expired or previously allocated trial")
+        # Launch-only dependencies must never prevent consumed-claim recovery.
+        node = trial_node(options)
+        receipt["nodeExecutable"] = node
+        # Fail closed before either service or driver starts. esbuild is unref'd
+        # by tsx and can outlive Node; keep it adoptable and waitable here.
+        enable_child_subreaper()
+        receipt["driverChildSubreaperVerified"] = True
         validate(options)
         obj = json.loads(public_command(["docker", "network", "inspect", options.network]))[0]
         network_id = obj["Id"]
@@ -588,7 +636,7 @@ def run_trial(options):
         parent_alive()
         if remaining() <= 0:
             raise RuntimeError("absolute deadline before driver")
-        spawn_owned("driver", ["node", "--import", "tsx", str(repo / "scripts/run-opensandbox-local-smoke.ts"),
+        spawn_owned("driver", [node, "--import", "tsx", str(repo / "scripts/run-opensandbox-local-smoke.ts"),
                                    str(task), options.network_owner, options.network, str(state / "lifecycle.json"), str(state)],
                                   cwd=repo, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                   start_new_session=True, env={"PATH": "/usr/local/bin:/usr/bin:/bin", "OPENSANDBOX_DISABLE_METRICS": "1"})
@@ -641,6 +689,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--trial-supervisor", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--node-executable", help="absolute installed Node binary for the isolated trial driver")
     parser.add_argument("--trial-state", help="private persistent one-shot outer trial directory")
     parser.add_argument("--expires-unix-ms", type=int, help="absolute UTC deadline; never extended on resume")
     parser.add_argument("--approval-ref")

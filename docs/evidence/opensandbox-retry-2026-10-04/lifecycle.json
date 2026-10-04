@@ -1,0 +1,83 @@
+{
+  "classification": "single-no-model-lifecycle",
+  "owner": "4280f8a6-5cba-4416-b437-9560863d0155",
+  "network": "flyrewheel-internal-4280f8a6-5cba-4416-b437-9560863d0155",
+  "endpoint": "https://127.0.0.1:41381",
+  "allocationRequestsPrepared": 1,
+  "allocationDispatches": 1,
+  "events": [
+    "verified-TLS-health"
+  ],
+  "requests": [
+    {
+      "category": "health",
+      "method": "GET",
+      "elapsedMs": 1004,
+      "error": "abort"
+    },
+    {
+      "category": "health",
+      "method": "GET",
+      "elapsedMs": 661,
+      "status": 200
+    },
+    {
+      "category": "sandboxes",
+      "method": "GET",
+      "elapsedMs": 48,
+      "status": 401
+    },
+    {
+      "category": "sandboxes",
+      "method": "POST",
+      "elapsedMs": 8949,
+      "status": 202
+    },
+    {
+      "category": "other",
+      "method": "GET",
+      "elapsedMs": 48,
+      "status": 200
+    },
+    {
+      "category": "other",
+      "method": "GET",
+      "elapsedMs": 47,
+      "status": 200
+    },
+    {
+      "category": "readiness",
+      "method": "GET",
+      "elapsedMs": 46,
+      "status": 200
+    },
+    {
+      "category": "sandbox",
+      "method": "DELETE",
+      "elapsedMs": 986,
+      "status": 204
+    }
+  ],
+  "status": "failed",
+  "unauthenticatedStatus": 401,
+  "sandboxId": "1f76300b-aec1-4aab-89a8-a12b5acb90ad",
+  "errorClass": "AssertionError",
+  "diagnostics": {
+    "status": "captured",
+    "containerId": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+    "imageId": "sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed",
+    "ownerMatched": true,
+    "networkMatched": true,
+    "running": true,
+    "paused": false,
+    "oomKilled": false,
+    "state": "running",
+    "exitCode": 0,
+    "publishedPortsPresent": false,
+    "execdProcessObserved": "unknown",
+    "startupCategories": [
+      "execd-start-marker"
+    ]
+  },
+  "cleanupDeleteApi": true
+}

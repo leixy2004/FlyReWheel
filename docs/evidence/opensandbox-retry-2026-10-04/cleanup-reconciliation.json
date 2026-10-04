@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "classification": "independent-read-only-cleanup-reconciliation",
+  "checkedAtUtc": "2026-10-04T08:24:16.157271Z",
+  "owner": "4280f8a6-5cba-4416-b437-9560863d0155",
+  "containerInventory": {
+    "exitCode": 0,
+    "ids": []
+  },
+  "ownerContainerInventory": {
+    "exitCode": 0,
+    "ids": []
+  },
+  "worker": {
+    "id": "ec1b99bba9c84f784c2d343d3b72901c59c41c6e3c0c523b0357b2f601620086",
+    "inspectExitCode": 1,
+    "present": false
+  },
+  "networkInventory": {
+    "exitCode": 0,
+    "networks": [
+      {
+        "id": "b135356fc9528d10b33e8f13d1989a383fffeb300798c3ef2c75b1fc4c3f0191",
+        "name": "bridge"
+      },
+      {
+        "id": "e46365d64873dfa1d79185df6fefaa02273ce417601fdf1c8e1e5b1f47ea4ca5",
+        "name": "host"
+      },
+      {
+        "id": "e6b946701d2955b700b95e1297718cd17ea226b4b5179a25eb178a2c4f970fa5",
+        "name": "none"
+      }
+    ]
+  },
+  "taskNetworkId": "a10588c6937319a3b247d5dea02d67d3363f5c5a783effa4d5f31a94952858e8",
+  "introducedExecdImage": {
+    "reference": "opensandbox/execd@sha256:9b856dad9c73488660522361abfaaa1ddbb9032169bcfb44c83348f46bc1cd9a",
+    "inspectExitCode": 1,
+    "present": false
+  },
+  "imageInventory": {
+    "exitCode": 0,
+    "ids": [
+      "sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed",
+      "sha256:b37a4d56eedb5e42bca59c8d4782fa550e741fba5dbce943c53767d3ceee57e6"
+    ]
+  },
+  "tcpListenerInventory": {
+    "exitCode": 0,
+    "ports": [
+      1040
+    ],
+    "servicePort": 41381,
+    "servicePortListening": false
+  },
+  "matchingProcesses": [
+    {
+      "pid": 15007,
+      "comm": "esbuild",
+      "state": "Z",
+      "ppid": 1,
+      "pgid": 14999,
+      "session": 14999
+    }
+  ],
+  "activeMatchingProcesses": [],
+  "absentRecordedPids": [
+    14959,
+    14998,
+    14999
+  ],
+  "secretDirectory": "/tmp/flyrewheel-control-a5nug5rs",
+  "secretDirectoryLexists": false,
+  "driverProcessGroupAbsent": false,
+  "overallCleanup": "cleanup-unverified",
+  "limits": [
+    "Preserves earlier independent-cleanup.json and failed lifecycle receipt.",
+    "Process matching uses recorded PIDs, process groups, sessions and observable parent relationships; historical detached descendants cannot be inferred from absent records.",
+    "No signals, credentials, environment values, service probes or resource mutations."
+  ]
+}
