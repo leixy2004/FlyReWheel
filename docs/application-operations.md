@@ -47,6 +47,13 @@ SDK, backend, model or queue, and does not reconcile job leases. A configured
 report means dependencies are present, not that live workspace/lifecycle checks
 have passed. Evaluation bindings still require trusted resolver verification.
 
+Revision preflight validates the frozen feedback graph and existing holdout
+exclusions without reserving source content as training. Actual generation
+revalidates and reserves the consumed content before runtime execution; a
+preflight result does not reserve data or guarantee that a later execution will
+remain admissible. Fixture labels stay separate from caller-declared human
+verdicts, and readiness checks do not resolve Unknown or Disputed attribution.
+
 ## Explicit composition and the external deployment boundary
 
 `application-jobs bootstrap-check --config /absolute/admin-config.json` checks a

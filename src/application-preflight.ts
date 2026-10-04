@@ -23,6 +23,7 @@ export async function prepareMiningApplicationJob(store: QualEvoStore, raw: PrMi
 }
 
 /** No resolver/backend invocation, queue access, claims, lease reconciliation or model call.
+ * Inspect revision evidence without reserving training sources; execution revalidates and reserves.
  * Opening the caller's store can still run the existing database migrations. */
 export async function preflightApplicationJob(store: QualEvoStore, raw: ApplicationJobInput,
   options: { bootstrapConfig?: unknown; bootstrapDependencies?: WorkerBootstrapDependencies } = {}) {
@@ -46,7 +47,7 @@ export async function preflightApplicationJob(store: QualEvoStore, raw: Applicat
         await Promise.all(job.repositoryContextDigests.map(digest => store.getRepositoryContext(digest))), stored);
       if (job.governancePlanDigest) await store.requireCurrentGovernedReviewJob(job);
     } else {
-      const graph = await store.prepareRevisionGeneration(job.requestDigest);
+      const graph = await store.getRevisionGenerationEvidence(job.requestDigest);
       if (Date.parse(job.candidateCreatedAt) < Date.parse(graph.request.request.createdAt)) {
         issues.push({ code: 'candidate_predates_request', nextAction: 'Choose an explicit candidate timestamp at or after the frozen revision request timestamp.' });
       }
