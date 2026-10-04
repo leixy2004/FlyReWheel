@@ -126,10 +126,17 @@ class TrialPrerequisiteTests(unittest.TestCase):
     def options(self, directory):
         from types import SimpleNamespace
         now = int(time.time() * 1000)
-        return SimpleNamespace(trial_state=str(Path(directory) / "trial"),
+        return SimpleNamespace(node_executable=sys.executable, trial_state=str(Path(directory) / "trial"),
             network_owner="fixture-owner", approval_ref="fixture-approval", network="fixture-network",
             expires_unix_ms=now + 600000, source="unused", python="unused",
             execd_image=control.EXECD_IMAGE, dedicated_daemon=True)
+
+    def test_trial_node_requires_explicit_existing_absolute_executable(self):
+        from types import SimpleNamespace
+        self.assertEqual(control.trial_node(SimpleNamespace(node_executable=sys.executable)), str(Path(sys.executable).resolve()))
+        for path in ("node", "/nonexistent/flyrewheel-node"):
+            with self.assertRaises(ValueError):
+                control.trial_node(SimpleNamespace(node_executable=path))
 
     def test_immutable_admission_and_durable_exclusive_claim(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -385,10 +385,18 @@ def trial_quiescent_scan(owner):
     return verified
 
 
+def trial_node(options):
+    node = Path(options.node_executable)
+    if not node.is_absolute() or not node.is_file() or not os.access(node, os.X_OK):
+        raise ValueError("explicit executable Node path required")
+    return str(node.resolve())
+
+
 def run_trial(options):
+    node = trial_node(options)
     state, admission = trial_admission(options)
     receipt = dict(schema=1, owner=admission["owner"], deadlineUnixMs=admission["deadlineUnixMs"],
-                   status="failed", cleanup={}, imagePolicy="retain-preexisting-no-image-removal")
+                   status="failed", cleanup={}, nodeExecutable=node, imagePolicy="retain-preexisting-no-image-removal")
     child = driver = None
     task = None
     messages = queue.Queue()
@@ -588,7 +596,7 @@ def run_trial(options):
         parent_alive()
         if remaining() <= 0:
             raise RuntimeError("absolute deadline before driver")
-        spawn_owned("driver", ["node", "--import", "tsx", str(repo / "scripts/run-opensandbox-local-smoke.ts"),
+        spawn_owned("driver", [node, "--import", "tsx", str(repo / "scripts/run-opensandbox-local-smoke.ts"),
                                    str(task), options.network_owner, options.network, str(state / "lifecycle.json"), str(state)],
                                   cwd=repo, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                   start_new_session=True, env={"PATH": "/usr/local/bin:/usr/bin:/bin", "OPENSANDBOX_DISABLE_METRICS": "1"})
@@ -641,6 +649,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--trial-supervisor", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--node-executable", help="absolute installed Node binary for the isolated trial driver")
     parser.add_argument("--trial-state", help="private persistent one-shot outer trial directory")
     parser.add_argument("--expires-unix-ms", type=int, help="absolute UTC deadline; never extended on resume")
     parser.add_argument("--approval-ref")
@@ -664,6 +673,8 @@ def main(argv=None):
     if options.trial_supervisor and (not options.trial_state or options.supervisor):
         parser.error("trial supervisor requires outer trial mode")
     if options.trial_state and not options.supervisor:
+        if not options.node_executable:
+            parser.error("trial mode requires --node-executable")
         if options.trial_supervisor:
             return run_trial(options)
         command = [sys.executable, str(Path(__file__).resolve()),
