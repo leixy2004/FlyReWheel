@@ -27,7 +27,7 @@ HTTP, not end-to-end TLS.
 | Request compatibility | Normalizer transfers native Request method, body, headers and signal into external undici; fake SDK readiness preserves the path/auth. | Use unchanged explicit local origin, fixed image, empty env/volumes, sleep entrypoint, no model request. |
 | Allocation counting | Driver separately counts prepared POSTs and Agent dispatch attempts and rejects a second. Counters describe attempted preparation/dispatch, not proof of server-side create. | One durable exclusive admission record for the new approval/owner, shared across process restarts; no restart with reset counters. Correlate with worker create events. Historical orchestrator is not a reusable authorization wrapper. |
 | Lifetime | Control supervisor has 900s monotonic limit and parent-pipe EOF cleanup; historical outer trial used 180s. | One absolute expiry covering preparation and any continuation. Never reset the window by restarting. Reserve cleanup time; stop on first failed gate. |
-| Disk/images | Existing worker image is fixed at sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed. Last cleanup removed the execd image. | Fresh read-only budget check; >=7GiB startup and >=6GiB stop threshold. No worker rebuild/node_modules copy. Reacquiring the exact audited execd digest is a necessary scope item unless already cached; no pull until approval covers it. |
+| Disk/images | Existing worker image is fixed at sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed. Last cleanup removed the execd image. | Fresh read-only budget check; >=7GiB startup and >=6GiB stop threshold. No worker rebuild/node_modules copy. Reacquiring the exact audited execd digest is ordinary dependency preparation within the project; preserve digest/provenance and recheck capacity. No image was pulled during this offline work. |
 | Diagnostics | Current driver retains only exception class; server output is discarded. | Blocker: add bounded safe diagnostics before automatic SDK deletion, as specified below. |
 | Cleanup | Driver attempts API delete when a Sandbox object exists; SDK normally deletes on create/readiness failure; outer runner removes verified owned containers and network. | Blocker: explicitly handle ambiguous/late create, independently attempt all cleanup stages, and verify absence after control-plane shutdown. |
 
@@ -98,8 +98,9 @@ status, pause with Docker inspection, then delete. No resume/fencing/frozen-read
 claim follows from this sequence. No new auth backend, credential copying,
 production runtime edits, broader networking or main merge.
 
-The necessary pre-execution changes are bounded diagnostic retention and a
+The original pre-execution gaps were bounded diagnostic retention and a
 reviewable one-shot outer wrapper with absolute expiry and late-create cleanup.
+See [implemented safeguards](retry-offline-safeguards.md) for the follow-up status.
 The historical `recorded-orchestrator.py` remains evidence and must not be edited
 into a misleading record of a past run. These are local script changes, not an
 infrastructure expansion. Report this scope and the remaining gaps to the parent

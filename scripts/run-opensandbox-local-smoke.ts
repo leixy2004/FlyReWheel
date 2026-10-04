@@ -1,36 +1,69 @@
 /** Single authorized no-model trial. Secret values never enter receipts or errors. */
 import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
-import {execFileSync} from 'node:child_process';
+import {execFileSync,spawnSync} from 'node:child_process';
 import {Sandbox} from '@alibaba-group/opensandbox';
 import {Agent,fetch as scopedFetch} from 'undici';
-import {localRequest} from './opensandbox-smoke-request.js';
+import {localRequest,TrialGuard,TRIAL_WORKER_IMAGE,observeRequest,startupCategories} from './opensandbox-smoke-request.js';
 import {BoundedOpenSandboxConnection} from '../src/adapters/opensandbox-transport.js';
-const [task,owner,network,output]=process.argv.slice(2);
-assert(task&&owner&&network&&output);
+const [task,owner,network,output,state]=process.argv.slice(2);
+assert(task&&owner&&network&&output&&state);
+const guard=new TrialGuard(state,owner,network);
 const info=JSON.parse(await readFile(`${task}/public.json`,'utf8'));
+assert.equal(info.operatorApprovalReference,guard.approvalReference,'trial approval mismatch');
 const apiKey=await readFile(`${task}/api-key`,'utf8');
 const ca=await readFile(`${task}/tls.crt`);
 const endpoint=`https://127.0.0.1:${info.port}`;
 const agent=new Agent({connect:{ca,rejectUnauthorized:true}});
-const receipt:any={classification:'single-no-model-lifecycle',owner,network,endpoint,allocationRequestsPrepared:0,allocationDispatches:0,events:[],status:'failed'};
+const receipt:any={classification:'single-no-model-lifecycle',owner,network,endpoint,allocationRequestsPrepared:0,allocationDispatches:0,events:[],requests:[],status:'failed'};
 const originalDispatch=agent.dispatch.bind(agent);
 agent.dispatch=(options,handler)=>{
- if(options.method==='POST'&&options.path==='/v1/sandboxes'){
-  receipt.allocationDispatches++;assert.equal(receipt.allocationDispatches,1,'Only one allocation dispatch allowed');
+ guard.remaining();
+ if(options.method.toUpperCase()==='POST'&&new URL(options.path,endpoint).pathname==='/v1/sandboxes'){
+  guard.dispatch();receipt.allocationDispatches++;assert.equal(receipt.allocationDispatches,1,'Only one allocation dispatch allowed');
  }
  return originalDispatch(options,handler);
 };
 const localFetch:typeof fetch=async(input,init)=>{
  const normalized=await localRequest(input,init,endpoint);
  if(normalized.init.method==='POST'&&new URL(normalized.url).pathname==='/v1/sandboxes'){
-  receipt.allocationRequestsPrepared++;assert.equal(receipt.allocationRequestsPrepared,1,'Only one prepared allocation allowed');
+  guard.claim();receipt.allocationRequestsPrepared++;assert.equal(receipt.allocationRequestsPrepared,1,'Only one prepared allocation allowed');
  }
- return await scopedFetch(normalized.url,{...normalized.init,dispatcher:agent} as any) as any;
+ const deadlineSignal=AbortSignal.timeout(Math.min(guard.remaining(),20000));
+ const signal=normalized.init.signal?AbortSignal.any([normalized.init.signal,deadlineSignal]):deadlineSignal;
+ return await observeRequest(new URL(normalized.url).pathname,normalized.init.method,
+  async()=>await scopedFetch(normalized.url,{...normalized.init,signal,dispatcher:agent} as any) as any,
+  captureDiagnostics,receipt.requests) as any;
 };
 const connection=new BoundedOpenSandboxConnection({endpoint,apiKey,maxResponseBytes:1024*1024,timeoutMs:20000},localFetch);
 let sandbox:Sandbox|undefined;
 const docker=(args:string[])=>execFileSync('docker',args,{encoding:'utf8',timeout:10000,maxBuffer:1024*1024});
+let captured=false;
+function captureDiagnostics(){
+ if(captured)return;captured=true;
+ const safeDocker=(args:string[])=>execFileSync('docker',args,{encoding:'utf8',timeout:1500,maxBuffer:65536,stdio:['ignore','pipe','pipe']});
+ try{
+  const ids=safeDocker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean);
+  if(ids.length!==1){receipt.diagnostics={status:'owned-container-unavailable',count:Math.min(ids.length,2)};return;}
+  const obj=JSON.parse(safeDocker(['inspect',ids[0]!]))[0];
+  assert.equal(obj.Config.Labels['flyrewheel.lifecycle-owner'],owner);
+  assert(/^[a-f0-9]{64}$/.test(obj.Id)&&/^sha256:[a-f0-9]{64}$/.test(obj.Image));
+  const attached=obj.NetworkSettings.Networks??{};
+  const statuses=['created','running','paused','restarting','removing','exited','dead'];
+  receipt.diagnostics={status:'captured',containerId:obj.Id,imageId:obj.Image,ownerMatched:true,
+   networkMatched:Object.keys(attached).length===1&&Boolean(attached[network]),
+   running:obj.State.Running===true,paused:obj.State.Paused===true,oomKilled:obj.State.OOMKilled===true,
+   state:statuses.includes(obj.State.Status)?obj.State.Status:'unknown',exitCode:Number.isInteger(obj.State.ExitCode)?obj.State.ExitCode:null,
+   publishedPortsPresent:Object.values(obj.NetworkSettings.Ports??{}).some(v=>Array.isArray(v)&&v.length>0)};
+  try{const processes=safeDocker(['top',obj.Id,'-eo','comm']);
+   receipt.diagnostics.execdProcessObserved=processes.split(/\r?\n/).some(line=>line.trim()==='execd');}
+  catch{receipt.diagnostics.execdProcessObserved='unknown';}
+  try{const logs=spawnSync('docker',['logs','--tail','100',obj.Id],{encoding:'utf8',timeout:1500,maxBuffer:65536,stdio:['ignore','pipe','pipe']});
+   if(logs.error||logs.status!==0)throw new Error('log capture failed');
+   receipt.diagnostics.startupCategories=startupCategories(logs.stdout+'\n'+logs.stderr);}
+  catch{receipt.diagnostics.startupCategories=['log-read-failed'];}
+ }catch{receipt.diagnostics={status:'capture-failed'};}
+}
 const inspect=()=>{
  const ids=docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim().split(/\s+/).filter(Boolean);
  assert.equal(ids.length,1);const obj=JSON.parse(docker(['inspect',ids[0]!]))[0];
@@ -53,7 +86,7 @@ try{
  assert(healthy,'health deadline');receipt.events.push('verified-TLS-health');
  const unauth=await localFetch(`${endpoint}/v1/sandboxes`,{signal:AbortSignal.timeout(5000)});
  receipt.unauthenticatedStatus=unauth.status;assert([401,403].includes(unauth.status));await unauth.body?.cancel();
- sandbox=await Sandbox.create({image:'sha256:005cb1a42d3fb6f9c13af3636141b076ddff317c772a4fd511c8a7655199a8ed',
+ sandbox=await Sandbox.create({image:TRIAL_WORKER_IMAGE,
   entrypoint:['/bin/sleep','300'],resource:{cpu:'1',memory:'512Mi'},timeoutSeconds:300,
   metadata:{'flyrewheel.lifecycle-owner':owner},env:{},volumes:[],
   connectionConfig:connection,readyTimeoutSeconds:30,signal:AbortSignal.timeout(60000)});
@@ -70,10 +103,11 @@ try{
  await sandbox.kill();receipt.events.push('delete-api-succeeded');sandbox=undefined;
  assert.equal(docker(['ps','-aq','--filter',`label=flyrewheel.lifecycle-owner=${owner}`]).trim(),'');
  receipt.events.push('container-absence-independently-inspected');receipt.status='succeeded';
-}catch(e){receipt.errorClass=e instanceof Error?e.name:'Unknown';receipt.status='failed';}
+}catch(e){receipt.errorClass=e instanceof Error&&['Error','AssertionError','SandboxReadyTimeoutException','SandboxApiException','TimeoutError','AbortError'].includes(e.name)?e.name:'Unknown';receipt.status='failed';}
 finally{
  if(sandbox){try{await sandbox.kill();receipt.cleanupDeleteApi=true;}catch{receipt.cleanupDeleteApi=false;}await sandbox.close().catch(()=>{});}
- await connection.closeTransport();await agent.close().catch(()=>agent.destroy());
+ try{await connection.closeTransport();}catch{receipt.transportCleanup=false;}
+ await agent.destroy().catch(()=>{receipt.transportCleanup=false;});
  await writeFile(output,JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }
 process.exitCode=receipt.status==='succeeded'?0:1;
