@@ -9,6 +9,7 @@ import { EvaluationAnnotationSchema } from '../../src/core/paired-evaluation.js'
 import { PlanSchema, AssignmentSchema, SubmissionSchema, AdjudicationSchema, type AnnotationPlan, type Assignment, type Submission } from './contracts.js';
 const hash = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 const now = () => new Date().toISOString();
+const LOCKED_RECEIPT_BYTES = 16_000_000;
 const unique = (xs: string[], name: string) => { if (new Set(xs).size !== xs.length) throw new Error(`Duplicate ${name}`); };
 const same = (a: unknown, b: unknown) => digestOf(a) === digestOf(b);
 const seal = <T extends object>(body: T) => ({ ...body, digest: digestOf(body) });
@@ -27,6 +28,7 @@ export function validatePlan(raw: unknown) {
   unique(plan.sourceBindings.map(p => p.prId), 'source binding'); unique(plan.rubrics.map(r => r.familyId), 'rubric');
   unique(plan.opportunities.map(o => o.id), 'opportunity');
   unique(plan.opportunities.map(o => JSON.stringify([o.prId, o.familyId, o.issueId])), 'issue');
+  unique(plan.opportunities.map(o => JSON.stringify([o.prId, o.familyId, o.lineageId])), 'lineage');
   if (plan.sourceBindings.length !== dataset.prs.length || plan.rubrics.length !== dataset.families.length) throw new Error('Complete source/rubric roster required');
   for (const pr of dataset.prs) {
     const binding = plan.sourceBindings.find(s => s.prId === pr.id);
@@ -209,18 +211,20 @@ export async function importAnnotation(root: string, path: string) {
   checkTime(submission.submittedAt, manifest.createdAt, importedAt); roster(submission.tasks, manifest);
   submission.tasks.forEach(t => checkRows(t, manifest));
   const record = seal({ manifestDigest: manifest.digest, rawSha256: hash(raw), importedAt, submission });
+  const receiptText = JSON.stringify(record, null, 2) + '\n';
+  if (Buffer.byteLength(receiptText) > LOCKED_RECEIPT_BYTES) throw new Error('Locked receipt exceeds byte limit');
   const folder = join(root, 'locks', `rater-${index + 1}`);
   await privatePath(dirname(folder), true);
   await mkdir(folder, { mode: 0o700 }); // A crash leaves a blocked slot; never silently overwrite it.
   await writeFile(join(folder, 'original.json'), raw, { flag: 'wx', mode: 0o600 });
-  await writeEvaluationJson(join(folder, 'receipt.json'), record);
+  await writeFile(join(folder, 'receipt.json'), receiptText, { flag: 'wx', mode: 0o600 });
   return { state: 'submission-locked', submissionDigest: record.digest, rawSha256: record.rawSha256, importedAt,
     humanIdentityVerification: 'locally-declared-unverified', origin: submission.origin };
 }
 type Locked = { manifestDigest: string; rawSha256: string; importedAt: string; submission: Submission; digest: string };
 async function locked(root: string, manifest: Manifest, index: number): Promise<Locked> {
   const folder = join(root, 'locks', `rater-${index + 1}`);
-  const record = checkSeal(await readPrivate(join(folder, 'receipt.json'), 4_000_000) as Locked);
+  const record = checkSeal(await readPrivate(join(folder, 'receipt.json'), LOCKED_RECEIPT_BYTES) as Locked);
   const { raw, value } = await rawInput(join(folder, 'original.json'));
   if (record.manifestDigest !== manifest.digest || record.rawSha256 !== hash(raw) || !same(record.submission, SubmissionSchema.parse(value))
     || record.submission.participantId !== manifest.assignment.raters[index].id

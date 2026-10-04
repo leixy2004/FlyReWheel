@@ -74,6 +74,42 @@ describe('offline independent annotation workflow', () => {
       expect(() => prepareExport(plan, assignment), mode).toThrow();
     }
   });
+  it('rejects duplicate lineages before releasing annotation work', () => {
+    const { plan, assignment } = createAnnotationFixture();
+    plan.opportunities[1].lineageId = plan.opportunities[0].lineageId;
+    expect(() => prepareExport(plan, assignment)).toThrow('Duplicate lineage');
+  });
+  it('reopens a near-limit compact submission whose formatted receipt exceeds the input limit', async () => {
+    const { plan, assignment } = createAnnotationFixture();
+    const originalPr = plan.dataset.prs[0], originalFamily = plan.dataset.families[0];
+    const originals = plan.opportunities.filter(o => o.prId === originalPr.id);
+    plan.dataset.prs = Array.from({ length: 25 }, (_, i) => ({ ...originalPr, id: `large-pr-${i}`, number: i + 1, lineageId: `large-pr-${i}` }));
+    plan.dataset.families = Array.from({ length: 4 }, (_, i) => ({ ...originalFamily, id: `large-family-${i}`, ruleIds: [`large-rule-${i}`] }));
+    plan.sourceBindings = plan.dataset.prs.map(pr => ({ ...plan.sourceBindings[0], prId: pr.id }));
+    plan.rubrics = plan.dataset.families.map(f => ({ ...plan.rubrics[0], familyId: f.id }));
+    plan.opportunities = plan.dataset.prs.flatMap(pr => plan.dataset.families.flatMap(f => originals.map((o, i) => ({
+      ...o, id: `${pr.id}-${f.id}-${i}`, prId: pr.id, familyId: f.id,
+    }))));
+    const path = join(root, `large-workspace-${++count}`);
+    await exportAnnotation(plan, assignment, path);
+    const response = await json(join(path, 'rater-1/response.blank.json'));
+    response.submittedAt = new Date().toISOString(); response.noOutcomeOrOtherRaterExposureDeclared = true;
+    const reasons: any[] = [];
+    for (const task of response.tasks) {
+      task.coverage = 'unassessed'; task.minutes = 1; task.reason = ''; reasons.push(task);
+      for (const row of task.rows) { row.reason = ''; reasons.push(row); }
+    }
+    const baseBytes = Buffer.byteLength(JSON.stringify(response));
+    const characters = Math.floor((3_998_000 - baseBytes) / (3 * reasons.length));
+    expect(characters).toBeLessThanOrEqual(4096);
+    reasons.forEach(row => { row.reason = '中'.repeat(characters); });
+    const raw = JSON.stringify(response), file = join(path, 'large-input.json');
+    expect(Buffer.byteLength(raw)).toBeLessThanOrEqual(4_000_000);
+    await writeFile(file, raw);
+    await importAnnotation(path, file);
+    expect((await stat(join(path, 'locks/rater-1/receipt.json'))).size).toBeGreaterThan(4_000_000);
+    expect((await inspectAnnotation(path)).submissions[0].state).toBe('locked');
+  });
   it('locks exact originals once and requires both independent submissions before adjudication release', async () => {
     const path = await exported(), response = await authoredResponse(path, 1), file = join(path, 'input.json');
     await expect(exportAdjudication(path)).rejects.toThrow();
