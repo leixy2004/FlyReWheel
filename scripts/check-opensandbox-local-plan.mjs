@@ -1,4 +1,5 @@
-/** Offline deployment-plan checks; optional HTTPS /health probe never allocates. */
+/** Historical proposal checks; not validation of the current resolve_internal=true trial config.
+ * See deploy/opensandbox/README.md. Optional HTTPS /health probe never allocates. */
 import assert from 'node:assert/strict';
 import https from 'node:https';
 import { readFile, realpath } from 'node:fs/promises';

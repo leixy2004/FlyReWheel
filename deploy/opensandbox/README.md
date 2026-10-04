@@ -27,12 +27,14 @@ cleanup race. The surrounding executor must retain exact ownership and report
 uncertain daemon operations/removal failures. Neither archive success nor a local
 patch establishes production lifecycle or model/runtime readiness.
 
-## Temporary control-plane executor (not yet launched)
+## Temporary control-plane executor and explicit trial mode
 
 `python3 -B scripts/opensandbox-control-plane.py` is default dry-run: it creates no
-files, credentials, SDK clients or services. The executable scope is only the
-control-plane process; it does not issue sandbox/model requests or claim cleanup
-of future SDK allocations.
+files, credentials, SDK clients or services. Its ordinary executable mode
+supervises the control-plane process. The separate explicit `--trial-state` mode
+now supervises one no-model SDK allocation under a persisted one-shot admission
+and absolute deadline; see the [retry safeguards](../../docs/evidence/opensandbox-live-2026-10-03/retry-offline-safeguards.md).
+That implementation is not approval to run a trial or proof of lifecycle readiness.
 
 After actual user approval, explicit execution requires `--execute`, an
 `--approval-ref` audit reference, `--source` pointing to the exact patched upstream
@@ -53,8 +55,10 @@ public records. The client must use the generated public certificate as scoped
 trust with verification enabled; this executor does not implement an SDK client.
 
 A pre-bound loopback socket is passed to Uvicorn, avoiding a port-allocation race.
-Docker workload ports are constrained to 127.0.0.1:49000–49100; proxy resolution
-uses local published ports. All caps are dropped for workloads, NNP enabled,
+The configured workload port pool is 127.0.0.1:49000–49100, but internal Docker
+bridges do not publish those host ports. Current `build_config` sets
+`resolve_internal=true`, so the host-side control plane reaches execd by container
+IP while SDK clients still use its HTTPS proxy. All caps are dropped for workloads, NNP enabled,
 PID limit 64, and host binds limited to a deliberately unused path. No policy
 sidecar, bwrap extension, credentials or external socket is configured for workloads.
 The subsequent sandbox runner must separately enforce one workload, CPU/memory,
@@ -70,7 +74,7 @@ an attempted signal as success. Process startup is explicitly reported as readin
 unverified. The empty-daemon preflight is not a lock against another actor; use this
 only in the task's independently owned idle environment.
 
-Eight tests use nonsensitive file fixtures and inert Python child processes to
+The initial eight control-plane tests use nonsensitive file fixtures and inert Python child processes to
 check zero-side-effect dry-run, explicit inputs, file mode, cleanup failure,
 listener closure, low disk, deadline and parent EOF, plus generated TOML validation
 with the unchanged DockerConfig class from the pinned upstream source. The
@@ -84,3 +88,17 @@ The [authorized live outcome](../../docs/evidence/opensandbox-live-2026-10-03/RE
 records verified TLS/authentication and one allocation, followed by SDK readiness
 timeout and independently verified cleanup. It does not establish command/pause
 or complete lifecycle readiness. No further allocation is authorized by this file.
+
+## Historical plan checker versus current trial configuration
+
+`scripts/check-opensandbox-local-plan.mjs` preserves an earlier static proposal
+whose schema requires `proxyResolveInternal=false`. It is not called by the
+current control-plane/trial executor and cannot validate its corrected
+`resolve_internal=true` configuration. A passing historical plan check is neither
+current configuration validation nor permission to allocate. The current mapping
+is `build_config` in `scripts/opensandbox-control-plane.py`, checked by
+`tests/test_opensandbox_control_plane.py`,
+`tests/test_opensandbox_endpoint_offline.py` and
+`tests/opensandbox-readiness-offline.test.ts`. These offline tests do not replace
+a successful authorized live retry; the recorded live trial remains a readiness
+failure and any further trial needs its own approval.

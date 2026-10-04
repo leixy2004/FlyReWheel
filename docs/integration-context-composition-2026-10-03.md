@@ -17,6 +17,9 @@ must not be attributed to later heads. Main is not merged by this integration.
 | PR25 Ruff retry | `a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760` | One subsequent bounded before/after lint+format pair passes. No effectiveness or defect label. |
 | PR26 corrected recovery/resolver | `6a1a8ac1d56f659f2e7d96b000739025f9755672` | Late-EOF result acceptance corrected; authored protocol/local Git verification only. |
 | PR28 evaluation-aware resolver | `ba319f64eafc06b816975ee159c510a8404e0644` | Explicit offline-study registry, complete binding retained; no deployment authority. |
+| Runtime tooling follow-up | `036e64ae1182348491d6587d028a156d17f0f8be` | Persisted single-allocation/deadline and bounded cleanup diagnostics; no new real trial. |
+| PR29 registry inspection CLI | `8f26428d6723dd8792d8733301a4098c57138b06` + registration `0299179` | Actual compiled CLI verified on an authored local Git export. |
+| PR27 hardened drafts / real resolver record | `2cb82efbefc764f2b0b04f5ec64da3601da0ef64` | Six real W0 diagnostic resolver successes; no persisted job or mining run. |
 | PR27 evaluation provenance | `d778aba7c1abcd029bb90ce94d7f6f4e9f583cd8` | 3 requests, 8 source bindings, 6 contexts; no annotation or effectiveness result. |
 | Offline CLI reproduction | `084eb9c` | 13 actual offline commands; blocked real jobs and separate authored evaluator. |
 | Preparation cleanup | `a5784fc` | Local PGlite failure injection verifies primary-error preservation and single close of released handles. |
@@ -62,8 +65,9 @@ reports HTTPS health/401 checks and one actual worker create/start, followed by
 SDK readiness timeout before command or pause. Cleanup was independently checked;
 the retrospective total live window was 265.819 seconds. No model call occurred.
 Complete lifecycle, frozen reads, fencing and production authority remain unproven.
-This candidate references the record without importing the runtime branch's later
-control-plane implementation or authorizing another allocation.
+That record remains unchanged. The later fixed tooling snapshot `036e64a` is now
+included after independent review; importing its code does not authorize another
+allocation or change the failed live-trial outcome.
 
 The default worker still needs explicitly configured trusted capabilities. The
 separate deployment-bootstrap owner retains that implementation. No credentials,
@@ -99,9 +103,10 @@ dummy job digest, not positive authorization or an end-to-end job.
 The concrete PR26 resolver supports ordinary prepared workspaces, explicitly not
 evaluation exports. PR28 now adds a separate explicitly selected offline-study
 evaluation-aware resolver; 27 related authored/local Git tests and typecheck passed
-independently, and the external late-EOF probe still rejects. Six real W0 positive
-resolutions remain a separate data-environment validation, not inferred from those
-fixtures. An actual configured worker entrypoint remains separately owned work.
+independently, and the external late-EOF probe still rejects. The later data
+snapshot `2cb82ef` records six real W0 positive resolutions with complete bindings.
+Those used diagnostic job digests; they did not persist/enqueue/execute mining jobs
+and are distinct from the local authored fixtures. An actual configured worker entrypoint remains separately owned work.
 The default worker still does not call
 `startConfiguredWorkerService`; runtime lifecycle authority is not proven. The
 [offline CLI chain](offline-reproducibility.md) executes available preparation and
@@ -129,3 +134,28 @@ pass. The 1762-pass checkpoint predates PR26/27/28 and the executable CLI guide;
 none of those later changes inherit that full-suite result. The next published
 head requires its own aggregate run. Hosted tests are authored fixtures/local
 PGlite/local Git checks, not a fresh real PostgreSQL/model/deployment experiment.
+
+## Later CLI, data and runtime follow-ups
+
+PR29's module is registered in the shared CLI by `0299179` (two registration lines
+and a real subprocess authorization regression). Typecheck/build and eight targeted
+checks passed. Independent actual compiled-CLI verification used an authored local
+Git export, preserved complete selection/evaluation binding and rejected an existing
+output without changing bytes. The six real W0 resolver checks in `2cb82ef` are a
+separate data-environment diagnostic; combining these records does not establish an
+actual W0 CLI-to-model or native-study run. Native evaluation-aware request/study/
+checkpoint bridging remains independently owned follow-up work at this checkpoint.
+
+The runtime `036e64a` review ran 25 pure Python mock/archive tests and 14 authored
+TypeScript guard tests. Three control-plane Python cases requiring a real local
+socket, an inert subprocess supervisor or upstream schema dependencies were excluded
+from that independent subset. No new Docker/service/model trial ran. The merge kept
+the earlier realpath entrypoint fix and its six CLI regression cases. The old plan
+checker preserves historical `resolve_internal=false`; current trial configuration
+uses `true`. The deployment README and checker header now explicitly distinguish
+them, without altering runtime routing or the historical proposal.
+
+After these integrations, source checkpoint `12e7618` plus the documentation/header
+clarification passed typecheck/build and 40 targeted tests across seven files
+(4.25 seconds). These include authored/local Git and local loopback fixture checks,
+not actual deployment. Each later aggregate still requires its own full CI result.

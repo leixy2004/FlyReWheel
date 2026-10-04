@@ -116,6 +116,12 @@ Subsequent PR #28 `ba319f64eafc06b816975ee159c510a8404e0644` supplies a
 [separate evaluation-aware registry resolver](../docs/prepared-evaluation-workspace-resolver.md)
 that preserves the full binding and re-verifies the exported workspace. Its
 authored/local Git tests do not establish deployed authority or model execution.
+The follow-up data snapshot `2cb82ef` records six real W0 export resolutions with
+complete evaluation binding; diagnostic job digests make this a resolver contract
+check, not persisted application or native-study execution. PR29 and CLI registration
+`0299179` expose `evaluation workspace resolve`; an actual compiled-CLI authored Git
+positive also preserves the full binding and refuses overwrite. These distinct
+records do not jointly imply a real W0 model run.
 
 ## Product execution is a separate gate
 
