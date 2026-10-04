@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "PAPER-DATA-AUDIT.md",
+      "bytes": 2090,
+      "sha256": "8760b0209454d8b138248d25f4927575632e06ddedfadecb86ec758ab0d7eb12"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6437,
+      "sha256": "da22c1cf93ec7c3f605503bd589a7096e35b93e77a46a23c8351fc5c9188de52"
+    },
+    {
+      "path": "blind-draft.schema.json",
+      "bytes": 1850,
+      "sha256": "987be49f575055d0062c929cf610747d57f1eb0f575e64732ada0ccd2556582e"
+    },
+    {
+      "path": "heldout-selection.json",
+      "bytes": 12417,
+      "sha256": "4ec61bac4681a6e8b428cba9f96e6e336ab59678120ab86b252d8abbb8ce1bae"
+    },
+    {
+      "path": "independent-audit.json",
+      "bytes": 876,
+      "sha256": "e5088428f71ec0499747bae88f37150c72accb9fb687bbca5a06c4dbc66ee1aa"
+    },
+    {
+      "path": "provenance-ledger.json",
+      "bytes": 23091,
+      "sha256": "9d6835f5a00eb84037c0dcdada00bc50495a1483a42f31cbcc5ab32ac0f69d93"
+    },
+    {
+      "path": "resolver26-check.json",
+      "bytes": 11036,
+      "sha256": "deb243b2b43db8631f36617eb02726e1b1999ae290c1f54f9ac4c380eebcbcc3"
+    },
+    {
+      "path": "resolver26-inspect.json",
+      "bytes": 2119,
+      "sha256": "0fb94969d28c629126b23b860a6a11075a8f0b994908daf694b504d96473f80d"
+    },
+    {
+      "path": "resolver26-probe.mts.txt",
+      "bytes": 2611,
+      "sha256": "94aab4dd4f568318f6a95c2d4d883a8348e31b79eea0515a592ca1f2e3c4a40a"
+    },
+    {
+      "path": "schema-contracts.json",
+      "bytes": 360,
+      "sha256": "a396bc5c6a30f318eb6539067cb520b9ecaf0ad058abc1baa62b74a9242d9bef"
+    }
+  ]
+}

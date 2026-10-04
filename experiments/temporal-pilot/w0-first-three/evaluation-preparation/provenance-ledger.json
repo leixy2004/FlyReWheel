@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "kind": "w0-evaluation-preparation-provenance",
+  "sourceCheckpoint": "a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760",
+  "frameSha256": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+  "inventory": {
+    "metadataFrame": 70,
+    "windows": {
+      "W0": 38,
+      "W1": 13,
+      "W2": 19
+    },
+    "fixedExploratorySamples": 3,
+    "changedPathsAcrossPrs": 4,
+    "sourceSides": 8,
+    "fullContextExports": 6,
+    "pairedToolChecks": 1
+  },
+  "formalInputs": {
+    "dataset": "not-materialized-no-rule-families",
+    "annotations": "not-materialized-no-human-authors-or-labels",
+    "runs": "not-materialized-no-model-or-review-arms",
+    "feedback": "not-materialized-no-developer-feedback"
+  },
+  "reusedContracts": [
+    "EvaluationDatasetSchema",
+    "EvaluationAnnotationSchema",
+    "PrMiningRequestSchema",
+    "EvaluationWorkspaceBindingSchema",
+    "validateW0SourcePackage",
+    "validateTemporalFrame"
+  ],
+  "metrics": {
+    "precision": null,
+    "recall": null,
+    "effectiveness": null,
+    "status": "not-estimated",
+    "semanticRuleYield": null
+  },
+  "blinding": {
+    "localDraftPackets": 3,
+    "publishedPacketBytes": 0,
+    "sourceScope": "selected-before-files-only",
+    "fullContextNotReleasedToAnnotators": true,
+    "formalHistoricalRelease": false,
+    "status": "blocked-unverified-history-and-missing-rule-rubric",
+    "assignedAnnotators": 0,
+    "externalSharing": false,
+    "privateManifest": "facilitator/facilitator-only.json outside repository; random UUIDs and identity mapping not published"
+  },
+  "networkRequests": 0,
+  "modelCalls": 0,
+  "independentHumanLabels": 0,
+  "runtimeFeedbackWrites": 0,
+  "items": [
+    {
+      "number": 3035,
+      "frameRow": {
+        "number": 3035,
+        "mergedAt": "2024-01-03T05:11:45Z",
+        "window": "W0",
+        "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "parents": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ],
+        "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb"
+      },
+      "packageSha256": "a0e1de76143154a1fd8f021c8be9f9a778a161986e5d5d03fc50e1ca92a92883",
+      "evidenceDigest": "ab4dad128cb8124d0c1de63e6ea55fc40557965749d9595fb2a84affa2a10c54",
+      "snapshotDigest": "4532d1b688fe3e437720fbd54edcddb87da8d644a57aa4ed21f49a4ef54ee535",
+      "miningRequestDigest": "d82c439e53ff66f157dea5c040e3936d3787e906720937e1e389f0730b484a85",
+      "contexts": [
+        {
+          "side": "before",
+          "commit": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "tree": "ddddb6812f4e41c0c106fbd93d0e2ca2ff636f1a",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3035-before",
+            "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+            "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+            "allowedHeads": [
+              "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+            ],
+            "inventory": {
+              "count": 9380,
+              "expandedBytes": 49367125,
+              "digest": "68583e5246c2a79a9cacf1ccd0081ed2cdda506f799fe1e2aceabc2b3b9c9dc7"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        },
+        {
+          "side": "after",
+          "commit": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3035-after",
+            "requestDigest": "9920cc68957ce301ee74a714fc8425fd600b2e6df7f20f4a96f747dbe9a51052",
+            "recordDigest": "712345e35434b77127b830a41e23f8d09cc56ccd3bef71dd1890ce3fea23d18b",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+            "allowedHeads": [
+              "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac"
+            ],
+            "inventory": {
+              "count": 9383,
+              "expandedBytes": 49369573,
+              "digest": "6988f6b218f3d48f7bc92987b816241d0b554d55152e1fb6b36a6de73f276415"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        }
+      ],
+      "changedPaths": [
+        "requirements.txt"
+      ],
+      "sourceBindings": [
+        {
+          "caseId": "pr-case_cb0f543a739d7899dabf0176ba89b7cf7c3120da9bd84e066aaafdf4ef8fcdb0",
+          "repository": "github:encode/httpx",
+          "commit": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+          "path": "requirements.txt",
+          "sourceDigest": "eac028a8d82753ce7c75d5a227a80afcff1a6133afe8fcf1e3e12f3a5643f607",
+          "side": "before",
+          "objectId": "3fb85ca726ed8d0f2f9288edbf1105542ca1abaa",
+          "mode": "100644",
+          "byteLength": 680,
+          "caseDigest": "00235b8adf32e7be5fa4da85bc630630e0c88030e7e18d3e4049f477edcd9868"
+        },
+        {
+          "caseId": "pr-case_9aeb893863a30c237ff196f2e60209b0eae573e7863c027646cbca84baa95d25",
+          "repository": "github:encode/httpx",
+          "commit": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+          "path": "requirements.txt",
+          "sourceDigest": "0b7c3e6d7fe920aad5c2dd067ad3c2967c670773c4650191653fcb0a8e516fb4",
+          "side": "after",
+          "objectId": "c3619d2d8bc3efd2e3766fccf2dbe5d30ecd4885",
+          "mode": "100644",
+          "byteLength": 679,
+          "caseDigest": "3b3e7ca96ee156a2f33aa32a7b46ad3b141f6e1c9a6e40a899c7652b49e7879e"
+        }
+      ],
+      "toolEvidence": {
+        "status": "docs-build-not-run-sdist-only-dependency",
+        "pairedChecks": 0
+      },
+      "temporal": {
+        "sourceCapture": "current-capture",
+        "observedAtRange": [
+          "2026-10-03T22:39:51.333Z",
+          "2026-10-03T22:39:56.187Z"
+        ],
+        "mergedAt": "2024-01-03T05:11:45Z",
+        "intendedWindow": "W0",
+        "windowEndExclusive": "2024-04-01T00:00:00Z",
+        "historicalReviewCheckpoint": null,
+        "historicalPublicAvailability": "unproven",
+        "annotationObservationCutoff": null,
+        "discussionsSelected": false,
+        "statementExclusion": "All current PR/discussion statements excluded from annotation drafts; existing mining requests still carry untrusted current pull statement and are not as-of experiment inputs."
+      },
+      "split": {
+        "use": "development-only",
+        "excludedFromHoldout": true,
+        "reason": "Selected for exploratory development; source, changes and behavior exposed to assistants.",
+        "crossWindowLineage": "not-audited"
+      },
+      "ruleEligibility": {
+        "status": "unknown",
+        "defectRuleSupport": "not-established",
+        "reason": "docs-tool-dependency-bump",
+        "exploratoryProposals": 0,
+        "zeroMeaning": "Offline exploratory reading has not established a reusable defect rule; not a measured model yield or negative label."
+      },
+      "annotations": {
+        "assignment": "unassigned",
+        "labels": 0,
+        "coverage": "unassessed"
+      },
+      "feedback": {
+        "recordsCreated": 0,
+        "status": "not-collected"
+      }
+    },
+    {
+      "number": 3031,
+      "frameRow": {
+        "number": 3031,
+        "mergedAt": "2024-01-03T05:14:26Z",
+        "window": "W0",
+        "mergeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+        "parents": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ],
+        "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046"
+      },
+      "packageSha256": "41f3209e3209d8790127149d5928c27910048e3515cf60e786ccfd30b2247c7a",
+      "evidenceDigest": "f05a725ce46e207db91409fcbb7fd17e43540104bbb3867cd20f2295ae55f5fa",
+      "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+      "miningRequestDigest": "649b2693c8fab5d2a76adc4aa0c98f801aca71af089258b531f19bf339497723",
+      "contexts": [
+        {
+          "side": "before",
+          "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3031-before",
+            "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+            "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+            "allowedHeads": [
+              "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+            ],
+            "inventory": {
+              "count": 9383,
+              "expandedBytes": 49369678,
+              "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        },
+        {
+          "side": "after",
+          "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3031-after",
+            "requestDigest": "d90bbf204f0ab36487d38be8a24c3488ad5e33f70e68bc468344f13575007c5d",
+            "recordDigest": "c6e538cee58b7987bd8430099d84aaa3d0cd61059c9a27b5eaaeaafdae78e5ed",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+            "allowedHeads": [
+              "abcfb791a03affbeee40c38eb8fedd6a02accbaa"
+            ],
+            "inventory": {
+              "count": 9389,
+              "expandedBytes": 49374024,
+              "digest": "32b83d9334feee788b9921577d6f308e81db251491c8087176a90f46a4e85420"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        }
+      ],
+      "changedPaths": [
+        "requirements.txt"
+      ],
+      "sourceBindings": [
+        {
+          "caseId": "pr-case_24a98554a5b29606432914e4cf9b605c0128be68ad70dd147d44e8a8f741ce16",
+          "repository": "github:encode/httpx",
+          "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+          "path": "requirements.txt",
+          "sourceDigest": "0b7c3e6d7fe920aad5c2dd067ad3c2967c670773c4650191653fcb0a8e516fb4",
+          "side": "before",
+          "objectId": "c3619d2d8bc3efd2e3766fccf2dbe5d30ecd4885",
+          "mode": "100644",
+          "byteLength": 679,
+          "caseDigest": "b662e1e03029113e82bc72b53a9f1737d341b977d53ae5076efc323f0e22f6a2"
+        },
+        {
+          "caseId": "pr-case_cadf11d1e6de32ec00abb81983c8ca88847aa82b75b2fd0fcfee61c7c0082b66",
+          "repository": "github:encode/httpx",
+          "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+          "path": "requirements.txt",
+          "sourceDigest": "fbd729cad0494610f007ae83311cf168613db51bb216df7b98799906d7668ece",
+          "side": "after",
+          "objectId": "af1caa5c5ae055a8f62e1bd0a924957846d9523e",
+          "mode": "100644",
+          "byteLength": 679,
+          "caseDigest": "47c5c45abf440b082e69f90fbae1d91141850f3cf2917a5e2c13180f7e9b291e"
+        }
+      ],
+      "toolEvidence": {
+        "status": "selected-official-ruff-checks-pass-both-sides",
+        "pairedChecks": 1,
+        "pairs": [
+          {
+            "side": "before",
+            "commit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+            "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+            "imageId": "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+            "elapsedSeconds": 1.358,
+            "sourceFiles": 114,
+            "binarySha256": "bdae3ceaa3ca9a9be260913e69f8e5b373341ec78c21c9f2281181e86337de4c",
+            "commands": [
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/before",
+                  "--version"
+                ],
+                "exitCode": 0,
+                "stdout": "ruff 0.1.6\n",
+                "stderr": ""
+              },
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/before",
+                  "format",
+                  "httpx",
+                  "tests",
+                  "--diff"
+                ],
+                "exitCode": 0,
+                "stdout": "",
+                "stderr": "60 files left unchanged\n"
+              },
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/before",
+                  "check",
+                  "httpx",
+                  "tests"
+                ],
+                "exitCode": 0,
+                "stdout": "",
+                "stderr": ""
+              }
+            ],
+            "sourceUnchanged": true,
+            "removed": true
+          },
+          {
+            "side": "after",
+            "commit": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+            "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+            "imageId": "sha256:21607243580b9287196499f707777f7f43ff7a6d09fbc315e7a29aee2df58f28",
+            "elapsedSeconds": 2.545,
+            "sourceFiles": 114,
+            "binarySha256": "fa8f10bdef7ac67ef3b04c5bfbb95e2dd8feaacca577092f1b216c3d5d56e141",
+            "commands": [
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/after",
+                  "--version"
+                ],
+                "exitCode": 0,
+                "stdout": "ruff 0.1.9\n",
+                "stderr": ""
+              },
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/after",
+                  "format",
+                  "httpx",
+                  "tests",
+                  "--diff"
+                ],
+                "exitCode": 0,
+                "stdout": "",
+                "stderr": "60 files already formatted\n"
+              },
+              {
+                "kind": "command",
+                "command": [
+                  "/opt/ruff/after",
+                  "check",
+                  "httpx",
+                  "tests"
+                ],
+                "exitCode": 0,
+                "stdout": "",
+                "stderr": ""
+              }
+            ],
+            "sourceUnchanged": true,
+            "removed": true
+          }
+        ],
+        "interpretation": "Tool availability only; no defect repair or semantic correctness inference.",
+        "previousFailureArtifact": "../behavior-validation/ledger.json"
+      },
+      "temporal": {
+        "sourceCapture": "current-capture",
+        "observedAtRange": [
+          "2026-10-03T22:39:56.778Z",
+          "2026-10-03T22:40:00.925Z"
+        ],
+        "mergedAt": "2024-01-03T05:14:26Z",
+        "intendedWindow": "W0",
+        "windowEndExclusive": "2024-04-01T00:00:00Z",
+        "historicalReviewCheckpoint": null,
+        "historicalPublicAvailability": "unproven",
+        "annotationObservationCutoff": null,
+        "discussionsSelected": false,
+        "statementExclusion": "All current PR/discussion statements excluded from annotation drafts; existing mining requests still carry untrusted current pull statement and are not as-of experiment inputs."
+      },
+      "split": {
+        "use": "development-only",
+        "excludedFromHoldout": true,
+        "reason": "Selected for exploratory development; source, changes and behavior exposed to assistants.",
+        "crossWindowLineage": "not-audited"
+      },
+      "ruleEligibility": {
+        "status": "unknown",
+        "defectRuleSupport": "not-established",
+        "reason": "lint-tool-dependency-bump",
+        "exploratoryProposals": 0,
+        "zeroMeaning": "Offline exploratory reading has not established a reusable defect rule; not a measured model yield or negative label."
+      },
+      "annotations": {
+        "assignment": "unassigned",
+        "labels": 0,
+        "coverage": "unassessed"
+      },
+      "feedback": {
+        "recordsCreated": 0,
+        "status": "not-collected"
+      }
+    },
+    {
+      "number": 3036,
+      "frameRow": {
+        "number": 3036,
+        "mergedAt": "2024-01-03T05:36:16Z",
+        "window": "W0",
+        "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+        "parents": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ],
+        "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712"
+      },
+      "packageSha256": "9eb899563bd26d08fbd03d8b0fe0d4323243f5b20fd663d0969d81d877840ffd",
+      "evidenceDigest": "61231694c91933c49e285d5bd37cc5857148962800cdbc65d09161ede9d2fc28",
+      "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+      "miningRequestDigest": "fceffa2a78a53080329a357218a05664a2cd261bc99cfe6d2f731cd3ddde40f1",
+      "contexts": [
+        {
+          "side": "before",
+          "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+          "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3036-before",
+            "requestDigest": "faa99b5f75787ad5dac22b42aad1aaf61d2fd103767066ae35dd58f019e6d33a",
+            "recordDigest": "3fdf738c5073c7a7e9690463f06aa02e883ea9fd128e368e2ae91ad6dd307c27",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "ea3071642d12ed546d901861a5901da6fad37073",
+            "allowedHeads": [
+              "ea3071642d12ed546d901861a5901da6fad37073"
+            ],
+            "inventory": {
+              "count": 9386,
+              "expandedBytes": 49372234,
+              "digest": "56fd971d608953b6b0ede14f729630710857ebc73e0e9f4d742dc87a155bf3da"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        },
+        {
+          "side": "after",
+          "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+          "binding": {
+            "schemaVersion": 1,
+            "exportId": "httpx-w0-3036-after",
+            "requestDigest": "5e45977fab6b22c6f4d757137432be4ffb324428117e5a948a714a62c18a5507",
+            "recordDigest": "4510f4b539e2e0c2256dd9bcf3f513bfb6894384dca8461b6065c687335e73a3",
+            "repositoryId": "github:encode/httpx",
+            "checkoutSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+            "allowedHeads": [
+              "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+            ],
+            "inventory": {
+              "count": 9394,
+              "expandedBytes": 49376949,
+              "digest": "ac2394bc9e599b0953740bbb919b3efbbd2c22aab1e3d1a93af5f0c8be57fc76"
+            }
+          },
+          "fullCommittedTreeVerified": true
+        }
+      ],
+      "changedPaths": [
+        ".github/workflows/publish.yml",
+        ".github/workflows/test-suite.yml"
+      ],
+      "sourceBindings": [
+        {
+          "caseId": "pr-case_9b8fc211796721a369641683866e729df0938bf4baefd729b2a6a05a466a1497",
+          "repository": "github:encode/httpx",
+          "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+          "path": ".github/workflows/publish.yml",
+          "sourceDigest": "d0af2f9152ced371885aadc5b70cd9ec26c74b6bf8c42032ece5d7b31d489326",
+          "side": "before",
+          "objectId": "4ceb8c69e04017299f88b840938c967daf93981a",
+          "mode": "100644",
+          "byteLength": 606,
+          "caseDigest": "318e37361758b9946c2c85e5ac9d380839e757944cc5304eb1de7c9067be4149"
+        },
+        {
+          "caseId": "pr-case_7e3321f35cdc3fc0d6818ff708bd996efa7c5663502aba8f7e92874293842103",
+          "repository": "github:encode/httpx",
+          "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "path": ".github/workflows/publish.yml",
+          "sourceDigest": "9e5b75be0d18b01710a0aaa5cf9c9c74b2e5a9b6769642c95ad847f1d898dcc9",
+          "side": "after",
+          "objectId": "2c7cfb9f9b7aa2187eaf4830b401b7248d140ea4",
+          "mode": "100644",
+          "byteLength": 606,
+          "caseDigest": "14a0dc6a05e4d3cdb05a5711dce64dc6dd03729333d7aef7416c42958ca80d77"
+        },
+        {
+          "caseId": "pr-case_c261d2705ea80e3ffe5513b68e5bb127bb6624cc5deb5111835dd10a7fdbe7e1",
+          "repository": "github:encode/httpx",
+          "commit": "ea3071642d12ed546d901861a5901da6fad37073",
+          "path": ".github/workflows/test-suite.yml",
+          "sourceDigest": "9dd92b4f6b1da94c634eff9b97d78f3c2e006faee544435f66567a96a62b53ed",
+          "side": "before",
+          "objectId": "c3ad08f14544d976a2520a74578ed41feb6fda71",
+          "mode": "100644",
+          "byteLength": 795,
+          "caseDigest": "4f960847029b6ca5ff36bb10c1448c7119b7223e0528669889df64cf4a45de93"
+        },
+        {
+          "caseId": "pr-case_d208af84a214984dd51f09dbc58e36169a83f1ee8cf653be1144bda2f728472a",
+          "repository": "github:encode/httpx",
+          "commit": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+          "path": ".github/workflows/test-suite.yml",
+          "sourceDigest": "423ca34ed0426a83f90abdafc98ffffdfa2b63e59f9124b06549fc7fa8221844",
+          "side": "after",
+          "objectId": "0bb570cedb51dbc57b08f097523c5e9aa245f854",
+          "mode": "100644",
+          "byteLength": 795,
+          "caseDigest": "d61b43f1b48e4a0b0f22e7bfa57f9a32f7912e6b8069f2c81871c25d95368149"
+        }
+      ],
+      "toolEvidence": {
+        "status": "action-behavior-not-run",
+        "pairedChecks": 0
+      },
+      "temporal": {
+        "sourceCapture": "current-capture",
+        "observedAtRange": [
+          "2026-10-03T22:40:01.637Z",
+          "2026-10-03T22:40:07.420Z"
+        ],
+        "mergedAt": "2024-01-03T05:36:16Z",
+        "intendedWindow": "W0",
+        "windowEndExclusive": "2024-04-01T00:00:00Z",
+        "historicalReviewCheckpoint": null,
+        "historicalPublicAvailability": "unproven",
+        "annotationObservationCutoff": null,
+        "discussionsSelected": false,
+        "statementExclusion": "All current PR/discussion statements excluded from annotation drafts; existing mining requests still carry untrusted current pull statement and are not as-of experiment inputs."
+      },
+      "split": {
+        "use": "development-only",
+        "excludedFromHoldout": true,
+        "reason": "Selected for exploratory development; source, changes and behavior exposed to assistants.",
+        "crossWindowLineage": "not-audited"
+      },
+      "ruleEligibility": {
+        "status": "unknown",
+        "defectRuleSupport": "not-established",
+        "reason": "ci-action-bump",
+        "exploratoryProposals": 0,
+        "zeroMeaning": "Offline exploratory reading has not established a reusable defect rule; not a measured model yield or negative label."
+      },
+      "annotations": {
+        "assignment": "unassigned",
+        "labels": 0,
+        "coverage": "unassessed"
+      },
+      "feedback": {
+        "recordsCreated": 0,
+        "status": "not-collected"
+      }
+    }
+  ]
+}
