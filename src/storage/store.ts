@@ -763,10 +763,15 @@ export class QualEvoStore {
     return this.db.transaction(async tx => {
       const rule = await this.readSemanticRuleVersion(tx, options.baseRuleDigest);
       if (options.requestedRuleVersion === rule.rule.version) fail('INVALID_REVISION_REQUEST', 'Requested version must differ from the pinned base version');
+      // Reject unusable selections before reserving an immutable request ID.
+      // These are declared event times, not proof of historical availability.
+      const requestedAt = Date.parse(options.createdAt);
+      if (Date.parse(rule.rule.provenance.createdAt) > requestedAt) fail('INVALID_REVISION_REQUEST', 'Revision base postdates the requested revision');
       const feedbackBindings = [];
       for (const id of options.feedbackIds) {
         const feedback = await this.readReviewFeedback(tx, id);
         if (feedback.ruleDigest !== options.baseRuleDigest) fail('VERSION_MISMATCH', 'Selected revision feedback must bind to the exact base rule digest');
+        if (Date.parse(feedback.createdAt) > requestedAt) fail('INVALID_REVISION_REQUEST', 'Selected feedback postdates the requested revision');
         feedbackBindings.push({ id, digest: digestOf(feedback) });
       }
       const request = RevisionRequestSchema.parse({ ...options, schemaVersion: 1, kind: 'rule-revision-request', status: 'pending', feedbackBindings, synthesis: 'not_run' });

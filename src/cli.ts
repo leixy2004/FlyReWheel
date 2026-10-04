@@ -19,6 +19,7 @@ import { runDemo } from './demo.js';
 import { runSemanticReviewDemo } from './review-demo.js';
 import { runRevisionComparisonDemo } from './revision-demo.js';
 import { runLocalClosedLoop } from './local-closed-loop.js';
+import { runLocalGovernanceLoop } from './local-governance-loop.js';
 import { detectAstGrep } from './adapters/index.js';
 import { bundleDigest } from './core/index.js';
 import { configuredCodex, resolveCodexExecutionConfig } from './model-runtime.js';
@@ -468,6 +469,9 @@ closedLoop.command('demo').description('Deterministic authored fixtures only; no
   .requiredOption('--out-dir <directory>', 'Dedicated artifact directory; rerun the same path to validate and reuse immutable records')
   .option('--db <directory>', 'Local PGlite database; defaults to <out-dir>/db')
   .action(async options => { await output(await runLocalClosedLoop({ outDir: options.outDir, db: options.db })); });
+closedLoop.command('governance-demo').description('Persistent authored feedback → revision → explicit local-shadow governance → governed review; no live model or production activation')
+  .requiredOption('--out-dir <directory>', 'Dedicated artifact directory; rerun the same path to validate and reuse immutable records')
+  .action(async options => { await output(await runLocalGovernanceLoop({ outDir: options.outDir })); });
 databaseCommand(cli, 'demo', { allowMemory: true }).option('--out <file>').action(async options => {
   const store = await storeFor(options, { allowMemory: true });
   try { await output(await runDemo(store), options.out); } finally { await store.close(); }
