@@ -1,3 +1,4 @@
+import { NativeEvaluationContextSchema, type NativeEvaluationContext } from '../../src/core/matched-revision-model.js';
 import { MatchedStudyStore, MatchedStudyError, type MatchedStudyClaim, type MatchedStudyEvent } from '../../src/storage/matched-studies.js';
 import { digestOf } from '../../src/core/identity.js';
 import { freeze } from '../../src/workspace/execution-receipt.js';
@@ -14,10 +15,11 @@ type CompletedBlock = Extract<Awaited<ReturnType<typeof runMatchedRevision>>, { 
 type Outcome = 'completed' | 'failed' | 'missing';
 export interface SdkNativeStudyInput { blockId: string; packet: FrozenPacket; future: FrozenFuture }
 /** Compute the status identity before dispatch, so interruption cannot hide it. */
-export function sdkNativeStudyDigest(schedule: SdkNativeSchedule, configuration: SdkNativeConfiguration) {
+export function sdkNativeStudyDigest(schedule: SdkNativeSchedule, configuration: SdkNativeConfiguration, evaluation?: NativeEvaluationContext) {
   const config = validateSdkNativeConfiguration(configuration);
   const frozen = validateSdkNativeSchedule(schedule, config);
-  return digestOf(['authored-matched-study-recovery', frozen.digest, digestOf(config)]);
+  return digestOf(['authored-matched-study-recovery', frozen.digest, digestOf(config),
+    ...(evaluation === undefined ? [] : [digestOf(NativeEvaluationContextSchema.parse(evaluation))])]);
 }
 function roster(block: SdkNativeScheduledBlock, report: CompletedBlock | null, recorded: { arm: Arm; call: CallRecord }[],
   uncertain: BlockOutcome['uncertainCalls']) {
@@ -73,8 +75,8 @@ function blockReport(block: SdkNativeScheduledBlock, schedule: SdkNativeSchedule
       ...(uncertainCalls.length ? { uncertainCalls } : {}) };
 }
 type StudyBlock = ReturnType<typeof blockReport>;
-function studyReport(schedule: SdkNativeSchedule, configuration: SdkNativeConfiguration, blocks: StudyBlock[], studyDigest?: string) {
-  const body = { schemaVersion: 1, kind: 'matched-revision-sdk-native-authored-study-report',
+function studyReport(schedule: SdkNativeSchedule, configuration: SdkNativeConfiguration, blocks: StudyBlock[], studyDigest?: string, evaluation?: NativeEvaluationContext) {
+  const body = { ...(evaluation ? { evaluation } : {}), schemaVersion: 1, kind: 'matched-revision-sdk-native-authored-study-report',
     execution: 'completed' as const, modelExecution: 'not_run' as const, empiricalEpisodes: 0,
     independentHumanAnnotations: 0, providerModelCalls: 0,
     operationalAdmission: 'not_evaluated', declaredPinsVerified: false,
@@ -113,6 +115,7 @@ function recoveryEvents(events: MatchedStudyEvent[], blockId: string) {
  * checkpoints every dispatch. Recovery reuses finished blocks and terminally
  * retains interrupted blocks; it never replays a partly executed block. */
 export async function runSdkNativeStudy(input: {
+  evaluation?: NativeEvaluationContext; verifyEvaluation?: () => Promise<void>;
   mode: 'authored_fixture' | 'production'; schedule: SdkNativeSchedule;
   configuration: SdkNativeConfiguration; blocks: SdkNativeStudyInput[];
   transport: AuthoredCodexNativeMatchedTransport; store?: MatchedStudyStore;
@@ -121,6 +124,12 @@ export async function runSdkNativeStudy(input: {
     reason: 'production_adapter_unconfigured', blocks: [] };
   if (!isAuthoredCodexNativeMatchedTransport(input.transport)) return { execution: 'not_run' as const,
     modelExecution: 'not_run' as const, reason: 'authored_native_sdk_transport_required', blocks: [] };
+  const evaluation = input.evaluation === undefined ? undefined : freeze(NativeEvaluationContextSchema.parse(input.evaluation));
+  const verifyEvaluation = input.verifyEvaluation;
+  if (evaluation) {
+    if (!verifyEvaluation) throw new Error('Native evaluation requires a trusted verification hook');
+    await verifyEvaluation();
+  }
   const configuration = validateSdkNativeConfiguration(input.configuration);
   const schedule = validateSdkNativeSchedule(input.schedule, configuration);
   const supplied = freeze(structuredClone(input.blocks));
@@ -137,7 +146,7 @@ export async function runSdkNativeStudy(input: {
   if (store) {
     const manifest = { schemaVersion: 1 as const, kind: 'authored-matched-study-recovery' as const,
       scheduleDigest: schedule.digest, configurationDigest: digestOf(configuration), blockIds: schedule.blocks.map(b => b.blockId),
-      input: { schedule, configuration, blocks: schedule.blocks.map(b => byId.get(b.blockId) ?? null) } };
+      input: { ...(evaluation ? { evaluation } : {}), schedule, configuration, blocks: schedule.blocks.map(b => byId.get(b.blockId) ?? null) } };
     // Renewed on each awaited checkpoint; one call plus cleanup cannot outlive this bound.
     const leaseMs = configuration.limits.deadlineMsPerCall + configuration.limits.cleanupTimeoutMs + 30_000;
     const admission = await store.claim(manifest, leaseMs);
@@ -184,7 +193,7 @@ export async function runSdkNativeStudy(input: {
       if (store) await store.append(claim!, block.blockId, 'block-start', { startedAt: outcome.startedAt });
       try {
         const result = await runMatchedRevision({ mode: 'authored_fixture', packet: item.packet, future: item.future,
-          native: { configuration, repetition: block.repetition, transport: input.transport,
+          native: { ...(evaluation ? { evaluation, verifyEvaluation } : {}), configuration, repetition: block.repetition, transport: input.transport,
             schedule: { manifest: schedule, blockId: block.blockId },
             ...(store ? { checkpoint: {
               beforeCall: async (arm: Arm | null, callId: string, requestDigest: string) => {
@@ -225,7 +234,7 @@ export async function runSdkNativeStudy(input: {
     if (store) await store.append(claim!, block.blockId, 'block-result', result);
     blocks.push(result);
   }
-  const report = studyReport(schedule, configuration, blocks, claim?.studyDigest);
+  const report = studyReport(schedule, configuration, blocks, claim?.studyDigest, evaluation);
   if (store) await store.finish(claim!, report);
   return report;
 }
