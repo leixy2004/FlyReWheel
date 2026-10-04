@@ -2,14 +2,19 @@
   "schemaVersion": 1,
   "files": [
     {
+      "path": "ANNOTATION-TEMPORAL-PROTOCOL.md",
+      "bytes": 19683,
+      "sha256": "b5190d27e0055bf74852efc7458f11e52143bee5f667a21009b7dd12667bfdf7"
+    },
+    {
       "path": "PAPER-DATA-AUDIT.md",
       "bytes": 2090,
       "sha256": "8760b0209454d8b138248d25f4927575632e06ddedfadecb86ec758ab0d7eb12"
     },
     {
       "path": "README.md",
-      "bytes": 9751,
-      "sha256": "3e33c9d1accfc159d5bf378e3448bf7e3d19f83c2a8836f1342fbc258c838f07"
+      "bytes": 10549,
+      "sha256": "bd418de2bc61c82e07c0e52ef2c1167c3e99d2b2aff39b6c9ff2fbcee6e32e8e"
     },
     {
       "path": "blind-draft.schema.json",
@@ -40,6 +45,11 @@
       "path": "late-eof-independent-check.json",
       "bytes": 2589,
       "sha256": "6a5f7f16154f6fcb3d5de229f716db9974f55e3ea2c6e63dcb3359a9eb274431"
+    },
+    {
+      "path": "protocol-independent-critique.json",
+      "bytes": 2121,
+      "sha256": "5bc979e92898f8892c236f9a7ad5cb274008d973b82e81a8339382042131e553"
     },
     {
       "path": "provenance-ledger.json",
