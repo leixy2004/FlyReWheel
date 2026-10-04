@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "vitest run --maxWorkers=2",
+    "test:serial": "vitest run --maxWorkers=1",
     "typecheck": "tsc --noEmit",
     "demo": "node --import tsx src/cli.ts demo",
     "cli": "node --import tsx src/cli.ts",

@@ -3,6 +3,32 @@
 Historical local checkpoints begin **2026-10-02**, canonical directory `FlyReWheel/`. This is a local
 source/build/test result, not a deployed sandbox or production service.
 
+## Tests in a constrained local workspace
+
+Use `npm run test:serial` to run the complete suite with one Vitest worker when
+parallel PGlite initialization competes for local CPU resources. The default
+`npm test` and CI retain two workers. Both commands run the same tests and keep
+their existing assertions, timeouts, isolation and cleanup. Record the command,
+commit, exit status, failures and skips; a serial pass does not erase a failed
+parallel run or certify parallel stability.
+
+On the 4-CPU/16-GiB cloud workspace at `28a567a`, the two-worker full suite had
+two default 5-second timeouts. A measured two-file rerun reproduced cancellation
+rollback timing out with PGlite readiness taking 4801ms and migrations 560ms;
+closing took 6ms. The same 66 tests passed with one worker, with cancellation
+rollback taking 1936ms. No new memory-limit or OOM events occurred in either
+measured run. CPU throttling increased in both, more in the two-worker run.
+This supports a resource-sensitive initialization budget, not a proven cleanup
+leak or a claim that CPU throttling alone caused every timeout. Phase observation
+adds overhead; validate the complete serial suite without those transforms.
+
+The optional offline rendering tests need an installed `kubectl` or `kustomize`
+on PATH. Earlier runtime-lane evidence used the temporary
+`/workspace/scratch/flyrewheel-kube-tools/kubectl` cache (kubectl v1.34.1,
+Kustomize v5.7.1). That cache is absent in this workspace. Git tracks the rendered
+artifacts and verification receipts, not the renderer binary; these two tests
+remain explicitly skipped when neither tool is available.
+
 ## Real PostgreSQL cloud checkpoint: 2026-10-03
 
 At GitHub baseline `237056acaaa3c21684fd63772eaca119e2af5f3a` (tree
