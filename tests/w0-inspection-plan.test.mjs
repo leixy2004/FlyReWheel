@@ -1,4 +1,5 @@
-import test from 'node:test';
+// Preserve the standalone Node check while registering with the default Vitest suite.
+const test = process.env.VITEST === 'true' ? (await import('vitest')).test : (await import('node:test')).default;
 import assert from 'node:assert/strict';
 import { generate, localInputs, paths } from '../scripts/freeze-w0-inspection-plan.mjs';
 
