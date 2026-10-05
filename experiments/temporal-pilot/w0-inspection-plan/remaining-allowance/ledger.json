@@ -1,0 +1,53 @@
+{
+  "kind": "remaining-rest-allowance-check",
+  "frozenPlanCommit": "3182b4c02045c414d22275e92c9d319f00a9fe64",
+  "number": 3034,
+  "order": 4,
+  "previousRequests": 48,
+  "budget": 50,
+  "proposalBudgetActivated": false,
+  "attempts": [
+    {
+      "requestNumber": 49,
+      "url": "https://api.github.com/repos/encode/httpx/git/commits/4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3",
+      "startedAt": "2026-10-04T22:58:37.391Z",
+      "method": "GET",
+      "purpose": "verify frozen merge commit/parents/tree",
+      "status": "complete",
+      "bytes": 3297,
+      "httpStatus": 200,
+      "sha256": "03dfc7e90164b0d2716854b790dc76792a1fc1a6d0f94fe4b5b66413da272c68",
+      "rawResponse": "response-49.json",
+      "identityMatches": true,
+      "completedAt": "2026-10-04T22:58:37.906Z"
+    },
+    {
+      "requestNumber": 50,
+      "url": "https://api.github.com/repos/encode/httpx/git/trees/ce25806e1c1121ade2cef4e8197866713232bd01",
+      "startedAt": "2026-10-04T22:58:37.906Z",
+      "method": "GET",
+      "purpose": "verify pinned root tree and discover license path",
+      "status": "complete",
+      "bytes": 2895,
+      "httpStatus": 200,
+      "sha256": "38a3343892acea29b681b96666560fb641504e679e731b976bce081b7b6eee91",
+      "rawResponse": "response-50.json",
+      "identityMatches": true,
+      "licenseEntries": [
+        {
+          "path": "LICENSE.md",
+          "sha": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+          "type": "blob",
+          "size": 1508
+        }
+      ],
+      "completedAt": "2026-10-04T22:58:38.418Z"
+    }
+  ],
+  "status": "budget_exhausted_source_incomplete",
+  "modelCalls": 0,
+  "humanLabels": 0,
+  "sourcePackageComplete": false,
+  "totalRequests": 50,
+  "remainingRequests": 0
+}
