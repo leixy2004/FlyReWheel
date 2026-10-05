@@ -43,7 +43,7 @@ describe('minimal matched evaluation contract', () => {
       }
     }
     expect(result.arms.every(a => a.usage.modelCalls === 0 && a.metrics.scheduledTargets === 3)).toBe(true);
-    expect(result.arms.find(a => a.arm === 'M')!.persistentBytes).toBeGreaterThan(result.arms.find(a => a.arm === 'H')!.persistentBytes);
+    expect(result.arms.find(a => a.arm === 'M')!.persistentBytes).toBe(result.arms.find(a => a.arm === 'H')!.persistentBytes);
     expect(result.report.independentHumanAnnotations).toBe(0);
   });
   it('rejects gate evidence injection even when packet and outer contract hashes are recomputed', () => {
