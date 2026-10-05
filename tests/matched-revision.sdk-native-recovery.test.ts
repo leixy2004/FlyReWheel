@@ -1,3 +1,4 @@
+import { MATCHED_EXECUTION_POLICY_DIGEST } from '../experiments/matched-revision/prompts.js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -8,7 +9,7 @@ import { createAuthoredCodexNativeMatchedTransport } from '../src/adapters/match
 import { openPGliteDatabase, type Database } from '../src/storage/database.js';
 import { MatchedStudyStore, MatchedStudyError, matchedStudyDigest, type MatchedStudyManifest } from '../src/storage/matched-studies.js';
 import { digestOf } from '../src/core/identity.js';
-import { runSdkNativeStudy, type SdkNativeStudyReport } from '../experiments/matched-revision/sdk-native-study.js';
+import { runSdkNativeStudy, sdkNativeStudyDigest, type SdkNativeStudyReport } from '../experiments/matched-revision/sdk-native-study.js';
 import { inspectSdkNativeStudy } from '../experiments/matched-revision/sdk-native-status.js';
 import { createRecoveryFixture } from './helpers/matched-study-recovery-fixture.js';
 const exec = promisify(execFile), clean: (() => Promise<unknown>)[] = [];
@@ -21,7 +22,7 @@ async function fixture(repetitions = 1, disk = false) {
   const transport = createAuthoredCodexNativeMatchedTransport(input.transportOptions);
   const manifest: MatchedStudyManifest = { schemaVersion: 1, kind: 'authored-matched-study-recovery',
     scheduleDigest: input.schedule.digest, configurationDigest: digestOf(input.configuration), blockIds: input.schedule.blocks.map(b => b.blockId),
-    input: { schedule: input.schedule, configuration: input.configuration, blocks: input.blocks } };
+    input: { executionPolicyDigest: MATCHED_EXECUTION_POLICY_DIGEST, schedule: input.schedule, configuration: input.configuration, blocks: input.blocks } };
   const audit = async () => (await readFile(join(input.transportOptions.workingDirectory, 'audit.jsonl'), 'utf8')).trim().split('\n').map(line => JSON.parse(line));
   return { root, input, path, db, store, transport, manifest, audit,
     run: () => runSdkNativeStudy({ ...input, transport, store }) };
@@ -46,6 +47,17 @@ async function childRun(root: string, input: unknown, path: string) {
 }
 
 describe('durable authored study recovery', () => {
+  it('isolates historical unversioned recovery from active-state-v2 without rewriting its record', async () => {
+    const f = await fixture();
+    const old = structuredClone(f.manifest);
+    delete (old.input as Record<string, unknown>).executionPolicyDigest;
+    const prior = await f.store.claim(old, 10000);
+    const current = await f.store.claim(f.manifest, 10000);
+    expect(prior.state).toBe('claimed'); expect(current.state).toBe('claimed');
+    expect(matchedStudyDigest(old)).not.toBe(matchedStudyDigest(f.manifest));
+    expect(sdkNativeStudyDigest(f.input.schedule, f.input.configuration)).toBe(matchedStudyDigest(f.manifest));
+    expect((await f.store.inspect(matchedStudyDigest(old)))!.manifest).toEqual(old);
+  }, 15_000);
   it('opens status without schema creation or migration', async () => {
     const db = await openPGliteDatabase(); clean.push(() => db.close());
     await expect(MatchedStudyStore.openExisting(db)).rejects.toMatchObject({ code: 'STUDY_INTEGRITY' });

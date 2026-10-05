@@ -38,8 +38,7 @@ All arms review identical targets; only persistent state differs. U/H/M receive 
 proposal slot, F none. The smoke consequently invokes 2 transport calls for F and
 3 for each updating arm, **zero model calls throughout**. Equal ceilings are not
 equal consumed resources. The report includes actual rendered persistent bytes;
-M carries audit-only initial text and delta overhead, so this is not a claim of
-representation-neutral effective capacity or validated M competence.
+M now charges only its active rendering: retired initial text is absent from review prompts and capacity, while active qualification/suppression framing is charged. The complete proposal audit envelope still obeys output limits. Equal byte limits are not equal model-token or semantic capacity, and M competence remains unvalidated; see the [precise contrast](README.md#active-state-capacity-contrast-v2-renderer).
 
 The existing ledger retains declared usage, conservative UTF-8 fixture token counts,
 upstream standalone diagnosis accounting, failures and unknown costs. It rejects
