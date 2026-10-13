@@ -1,0 +1,243 @@
+{
+  "status": "passed",
+  "directory": "/tmp/flyrewheel-revision-explanation-final",
+  "commands": [
+    {
+      "args": [
+        "revisions",
+        "demo"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "show",
+        "--digest",
+        "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "show",
+        "--digest",
+        "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "revision-demo-negative-label"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "list",
+        "--base-rule-digest",
+        "2684802aba2f87154e562465f2ca0fd437596c4d34e95f75782222278f75deaf"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "comparisons",
+        "--request-digest",
+        "74560c7a9d9d641a9fc17ac908715441b5b0b111f75c95bd0320994807b2f99e",
+        "--candidate-rule-digest",
+        "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-revision-explanation-final/explain-register.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-revision-explanation-final/explain-select.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "docs/outside.md"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "a25bb3e9e28af7ddbb6697cd3d538186e163ffed640b26b1046b40706352de7b",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "/tmp/flyrewheel-revision-explanation-final/plan-input.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_59cd95c354fc7d5655731852828d4eed03663f604d6d80c5bbfae1b09d06ab77"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4",
+        "--snapshot-digest",
+        "1724386189f743acaa99eb36d7c0074c5f665c05b32e72783a0b95420b49e532",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-revision-explanation-final/selected-fixtures.json",
+        "--attempt",
+        "explained-offline-replay"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-revision-explanation-final/explain-suspend.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "checks": [
+    "feedback discovery to exact comparison",
+    "literal candidate field changes",
+    "focused feedback evaluation and explicit decision",
+    "accepted candidate unselected before governance",
+    "candidate registration still unselected",
+    "explicit shadow selection and out-of-scope exclusion",
+    "regressed/rejected candidate remains unselected",
+    "governed plan pins chosen version",
+    "subsequent explicit offline review uses chosen version",
+    "suspension changes current eligibility without rewriting comparison"
+  ],
+  "inputs": "authored synthetic revision-demo source, imported candidates, judgments, feedback and decisions",
+  "modelExecution": "not_run",
+  "modelSubstituteRuntime": "not_used",
+  "realSourceEvaluation": "not_performed",
+  "realHumanAssessment": "not_performed",
+  "governedWorkerExecution": "not_run",
+  "subsequentReview": "explicit offline fixture replay",
+  "productionActivation": "not_performed",
+  "credentials": "not_read",
+  "W1": "not_read",
+  "publication": "not_performed",
+  "implementationBase": "10a0a020f978ddd8eeb25cb02230409e76c5686e",
+  "validation": {
+    "build": "passed",
+    "typecheck": "passed",
+    "literalDiffTest": "1 passed"
+  }
+}
