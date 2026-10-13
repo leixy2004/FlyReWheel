@@ -1,0 +1,440 @@
+{
+  "status": "passed",
+  "testedHead": "fc203176b7cce417076856d41b6939748806ebff",
+  "snapshotDigest": "a7f698832d0601c7fb842f88bc34f27d46fc0e3f5d393da30679609263cd3b61",
+  "originalObjects": {
+    "commits": 2,
+    "trees": 400,
+    "treeBytes": 201611,
+    "changedBlobSides": 18,
+    "changedBlobBytes": 131744,
+    "originalParentHeaderPreserved": true,
+    "shallowAndPromisorMarkersPreserved": true,
+    "head": "953d9c820b0d8f9a55ee455814287536a498498c",
+    "parent": "33b06a6f24be632e99c19cadb5004a27cf9605a0"
+  },
+  "flows": [
+    {
+      "successfulCommands": 30,
+      "allOutputHashesVerified": true,
+      "scopeBindings": "snapshot literal; review/finding/export digest; feedback review/finding; request feedback digest",
+      "artifactRoot": "original-flow",
+      "rawOutputsArchived": false,
+      "priorEvidence": "vllm-direct-parent-2026-10-13.json"
+    },
+    {
+      "successfulCommands": 30,
+      "allOutputHashesVerified": true,
+      "scopeBindings": "snapshot literal; review/finding/export digest; feedback review/finding; request feedback digest",
+      "artifactRoot": "fresh-flow",
+      "rawOutputsArchived": false
+    }
+  ],
+  "limitations": {
+    "fullHistory": false,
+    "realModelCalls": 0,
+    "realDeveloperFeedback": false,
+    "targetCodeExecution": false
+  },
+  "archiveNote": "Evidence-only archive of the completed acceptance; paths parameterized, no code tests or CLI calls rerun during archival. Raw logs, output payloads, databases and source objects not bundled.",
+  "validation": {
+    "testFiles": 17,
+    "passed": 249,
+    "failed": 0,
+    "skipped": 0,
+    "runs": 1,
+    "durationSeconds": 147.11,
+    "typecheckExitCode": 0,
+    "buildExitCode": 0,
+    "freshSuccessfulCliCalls": 30,
+    "originalSuccessfulCliCallsAuditedNotRerunCount": 30,
+    "expectedLegacyCaptureRejectionsInFreshFlow": 1,
+    "repairsRequired": false
+  },
+  "logSha256": {
+    "tests.log": "0252608fa7494a0848f0a317fa4bf13aa640d4fa0013b00fdce86539e581e2bc",
+    "typecheck.log": "03dee22e1e68e94260f41874a6deb0abd8a4d7f49932950f76168ac66c424519",
+    "build.log": "7282272b052fb9627442b50ca3f05079318060c2b0be5441e42770a355394bce",
+    "vllm-flow.log": "222c5237cf4bc743f7f7d55d1cbc4beec1abb2bf1ae95ed265228507498a0742",
+    "audit.log": "3c17dada59f817a13af26078909b930eac8896ad1d601f2b57b7a7817d952b72"
+  },
+  "freshFlowCommands": [
+    {
+      "args": [
+        "snapshots",
+        "capture-direct-parent",
+        "--repo",
+        "${VLLM_GIT_STORE}",
+        "--repository-id",
+        "github.com/vllm-project/vllm",
+        "--parent",
+        "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+        "--head",
+        "953d9c820b0d8f9a55ee455814287536a498498c"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshot-captured.json",
+      "outputSha256": "664938f2a0ad698afb88e48e205f3915c764144a951e064323bc82684348e987"
+    },
+    {
+      "args": [
+        "snapshots",
+        "import",
+        "--file",
+        "${NEW_FLOW_DIR}/snapshot-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshot-imported.json",
+      "outputSha256": "2ad7244672f86bdebb3a53d10a5a3be8e7aedbf2031a554da365b6b1db823a41"
+    },
+    {
+      "args": [
+        "snapshots",
+        "list"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshots-list.json",
+      "outputSha256": "df1a94f64c8758aa937312b902ee72f19099d1b29a08cb32c80abedee1e8d65b"
+    },
+    {
+      "args": [
+        "snapshots",
+        "show",
+        "--digest",
+        "a7f698832d0601c7fb842f88bc34f27d46fc0e3f5d393da30679609263cd3b61"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshot-reopened.json",
+      "outputSha256": "2ad7244672f86bdebb3a53d10a5a3be8e7aedbf2031a554da365b6b1db823a41"
+    },
+    {
+      "args": [
+        "rules",
+        "import",
+        "--rule",
+        "${NEW_FLOW_DIR}/base-rule.json",
+        "--cases",
+        "${NEW_FLOW_DIR}/cases.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-imported.json",
+      "outputSha256": "bf9d1a1e776c49bdd7a682b670e8624ef03da646d60904f35b9fb0f90ff8674b"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+        "--snapshot-digest",
+        "a7f698832d0601c7fb842f88bc34f27d46fc0e3f5d393da30679609263cd3b61"
+      ],
+      "exitCode": 0,
+      "outputFile": "structural.json",
+      "outputSha256": "2ddff155f2439b5ceef4d07b3b5573c982e3b313cceb4019ee757dde60b16cab"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "${NEW_FLOW_DIR}/base-register-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-register.json",
+      "outputSha256": "f56e573e34eb4855e9efe94dcf3f9278da118dfbec613eb3784787df5be89345"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "${NEW_FLOW_DIR}/base-shadow-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-shadow.json",
+      "outputSha256": "48bab74cf8af2a90011afe95a9102ee60b0982c42a3961a8ca93216bfbdb7962"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "${NEW_FLOW_DIR}/base-plan-input.json",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/baseline-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-plan.json",
+      "outputSha256": "102845bd58fdf9f3947186b724f007ec675e04a55c1fd2495ba0ca0695de086f"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "b381749bbc92ae68539ad8fe97deb7005e516e0c9a585072acb851311a495444",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/baseline-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-execution.json",
+      "outputSha256": "112c464981d5557557f81c6dc96a478d208694a769f6c42c8343994fc3e0fd98"
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_53356f5154c9f12665a812552a78299039ad996dff8fc74c26ce020b12061a22"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-review.json",
+      "outputSha256": "202d9ab4eb17f988ebf4208a61466ad78866679e32a464a840fa0b708d6b1855"
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "${NEW_FLOW_DIR}/feedback-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "feedback.json",
+      "outputSha256": "ad7b65235e4925bd2bdea9307edf50b52c508d112c9e9fdcd74b11b8d68ac4b4"
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--rule-digest",
+        "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+        "--source",
+        "fixture"
+      ],
+      "exitCode": 0,
+      "outputFile": "feedback-list.json",
+      "outputSha256": "76e06ef794bb74053a123e92c68cc98b45f5652234d74bb9a3f17742ed757636"
+    },
+    {
+      "args": [
+        "revisions",
+        "request",
+        "--file",
+        "${NEW_FLOW_DIR}/request-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "request.json",
+      "outputSha256": "14270d993794a4bd760cdf086b235eab2a1c4b92794ab003b9eef7f21b541693"
+    },
+    {
+      "args": [
+        "rules",
+        "import",
+        "--rule",
+        "${NEW_FLOW_DIR}/candidate-rule.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-imported.json",
+      "outputSha256": "7070866e689aabadeb76bf00d0f6dd10821f5c923fccac603280d726b8f511e0"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+        "--snapshot-digest",
+        "a7f698832d0601c7fb842f88bc34f27d46fc0e3f5d393da30679609263cd3b61"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-structural.json",
+      "outputSha256": "470865483e5cf042cf83a6995a0b5f955c10ffeb851364d504cb91c843682115"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+        "--snapshot-digest",
+        "a7f698832d0601c7fb842f88bc34f27d46fc0e3f5d393da30679609263cd3b61",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-evaluation-review.json",
+      "outputSha256": "4b68893304a42e710ba2bca1826a181e63e15c1387da90b5b8257629b5f3ddeb"
+    },
+    {
+      "args": [
+        "revisions",
+        "compare",
+        "--file",
+        "${NEW_FLOW_DIR}/comparison-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "comparison.json",
+      "outputSha256": "3acd0ecabe7b57edd225cdf12a5a8d3f4e5fb30d80790ee729833e9a07e28646"
+    },
+    {
+      "args": [
+        "revisions",
+        "decide",
+        "--file",
+        "${NEW_FLOW_DIR}/decision-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "decision.json",
+      "outputSha256": "2e76aaf0d36b5a70ad38273e93ad1033ff950e624b2a6d324ba8adf6eb0bf256"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "${NEW_FLOW_DIR}/candidate-register-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-register.json",
+      "outputSha256": "b4a6083e89a3d28a7cec6b7b9d2af3624fe23c9cb112d6236bd792278926a6c9"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "${NEW_FLOW_DIR}/candidate-shadow-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-shadow.json",
+      "outputSha256": "8861b4c23d1be058425b71c0a76a8318e56123be8ca64f424f4c08bb109f5111"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "${NEW_FLOW_DIR}/next-plan-input.json",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-plan.json",
+      "outputSha256": "7e3357de5a063b00d4220b4c560a503908ee9c58d3eaa7371c86cd95fa7f6111"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "491950ebb24962b70ddc9bf161d24d9386ed8a6fc3d0b1c3b02ef201b2132224",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-execution.json",
+      "outputSha256": "972b75f848bf53cb8798a55df18184202c49e152d35df13f12a618f4dd590832"
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_9026374a3eedb7b6b5721e0da3e6b55cdbb3fb3fb7793ed1ffde1a3468616ae8"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-review.json",
+      "outputSha256": "8ebf178c710626845f2c0958f642c79a19c632a695f0876065382d7180ce6225"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "491950ebb24962b70ddc9bf161d24d9386ed8a6fc3d0b1c3b02ef201b2132224",
+        "--offline-fixtures",
+        "${NEW_FLOW_DIR}/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-reopened-execution.json",
+      "outputSha256": "972b75f848bf53cb8798a55df18184202c49e152d35df13f12a618f4dd590832"
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "1065380b87dd224e81e969756f9d998c4ffa76478e5f3a0466ad9456c9d3a6f6",
+        "--feedback-id",
+        "vllm-authored-fp",
+        "--repository",
+        "github.com/vllm-project/vllm",
+        "--path",
+        "vllm/utils/network_utils.py"
+      ],
+      "exitCode": 0,
+      "outputFile": "explanation.json",
+      "outputSha256": "81d0de214b343e609d16f48303a14cc012e4740965d8700967b8224c28992699"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "create",
+        "--file",
+        "${NEW_FLOW_DIR}/export-batch-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "export-batch.json",
+      "outputSha256": "3c9c0aa2d400cb79f8651286fbd1680dbe4d9d61062c8acf19f2e959622354b0"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "a85f7ed3fc6b80c71c09302b661b1621750875ec84a75aa37600b48694060ea3"
+      ],
+      "exitCode": 0,
+      "outputFile": "batch-export.json",
+      "outputSha256": "4c3e1f2d552a177053ccd826bd0411df706b65a6dec34bbcd5347e66ddefb1b5"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "a85f7ed3fc6b80c71c09302b661b1621750875ec84a75aa37600b48694060ea3",
+        "--format",
+        "csv"
+      ],
+      "exitCode": 0,
+      "outputFile": "batch-export.csv",
+      "outputSha256": "4b6173d341cc979e4501224d903b2e0fc8bf289f2da140876c08cb5deee193ae"
+    },
+    {
+      "args": [
+        "application-jobs",
+        "history",
+        "--file",
+        "${NEW_FLOW_DIR}/executed-job.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "job-history.json",
+      "outputSha256": "6067fe37065ac174308f665661f43379bd7f43210e9c5bcb9f191305f0262e31"
+    }
+  ],
+  "commandRecordMeaning": "Arguments are parameterized from executed argv; outputFile is relative to fresh-flow. Output SHA256 hashes refer to actual original bytes, not normalized or regenerated payloads. The CLI driver also supplied --db ${NEW_FLOW_DIR}/db to every invocation."
+}
