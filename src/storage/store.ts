@@ -1,3 +1,4 @@
+import { deriveReviewBatch, ReviewBatchSchema, type ReviewBatchInput, type StoredReviewBatch } from '../review-batch.js';
 import { ReviewContinuationInputSchema, ReviewContinuationSchema, reviewContinuationJob, type ReviewContinuationInput, type StoredReviewContinuation } from '../review-continuation.js';
 import { readTrustedComparisonApplicability, type TrustedComparisonApplicability } from '../adapters/comparison-applicability-model.js';
 import { GovernedReviewPlanSchema, GovernedReviewAdmissionSchema, GOVERNED_REVIEW_LIMITS, deriveGovernedReviewPlan,
@@ -959,6 +960,48 @@ export class QualEvoStore {
   }
   async getRevisionOutcome(digest: string): Promise<StoredRevisionNoMutationOutcome> {
     return this.db.transaction(tx => this.readRevisionOutcome(tx, digest));
+  }
+  private async validateReviewBatchJobs(tx: Queryable, stored: StoredReviewBatch): Promise<void> {
+    for (const job of stored.batch.input.jobs) {
+      await this.readSemanticRuleVersion(tx, job.ruleDigest);
+      const snapshot = await this.readChangeSnapshot(tx, job.snapshotDigest);
+      if (job.repositoryContextDigests) validateReviewRepositoryContexts(
+        await Promise.all(job.repositoryContextDigests.map(digest => this.readRepositoryContext(tx, digest))), snapshot);
+      if (job.continuationDigest) {
+        const plan = await this.readReviewContinuation(tx, job.continuationDigest);
+        if (applicationJobDigest(reviewContinuationJob(plan)) !== applicationJobDigest(job))
+          fail('CONTINUATION_REJECTED', 'Batch job differs from continuation selection');
+      }
+      if (job.governancePlanDigest) {
+        const plan = await this.readGovernedReviewPlan(tx, job.governancePlanDigest);
+        if (!governedReviewJobs(plan).some(member => applicationJobDigest(member) === applicationJobDigest(job)))
+          fail('GOVERNANCE_PLAN_MISMATCH', 'Batch job differs from governed plan selection');
+      }
+    }
+  }
+  async createReviewBatch(input: ReviewBatchInput): Promise<StoredReviewBatch> {
+    const stored = deriveReviewBatch(input);
+    return this.db.transaction(async tx => {
+      await this.validateReviewBatchJobs(tx, stored);
+      await tx.query('INSERT INTO qe_review_batches(digest,id,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT DO NOTHING',
+        [stored.digest, stored.batch.input.id, JSON.stringify(stored.batch)]);
+      const row = await one<{ digest: string }>(tx, 'SELECT digest FROM qe_review_batches WHERE id=$1', [stored.batch.input.id]);
+      if (row?.digest !== stored.digest) fail('IMMUTABLE_CONFLICT', 'Batch ID already binds different jobs or order');
+      return this.readReviewBatch(tx, stored.digest);
+    });
+  }
+  private async readReviewBatch(tx: Queryable, digest: string): Promise<StoredReviewBatch> {
+    DigestSchema.parse(digest);
+    const row = await one<{ id: string; payload: unknown }>(tx, 'SELECT id,payload FROM qe_review_batches WHERE digest=$1', [digest]);
+    if (!row) fail('NOT_FOUND', 'Unknown review batch');
+    const batch = ReviewBatchSchema.parse(row.payload), stored = deriveReviewBatch(batch.input);
+    if (digestOf(batch) !== digest || stored.digest !== digest || row.id !== batch.input.id)
+      fail('INTEGRITY_FAILURE', 'Stored review batch identity mismatch');
+    await this.validateReviewBatchJobs(tx, stored);
+    return stored;
+  }
+  async getReviewBatch(digest: string): Promise<StoredReviewBatch> {
+    return this.db.transaction(tx => this.readReviewBatch(tx, digest));
   }
   private async deriveReviewContinuation(tx: Queryable, raw: ReviewContinuationInput): Promise<StoredReviewContinuation> {
     const input = ReviewContinuationInputSchema.parse(raw);

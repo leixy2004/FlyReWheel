@@ -1,3 +1,4 @@
+import { registerReviewBatchCommands } from './cli-review-batch.js';
 import { registerReviewContinuationCommands } from './cli-review-continuation.js';
 import { GovernedReviewPlanInputSchema, governedReviewJobs, governedReviewStatus, enqueueGovernedReviewPlan } from './governed-semantic-review.js';
 import { Command } from 'commander';
@@ -290,6 +291,7 @@ databaseCommand(reviews, 'run').description('Explicit digest historical/manual r
       if (review.coverage.targets.some(target => target.scans.some(scan => ['execution_error', 'budget_exceeded'].includes(scan.state)))) process.exitCode = 2;
     } finally { await store.close(); }
   });
+registerReviewBatchCommands(reviews, json, output);
 const governedReviews = reviews.command('governed').description('Freeze and dispatch bounded local governance-selected reviews; no implicit activation or publication');
 databaseCommand(governedReviews, 'plan').requiredOption('--file <file>', 'Strict plan input: id, repository, snapshotDigest, literal paths and trusted workspaceId')
   .option('--out <file>').action(async options => {
