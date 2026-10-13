@@ -1,0 +1,376 @@
+{
+  "status": "passed",
+  "provenance": {
+    "origin": "https://github.com/leixy2004/FlyReWheel",
+    "sourceBase": "0b476d9f6835fec63b3b924c0de3120d3c79922f",
+    "sourceHead": "1bc2afffdd28c5ebde64f81e39944d816fdca8f7",
+    "sourcePathsRead": [
+      "src/application-preflight.ts",
+      "src/core/identity.ts"
+    ],
+    "originalSourceSha256": "a1a23a56d378301e849316c6140f954affb509fb6b7fa0b8299b2a520d8b7a0b",
+    "projectionBase": "9b9488669a0d8e9f02f41211c3dddcfe633559df",
+    "projectionHead": "609f33d560e39a7133f3701038c093005d9d162e",
+    "boundary": "real-upstream-source-bytes-selected-path-projection-not-the-original-repository-tree",
+    "researchW1": "not_read"
+  },
+  "commands": [
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "init"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "revisions",
+      "continuations",
+      "create",
+      "--id",
+      "real-source-followup",
+      "--outcome-digest",
+      "f1ffe388970c5a1cbe61c5a9ecbdb0e9e290a746278d02997d515ab088bf5751",
+      "--finding-id",
+      "review_finding_cc1beaf9eaaf726d1f6d2fd32ed731252be49ff808ec73fa609e348103c82082",
+      "--repository-context-digest",
+      "993e5292f27320b14216c6083bb56e2de5206fe3d568216b33499f804181ee0a",
+      "--workspace-id",
+      "offline-projection",
+      "--attempt",
+      "followup",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "revisions",
+      "continuations",
+      "create",
+      "--id",
+      "real-source-followup",
+      "--outcome-digest",
+      "f1ffe388970c5a1cbe61c5a9ecbdb0e9e290a746278d02997d515ab088bf5751",
+      "--finding-id",
+      "review_finding_cc1beaf9eaaf726d1f6d2fd32ed731252be49ff808ec73fa609e348103c82082",
+      "--repository-context-digest",
+      "993e5292f27320b14216c6083bb56e2de5206fe3d568216b33499f804181ee0a",
+      "--workspace-id",
+      "offline-projection",
+      "--attempt",
+      "followup",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "create",
+      "--file",
+      "/tmp/flyrewheel-real-source-flow-3/batch-input.json",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "fail"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "status",
+      "--digest",
+      "bfe59701aab01a20db3923b49d0ca07ad1c4dfc198f684f8362e23a3b59a5880",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "export",
+      "--digest",
+      "bfe59701aab01a20db3923b49d0ca07ad1c4dfc198f684f8362e23a3b59a5880",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "retry"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "revisions",
+      "continuations",
+      "status",
+      "--digest",
+      "8d6949ea7aaf0309b0a169a8566310ccc3835e23c9216ef6a6d0c4053dfff5ef",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "application-jobs",
+      "history",
+      "--file",
+      "/tmp/flyrewheel-real-source-flow-3/retry-job.json",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "export",
+      "--digest",
+      "bfe59701aab01a20db3923b49d0ca07ad1c4dfc198f684f8362e23a3b59a5880",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "export",
+      "--digest",
+      "bfe59701aab01a20db3923b49d0ca07ad1c4dfc198f684f8362e23a3b59a5880",
+      "--format",
+      "csv",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "cancel"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "reviews",
+      "batch",
+      "status",
+      "--digest",
+      "eb6db05389f43a519f64b2ced5a22c06d28844c46b383f6328992266c866822a",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ],
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "interrupt"
+    ],
+    [
+      "node",
+      "scripts/smoke-review-user-flow.mjs",
+      "/tmp/flyrewheel-real-source-flow-3",
+      "expire"
+    ],
+    [
+      "node",
+      "dist/cli.js",
+      "application-jobs",
+      "history",
+      "--file",
+      "/tmp/flyrewheel-real-source-flow-3/interrupted-job.json",
+      "--db",
+      "/tmp/flyrewheel-real-source-flow-3/db"
+    ]
+  ],
+  "checks": {
+    "processRestarts": true,
+    "originalRecordsUnchanged": true,
+    "failureHistoryRetained": true,
+    "unknownAnchorPreserved": true,
+    "concurrentAndRepeatedRetryExecutions": 1,
+    "csvFormulaPrefixes": [
+      "=",
+      "+",
+      "-",
+      "@",
+      "tab",
+      "newline"
+    ],
+    "cancellation": "retryable-first-unstarted-second",
+    "interruptedLease": "blocked-model-execution-unknown",
+    "leaseElapsedTime": "accelerated-by-authored-database-fixture",
+    "activation": "not_performed"
+  },
+  "modelExecution": "not_run",
+  "runtime": "authored-envelopes-no-SDK-or-model-call",
+  "limitations": [
+    "Selected real-source projection, not the complete upstream repository",
+    "Authored rule, feedback and judgments; no empirical bug/quality claim",
+    "Sequential cross-process PGlite reopen; concurrent API calls share one process, not PostgreSQL multi-process contention",
+    "Batch execution still requires trusted application API dependencies; no generic local execution CLI"
+  ],
+  "executions": [
+    {
+      "contract": "rule-revision-v2",
+      "phase": "init"
+    },
+    {
+      "contract": "semantic-review-v3",
+      "phase": "fail"
+    },
+    {
+      "contract": "semantic-review-v3",
+      "phase": "fail"
+    },
+    {
+      "contract": "semantic-review-v3",
+      "phase": "retry"
+    },
+    {
+      "contract": "semantic-review-v3",
+      "phase": "cancel"
+    }
+  ],
+  "implementationCommit": "3e9dc825555fd076085f506550c115f3b74c31c8",
+  "artifactsDirectory": "/tmp/flyrewheel-real-source-flow-3",
+  "retryHistory": {
+    "jobDigest": "dddf19cf66a09b6e217525503b04b1eda54c1d0b7a0a27d21f48beb525f844c1",
+    "currentState": "finished",
+    "attempts": 2,
+    "recordedAttempts": 2,
+    "missingHistoricalAttempts": 0,
+    "historyScope": "observed-results-only-no-invented-backfill",
+    "outcomes": [
+      {
+        "attempt": 1,
+        "state": "retryable",
+        "result": {
+          "status": "failed",
+          "modelExecution": "not_run",
+          "cleanup": "verified",
+          "reason": "runtime_failed"
+        },
+        "origin": "recorded-transition"
+      },
+      {
+        "attempt": 2,
+        "state": "finished",
+        "result": {
+          "status": "completed",
+          "modelExecution": "not_run",
+          "cleanup": "verified",
+          "outcome": {
+            "kind": "semantic-review",
+            "id": "review_c7e69b38ae152cebf83d3bc79865b953dec6b033b4dd2ebf5eb09b01594d6d26",
+            "digest": "99be0984cca738f9cdfe6e18194bc5d4476418d8f87e90cd3d0683b42004d961"
+          }
+        },
+        "origin": "recorded-transition"
+      }
+    ],
+    "nextAfterAttempt": 2
+  },
+  "continuationAssessment": {
+    "state": "completed",
+    "result": {
+      "status": "completed",
+      "modelExecution": "not_run",
+      "cleanup": "verified",
+      "outcome": {
+        "kind": "semantic-review",
+        "id": "review_c7e69b38ae152cebf83d3bc79865b953dec6b033b4dd2ebf5eb09b01594d6d26",
+        "digest": "99be0984cca738f9cdfe6e18194bc5d4476418d8f87e90cd3d0683b42004d961"
+      }
+    },
+    "assessment": "unknown",
+    "assessmentMeaning": "new-review-declaration-not-repair-certification",
+    "certification": "none"
+  },
+  "finalReport": {
+    "schemaVersion": 1,
+    "kind": "review-batch-report",
+    "batchDigest": "bfe59701aab01a20db3923b49d0ca07ad1c4dfc198f684f8362e23a3b59a5880",
+    "batchId": "real-source-batch",
+    "state": "completed",
+    "counts": {
+      "total": 2,
+      "notStarted": 0,
+      "running": 0,
+      "retryable": 0,
+      "completed": 2,
+      "blocked": 0
+    },
+    "rows": [
+      {
+        "index": 1,
+        "jobDigest": "dddf19cf66a09b6e217525503b04b1eda54c1d0b7a0a27d21f48beb525f844c1",
+        "ruleDigest": "b3adcc150d00cfed0a1aba098ff7a5d471806c118775702fca65f82acdf04284",
+        "snapshotDigest": "a87018ecf8738fdadc293541ff67a0c32354fd9f5f747b02904f2a97f049844b",
+        "workspaceId": "offline-projection",
+        "attempt": "followup",
+        "attempts": 2,
+        "state": "finished",
+        "outcomeStatus": "completed",
+        "reason": null,
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "reviewId": "review_c7e69b38ae152cebf83d3bc79865b953dec6b033b4dd2ebf5eb09b01594d6d26",
+        "findings": {
+          "violation": 0,
+          "safe": 0,
+          "unknown": 1,
+          "not_verified": 0
+        },
+        "recoveryAction": "inspect_existing_outcome",
+        "nextAction": "Inspect the recorded domain outcome. Re-delivery returns this outcome; it does not rerun generation or imply a candidate was produced."
+      },
+      {
+        "index": 2,
+        "jobDigest": "baae74851722ad3081e4147a4cb9388db9a779420af72ef3170a4a945ef2d7d6",
+        "ruleDigest": "b3adcc150d00cfed0a1aba098ff7a5d471806c118775702fca65f82acdf04284",
+        "snapshotDigest": "a87018ecf8738fdadc293541ff67a0c32354fd9f5f747b02904f2a97f049844b",
+        "workspaceId": "offline-projection",
+        "attempt": "independent",
+        "attempts": 1,
+        "state": "finished",
+        "outcomeStatus": "completed",
+        "reason": null,
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "reviewId": "review_46556da963e6fbf9e75b3a033682eb2531645f7169d1a70ca66e9840bdb962c4",
+        "findings": {
+          "violation": 0,
+          "safe": 0,
+          "unknown": 1,
+          "not_verified": 0
+        },
+        "recoveryAction": "inspect_existing_outcome",
+        "nextAction": "Inspect the recorded domain outcome. Re-delivery returns this outcome; it does not rerun generation or imply a candidate was produced."
+      }
+    ],
+    "retrySelection": {
+      "retryJobDigests": []
+    },
+    "retrySelectionMeaning": "suggested-existing-failures-requires-explicit-operator-selection-no-retry-performed",
+    "findingCountsMeaning": "stored-review-declarations-not-ground-truth-or-repair-metrics",
+    "consistency": "per-item-readback-not-a-cross-job-transactional-snapshot",
+    "execution": "not_started_by_export",
+    "notification": "not_performed",
+    "certification": "none"
+  },
+  "harnessCorrections": [
+    "Initial authored Unknown feedback correctly rejected request_context; final run uses explicit fixture FP routing label without changing policy or claiming human judgment.",
+    "Restarted resolver must inspect an existing prepared workspace instead of allocating the same attempt again; verification driver corrected, product workspace semantics unchanged."
+  ]
+}
