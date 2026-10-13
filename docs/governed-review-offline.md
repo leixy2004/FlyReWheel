@@ -55,6 +55,9 @@ runner retries cleanup-safe retryable jobs on explicit reinvocation; a runtime o
 persistence failure stops that invocation, leaving earlier results committed. This
 is separate from the existing batch command's individually selected retry policy.
 Cancellation uses the existing abort handling and durable attempt history.
+The CLI returns 0 when every job completed, 2 when returned status contains a
+noncompleted job, and an error exit for invalid/stale input or a thrown execution
+failure. Inspect `status` and existing application-job history after a failure.
 
 The result includes `reviewSelection: local-governed`,
 `executionMode: authored-offline-fixtures`, `modelExecution: not_run` and
@@ -87,3 +90,17 @@ feedback; CLI/database/structural scan operations are real. No upstream-source
 quality claim, real developer assessment, model call or substitute model runtime
 is involved. Real-runtime authority remains a separate unsolved deployment gap.
 No credential/W1 access or frozen research protocol changes are required.
+
+## Post-commit interaction regression
+
+On `db205be`, the related aggregate passed **109 tests in
+19 files**, with 0 failed, 0 skipped and
+0 todo (293.61 seconds). The 3 focused tests above
+are included in this aggregate, not additional unique coverage.
+Four prior compiled CLI flows were rerun on fresh databases: source-projection
+restart, batch CLI/retry history, feedback discovery/freeze and revision explanation/
+governance selection. All four passed. The new 19-command governed offline flow
+also passed, as recorded separately above. Typecheck, build and diff checks passed.
+
+[Exact commands and per-file counts](evidence/governed-review-offline-regression-2026-10-13.json).
+No new regression was found. No unrelated full-suite repetition was performed.
