@@ -1,0 +1,750 @@
+{
+  "status": "passed",
+  "testedProductCommit": "665aa5491750cecd62146fb61dafdfe55973af80",
+  "directory": "/tmp/flyrewheel-vllm-compat/flow",
+  "source": {
+    "repository": "https://github.com/vllm-project/vllm",
+    "head": "953d9c820b0d8f9a55ee455814287536a498498c",
+    "base": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+    "commitUrl": "https://github.com/vllm-project/vllm/commit/953d9c820b0d8f9a55ee455814287536a498498c",
+    "commitApiUrl": "https://api.github.com/repos/vllm-project/vllm/commits/953d9c820b0d8f9a55ee455814287536a498498c",
+    "diffUrl": "https://github.com/vllm-project/vllm/commit/953d9c820b0d8f9a55ee455814287536a498498c.diff",
+    "diffSha256": "7af8b02438e5c26b8775daa845d85247d4b4c82b61fe15317b8918bd919fd276",
+    "files": [
+      {
+        "path": "tools/pre_commit/mypy.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "34f6e8c928ffb00180f4bbeebf04a0279f32fca1",
+            "sha256": "c7897d898a89b837b89c51b1312e84e3f2d42ff5dbfd6717b09842bbc0096e14",
+            "bytes": 4469,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/tools/pre_commit/mypy.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/tools/pre_commit/mypy.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "e3dc40fd0ec7d9ad08cf00bce5f13051e2a94685",
+            "sha256": "8459735aaf8515ef4e34cfa0e65455d7bd21fccd54acd12d64cc9809a45ccbf9",
+            "bytes": 4487,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/tools/pre_commit/mypy.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/tools/pre_commit/mypy.py"
+          }
+        },
+        "mode": "100755"
+      },
+      {
+        "path": "vllm/utils/async_utils.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "b6c24e1ceeee79ed30e66c08c893856dae047f25",
+            "sha256": "98550aca9a8c2eef470dadf2cf4a8822f4d351c1849a4858baa566fac6c4aa6b",
+            "bytes": 11061,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/async_utils.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/async_utils.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "77234cbd0c8ca151c0de36ee3353198841e41178",
+            "sha256": "9f0000f1caf512025beeb000c227c55971c041b4d9be146a1fd29174a3c735d9",
+            "bytes": 11193,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/async_utils.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/async_utils.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/jsontree.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "cde9aa6ff901c7699a66ae8ba8ae2b913b00d41a",
+            "sha256": "54dc451f4d0a7dc76d6723063d4bf35564d9ed85c5e790a17be817a79a2d4eee",
+            "bytes": 3840,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/jsontree.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/jsontree.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "fe757c2f337485506ac333467747d622d14a8033",
+            "sha256": "964b573443aad30d6aa801933e0a49e5e0e88237ad1c30b5e47abffffd8e2e68",
+            "bytes": 3755,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/jsontree.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/jsontree.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/mem_utils.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "c6a6757bed3bfb589f24e00809e6885f1ff7b06e",
+            "sha256": "da4b392a2261f05bffe380c867430fd27037b1d18d2a6e2b946a26e79e233071",
+            "bytes": 8834,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/mem_utils.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/mem_utils.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "e2517b935bf287f7ededc525e8dc10dfdbf05d0f",
+            "sha256": "3034e34843735548c87598e21105e1ade17a47a9d420fc0730df632edf7b8ee9",
+            "bytes": 8850,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/mem_utils.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/mem_utils.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/nccl.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "b1459fcbd246a1f4af2a43085b5c796f8ad723ab",
+            "sha256": "21d661152e151ba4ad47a3917fc4b0248688d080b16047f5ec001f112942be40",
+            "bytes": 1927,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/nccl.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/nccl.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "4807bc076f82404cb14fe362b4f34c1ad18e7cb4",
+            "sha256": "574c956318442918b6852581a8affb39a170bd547f440241350f9adf08020d70",
+            "bytes": 1915,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/nccl.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/nccl.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/network_utils.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "0a68e48ba5e7a320b9847caa014684871a5cf802",
+            "sha256": "78437d3278e838024ca8d5932a131841c1dec64b09ad404826c09493cf8b535f",
+            "bytes": 10058,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/network_utils.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/network_utils.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "80ff0df28c66c8f147b90bb611ea22780dc5f8bd",
+            "sha256": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+            "bytes": 10076,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/network_utils.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/network_utils.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/registry.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "ac9b859159eadba3ecd7db902c3a081fee9fdf43",
+            "sha256": "f3586f453213b5a0c00a5a5211088ea3c207feb567a70bb4c1b9595b42c883ef",
+            "bytes": 1504,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/registry.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/registry.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "a136d450e7b14c249b29aee93efd3812d4391cd4",
+            "sha256": "816459d9747053e61aa5cb4be40d393b56c6d95826f9005c3ebc6350f46e8055",
+            "bytes": 1555,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/registry.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/registry.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/utils/torch_utils.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "3661dfd09047aea5471325b8fc0d0be920f9d7df",
+            "sha256": "c50371b22f693a29abed8d079355bd3c81723cde09f422373ed51b347e7c4587",
+            "bytes": 21521,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/torch_utils.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/utils/torch_utils.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "f5c49ac169f0c7a448395dba0f9885724ef19401",
+            "sha256": "0890c97ac67d7bdd5decf40fcc665c01c6b6d282f663da1957da73d3a7b570c8",
+            "bytes": 21217,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/utils/torch_utils.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/utils/torch_utils.py"
+          }
+        },
+        "mode": "100644"
+      },
+      {
+        "path": "vllm/v1/pool/metadata.py",
+        "status": "modified",
+        "sides": {
+          "before": {
+            "commit": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "blobSha": "9883ab8fb9964c1a8caae0d1c6524a2640bed87d",
+            "sha256": "8ca8273a429f41f61b7ac89318e5ee34d9c4caac28b5ae52959d325b85a66dbe",
+            "bytes": 2735,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/v1/pool/metadata.py?ref=33b06a6f24be632e99c19cadb5004a27cf9605a0",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/before/vllm/v1/pool/metadata.py"
+          },
+          "after": {
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "blobSha": "7bd2c7415dafe9f47ff82e09b3e56857492f5d55",
+            "sha256": "090061e45eb20c481069b84404bb1f7d2b83ac63a4aef11be8d9629a8c1b4ebc",
+            "bytes": 2747,
+            "url": "https://api.github.com/repos/vllm-project/vllm/contents/vllm/v1/pool/metadata.py?ref=953d9c820b0d8f9a55ee455814287536a498498c",
+            "localPath": "/tmp/flyrewheel-vllm-compat/source/after/vllm/v1/pool/metadata.py"
+          }
+        },
+        "mode": "100644"
+      }
+    ],
+    "changedFiles": 9,
+    "totalBytes": 131744,
+    "source": "official public GitHub API and diff; no local checkout or source projection",
+    "verification": "Git blob IDs recomputed and matched API contents; after IDs matched commit files; modes matched official diff",
+    "auth": "anonymous requests, no Authorization headers",
+    "execution": "target code not executed",
+    "historicalResearch": "not_read",
+    "commitDate": "2025-11-28T12:40:47Z",
+    "commitSubject": "[mypy] Pass type checking for `vllm/utils` and `vllm/v1/pool` (#29666)"
+  },
+  "commands": [
+    {
+      "args": [
+        "snapshots",
+        "import",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/snapshot-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshot-imported.json",
+      "outputSha256": "885d2f6bb3377fc90b45b7d5bae57f7fc42f19b5373c7eb9bd9715c06637b3f7"
+    },
+    {
+      "args": [
+        "snapshots",
+        "show",
+        "--digest",
+        "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2"
+      ],
+      "exitCode": 0,
+      "outputFile": "snapshot-reopened.json",
+      "outputSha256": "885d2f6bb3377fc90b45b7d5bae57f7fc42f19b5373c7eb9bd9715c06637b3f7"
+    },
+    {
+      "args": [
+        "rules",
+        "import",
+        "--rule",
+        "/tmp/flyrewheel-vllm-compat/flow/base-rule.json",
+        "--cases",
+        "/tmp/flyrewheel-vllm-compat/flow/cases.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-imported.json",
+      "outputSha256": "bf9d1a1e776c49bdd7a682b670e8624ef03da646d60904f35b9fb0f90ff8674b"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+        "--snapshot-digest",
+        "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2"
+      ],
+      "exitCode": 0,
+      "outputFile": "structural.json",
+      "outputSha256": "fabd98d69e9d721608813a519810a709656024e16107044295c5ce4b7dafcce8"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/base-register-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-register.json",
+      "outputSha256": "f56e573e34eb4855e9efe94dcf3f9278da118dfbec613eb3784787df5be89345"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/base-shadow-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-shadow.json",
+      "outputSha256": "48bab74cf8af2a90011afe95a9102ee60b0982c42a3961a8ca93216bfbdb7962"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/base-plan-input.json",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/baseline-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-plan.json",
+      "outputSha256": "c6c0a0cf9ef2302b245f8933b214df30cebcb0cdfa43bf52450f4be6a8b31845"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "29c2ef05225212c8bbf3d8d7f0578beb977eb8e4f131aa7adca40fa75ff3e277",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/baseline-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-execution.json",
+      "outputSha256": "cdc6fd6ca9d3202f1c47f995bb9adc5320bc813f946d300f3791b35b1d640e61"
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_6ccc758ce4f2c3cbc2189cd52c20a5de28998ed26be07a7ed891271353d55bd1"
+      ],
+      "exitCode": 0,
+      "outputFile": "base-review.json",
+      "outputSha256": "5f6defcf22c1d6e6df69c468d043c111e20230bdc088bfd1a86fc5e4ab630f87"
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/feedback-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "feedback.json",
+      "outputSha256": "21b433d13bcd01a87c0cea6c3f48798ed5b4fb5386b9596cb67b2837cd97ad37"
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--rule-digest",
+        "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+        "--source",
+        "fixture"
+      ],
+      "exitCode": 0,
+      "outputFile": "feedback-list.json",
+      "outputSha256": "74546a5405e7b6ef731f2c013e34e982f1881a83764ca3b5bb4a6cd1e8126fd5"
+    },
+    {
+      "args": [
+        "revisions",
+        "request",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/request-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "request.json",
+      "outputSha256": "fcd62407675a86faf03c4f48161cd60843e1323b5f23c22cfe697153ba23aa22"
+    },
+    {
+      "args": [
+        "rules",
+        "import",
+        "--rule",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-rule.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-imported.json",
+      "outputSha256": "7070866e689aabadeb76bf00d0f6dd10821f5c923fccac603280d726b8f511e0"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+        "--snapshot-digest",
+        "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-structural.json",
+      "outputSha256": "422b3eb6e2aedaea73c4e6219d0d9232f94e88ae018d2c98f9cc7f96c30b1c59"
+    },
+    {
+      "args": [
+        "reviews",
+        "run",
+        "--rule-digest",
+        "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+        "--snapshot-digest",
+        "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-evaluation-review.json",
+      "outputSha256": "0a77d7cc2426725cc6be7e718e5574c153764340feaff530b7bc3bc36720ac44"
+    },
+    {
+      "args": [
+        "revisions",
+        "compare",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/comparison-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "comparison.json",
+      "outputSha256": "d4c016264977243aa0fc75adc6690ed4409cea5c94ab1d17b0caffd68d2c97bc"
+    },
+    {
+      "args": [
+        "revisions",
+        "decide",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/decision-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "decision.json",
+      "outputSha256": "4e17e6ca2d8e235006bf241dde0b5e438312a453c0bf2929bc3195e9025c993c"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-register-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-register.json",
+      "outputSha256": "b4a6083e89a3d28a7cec6b7b9d2af3624fe23c9cb112d6236bd792278926a6c9"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-shadow-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "candidate-shadow.json",
+      "outputSha256": "2f9be83479dcf7fe6d0b6e3ae03de3f9e31754d664b0ae7e21a7d4450f38abb8"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/next-plan-input.json",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-plan.json",
+      "outputSha256": "a2702678cab3a9ffb01445e4b2299a0680d0619936107b41bac70cf3e0ba5cb3"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "c70d4803aa928018200188b440db66150ec5bd96d7d323d1cd854b19bf951506",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-execution.json",
+      "outputSha256": "e11f51521a36d6323045e4d2ff47553e62c30fb54721fedf4a26a2917bbd41e8"
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_f158439cb184611fe491031459856334926076f1d59d92f529040275ca9337bb"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-review.json",
+      "outputSha256": "2b52ca5e87bd1489d3d30ea551069e90d9dc1b09018c72ab77546826b089d4f1"
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "c70d4803aa928018200188b440db66150ec5bd96d7d323d1cd854b19bf951506",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-vllm-compat/flow/candidate-authored-response.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "next-reopened-execution.json",
+      "outputSha256": "e11f51521a36d6323045e4d2ff47553e62c30fb54721fedf4a26a2917bbd41e8"
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "877b950ee6f1b0510306e431ea8e5842242c617ec1e3d5d5a7a630f831fc7a8c",
+        "--feedback-id",
+        "vllm-authored-fp",
+        "--repository",
+        "github.com/vllm-project/vllm",
+        "--path",
+        "vllm/utils/network_utils.py"
+      ],
+      "exitCode": 0,
+      "outputFile": "explanation.json",
+      "outputSha256": "d025782454122b520bb86560eb01557cf95bbcbd3b373b9e34fcd7bfc7b331a9"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "create",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/export-batch-input.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "export-batch.json",
+      "outputSha256": "82a798f2cc7d74c0c65d4efb3c9f5f91bcec732e5616ae5e21a99720118b03d3"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "570e8968d0446ec629462db9817035c71f9cc791ce66f36f678607bb62691482"
+      ],
+      "exitCode": 0,
+      "outputFile": "batch-export.json",
+      "outputSha256": "0f4fa338ec3b44a4fa5c87c927ee8b7df2d527839d1cf21155e361b0c9d81a66"
+    },
+    {
+      "args": [
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "570e8968d0446ec629462db9817035c71f9cc791ce66f36f678607bb62691482",
+        "--format",
+        "csv"
+      ],
+      "exitCode": 0,
+      "outputFile": "batch-export.csv",
+      "outputSha256": "cd984c2c4b72316fe0586d4d96ec417f24f267eb0358ac852f10d8037c3c2b40"
+    },
+    {
+      "args": [
+        "application-jobs",
+        "history",
+        "--file",
+        "/tmp/flyrewheel-vllm-compat/flow/executed-job.json"
+      ],
+      "exitCode": 0,
+      "outputFile": "job-history.json",
+      "outputSha256": "79dfdf0ca85de9d5f1b7a74f5254c6939103434b39d016d86c3bcae2a9b162a0"
+    }
+  ],
+  "scope": {
+    "snapshotChangedFiles": 9,
+    "capturedSides": 18,
+    "capturedBytes": 131744,
+    "reviewedPaths": [
+      "vllm/utils/network_utils.py"
+    ],
+    "outOfScopePaths": [
+      "tools/pre_commit/mypy.py",
+      "vllm/utils/async_utils.py",
+      "vllm/utils/jsontree.py",
+      "vllm/utils/mem_utils.py",
+      "vllm/utils/nccl.py",
+      "vllm/utils/registry.py",
+      "vllm/utils/torch_utils.py",
+      "vllm/v1/pool/metadata.py"
+    ],
+    "anchorSignature": "def test_loopback_bind(address: str, family: int) -> bool:",
+    "excludedSnapshotSides": 0,
+    "otherRepositoryFiles": "not_fetched",
+    "fullRepositoryExecution": "not_performed",
+    "localGitCapture": "not_run-no-complete-history-checkout",
+    "snapshotReceipt": "package-integrity-only"
+  },
+  "artifacts": {
+    "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+    "baseRuleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+    "candidateRuleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+    "requestDigest": "07770c63b07547c495dfef5b55068f0e3d86ce085a0f1569a0c05f1d425e377a",
+    "comparisonDigest": "877b950ee6f1b0510306e431ea8e5842242c617ec1e3d5d5a7a630f831fc7a8c",
+    "decisionDigest": "b7ba5de7813d769ec7d63b549fee7ee4e448fa3c9b37000f0140b7b1b70bb8e0",
+    "basePlanDigest": "29c2ef05225212c8bbf3d8d7f0578beb977eb8e4f131aa7adca40fa75ff3e277",
+    "followupPlanDigest": "c70d4803aa928018200188b440db66150ec5bd96d7d323d1cd854b19bf951506",
+    "reviewId": "review_f158439cb184611fe491031459856334926076f1d59d92f529040275ca9337bb",
+    "jobDigest": "a4d1250df3570e88e80efb4ff776f1aec473acf6c1e6d68daef1f0d6d8782446",
+    "exportBatchDigest": "570e8968d0446ec629462db9817035c71f9cc791ce66f36f678607bb62691482"
+  },
+  "checks": [
+    "all official changed paths imported with real parent/head SHAs and modes",
+    "source bytes checked against Git blob SHA and SHA256",
+    "one real Python file selected; eight paths explicitly out of scope",
+    "governed baseline executed with authored response",
+    "feedback discovered and frozen",
+    "manual candidate evaluated and explicitly selected",
+    "followup governed review bound to exact version, snapshot and fixture",
+    "restarted execution reused one attempt",
+    "JSON and CSV exported same governed review"
+  ],
+  "evidence": {
+    "sourceBytes": "real official vLLM GitHub commit",
+    "ruleAndCandidate": "manually authored compatibility inputs",
+    "responses": "authored offline fixtures",
+    "feedbackAndDecision": "fixture declarations, not real developer judgments",
+    "modelExecution": "not_run",
+    "modelSubstituteRuntime": "not_used",
+    "semanticQuality": "not_evaluated",
+    "vllmCodeExecution": "not_performed",
+    "installation": "not_performed",
+    "W1": "not_read",
+    "credentials": "no user credentials read or supplied",
+    "publication": "not_performed"
+  },
+  "acquisitionNotes": [
+    "No independent vLLM checkout found in the inspected /workspace and /tmp directory inventory; existing research-named files were not reused.",
+    "Anonymous public GitHub HTTP requests with no Authorization header; standard environment network routing was used after direct stripped-environment networking refused connection.",
+    "Preparatory input script initially assumed all Python files were mode 100644; official diff identified tools/pre_commit/mypy.py as 100755. The imported package preserves that real mode. No target script was executed."
+  ],
+  "notCovered": [
+    "Full-history native local Git capture: not run; there is no complete checkout. Existing capture deliberately refuses shallow/partial repositories.",
+    "Whole repository context, all other commits, other vLLM versions and files outside this commit diff.",
+    "Python AST detector integration: rule has no detectionAssets; semantic fixtures exercise byte anchors and review/storage contracts.",
+    "Execution/import of vLLM, dependencies, tests, builds, GPU/inference/runtime behavior.",
+    "Real rule mining, model-generated revisions, real developer judgments or empirical quality evaluation."
+  ],
+  "result": {
+    "cliCommandsPassed": 28,
+    "cliCommandsFailed": 0,
+    "modelCalls": 0,
+    "productCodeDefectsObserved": 0,
+    "defectScope": "Only the exercised fixed-input import/plan/review/feedback/selection/export path",
+    "productChanges": "none"
+  },
+  "authoredInputsBundle": "vllm-953d9c8-authored-inputs.json",
+  "artifactHashes": {
+    "base-execution.json": "cdc6fd6ca9d3202f1c47f995bb9adc5320bc813f946d300f3791b35b1d640e61",
+    "base-imported.json": "bf9d1a1e776c49bdd7a682b670e8624ef03da646d60904f35b9fb0f90ff8674b",
+    "base-plan-input.json": "ea574466f0fb04d7238b86d8b056ac534f512649c8f3e01de6d9a179ac474187",
+    "base-plan.json": "c6c0a0cf9ef2302b245f8933b214df30cebcb0cdfa43bf52450f4be6a8b31845",
+    "base-register-input.json": "7fe55216044256551b9afaae85e6e8f4fc62d099d2996302addf4eedf2b38fb2",
+    "base-register.json": "f56e573e34eb4855e9efe94dcf3f9278da118dfbec613eb3784787df5be89345",
+    "base-review.json": "5f6defcf22c1d6e6df69c468d043c111e20230bdc088bfd1a86fc5e4ab630f87",
+    "base-rule.json": "304fb7a03b0a4155dfcc9fd6322c046a9abb40aea221ff339062d6409fce2645",
+    "base-shadow-input.json": "15c8687604f0930da97acb8ffbd697bbd987ac2fa91f595c13e7006f0a574f6d",
+    "base-shadow.json": "48bab74cf8af2a90011afe95a9102ee60b0982c42a3961a8ca93216bfbdb7962",
+    "baseline-authored-response.json": "f02f91045415077205893cf181a8922a9775d396ef06159b004c4a491d2e23e7",
+    "batch-export.csv": "cd984c2c4b72316fe0586d4d96ec417f24f267eb0358ac852f10d8037c3c2b40",
+    "batch-export.json": "0f4fa338ec3b44a4fa5c87c927ee8b7df2d527839d1cf21155e361b0c9d81a66",
+    "candidate-authored-response.json": "9eca55b1d30959b0b29f24178c2235b6ce913c28238a36f3ec359401b4ec6b2a",
+    "candidate-evaluation-review.json": "0a77d7cc2426725cc6be7e718e5574c153764340feaff530b7bc3bc36720ac44",
+    "candidate-imported.json": "7070866e689aabadeb76bf00d0f6dd10821f5c923fccac603280d726b8f511e0",
+    "candidate-register-input.json": "3697c40fa26773faf3feae410532fa4565aa372c0ebdf7da9d1c1bede4689997",
+    "candidate-register.json": "b4a6083e89a3d28a7cec6b7b9d2af3624fe23c9cb112d6236bd792278926a6c9",
+    "candidate-rule.json": "4072880b0027573061bb0e47f72aabb18668630cc56388822931261af1a68ca6",
+    "candidate-shadow-input.json": "736b056976bcd45b00b6a5114487d37f28d038a51772387a740c6c5ceaa62fde",
+    "candidate-shadow.json": "2f9be83479dcf7fe6d0b6e3ae03de3f9e31754d664b0ae7e21a7d4450f38abb8",
+    "candidate-structural.json": "422b3eb6e2aedaea73c4e6219d0d9232f94e88ae018d2c98f9cc7f96c30b1c59",
+    "cases.json": "c5f012173a3805c468b09cc0240da580fba32a14ef29b7e6225ef7629f3c1259",
+    "commands.json": "e3d6d62db1fa8b426670f48731121569186382db5a7164fd5713e15481332230",
+    "comparison-input.json": "8b73d283ab644359a9c39337169b6ad06e5d79205ebd8193362bae9644c8ca24",
+    "comparison.json": "d4c016264977243aa0fc75adc6690ed4409cea5c94ab1d17b0caffd68d2c97bc",
+    "decision-input.json": "d14a8f6042ef1498267d10a9f552c3f5d09ddb86e2824e3de2e7293f2e09d478",
+    "decision.json": "4e17e6ca2d8e235006bf241dde0b5e438312a453c0bf2929bc3195e9025c993c",
+    "executed-job.json": "cfd014e0295986759bfa69488b439b444e84fd748dbed0f57c3905979d7b96c7",
+    "explanation.json": "d025782454122b520bb86560eb01557cf95bbcbd3b373b9e34fcd7bfc7b331a9",
+    "export-batch-input.json": "07e5532de2f3878174ec06bae2e89c22d13d1a7ff123750a2fb62a11446ad2fb",
+    "export-batch.json": "82a798f2cc7d74c0c65d4efb3c9f5f91bcec732e5616ae5e21a99720118b03d3",
+    "feedback-input.json": "21b433d13bcd01a87c0cea6c3f48798ed5b4fb5386b9596cb67b2837cd97ad37",
+    "feedback-list.json": "74546a5405e7b6ef731f2c013e34e982f1881a83764ca3b5bb4a6cd1e8126fd5",
+    "feedback.json": "21b433d13bcd01a87c0cea6c3f48798ed5b4fb5386b9596cb67b2837cd97ad37",
+    "job-history.json": "79dfdf0ca85de9d5f1b7a74f5254c6939103434b39d016d86c3bcae2a9b162a0",
+    "next-execution.json": "e11f51521a36d6323045e4d2ff47553e62c30fb54721fedf4a26a2917bbd41e8",
+    "next-plan-input.json": "9a0a4c3c9d77d7c0b08932a528c33bdbe01393624bc7935166070c0c48e8ffc8",
+    "next-plan.json": "a2702678cab3a9ffb01445e4b2299a0680d0619936107b41bac70cf3e0ba5cb3",
+    "next-reopened-execution.json": "e11f51521a36d6323045e4d2ff47553e62c30fb54721fedf4a26a2917bbd41e8",
+    "next-review.json": "2b52ca5e87bd1489d3d30ea551069e90d9dc1b09018c72ab77546826b089d4f1",
+    "request-input.json": "976feee8346069a07df4fa38895ee62b6fe46d5ae2e3d3d753727d0e48eee2f3",
+    "request.json": "fcd62407675a86faf03c4f48161cd60843e1323b5f23c22cfe697153ba23aa22",
+    "snapshot-imported.json": "885d2f6bb3377fc90b45b7d5bae57f7fc42f19b5373c7eb9bd9715c06637b3f7",
+    "snapshot-input.json": "16b8e875f6b5ac80ebb175ca7d2ee342f3087875f7478699a68def9e524c3e77",
+    "snapshot-reopened.json": "885d2f6bb3377fc90b45b7d5bae57f7fc42f19b5373c7eb9bd9715c06637b3f7",
+    "structural.json": "fabd98d69e9d721608813a519810a709656024e16107044295c5ce4b7dafcce8",
+    "verification.json": "0e3c7ff823f23b30a5eb9d7735e5253e31b1d5471e0da369ef51dcbee087a104"
+  },
+  "comparisonSummary": {
+    "status": "compatible",
+    "preserved": 0,
+    "corrected": 2,
+    "regressed": 0,
+    "stillFailing": 0,
+    "inconclusive": 0
+  },
+  "exportResult": [
+    {
+      "index": 1,
+      "jobDigest": "a4d1250df3570e88e80efb4ff776f1aec473acf6c1e6d68daef1f0d6d8782446",
+      "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "workspaceId": "offline-no-vllm-execution",
+      "attempt": "initial",
+      "attempts": 1,
+      "state": "finished",
+      "outcomeStatus": "completed",
+      "reason": null,
+      "modelExecution": "not_run",
+      "cleanup": "verified",
+      "reviewId": "review_f158439cb184611fe491031459856334926076f1d59d92f529040275ca9337bb",
+      "findings": {
+        "violation": 0,
+        "safe": 1,
+        "unknown": 0,
+        "not_verified": 0
+      },
+      "recoveryAction": "inspect_existing_outcome",
+      "nextAction": "Inspect the recorded domain outcome. Re-delivery returns this outcome; it does not rerun generation or imply a candidate was produced."
+    }
+  ]
+}
