@@ -1,3 +1,5 @@
+import { seedConstruction } from './helpers/construction-family.js';
+import { registryRoot } from '../experiments/construction/registry.js';
 import { it,expect } from 'vitest';
 import { rmSync,readFileSync,writeFileSync,mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -6,13 +8,14 @@ import { digestOf } from '../src/core/identity.js';
 import { episodeRegistryRoot,registerEpisodeIndex,finalizeRegisteredEpisode,recoverRegisteredEpisode } from '../experiments/construction/episode-registry.js';
 function fixture(){
  const repository=`authored/index-${randomUUID()}`;
+ const {construction,families}=seedConstruction(repository);
  const plan={kind:'authored-episode-selection-plan',origin:'authored-fixture',repository,frozenAt:'2026-10-13T00:00:01Z',
- families:[{id:'f',representativeOrder:1,ruleDigest:digestOf('f')}],prs:[1,2].map(pr=>({pr,mergedAt:`2024-01-0${pr}T00:00:00Z`,packetDigest:digestOf(pr)}))};
- const cells=plan.prs.map(p=>({familyId:'f',ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr:p.pr,packetDigest:p.packetDigest,recordedAt:'2026-10-13T00:00:02Z',status:'completed',findings:[{path:'a.py',side:'after',start:1,end:1,claim:'authored'}]}));
+ construction,families,prs:[1,2].map(pr=>({pr,mergedAt:`2024-01-0${pr}T00:00:00Z`,packetDigest:digestOf(pr)}))};
+ const cells=plan.prs.map(p=>({familyId:plan.families[0].id,ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr:p.pr,packetDigest:p.packetDigest,recordedAt:'2026-10-13T00:00:02Z',status:'completed',findings:[{path:'a.py',side:'after',start:1,end:1,claim:'authored'}]}));
  const dir=join(episodeRegistryRoot,digestOf({repository}));
  const index=()=>registerEpisodeIndex(plan,cells,'2026-10-13T00:00:03Z');
- const feedback=(lock:ReturnType<typeof index>,verdict='unknown')=>[{origin:'authored-fixture',indexLockDigest:lock.digest,familyId:'f',findingDigest:lock.indices[0].findingDigest,lockedAt:'2026-10-13T00:00:04Z',verdict,otherGates:'passed-authored',reason:'synthetic'}];
- return {repository,plan,cells,dir,index,feedback,clean:()=>rmSync(dir,{recursive:true,force:true})};
+ const feedback=(lock:ReturnType<typeof index>,verdict='unknown')=>[{origin:'authored-fixture',indexLockDigest:lock.digest,familyId:plan.families[0].id,findingDigest:lock.indices[0].findingDigest,lockedAt:'2026-10-13T00:00:04Z',verdict,otherGates:'passed-authored',reason:'synthetic'}];
+ return {repository,plan,cells,dir,index,feedback,clean:()=>{rmSync(dir,{recursive:true,force:true});rmSync(join(registryRoot,digestOf({repository})),{recursive:true,force:true});}};
 }
 it('persists first index across calls and refuses changed plans or cells',()=>{
  const s=fixture();try{const first=s.index();expect(s.index()).toEqual(first);

@@ -1,13 +1,22 @@
-import { it,expect } from 'vitest';
+import { randomUUID } from 'node:crypto';
+import { rmSync } from 'node:fs';
+import { join } from 'node:path';
+import { registryRoot } from '../experiments/construction/registry.js';
+import { seedConstruction } from './helpers/construction-family.js';
+import { it,expect,afterEach } from 'vitest';
 import { digestOf } from '../src/core/identity.js';
 import { selectIndices,selectEpisodes } from '../experiments/construction/episode-selection.js';
 const time=(n:number)=>`2026-10-13T00:00:0${n}Z`;
+const repositories:string[]=[];
+afterEach(()=>{for(const repository of repositories.splice(0))rmSync(join(registryRoot,digestOf({repository})),{recursive:true,force:true});});
 function fixture(){
- const plan={kind:'authored-episode-selection-plan',origin:'authored-fixture',repository:'authored/example',frozenAt:time(1),families:[{id:'f',representativeOrder:1,ruleDigest:digestOf('f')}],
+ const repository=`authored/selector-${randomUUID()}`;repositories.push(repository);
+ const {construction,families}=seedConstruction(repository);
+ const plan={kind:'authored-episode-selection-plan',origin:'authored-fixture',repository,frozenAt:time(1),construction,families,
  prs:[1,2,3].map(pr=>({pr,mergedAt:`2024-01-0${pr}T00:00:00Z`,packetDigest:digestOf(pr)}))};
  const finding=(path:string)=>({path,side:'after',start:1,end:2,claim:'authored claim only'});
- const cell=(pr:number,findings:unknown[]=[])=>({familyId:'f',ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr,packetDigest:digestOf(pr),recordedAt:time(2),status:'completed',findings});
- const feedback=(lock:ReturnType<typeof selectIndices>,verdict='unknown')=>({origin:'authored-fixture',indexLockDigest:lock.digest,familyId:'f',findingDigest:lock.indices[0].findingDigest,lockedAt:time(4),verdict,otherGates:'passed-authored',reason:'synthetic judgment, not human'});
+ const cell=(pr:number,findings:unknown[]=[])=>({familyId:plan.families[0].id,ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr,packetDigest:digestOf(pr),recordedAt:time(2),status:'completed',findings});
+ const feedback=(lock:ReturnType<typeof selectIndices>,verdict='unknown')=>({origin:'authored-fixture',indexLockDigest:lock.digest,familyId:plan.families[0].id,findingDigest:lock.indices[0].findingDigest,lockedAt:time(4),verdict,otherGates:'passed-authored',reason:'synthetic judgment, not human'});
  return {plan,finding,cell,feedback};
 }
 it('locks first finding by canonical anchor order independent of cell input order',()=>{

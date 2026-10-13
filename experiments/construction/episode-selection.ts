@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { digestOf } from '../../src/core/identity.js';
+import { ConstructionBindingSchema,FamilyBindingSchema,validateFamilyProvenance } from './family-provenance.js';
 import { DigestSchema } from '../../src/core/model.js';
 const Text=z.string().min(1).max(4096);
 const Time=z.string().datetime({offset:true});
 export const EpisodePlanSchema=z.object({kind:z.literal('authored-episode-selection-plan'),origin:z.literal('authored-fixture'),
   repository:Text.refine(s=>s.startsWith('authored/')),frozenAt:Time,
-  families:z.array(z.object({id:Text,representativeOrder:z.number().int().positive(),ruleDigest:DigestSchema}).strict()).min(1),
+  construction:ConstructionBindingSchema,families:z.array(FamilyBindingSchema).min(1),
   prs:z.array(z.object({pr:z.number().int().positive(),mergedAt:Time,packetDigest:DigestSchema}).strict()).min(1),
 }).strict().superRefine((p,ctx)=>{
   if(new Set(p.families.map(f=>f.ruleDigest)).size!==p.families.length)ctx.addIssue({code:'custom',message:'duplicate exact rule family'});
@@ -22,7 +23,7 @@ const Cell=z.object({familyId:Text,ruleDigest:DigestSchema,planDigest:DigestSche
   recordedAt:Time,status:z.enum(['completed','failed','missing']),findings:z.array(z.unknown()),
 }).strict().refine(c=>c.status==='completed'||c.findings.length===0,'failed/missing response cannot assert findings');
 export function selectIndices(planInput:unknown,rawCells:unknown[],lockedAt:string){
- const plan=EpisodePlanSchema.parse(planInput);Time.parse(lockedAt);
+ const plan=EpisodePlanSchema.parse(planInput);validateFamilyProvenance(plan);Time.parse(lockedAt);
  if(Date.parse(lockedAt)<=Date.parse(plan.frozenAt))throw Error('index lock must follow plan freeze');
  const keyed=new Map<string,unknown>();
  for(const raw of rawCells){

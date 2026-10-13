@@ -1,5 +1,9 @@
 import { mkdirSync,writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fixture } from './fixture.js';
+import { freeze } from './contracts.js';
+import { register } from './registry.js';
+import { constructedFamilies } from './family-provenance.js';
 import { digestOf } from '../../src/core/identity.js';
 import { registerEpisodeIndex,finalizeRegisteredEpisode,recoverRegisteredEpisode } from './episode-registry.js';
 const argv=process.argv.slice(2);
@@ -14,15 +18,21 @@ if(argv[0]==='--recover'){
 const [directory,...extra]=argv;
 if(!directory||extra.length)throw Error('Usage: episode-replay.ts NEW_DIRECTORY');
 mkdirSync(directory,{mode:0o700});
-const plan={kind:'authored-episode-selection-plan',origin:'authored-fixture',repository:'authored/episode-demo',
- frozenAt:'2026-10-13T00:00:01Z',families:[{id:'fixture-family',representativeOrder:1,ruleDigest:digestOf('authored invariant')}],
+const repository='authored/episode-linked-demo-v1';
+const config=fixture();config.repository=repository;
+const constructionFreeze=freeze(config,'2026-10-13T00:00:00Z');
+const candidate={path:'fixture.py',side:'after',start:1,end:1,scope:'authored',applicability:'operation',invariant:'guard protects operation',exception:'none',requiredContext:[]};
+register(constructionFreeze,config.roster.map((p,i)=>({pr:p.pr,packetDigest:p.packetDigest,outcome:'completed',candidates:i===0?[candidate]:[]})));
+const {construction,families}=constructedFamilies(repository);
+const plan={kind:'authored-episode-selection-plan',origin:'authored-fixture',repository,
+ frozenAt:'2026-10-13T00:00:01Z',construction,families,
  prs:[1,2,3].map(pr=>({pr,mergedAt:`2024-01-0${pr}T00:00:00Z`,packetDigest:digestOf(`authored-packet-${pr}`)}))};
 const finding={path:'fixture.py',side:'after',start:1,end:1,claim:'authored finding, not an empirical observation'};
-const cells=plan.prs.map((p,i)=>({familyId:'fixture-family',ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr:p.pr,packetDigest:p.packetDigest,
+const cells=plan.prs.map((p,i)=>({familyId:plan.families[0].id,ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr:p.pr,packetDigest:p.packetDigest,
  recordedAt:'2026-10-13T00:00:02Z',status:'completed',findings:i===0?[]:[finding]}));
 const lock=registerEpisodeIndex(plan,cells,'2026-10-13T00:00:03Z');
 writeFileSync(join(directory,'index-lock.json'),JSON.stringify(lock,null,2)+'\n',{flag:'wx',mode:0o600});
-const feedback=[{origin:'authored-fixture',indexLockDigest:lock.digest,familyId:'fixture-family',
+const feedback=[{origin:'authored-fixture',indexLockDigest:lock.digest,familyId:plan.families[0].id,
  findingDigest:lock.indices[0].findingDigest,lockedAt:'2026-10-13T00:00:04Z',verdict:'unknown',
  otherGates:'blocked',reason:'Synthetic unresolved feedback exercises no-replacement path; not a human label'}];
 writeFileSync(join(directory,'feedback.authored.json'),JSON.stringify(feedback,null,2)+'\n',{flag:'wx',mode:0o600});
