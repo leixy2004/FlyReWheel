@@ -1,10 +1,10 @@
 import { describe,it,expect } from 'vitest';
-import { mkdtempSync,readFileSync,rmSync } from 'node:fs';
+import { mkdtempSync,readFileSync,writeFileSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { freeze,validateFreeze,readiness,ConfigSchema } from '../experiments/construction/contracts.js';
 import { fixture } from '../experiments/construction/fixture.js';
-import { replay,writeReplay } from '../experiments/construction/runner.js';
+import { replay,writeReplay,verifyReplay } from '../experiments/construction/runner.js';
 const time='2026-10-13T00:00:01Z';
 const candidate=(path:string)=>({path,side:'after',start:1,end:2,scope:'authored',applicability:'operation',invariant:'guard protects operation',exception:'none',requiredContext:[]});
 const receipt=(c=fixture(),candidates:unknown[]=[])=>({pr:1,packetDigest:c.roster[0].packetDigest,outcome:'completed',candidates});
@@ -31,6 +31,12 @@ describe('offline construction freeze',()=>{
   expect(a.rows[0].candidates).toMatchObject([{candidate:{path:'a.py'},disposition:'retained_pending_independent_admission'},{disposition:'cap_excluded'}]);
   expect(a.empiricalAdmission).toBe(false);
  });
+ it('marks exact duplicate candidates without counting another retained rule',()=>{
+  const c=fixture();const a=candidate('a.py');
+  expect(replay(freeze(c,time),[receipt(c,[a,a])]).rows[0].candidates).toMatchObject([
+    {disposition:'retained_pending_independent_admission'},{disposition:'duplicate_excluded'}]);
+  expect(readiness(c).status).toBe('authored-config-valid-time-check-pending');
+ });
  it('malformed or interrupted attempt fails without replacing candidates',()=>{
   const c=fixture(),f=freeze(c,time);
   expect(replay(f,[receipt(c,[candidate('a.py'),candidate('../invalid')])]).rows[0].status).toBe('failed');
@@ -42,6 +48,13 @@ describe('offline construction freeze',()=>{
   expect(()=>replay(f,[{...r,pr:2}])).toThrow(/prefix/);
   expect(()=>replay(f,[{...r,packetDigest:'0'.repeat(64)}])).toThrow(/binding/);
   c.limits.responseBytes=10;expect(()=>replay(freeze(c,time),[r])).toThrow(/budget/);
+ });
+ it('verifies persisted replay and rejects report alteration',()=>{
+  const parent=mkdtempSync(join(tmpdir(),'construction-'));const out=join(parent,'run');
+  try {writeReplay(out,freeze(fixture(),time),[]);expect(verifyReplay(out).status).toBe('verified-authored-only');
+    const report=JSON.parse(readFileSync(join(out,'report.json'),'utf8'));report.empiricalAdmission=true;
+    writeFileSync(join(out,'report.json'),JSON.stringify(report));expect(()=>verifyReplay(out)).toThrow(/report mismatch/);
+  }finally{rmSync(parent,{recursive:true,force:true});}
  });
  it('persists failure and refuses overwrite of consumed run directory',()=>{
   const parent=mkdtempSync(join(tmpdir(),'construction-'));const out=join(parent,'run');

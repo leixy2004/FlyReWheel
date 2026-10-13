@@ -38,7 +38,7 @@ export function readiness(input: unknown) {
   if(c.exposure.firstW1At!==null) blockers.push('W1 already exposed');
   if(c.exposure.auditDigest===null) blockers.push('exposure audit missing');
   for(const r of c.roster) if(!r.priorRejected && (!r.packetDigest || r.missingEvidence.length)) blockers.push(`PR ${r.pr}: incomplete source packet`);
-  return { status: blockers.length ? 'blocked' as const : 'authored-ready' as const, blockers, configDigest:digestOf(c), modelCalls:0 };
+  return { status: blockers.length ? 'blocked' as const : 'authored-config-valid-time-check-pending' as const, blockers, configDigest:digestOf(c), modelCalls:0 };
 }
 const FreezeSchema=z.object({ kind:z.literal('authored-construction-freeze'), config:ConfigSchema,
   configDigest:DigestSchema, frozenAt:Time, digest:DigestSchema }).strict();

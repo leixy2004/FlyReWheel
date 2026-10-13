@@ -221,3 +221,16 @@ Before execution, complete and hash one operational configuration for this selec
 ## Companion documents
 
 The [manuscript](manuscript-draft.md#6-evaluation-protocol), [readiness checklist](manuscript-readiness.md), [pilot inventory](pilot-feasibility.md), and [research packet specification](experiment-protocol/README.md) use this same selected route. Implementation descriptions and historical evidence retain their original commit-specific scope.
+
+### Offline construction execution status
+
+The [construction configuration and execution status](construction-execution-status.md)
+now documents an offline authored harness for strict configuration validation,
+freeze/source-digest binding, ordered attempt slots, candidate retention, failure
+records and reproducible report verification. Public-source freezes and model
+execution remain blocked. These checks do not establish semantic source support,
+independent labels, cross-directory no-retry enforcement or empirical effectiveness.
+The planned H/U claim remains single-update constrained transfer on predefined
+opportunities under shared diagnosis, representation and gate, not autonomous
+issue discovery. The status note lists concrete remaining construction, episode
+selection and independent output-support gates that can proceed without login.

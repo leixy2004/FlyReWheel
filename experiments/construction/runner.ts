@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 import { digestOf } from '../../src/core/identity.js';
@@ -33,7 +33,7 @@ export function replay(frozen:unknown, inputs:unknown[]) {
     const candidates=parsed.map(c=>c.data!).sort((a,b)=>Buffer.compare(Buffer.from(a.path),Buffer.from(b.path)) ||
       (a.side===b.side?0:a.side==='before'?-1:1)||a.start-b.start||a.end-b.end||digestOf(a).localeCompare(digestOf(b)));
     return {...base,status:candidates.length?'provisional_rule':'no_rule',candidates:candidates.map((c,i)=>({candidate:c,
-      disposition:i===0?'retained_pending_independent_admission':'cap_excluded',
+      disposition:i===0?'retained_pending_independent_admission':candidates.slice(0,i).some(prior=>digestOf(prior)===digestOf(c))?'duplicate_excluded':'cap_excluded',
       familyKey:digestOf({repository:f.config.repository,scope:c.scope,applicability:c.applicability,invariant:c.invariant,exception:c.exception,requiredContext:c.requiredContext})}))};
   });
   return {kind:'authored-construction-replay',freezeDigest:f.digest,rows,modelCalls:0,independentLabels:0,empiricalAdmission:false};
@@ -51,4 +51,14 @@ export function writeReplay(directory:string,frozen:unknown,inputs:unknown[]) {
     writeFileSync(join(directory,'failure.json'),JSON.stringify({status:'failed',reason:e instanceof Error?e.message:'unknown failure',modelCalls:0}),{flag:'wx',mode:0o600});
     throw e;
   }
+}
+
+export function verifyReplay(directory:string) {
+  const reservation=JSON.parse(readFileSync(join(directory,'reservation.json'),'utf8'));
+  const {frozen,inputs}=JSON.parse(readFileSync(join(directory,'inputs.json'),'utf8'));
+  const actual=JSON.parse(readFileSync(join(directory,'report.json'),'utf8'));
+  if(reservation.inputDigest!==digestOf(inputs)) throw Error('reserved input digest mismatch');
+  const expected=replay(frozen,inputs);
+  if(digestOf(actual)!==digestOf(expected)) throw Error('replay report mismatch');
+  return {status:'verified-authored-only',reportDigest:digestOf(expected),modelCalls:0};
 }
