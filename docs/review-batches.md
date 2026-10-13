@@ -68,3 +68,43 @@ completed-result reuse, database reopen, concurrent ownership, cancellation,
 missing-runtime blocking, input rejection, immutability and CLI progress output.
 The database migration suite covers migration compatibility. Build and typecheck
 are required before committing. No old research results or W1 inputs are used.
+
+## Descriptive JSON and CSV export
+
+The independent export action reads existing results and provides a smaller
+report suitable for local sharing or spreadsheet inspection:
+
+```sh
+node dist/cli.js reviews batch export --db ./state --digest <batch-sha256> --out report.json
+node dist/cli.js reviews batch export --db ./state --digest <batch-sha256> --format csv --out report.csv
+```
+
+Each row includes job/rule/snapshot identities, attempt and execution count,
+state, failure reason, model-execution boundary, cleanup, review ID, stored finding
+counts and recovery instructions. Unreviewed items have null finding counts, not
+zero violations; active jobs without results have unknown model execution. A
+completed authored fixture remains `modelExecution: not_run`. Counts describe
+stored declarations, not ground truth, empirical quality or successful repair.
+
+JSON additionally includes an exact `retrySelection` suitable for the API's
+options argument. It is a suggestion for inspection and explicit selection, never
+an automatic retry instruction. It contains only currently retryable batch members.
+CSV quotes fields, preserves multiline text and neutralizes spreadsheet formula
+prefixes. JSON retains original text. Both formats leave domain records unchanged
+apart from the existing expired-lease reconciliation performed by status reads.
+A report reads items sequentially; it is not a transactional snapshot across jobs.
+
+Export was implemented after batch commit `fa843e3`. Its focused check exercises
+an authored runtime failure, a completed SDK fixture review and an active owner,
+then exports JSON and CSV through fresh compiled CLI processes against the closed
+persistent database. It verifies exact output, failure-only retry selection and
+formula quoting; no inference is started by export. Reproduce the compiled check:
+
+```sh
+npm run build
+REVIEW_BATCH_COMPILED_SMOKE=1 npm test -- tests/review-batch-export.test.ts
+```
+
+Without that flag, the test runs the source CLI so a normal test run does not
+require preexisting build artifacts. This retains the same authored evidence
+boundary as batch execution.

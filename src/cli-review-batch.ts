@@ -1,3 +1,6 @@
+import { writeFile } from 'node:fs/promises';
+import { Option } from 'commander';
+import { exportReviewBatch, reviewBatchCsv } from './review-batch-export.js';
 import type { Command } from 'commander';
 import { databaseCommand, storeFor } from './cli-database.js';
 import { ReviewBatchInputSchema, reviewBatchStatus } from './review-batch.js';
@@ -18,4 +21,18 @@ export function registerReviewBatchCommands(reviews: Command, json: (path: strin
     const store = await storeFor(options);
     try { await output(await reviewBatchStatus(store, options.digest), options.out); } finally { await store.close(); }
   });
+  databaseCommand(batch, 'export').requiredOption('--digest <sha256>')
+    .addOption(new Option('--format <format>', 'JSON report or spreadsheet CSV').choices(['json', 'csv']).default('json'))
+    .option('--out <file>').action(async options => {
+      const store = await storeFor(options);
+      try {
+        const report = await exportReviewBatch(store, options.digest);
+        if (options.format === 'json') await output(report, options.out);
+        else {
+          const csv = reviewBatchCsv(report);
+          if (options.out) await writeFile(options.out, csv); else process.stdout.write(csv);
+        }
+      } finally { await store.close(); }
+    });
+
 }
