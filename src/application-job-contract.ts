@@ -16,7 +16,7 @@ export const ApplicationJobSchema = z.discriminatedUnion('kind', [
   z.object({ ...common, kind: z.literal('semantic-review'), ruleDigest: DigestSchema, snapshotDigest: DigestSchema,
     repositoryContextDigests: RepositoryContextDigestSetSchema.optional(), governancePlanDigest: DigestSchema.optional(), continuationDigest: DigestSchema.optional(), offlineFixtureDigest: DigestSchema.optional() }).strict()
     .refine(value => !(value.governancePlanDigest && value.continuationDigest), 'Continuation is an explicit replay, not a governed review')
-    .refine(value => !value.offlineFixtureDigest || (!value.governancePlanDigest && !value.evaluationExportId), 'Offline fixture jobs cannot claim governed or evaluation workspace execution'),
+    .refine(value => !value.offlineFixtureDigest || !value.evaluationExportId, 'Offline fixture jobs cannot claim evaluation workspace execution'),
   z.object({ ...common, kind: z.literal('revision-generation'), requestDigest: DigestSchema,
     snapshotDigest: DigestSchema, candidateCreatedAt }).strict(),
 ]);

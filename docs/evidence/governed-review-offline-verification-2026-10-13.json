@@ -1,0 +1,255 @@
+{
+  "status": "passed",
+  "directory": "/tmp/flyrewheel-governed-offline-check/flow",
+  "commands": [
+    {
+      "args": [
+        "revisions",
+        "demo"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "revision-demo-negative-label"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "explain",
+        "--digest",
+        "3a5ebf5c7204bd56a1dd44a793ac7152120c870e3afc6bfb2bb3654cea51d25e",
+        "--feedback-id",
+        "revision-demo-negative-label",
+        "--repository",
+        "synthetic:revision-comparison-demo",
+        "--path",
+        "src/negative.ts"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "rules",
+        "show",
+        "--digest",
+        "645830f1d145910b2684b087e48aaea7dbbfdddea30c4447de0b8491972dcdd4"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_59cd95c354fc7d5655731852828d4eed03663f604d6d80c5bbfae1b09d06ab77"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-governed-offline-check/flow/offline-register.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-governed-offline-check/flow/offline-select.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "/tmp/flyrewheel-governed-offline-check/flow/plan-input.json",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "86089c2cf8c2a8d0134eb87b2e3538f486b6c163afa5c31038f3747f552f3a17",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/changed-response.json"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "status",
+        "--digest",
+        "86089c2cf8c2a8d0134eb87b2e3538f486b6c163afa5c31038f3747f552f3a17"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "86089c2cf8c2a8d0134eb87b2e3538f486b6c163afa5c31038f3747f552f3a17",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_7302351ec090de7bdf25761a9f750fca04e0efcb75376111d5d082bdcdeddd51"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "86089c2cf8c2a8d0134eb87b2e3538f486b6c163afa5c31038f3747f552f3a17",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "plan",
+        "--file",
+        "/tmp/flyrewheel-governed-offline-check/flow/pending-input.json",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "apply",
+        "--file",
+        "/tmp/flyrewheel-governed-offline-check/flow/offline-suspend.json"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "07cfe1783873f8e261700e662b445a9982aa1122ccc2f655fb6911f234b76216",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "status",
+        "--digest",
+        "07cfe1783873f8e261700e662b445a9982aa1122ccc2f655fb6911f234b76216"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "governed",
+        "run",
+        "--digest",
+        "86089c2cf8c2a8d0134eb87b2e3538f486b6c163afa5c31038f3747f552f3a17",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-governed-offline-check/flow/authored-response.json"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_7302351ec090de7bdf25761a9f750fca04e0efcb75376111d5d082bdcdeddd51"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0
+    }
+  ],
+  "checks": [
+    "feedback/comparison trace",
+    "explicit compatible candidate selection",
+    "plan freezes authored response digest",
+    "changed response rejected before claim",
+    "governed execution records exact admission",
+    "review binds selected rule, snapshot, fixture and application job",
+    "restart reuses completed output",
+    "suspension rejects pending and completed plan execution without rewriting review"
+  ],
+  "source": "synthetic authored demo source and imported candidate",
+  "modelExecution": "not_run",
+  "modelSubstituteRuntime": "not_used",
+  "judgments": "explicit authored offline fixtures",
+  "developerFeedback": "fixture-only-not-real-human",
+  "productionActivation": "not_performed",
+  "workspaceExecution": "not_run",
+  "credentials": "not_read",
+  "W1": "not_read",
+  "implementationBase": "6c22f5f9f0d38bbccb26011e6c1c52078cc7da13",
+  "validation": {
+    "targetedTests": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "typecheck": "passed",
+    "build": "passed"
+  }
+}

@@ -72,6 +72,10 @@ Current selection can change later; use `reviews governed plan` and its existing
 admission checks when preparing execution. Eligibility is only for local
 experimental review, never production certification.
 
+For subsequent local execution without manual replay, create a new
+[explicitly offline governed plan](governed-review-offline.md) and use
+`reviews governed run --offline-fixtures`.
+
 ## Verification and limits
 
 [Recorded acceptance](evidence/revision-explanation-verification-2026-10-13.json)

@@ -1,3 +1,5 @@
+import { bindGovernedOfflineFixtures, runGovernedOfflineReview } from './governed-review-offline.js';
+import { loadBatchFixtures } from './review-batch-cli-execution.js';
 import { registerFeedbackInspectionCommands } from './cli-feedback-inspection.js';
 import { registerLocalDevelopmentWorkspaceCommands } from './cli-local-development-workspace.js';
 import { registerReviewBatchCommands } from './cli-review-batch.js';
@@ -296,13 +298,27 @@ databaseCommand(reviews, 'run').description('Explicit digest historical/manual r
 registerReviewBatchCommands(reviews, json, output);
 const governedReviews = reviews.command('governed').description('Freeze and dispatch bounded local governance-selected reviews; no implicit activation or publication');
 databaseCommand(governedReviews, 'plan').requiredOption('--file <file>', 'Strict plan input: id, repository, snapshotDigest, literal paths and trusted workspaceId')
+  .option('--offline-fixtures <files...>', 'Explicit authored response files; freeze exact digests for every selected rule')
   .option('--out <file>').action(async options => {
-    const input = GovernedReviewPlanInputSchema.parse(await json(options.file));
+    const raw = GovernedReviewPlanInputSchema.parse(await json(options.file));
+    const input = options.offlineFixtures ? bindGovernedOfflineFixtures(raw, await loadBatchFixtures(options.offlineFixtures, json)) : raw;
     const store = await storeFor(options);
     try {
       const stored = await store.createGovernedReviewPlan(input);
       await output({ ...stored, jobs: governedReviewJobs(stored), execution: 'not_run' }, options.out);
     } finally { await store.close(); }
+  });
+databaseCommand(governedReviews, 'run').description('Execute an explicitly fixture-bound governed plan locally; rechecks selection, no model or workspace')
+  .requiredOption('--digest <sha256>').requiredOption('--offline-fixtures <files...>', 'Exact authored files bound when the plan was created')
+  .option('--out <file>').action(async options => {
+    const fixtures = await loadBatchFixtures(options.offlineFixtures, json), store = await storeFor(options);
+    const controller = new AbortController(), abort = () => controller.abort();
+    process.once('SIGINT', abort); process.once('SIGTERM', abort);
+    try {
+      const result = await runGovernedOfflineReview(store, options.digest, fixtures, controller.signal);
+      await output(result, options.out);
+      if (result.jobs.some(job => job.result?.status !== 'completed')) process.exitCode = 2;
+    } finally { process.removeListener('SIGINT', abort); process.removeListener('SIGTERM', abort); await store.close(); }
   });
 databaseCommand(governedReviews, 'show').requiredOption('--digest <sha256>').option('--out <file>').action(async options => {
   const store = await storeFor(options);
@@ -318,7 +334,8 @@ databaseCommand(governedReviews, 'enqueue', { postgresOnly: true }).requiredOpti
   const store = await openSelectedStore(selection);
   try {
     // Validate before queue startup/DDL; enqueue repeats the check and workers check at admission.
-    await store.requireCurrentGovernedReviewPlan(options.digest);
+    const plan = await store.requireCurrentGovernedReviewPlan(options.digest);
+    if (plan.plan.input.offlineFixtures) throw new Error('Use reviews governed run for authored offline plans');
     await output(await withSelectedQueue(selection, boss => enqueueGovernedReviewPlan(store, boss, options.digest)), options.out);
   } finally { await store.close(); }
 });

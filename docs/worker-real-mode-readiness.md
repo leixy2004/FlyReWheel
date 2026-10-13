@@ -18,6 +18,7 @@ Supplying both a configured and injected resolver is rejected as ambiguous.
 | Entry point | Actual execution capability |
 | --- | --- |
 | `reviews run` | Structural review or explicit offline fixtures; no worker-config option |
+| `reviews governed run --offline-fixtures ...` | Explicit fixture-bound governed plan, with actual local admission; no workspace/model receipt |
 | `reviews batch run --offline-fixtures ...` | Explicit fixture review; no workspace/model receipt |
 | `reviews batch run --config ...` | Existing worker composition; built-in prepared resolver now available, production authority still required |
 | `node dist/worker.js` | Existing queue service with application runtime blocked unless trusted service bootstrap is used |

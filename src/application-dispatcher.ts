@@ -80,6 +80,8 @@ export function createApplicationJobDispatcher(dependencies: ApplicationDispatch
         const completed = await store.completeOfflineSemanticReviewJob(job, owner, fixtures, signal);
         return applicationJobSummary(completed.result!);
       } catch (error) {
+        const rejected = job.governancePlanDigest ? governanceRejection(error) : undefined;
+        if (rejected) return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started', reason: rejected });
         const persistence = error instanceof Error && 'code' in error && error.code === 'OFFLINE_REVIEW_PERSISTENCE_FAILED';
         return retry({ status: 'failed', modelExecution: 'not_run', cleanup: 'not_started', reason: signal.aborted ? 'cancelled' : persistence ? 'persistence_failed' : 'input_rejected' });
       }
