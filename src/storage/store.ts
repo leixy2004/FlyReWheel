@@ -96,6 +96,12 @@ async function one<T extends Record<string, unknown>>(tx: Queryable, sql: string
 }
 
 /** Page options only affect discovery; every returned record still uses its exact getter validator. */
+export const ReviewFeedbackPageSchema = z.object({
+  ruleDigest: DigestSchema.optional(), reviewId: LocalReviewFeedbackSchema.shape.reviewId.optional(),
+  findingId: LocalReviewFeedbackSchema.shape.findingId.optional(), source: LocalReviewFeedbackSchema.shape.source.optional(),
+  after: IdSchema.optional(), limit: z.number().int().min(1).max(100).default(20),
+}).strict();
+
 export const RevisionCatalogPageSchema = z.object({
   requestDigest: DigestSchema.optional(), id: IdSchema.optional(), after: DigestSchema.optional(),
   limit: z.number().int().min(1).max(100).default(20),
@@ -792,6 +798,21 @@ export class QualEvoStore {
       const rows = (await tx.query<ReviewFeedbackRow>('SELECT * FROM qe_semantic_review_feedback WHERE finding_id=$1 ORDER BY id', [id])).rows;
       const feedback = rows.map(row => this.checkReviewFeedbackRow(row, finding));
       return { finding, feedback, verdict: deriveLocalReviewVerdict(feedback), identityVerification: 'caller-declared-unverified' };
+    });
+  }
+  async getReviewFeedback(id: string): Promise<LocalReviewFeedback> { return this.readReviewFeedback(this.db, id); }
+  async listReviewFeedback(input: z.input<typeof ReviewFeedbackPageSchema> = {}): Promise<LocalReviewFeedback[]> {
+    const options = ReviewFeedbackPageSchema.parse(input);
+    return this.db.transaction(async tx => {
+      const rows = (await tx.query<{ id: string }>(`SELECT id FROM qe_semantic_review_feedback
+        WHERE ($1::text IS NULL OR rule_digest=$1) AND ($2::text IS NULL OR review_id=$2)
+          AND ($3::text IS NULL OR finding_id=$3) AND ($4::text IS NULL OR payload->>'source'=$4)
+          AND ($5::text IS NULL OR id>$5) ORDER BY id LIMIT $6`,
+        [options.ruleDigest ?? null, options.reviewId ?? null, options.findingId ?? null,
+          options.source ?? null, options.after ?? null, options.limit])).rows;
+      const feedback: LocalReviewFeedback[] = [];
+      for (const row of rows) feedback.push(await this.readReviewFeedback(tx, row.id));
+      return feedback;
     });
   }
   async appendReviewFeedback(input: LocalReviewFeedback): Promise<LocalReviewFeedback> {

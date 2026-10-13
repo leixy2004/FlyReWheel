@@ -1,3 +1,4 @@
+import { registerFeedbackInspectionCommands } from './cli-feedback-inspection.js';
 import { registerLocalDevelopmentWorkspaceCommands } from './cli-local-development-workspace.js';
 import { registerReviewBatchCommands } from './cli-review-batch.js';
 import { registerReviewContinuationCommands } from './cli-review-continuation.js';
@@ -337,6 +338,7 @@ databaseCommand(reviews, 'list').option('--rule-digest <sha256>').option('--snap
 databaseCommand(reviews, 'finding').requiredOption('--id <finding-id>').option('--out <file>')
   .action(async options => { const store = await storeFor(options); try { await output(await store.getReviewFinding(options.id), options.out); } finally { await store.close(); } });
 const feedback = cli.command('feedback').description('Append exact local finding feedback; fixture and caller-declared human sources stay separate');
+registerFeedbackInspectionCommands(feedback, output);
 databaseCommand(feedback, 'add').requiredOption('--file <file>').option('--out <file>')
   .action(async options => {
     const value = LocalReviewFeedbackSchema.parse(await json(options.file));

@@ -320,3 +320,27 @@ it('rejects impossible stored asset coverage even with the original review ID an
   expect(await store.getSemanticReview(review.id)).toEqual(review);
   expect(await store.listSemanticReviews()).toEqual([review]);
 }, 30_000);
+
+it('discovers exact feedback across reviews with intersecting filters and ID pagination for revision selection', async () => {
+  const f = await fixture(), first = await f.store.runSemanticReview(f.runInput);
+  const second = await f.store.runSemanticReview({ ...f.runInput, attempt: 'feedback-catalog' });
+  const a = await f.store.appendReviewFeedback(feedback(first.findings[0], 'catalog-a'));
+  const b = await f.store.appendReviewFeedback(feedback(first.findings[1], 'catalog-b', { source: 'local-human-declared' }));
+  const c = await f.store.appendReviewFeedback(feedback(second.findings[0], 'catalog-c'));
+  expect(await f.store.listReviewFeedback({ ruleDigest: f.rule.digest })).toEqual([a, b, c]);
+  expect(await f.store.listReviewFeedback({ reviewId: first.id, source: 'fixture' })).toEqual([a]);
+  expect(await f.store.listReviewFeedback({ findingId: b.findingId, source: 'local-human-declared' })).toEqual([b]);
+  expect(await f.store.listReviewFeedback({ reviewId: second.id, findingId: b.findingId })).toEqual([]);
+  expect(await f.store.listReviewFeedback({ ruleDigest: 'f'.repeat(64) })).toEqual([]);
+  expect(await f.store.listReviewFeedback({ limit: 1 })).toEqual([a]);
+  expect(await f.store.listReviewFeedback({ after: a.id, limit: 1 })).toEqual([b]);
+  expect(await f.store.listReviewFeedback({ after: c.id })).toEqual([]);
+  expect(await f.store.getReviewFeedback(b.id)).toEqual(b);
+  expect((await f.store.getReviewFinding(a.findingId)).verdict).toBe('Unknown');
+  await expect(f.store.getReviewFeedback('missing-catalog-id')).rejects.toMatchObject({ code: 'NOT_FOUND' });
+  await expect(f.store.listReviewFeedback({ limit: 101 })).rejects.toThrow();
+  await expect(f.store.listReviewFeedback({ source: 'model' as never })).rejects.toThrow();
+  const selected = await f.store.listReviewFeedback({ reviewId: second.id });
+  const revision = await f.store.createRevisionRequest(request(f.rule.digest, { id: 'catalog-request', feedbackIds: selected.map(item => item.id) }));
+  expect(revision.request.feedbackBindings).toEqual([{ id: c.id, digest: digestOf(c) }]);
+}, 30_000);
