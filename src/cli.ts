@@ -1,3 +1,4 @@
+import { registerLocalDevelopmentWorkspaceCommands } from './cli-local-development-workspace.js';
 import { registerReviewBatchCommands } from './cli-review-batch.js';
 import { registerReviewContinuationCommands } from './cli-review-continuation.js';
 import { GovernedReviewPlanInputSchema, governedReviewJobs, governedReviewStatus, enqueueGovernedReviewPlan } from './governed-semantic-review.js';
@@ -447,6 +448,7 @@ databaseCommand(governance, 'select').requiredOption('--repository <id>', 'Exact
     try { await output(await store.selectLocalSemanticRules(value), options.out); } finally { await store.close(); }
   });
 const workspace = cli.command('workspace').description('Local Sandcastle attempt lifecycle in a dedicated trusted Linux Git store; no code execution or sandbox launch');
+registerLocalDevelopmentWorkspaceCommands(workspace, json, output);
 function workspaceIdentity(command: Command) {
   return command.requiredOption('--repo <directory>', 'Full-history main repository root')
     .requiredOption('--run <id>', 'Lowercase letters/digits with single hyphens; up to 40 characters')

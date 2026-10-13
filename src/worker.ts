@@ -1,3 +1,4 @@
+import { inspectLocalDevelopmentWorkspace, StoredLocalDevelopmentWorkspaceSchema } from './local-development-workspace.js';
 import { readFile, stat } from 'node:fs/promises';
 import { preflightWorkerBootstrap } from './worker-bootstrap.js';
 import { openSelectedStore, resolveDatabaseSelection } from './storage/connection.js';
@@ -22,8 +23,18 @@ async function startConfiguredWorker() {
 }
 // Build/runtime import smoke without opening a database, service, socket or model.
 if (process.argv.slice(2).includes('--check')) {
-  const args = process.argv.slice(2), configIndex = args.indexOf('--config');
-  if (configIndex >= 0) {
+  const args = process.argv.slice(2), localIndex = args.indexOf('--local-development'), configIndex = args.indexOf('--config');
+  if (localIndex >= 0) {
+    try {
+      if (configIndex >= 0) throw new Error('Local and production checks are separate');
+      const path = args[localIndex + 1];
+      if (!path || path.startsWith('--') || (await stat(path)).size > 2_000_000) throw new Error('Invalid development receipt');
+      const bytes = await readFile(path);
+      if (bytes.length > 2_000_000) throw new Error('Invalid development receipt');
+      const inspection = await inspectLocalDevelopmentWorkspace(StoredLocalDevelopmentWorkspaceSchema.parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes))));
+      process.stdout.write(JSON.stringify({ ...inspection, workerExecution: 'not_supported_by_development_adapter' }) + '\n');
+    } catch { process.stderr.write('Development workspace inspection failed; no runtime was started\n'); process.exitCode = 1; }
+  } else if (configIndex >= 0) {
     try {
       const path = args[configIndex + 1];
       if (!path || path.startsWith('--')) throw new Error('Missing configuration path');
@@ -35,6 +46,9 @@ if (process.argv.slice(2).includes('--check')) {
     } catch { process.stderr.write('Worker preflight could not read a bounded UTF-8 configuration file\n'); process.exitCode = 1; }
   } else process.stdout.write(JSON.stringify({ status: 'checked', queues: ['replay', 'application'], applicationRuntime: 'blocked',
     reason: 'Trusted workspace resolver/backend bootstrap and production lifecycle authority are not configured' }) + '\n');
+} else if (process.argv.slice(2).includes('--local-development')) {
+  process.stderr.write('Local development supports --check inspection and workspace local lifecycle commands only; it cannot execute repository programs or models\n');
+  process.exitCode = 1;
 } else if (process.argv.slice(2).includes('--config')) {
   process.stderr.write('Worker configuration alone cannot supply lifecycle authority; use --check --config for preflight and a reviewed deployment bootstrap for execution\n');
   process.exitCode = 1;

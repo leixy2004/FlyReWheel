@@ -59,6 +59,16 @@ workspace runs. Preflight emits a successful inspection response
 with `status: blocked` when prerequisites are absent; malformed/unreadable input
 files still produce a command error.
 
+## Local development lifecycle
+
+The separate [local workspace adapter](local-development-workspaces.md) now
+creates fresh fixed-SHA worktrees, exports existing prepared resolver entries,
+records content-hashed evidence and conservatively cleans its owned worktree.
+`node dist/worker.js --check --local-development receipt.json` verifies this local
+state and explicitly reports `productionReady: false`; it starts no worker
+execution. Ordinary directory/worktree management supplies none of the external
+production authority guarantees below. Production config checks remain blocked.
+
 ## Exact remaining blockers
 
 The missing production authority must implement and independently establish:
