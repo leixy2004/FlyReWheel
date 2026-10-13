@@ -53,8 +53,9 @@ execution still requires authenticated study identity and exposure auditing.
 2. Implement a raw-response parser rejecting duplicate keys and unorderable spans,
    validate anchors against pinned bytes, and test compound-rule rejection and
    independent screening with no replacement. Audit study identity and registry storage durability before connecting an executor.
-3. Implement exact-key family grouping with retained membership/rejections and
-   lineage audit; audit the now-persisted authored index/feedback lock against authenticated study
+3. Exact-key family grouping and construction-to-episode membership binding are now
+   implemented for authored receipts. Independently audit semantic admission and
+   lineage; audit the now-persisted authored index/feedback lock against authenticated study
    identity and exposure evidence before any real W1 material is used.
 4. Bind neutral packets and independent semantic-support sidecars to existing
    annotation/observation records; validate missing/conflicting assessor handling.

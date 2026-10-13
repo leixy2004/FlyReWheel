@@ -87,7 +87,7 @@ binds the complete authored plan and all review cells, then `selectEpisodes` acc
 separately bound synthetic feedback. Cells bind plan, rule and packet digests;
 duplicate exact-rule families and replacement cells are rejected. Missing/malformed
 earlier work blocks an index, and Unknown feedback cannot select a later finding.
-All raw cells, later findings and missing matrix entries are retained. The pure functions produce reproducible objects; persisted calls now go through
+All raw cells, later findings and missing matrix entries are retained. Selection now rereads and briefly locks the authoritative construction register; persisted index calls go through
 `episode-registry.ts`, which binds the first plan/cell request and final feedback
 across calls in a fixed checkout-local register. Neither proves actual exposure times. There is no empirical execution path.
 
@@ -112,7 +112,7 @@ explicitly finalized empty list (missing). Replacing either decision is refused.
 Before finalization, recovery reports `not_finalized`; it does not invent judgments.
 
 ```sh
-node --import tsx experiments/construction/episode-replay.ts --recover authored/episode-demo /tmp/episode-recovered
+node --import tsx experiments/construction/episode-replay.ts --recover authored/episode-linked-demo-v1 /tmp/episode-recovered
 ```
 
 Recovery derives missing reports only from preserved requests, checks existing
@@ -121,10 +121,21 @@ request and failure records. Partial JSON, conflicting artifacts or surviving lo
 stop recovery; there is no automatic repair or lock takeover. As with construction,
 this is one trusted checkout's append-only policy, not authentication, protection
 against owner tampering/aliases/another checkout, or power-loss durability.
-The pure selector remains available for authored tests; it cannot issue a registered
-study result. All registered reports remain `empiricalAdmission: false`.
+Direct selection still does not persist an index; only the registered wrapper
+locks index/feedback choices. Both entrypoints validate construction provenance. All registered reports remain `empiricalAdmission: false`.
 
-Episode families are currently supplied by an independent authored plan; they are
-not proven descendants of admitted construction results. See the
+Episode families now come from the complete authoritative construction replay.
+Freeze/report digests and exact family membership must match, including every
+retained PR/candidate digest. These are provisional retained candidates, not
+independently admitted semantic rules. See the
 [combined closeout matrix](../../paper/local-research-closeout.md) for the exact
 completed and incomplete boundaries and validation evidence.
+
+The linked demo uses `authored/episode-linked-demo-v1`, a new explicit fixture
+version; earlier unlinked registry artifacts are preserved, not rewritten or
+silently migrated. Legacy plans without construction bindings fail validation.
+Construction must have a disposition for every slot before selection. All exact
+families enter the plan; cap-excluded candidates and omitted families cannot enter
+or disappear through caller-supplied hashes. Recovery rechecks the same authority.
+Declared freeze times do not prove actual construction completion timestamps;
+empirical chronology still requires independent evidence.
