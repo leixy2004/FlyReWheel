@@ -94,3 +94,7 @@ PGlite was reopened by sequential processes; concurrent API calls shared one own
 process. Multi-process PostgreSQL contention and live-model behavior were not
 validated. Existing overwritten failures from before migration cannot be recovered.
 Reports read jobs sequentially and are not an atomic cross-job snapshot.
+
+A subsequent change adds the [batch run CLI](review-batch-cli.md), closing the
+local authored-execution gap described above. The historical verification record
+is unchanged; live runtime authority/resolver still require trusted injection.

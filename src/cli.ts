@@ -274,7 +274,7 @@ databaseCommand(snapshots, 'list').option('--repository-id <id>').option('--afte
         nextAfter: records.length ? records.at(-1)!.digest : null, receipt: integrityReceipt }, options.out);
     } finally { await store.close(); }
   });
-const reviews = cli.command('reviews').description('Local snapshot review with optional selected context packages; explicit fixtures only, no model or notifications');
+const reviews = cli.command('reviews').description('Local snapshot reviews with explicit fixtures or trusted configured execution; no notifications');
 databaseCommand(reviews, 'demo').option('--out <file>')
   .action(async options => { const store = await storeFor(options); try { await output(await runSemanticReviewDemo(store), options.out); } finally { await store.close(); } });
 databaseCommand(reviews, 'run').description('Explicit digest historical/manual replay; not governance-governed').requiredOption('--rule-digest <sha256>').requiredOption('--snapshot-digest <sha256>')

@@ -11,6 +11,7 @@ import type { QualEvoStore } from './storage/store.js';
 export const ReviewContinuationInputSchema = z.object({
   id: ApplicationLogicalIdSchema, outcomeDigest: DigestSchema, findingId: ReviewFindingSchema.shape.id,
   repositoryContextDigests: RepositoryContextDigestSetSchema,
+  offlineFixtureDigest: DigestSchema.optional(),
   workspaceId: ApplicationLogicalIdSchema, attempt: ApplicationLogicalIdSchema.default('initial'),
 }).strict();
 export type ReviewContinuationInput = z.input<typeof ReviewContinuationInputSchema>;
@@ -28,6 +29,7 @@ export function reviewContinuationJob(stored: StoredReviewContinuation): Extract
   if (digestOf(plan) !== stored.digest) throw new Error('Review continuation digest mismatch');
   return ApplicationJobSchema.options[1].parse({ schemaVersion: 1, kind: 'semantic-review',
     ruleDigest: plan.ruleDigest, snapshotDigest: plan.snapshotDigest, continuationDigest: stored.digest,
+    ...(plan.input.offlineFixtureDigest ? { offlineFixtureDigest: plan.input.offlineFixtureDigest } : {}),
     repositoryContextDigests: plan.input.repositoryContextDigests, workspaceId: plan.input.workspaceId, attempt: plan.input.attempt });
 }
 export async function runReviewContinuation(dependencies: ApplicationDispatcherDependencies, digest: string, signal: AbortSignal) {

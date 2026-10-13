@@ -19,7 +19,7 @@ creation reuses it; changed jobs or order under the same ID are rejected. Duplic
 job identities are rejected. Existing job identities are not re-keyed by a batch:
 sharing a job between batches shares its durable result.
 
-Trusted application code runs the batch with:
+The [batch run CLI](review-batch-cli.md) now supports explicit offline fixtures and the existing trusted worker bootstrap. Trusted application code can also run the batch with:
 
 ```ts
 await runReviewBatch(dependencies, batchDigest, signal);
@@ -30,8 +30,7 @@ await runReviewBatch(dependencies, batchDigest, signal, {
 ```
 
 The dependencies are the existing application dispatcher dependencies, supplied
-by trusted bootstrap code. CLI creation/status intentionally cannot load a runtime,
-model, credential or executable from JSON. Existing worker dispatch can consume
+by trusted bootstrap code. CLI creation/status do not execute. The run CLI accepts explicit fixture inputs or the existing worker configuration; JSON cannot supply lifecycle authority or executable modules. Existing worker dispatch can consume
 the exact manifest jobs individually. No authentication setup is added.
 
 Each review/result commits independently through the existing dispatcher.

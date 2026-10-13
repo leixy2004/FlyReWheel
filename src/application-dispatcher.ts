@@ -1,3 +1,4 @@
+import type { ReviewFixture } from './core/semantic-review.js';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { EvaluationWorkspaceBindingSchema, type EvaluationWorkspaceBinding } from './workspace/history-policy.js';
@@ -21,6 +22,8 @@ const ApplicationWorkspaceResolutionSchema = z.union([CodexWorkspaceRequestSchem
   z.object({ workspace: CodexWorkspaceRequestSchema.shape.workspace, evaluation: EvaluationWorkspaceBindingSchema.optional() }).strict()]);
 export interface ApplicationDispatcherDependencies {
   store: QualEvoStore;
+  /** Explicit fixture bytes keyed by canonical digest. Never a live-runtime fallback. */
+  offlineReviewFixtures?: ReadonlyMap<string, ReviewFixture>;
   /** Trusted bootstrap code supplies these dependencies. Nothing loads from queue JSON. */
   runtime?: PrMiningWorkspaceRuntime;
   config?: PrMiningModelConfig;
@@ -67,6 +70,20 @@ export function createApplicationJobDispatcher(dependencies: ApplicationDispatch
       await store.failApplicationJob(job, owner, result);
       throw new ApplicationJobRetryError(result);
     };
+    if (job.kind === 'semantic-review' && job.offlineFixtureDigest) {
+      const fixtures = dependencies.offlineReviewFixtures?.get(job.offlineFixtureDigest);
+      if (!fixtures) return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started', reason: 'input_rejected' });
+      try {
+        signal.throwIfAborted();
+        if (job.governancePlanDigest) await store.requireCurrentGovernedReviewJob(job);
+        if (job.governancePlanDigest) await store.admitGovernedReviewJob(job, owner);
+        const completed = await store.completeOfflineSemanticReviewJob(job, owner, fixtures, signal);
+        return applicationJobSummary(completed.result!);
+      } catch (error) {
+        const persistence = error instanceof Error && 'code' in error && error.code === 'OFFLINE_REVIEW_PERSISTENCE_FAILED';
+        return retry({ status: 'failed', modelExecution: 'not_run', cleanup: 'not_started', reason: signal.aborted ? 'cancelled' : persistence ? 'persistence_failed' : 'input_rejected' });
+      }
+    }
     if (!runtime || !config || !config.enabled || !resolveWorkspace) {
       return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started',
         reason: !runtime || !config ? 'runtime_unavailable' : !config.enabled ? 'disabled' : 'workspace_resolver_unavailable' });

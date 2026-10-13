@@ -1,0 +1,435 @@
+{
+  "status": "passed",
+  "implementationBase": "d02d1bb",
+  "source": {
+    "origin": "https://github.com/leixy2004/FlyReWheel",
+    "sourceBase": "0b476d9f6835fec63b3b924c0de3120d3c79922f",
+    "sourceHead": "1bc2afffdd28c5ebde64f81e39944d816fdca8f7",
+    "sourcePathsRead": [
+      "src/application-preflight.ts",
+      "src/core/identity.ts"
+    ],
+    "originalSourceSha256": "a1a23a56d378301e849316c6140f954affb509fb6b7fa0b8299b2a520d8b7a0b",
+    "projectionBase": "dcd46503383195fbb19096db83e796bd268aeff3",
+    "projectionHead": "a0642ded23f1afe6a443466e67af33cb18df81ae",
+    "boundary": "real-upstream-source-bytes-selected-path-projection-not-the-original-repository-tree",
+    "researchW1": "not_read"
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "revisions",
+        "continuations",
+        "create",
+        "--id",
+        "offline-followup",
+        "--outcome-digest",
+        "0119b3cb7d518bec6621201824bd7d2a93da96cbb5dfb30f397ef83053ca0231",
+        "--finding-id",
+        "review_finding_4b95279e2b6b594f5ab068401537665f413b4816d1463ab475dd023afc28ee81",
+        "--repository-context-digest",
+        "1cee5f1f0f6366f04ea1fdbd503aaa61a9652b6528e6a2a3d2464fbba28cd9bb",
+        "--workspace-id",
+        "offline-no-workspace",
+        "--attempt",
+        "offline-followup",
+        "--offline-fixture-digest",
+        "e1e57218b4ed81bff8ebbf4f6d88b5dd598c2018f63ade057382c288fd22a25d",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "create",
+        "--file",
+        "/tmp/flyrewheel-batch-cli-final/batch-input.json",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/fixtures.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--config",
+        "/tmp/flyrewheel-batch-cli-final/invalid-config.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Offline fixture jobs cannot execute with live runtime configuration\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Choose exactly one: --offline-fixtures or --config\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/wrong-fixtures.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Each offline job requires one unambiguous matching fixture selection\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "create",
+        "--file",
+        "/tmp/flyrewheel-batch-cli-final/live-batch-input.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "28356868128f027af1cb6bd3c3d64a1eab5f17302b553cefdab2b45d4406ebe2",
+        "--config",
+        "/tmp/flyrewheel-batch-cli-final/invalid-config.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Worker bootstrap blocked: invalid_configuration\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "28356868128f027af1cb6bd3c3d64a1eab5f17302b553cefdab2b45d4406ebe2",
+        "--config",
+        "/tmp/flyrewheel-batch-cli-final/unconfigured.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Worker bootstrap blocked: model_required, generation_limits_required, runtime_required, lifecycle_authority_required, workspace_resolver_required\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/fixtures.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 2,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/fixtures.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 2,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "status",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/fixtures.json",
+        "--retry-job-digest",
+        "304e07067e32c1458563385b2817665a83ea1e339e00f93ef2131199a7d9b504",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "run",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--offline-fixtures",
+        "/tmp/flyrewheel-batch-cli-final/fixtures.json",
+        "--retry-job-digest",
+        "304e07067e32c1458563385b2817665a83ea1e339e00f93ef2131199a7d9b504",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "application-jobs",
+        "history",
+        "--file",
+        "/tmp/flyrewheel-batch-cli-final/retry-job.json",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "revisions",
+        "continuations",
+        "status",
+        "--digest",
+        "7b643577f24f853c9ede1cdf4caf5324a5b4c518d1c1df258b05d06460ab5015",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "reviews",
+        "batch",
+        "export",
+        "--digest",
+        "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+        "--format",
+        "csv",
+        "--db",
+        "/tmp/flyrewheel-batch-cli-final/db"
+      ],
+      "exitCode": 0,
+      "stderr": ""
+    }
+  ],
+  "checks": {
+    "compiledCliCreateRunRestartRetryExport": true,
+    "invalidConfigurationBeforeClaims": true,
+    "duplicateRunNoAdditionalReviews": true,
+    "retryHistoryPreserved": true,
+    "unknownPreserved": true,
+    "fixtureJobIdentitySeparated": true,
+    "workspaceOrModelReceiptInvented": false,
+    "credentialsConsulted": false
+  },
+  "executionMode": "authored-offline-fixtures",
+  "modelExecution": "not_run",
+  "workspaceExecution": "not_run",
+  "fault": "authored one-time database insert rejection; not a model failure",
+  "history": {
+    "jobDigest": "304e07067e32c1458563385b2817665a83ea1e339e00f93ef2131199a7d9b504",
+    "currentState": "finished",
+    "attempts": 2,
+    "recordedAttempts": 2,
+    "missingHistoricalAttempts": 0,
+    "historyScope": "observed-results-only-no-invented-backfill",
+    "outcomes": [
+      {
+        "attempt": 1,
+        "state": "retryable",
+        "result": {
+          "status": "failed",
+          "modelExecution": "not_run",
+          "cleanup": "not_started",
+          "reason": "persistence_failed"
+        },
+        "origin": "recorded-transition"
+      },
+      {
+        "attempt": 2,
+        "state": "finished",
+        "result": {
+          "status": "completed",
+          "modelExecution": "not_run",
+          "cleanup": "verified",
+          "outcome": {
+            "kind": "semantic-review",
+            "id": "review_b6d98cf8ae0830cd9907b2e0748939b71fcf241891abdfd69beebc9a583588a0",
+            "digest": "a064846c2f922b613bd1b6ed92224bd689e8afbb32befb1eccfcd8cd06bbb552"
+          }
+        },
+        "origin": "recorded-transition"
+      }
+    ],
+    "nextAfterAttempt": 2
+  },
+  "report": {
+    "schemaVersion": 1,
+    "kind": "review-batch-report",
+    "batchDigest": "c188755a291c2315cdb332dcdb7e083367c213182289f1c14de6d5d992491dea",
+    "batchId": "compiled-cli-batch",
+    "state": "completed",
+    "counts": {
+      "total": 2,
+      "notStarted": 0,
+      "running": 0,
+      "retryable": 0,
+      "completed": 2,
+      "blocked": 0
+    },
+    "rows": [
+      {
+        "index": 1,
+        "jobDigest": "304e07067e32c1458563385b2817665a83ea1e339e00f93ef2131199a7d9b504",
+        "ruleDigest": "ae7898981f7092137764a89892325585b2849c2d28599cf2972d9fd8ee3adb3c",
+        "snapshotDigest": "d22d33b1959b3c69402d51c19613667a7baba2c0d74a46bcf2293c6babd8f484",
+        "workspaceId": "offline-no-workspace",
+        "attempt": "offline-followup",
+        "attempts": 2,
+        "state": "finished",
+        "outcomeStatus": "completed",
+        "reason": null,
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "reviewId": "review_b6d98cf8ae0830cd9907b2e0748939b71fcf241891abdfd69beebc9a583588a0",
+        "findings": {
+          "violation": 0,
+          "safe": 0,
+          "unknown": 1,
+          "not_verified": 0
+        },
+        "recoveryAction": "inspect_existing_outcome",
+        "nextAction": "Inspect the recorded domain outcome. Re-delivery returns this outcome; it does not rerun generation or imply a candidate was produced."
+      },
+      {
+        "index": 2,
+        "jobDigest": "3ebbdd417d8f1522c48033629ab1760280218f4a3aeab00bae78e69d1b456497",
+        "ruleDigest": "ae7898981f7092137764a89892325585b2849c2d28599cf2972d9fd8ee3adb3c",
+        "snapshotDigest": "d22d33b1959b3c69402d51c19613667a7baba2c0d74a46bcf2293c6babd8f484",
+        "workspaceId": "offline-no-workspace",
+        "attempt": "independent-offline",
+        "attempts": 1,
+        "state": "finished",
+        "outcomeStatus": "completed",
+        "reason": null,
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "reviewId": "review_1a2af5af2d4c2f926f51d33f2e40aff609d084bd7bcd3febd13e7ae23e2d2bd2",
+        "findings": {
+          "violation": 0,
+          "safe": 0,
+          "unknown": 1,
+          "not_verified": 0
+        },
+        "recoveryAction": "inspect_existing_outcome",
+        "nextAction": "Inspect the recorded domain outcome. Re-delivery returns this outcome; it does not rerun generation or imply a candidate was produced."
+      }
+    ],
+    "retrySelection": {
+      "retryJobDigests": []
+    },
+    "retrySelectionMeaning": "suggested-existing-failures-requires-explicit-operator-selection-no-retry-performed",
+    "findingCountsMeaning": "stored-review-declarations-not-ground-truth-or-repair-metrics",
+    "consistency": "per-item-readback-not-a-cross-job-transactional-snapshot",
+    "execution": "not_started_by_export",
+    "notification": "not_performed",
+    "certification": "none"
+  },
+  "limitation": "Default CLI has no trusted deployment authority/resolver; live --config requires reviewed embedding, not JSON-only authorization",
+  "artifactDirectory": "/tmp/flyrewheel-batch-cli-final"
+}

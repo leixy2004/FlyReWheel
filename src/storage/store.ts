@@ -160,11 +160,14 @@ export class QualEvoStore {
     if (job.kind === 'semantic-review') {
       if (outcome.kind !== 'semantic-review') mismatch();
       const review = await this.readSemanticReview(tx, outcome.id);
+      const executionMatches = job.offlineFixtureDigest
+        ? review.config.mode === 'offline_fixture' && review.config.fixtureDigest === job.offlineFixtureDigest
+          && result.modelExecution === 'not_run' && review.executionReceipt === undefined
+        : review.config.mode === 'workspace_execution' && review.executionReceipt?.modelExecution === result.modelExecution
+          && review.executionReceipt.context.checkout === 'after' && review.executionReceipt.context.evaluation?.exportId === job.evaluationExportId;
       if (digestOf(review) !== outcome.digest || review.ruleDigest !== job.ruleDigest || review.snapshotDigest !== job.snapshotDigest
         || digestOf(review.config.repositoryContextDigests ?? []) !== digestOf(job.repositoryContextDigests ?? [])
-        || review.config.attempt !== expectedId || review.config.mode !== 'workspace_execution'
-        || review.executionReceipt?.modelExecution !== result.modelExecution || review.executionReceipt.context.checkout !== 'after'
-        || review.executionReceipt.context.evaluation?.exportId !== job.evaluationExportId) mismatch();
+        || review.config.attempt !== expectedId || !executionMatches) mismatch();
       return;
     }
     if (outcome.id !== expectedId) mismatch();
@@ -670,6 +673,21 @@ export class QualEvoStore {
     const review = await buildSemanticReview({ rule, snapshot, ...(input.fixtures === undefined ? {} : { fixtures: input.fixtures }),
       ...(repositoryContexts === undefined ? {} : { repositoryContexts }), ...(options.attempt === undefined ? {} : { attempt: options.attempt }) });
     return this.saveSemanticReview(review);
+  }
+  /** Explicit fixture job only. Review plus job result still commit together;
+   * this path never mints a workspace/model execution receipt. */
+  async completeOfflineSemanticReviewJob(job: Extract<ApplicationJob, { kind: 'semantic-review' }>, owner: string,
+    fixtures: ReviewFixture, signal: AbortSignal): Promise<ApplicationJobRecord> {
+    if (!job.offlineFixtureDigest || digestOf(fixtures) !== job.offlineFixtureDigest || job.evaluationExportId)
+      fail('OFFLINE_REVIEW_REJECTED', 'Offline job must bind exact fixture bytes and cannot claim an evaluation workspace');
+    const rule = await this.readSemanticRuleVersion(this.db, job.ruleDigest), snapshot = await this.readChangeSnapshot(this.db, job.snapshotDigest);
+    const repositoryContexts = job.repositoryContextDigests === undefined ? undefined
+      : await Promise.all(job.repositoryContextDigests.map(digest => this.readRepositoryContext(this.db, digest)));
+    const review = buildSemanticReview({ rule, snapshot, fixtures, repositoryContexts, attempt: `application-${applicationJobDigest(job)}` });
+    try {
+      return await this.completeApplicationJob(job, owner, { status: 'completed', modelExecution: 'not_run', cleanup: 'verified',
+        outcome: { kind: 'semantic-review', id: review.id, digest: digestOf(review) } }, async scoped => { await scoped.saveSemanticReview(review); }, signal);
+    } catch { fail('OFFLINE_REVIEW_PERSISTENCE_FAILED', 'Offline review/result transaction did not complete'); }
   }
   /** Runtime capability only. A JSON receipt/result cannot claim execution. */
   async saveSemanticReviewModelResult(capability: TrustedSemanticReview): Promise<SemanticReview> {

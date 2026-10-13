@@ -6,11 +6,12 @@ export function registerReviewContinuationCommands(revisions: Command, output: (
   const commands = revisions.command('continuations').description('Explicit context-selected follow-up; preserves original outcomes and frozen experiments');
   databaseCommand(commands, 'create').requiredOption('--id <id>').requiredOption('--outcome-digest <sha256>')
     .requiredOption('--finding-id <id>').requiredOption('--repository-context-digest <sha256...>')
+    .option('--offline-fixture-digest <sha256>', 'Explicit authored fixture digest for a separate offline continuation job')
     .requiredOption('--workspace-id <id>').option('--attempt <id>', 'Immutable attempt; use a new ID and attempt after a terminal blocked run', 'initial')
     .option('--out <file>').action(async options => {
       const input = ReviewContinuationInputSchema.parse({ id: options.id, outcomeDigest: options.outcomeDigest,
         findingId: options.findingId, repositoryContextDigests: options.repositoryContextDigest,
-        workspaceId: options.workspaceId, attempt: options.attempt });
+        workspaceId: options.workspaceId, attempt: options.attempt, ...(options.offlineFixtureDigest ? { offlineFixtureDigest: options.offlineFixtureDigest } : {}) });
       const store = await storeFor(options);
       try {
         const stored = await store.createReviewContinuation(input);
