@@ -38,6 +38,7 @@ export function revisionInspectionSummary(stored: StoredGeneration) {
       rule: ruleDigest === null ? null : ['rules', 'show', '--digest', ruleDigest],
       snapshot: ['snapshots', 'show', '--digest', receipt.context.snapshotDigest],
       repositoryContexts: contextDigests.map(digest => ['contexts', 'show', '--digest', digest]),
+      continuations: ruleDigest === null ? ['revisions', 'continuations', 'list', '--outcome-digest', stored.digest] : null,
       comparisons: ruleDigest === null ? null : ['revisions', 'comparisons', '--request-digest', record.requestDigest, '--candidate-rule-digest', ruleDigest],
     },
   };

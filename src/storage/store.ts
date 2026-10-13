@@ -1,3 +1,4 @@
+import { ReviewContinuationInputSchema, ReviewContinuationSchema, reviewContinuationJob, type ReviewContinuationInput, type StoredReviewContinuation } from '../review-continuation.js';
 import { readTrustedComparisonApplicability, type TrustedComparisonApplicability } from '../adapters/comparison-applicability-model.js';
 import { GovernedReviewPlanSchema, GovernedReviewAdmissionSchema, GOVERNED_REVIEW_LIMITS, deriveGovernedReviewPlan,
   normalizeGovernedReviewInput, governedReviewJobs, type GovernedReviewPlan, type GovernedReviewPlanInput,
@@ -958,6 +959,65 @@ export class QualEvoStore {
   }
   async getRevisionOutcome(digest: string): Promise<StoredRevisionNoMutationOutcome> {
     return this.db.transaction(tx => this.readRevisionOutcome(tx, digest));
+  }
+  private async deriveReviewContinuation(tx: Queryable, raw: ReviewContinuationInput): Promise<StoredReviewContinuation> {
+    const input = ReviewContinuationInputSchema.parse(raw);
+    const { outcome } = await this.readRevisionOutcome(tx, input.outcomeDigest);
+    if (!['request_context', 'retain_rule'].includes(outcome.result.operator))
+      fail('CONTINUATION_REJECTED', 'Only request_context or retain_rule outcomes permit explicit continuation');
+    const graph = await this.readRevisionGenerationEvidence(tx, outcome.requestDigest);
+    const selected = graph.feedback.find(entry => entry.finding.id === input.findingId);
+    if (!selected || !outcome.result.diagnoses.some(diagnosis => diagnosis.feedbackId === selected.feedback.id))
+      fail('CONTINUATION_REJECTED', 'Finding must have a diagnosis in the frozen selected feedback');
+    const snapshot = await this.readChangeSnapshot(tx, selected.finding.snapshotDigest);
+    const contexts = await Promise.all(input.repositoryContextDigests.map(digest => this.readRepositoryContext(tx, digest)));
+    validateReviewRepositoryContexts(contexts, snapshot);
+    const continuation = ReviewContinuationSchema.parse({ schemaVersion: 1, kind: 'explicit-review-continuation', input,
+      requestDigest: outcome.requestDigest, ruleDigest: outcome.baseRuleDigest, snapshotDigest: snapshot.digest,
+      sourceReviewId: selected.review.id, reviewSelection: 'explicit-digest-replay-not-governance-governed',
+      scope: 'full-snapshot-review-single-anchor-followup', originalRecords: 'unchanged', experimentAttribution: 'separate-product-action' });
+    return { digest: digestOf(continuation), continuation };
+  }
+  async createReviewContinuation(input: ReviewContinuationInput): Promise<StoredReviewContinuation> {
+    return this.db.transaction(async tx => {
+      const stored = await this.deriveReviewContinuation(tx, input);
+      await tx.query('INSERT INTO qe_review_continuations(digest,id,outcome_digest,payload) VALUES($1,$2,$3,$4::jsonb) ON CONFLICT DO NOTHING',
+        [stored.digest, stored.continuation.input.id, stored.continuation.input.outcomeDigest, JSON.stringify(stored.continuation)]);
+      const row = await one<{ digest: string }>(tx, 'SELECT digest FROM qe_review_continuations WHERE id=$1', [stored.continuation.input.id]);
+      if (row?.digest !== stored.digest) fail('IMMUTABLE_CONFLICT', 'Continuation ID already binds a different selection or attempt');
+      return this.readReviewContinuation(tx, stored.digest);
+    });
+  }
+  private async readReviewContinuation(tx: Queryable, digest: string): Promise<StoredReviewContinuation> {
+    DigestSchema.parse(digest);
+    const row = await one<{ digest: string; id: string; outcome_digest: string; payload: unknown }>(tx,
+      'SELECT * FROM qe_review_continuations WHERE digest=$1', [digest]);
+    if (!row) fail('NOT_FOUND', 'Unknown review continuation');
+    const plan = ReviewContinuationSchema.parse(row.payload);
+    const stored = await this.deriveReviewContinuation(tx, plan.input);
+    if (stored.digest !== digest || digestOf(plan) !== digest || row.digest !== digest
+      || row.id !== plan.input.id || row.outcome_digest !== plan.input.outcomeDigest)
+      fail('INTEGRITY_FAILURE', 'Stored continuation differs from its frozen evidence');
+    return stored;
+  }
+  async getReviewContinuation(digest: string): Promise<StoredReviewContinuation> {
+    return this.db.transaction(tx => this.readReviewContinuation(tx, digest));
+  }
+  async listReviewContinuations(input: { outcomeDigest: string; after?: string; limit?: number }): Promise<StoredReviewContinuation[]> {
+    const options = z.object({ outcomeDigest: DigestSchema, after: DigestSchema.optional(), limit: z.number().int().min(1).max(100).default(20) }).strict().parse(input);
+    return this.db.transaction(async tx => {
+      const rows = (await tx.query<{ digest: string }>('SELECT digest FROM qe_review_continuations WHERE outcome_digest=$1 AND ($2::text IS NULL OR digest>$2) ORDER BY digest LIMIT $3',
+        [options.outcomeDigest, options.after ?? null, options.limit])).rows;
+      const records = [];
+      for (const row of rows) records.push(await this.readReviewContinuation(tx, row.digest));
+      return records;
+    });
+  }
+  async requireReviewContinuationJob(job: Extract<ApplicationJob, { kind: 'semantic-review' }>): Promise<void> {
+    if (!job.continuationDigest) fail('CONTINUATION_REJECTED', 'Missing continuation digest');
+    const stored = await this.getReviewContinuation(job.continuationDigest);
+    if (applicationJobDigest(job) !== applicationJobDigest(reviewContinuationJob(stored)))
+      fail('CONTINUATION_REJECTED', 'Job does not match the exact continuation selection');
   }
   async listRevisionOutcomes(input?: string | RevisionCatalogPage): Promise<StoredRevisionNoMutationOutcome[]> {
     const paged = typeof input === 'object' && input !== null;

@@ -54,6 +54,7 @@ export function createApplicationJobDispatcher(dependencies: ApplicationDispatch
   const { store, resolveWorkspace, runtime, config } = dependencies;
   return async (input: ApplicationJobInput, signal: AbortSignal) => {
     const job = ApplicationJobSchema.parse(input), jobDigest = applicationJobDigest(job), owner = randomUUID();
+    if (job.kind === 'semantic-review' && job.continuationDigest) await store.requireReviewContinuationJob(job);
     const claim = await store.claimApplicationJob(job, owner);
     if (claim.state === 'finished') return applicationJobSummary(claim.record.result!);
     if (claim.state === 'busy') throw new ApplicationJobBusyError();

@@ -1,3 +1,4 @@
+import { registerReviewContinuationCommands } from './cli-review-continuation.js';
 import { GovernedReviewPlanInputSchema, governedReviewJobs, governedReviewStatus, enqueueGovernedReviewPlan } from './governed-semantic-review.js';
 import { Command } from 'commander';
 import { exportEvaluationCheckout, inspectEvaluationCheckout, EvaluationVisibilityManifestSchema, EVALUATION_CHECKOUT_LIMITS } from './workspace/evaluation-checkout.js';
@@ -341,6 +342,7 @@ databaseCommand(feedback, 'add').requiredOption('--file <file>').option('--out <
   });
 const revisions = cli.command('revisions').description('Local immutable requests, generated candidates/outcomes, comparisons and declared decisions; no synthesis, activation or publication');
 registerRevisionInspectionCommands(revisions, output);
+registerReviewContinuationCommands(revisions, output);
 databaseCommand(revisions, 'request').requiredOption('--file <file>').option('--out <file>')
   .action(async options => {
     const value = RevisionRequestInputSchema.parse(await json(options.file));

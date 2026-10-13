@@ -14,7 +14,8 @@ const candidateCreatedAt = z.string().max(40).datetime({ offset: true });
 export const ApplicationJobSchema = z.discriminatedUnion('kind', [
   z.object({ ...common, kind: z.literal('pr-mining'), requestDigest: DigestSchema, candidateCreatedAt }).strict(),
   z.object({ ...common, kind: z.literal('semantic-review'), ruleDigest: DigestSchema, snapshotDigest: DigestSchema,
-    repositoryContextDigests: RepositoryContextDigestSetSchema.optional(), governancePlanDigest: DigestSchema.optional() }).strict(),
+    repositoryContextDigests: RepositoryContextDigestSetSchema.optional(), governancePlanDigest: DigestSchema.optional(), continuationDigest: DigestSchema.optional() }).strict()
+    .refine(value => !(value.governancePlanDigest && value.continuationDigest), 'Continuation is an explicit replay, not a governed review'),
   z.object({ ...common, kind: z.literal('revision-generation'), requestDigest: DigestSchema,
     snapshotDigest: DigestSchema, candidateCreatedAt }).strict(),
 ]);

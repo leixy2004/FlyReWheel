@@ -45,6 +45,7 @@ export async function preflightApplicationJob(store: QualEvoStore, raw: Applicat
       if (job.repositoryContextDigests !== undefined) validateReviewRepositoryContexts(
         await Promise.all(job.repositoryContextDigests.map(digest => store.getRepositoryContext(digest))), stored);
       if (job.governancePlanDigest) await store.requireCurrentGovernedReviewJob(job);
+      if (job.continuationDigest) await store.requireReviewContinuationJob(job);
     } else {
       const graph = await store.prepareRevisionGeneration(job.requestDigest);
       if (Date.parse(job.candidateCreatedAt) < Date.parse(graph.request.request.createdAt)) {
