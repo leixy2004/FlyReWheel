@@ -1,0 +1,596 @@
+{
+  "productCommit": "c044e7351066601308619498dad8346dd2f2729c",
+  "verifiedCommitAfterTestFix": "da486abce5c981a57808ba342f3773cad3537d1a",
+  "baseCommit": "17879c170b7ba6bdbbe86a5c977a9b4de88da386",
+  "branch": "codex/explicit-review-continuation",
+  "worktreeBeforeAudit": "clean",
+  "worktreeAfterFixCommit": "clean",
+  "initialAggregate": {
+    "command": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "tests/review-continuation.test.ts",
+        "tests/review-batch.test.ts",
+        "tests/review-batch-export.test.ts",
+        "tests/review-batch-cli-execution.test.ts",
+        "tests/application-job-history.test.ts",
+        "tests/application-jobs.test.ts",
+        "tests/application-jobs.storage.test.ts",
+        "tests/application-jobs.cli.test.ts",
+        "tests/application-job-context.test.ts",
+        "tests/application-operations.test.ts",
+        "tests/application-operations.cli.test.ts",
+        "tests/application-evaluation-binding.test.ts",
+        "tests/worker-bootstrap.test.ts",
+        "tests/worker-bootstrap-preflight.test.ts",
+        "tests/worker-preflight.cli.test.ts",
+        "tests/worker-service.test.ts",
+        "tests/prepared-workspace-resolver.test.ts",
+        "tests/local-development-workspace.test.ts",
+        "tests/semantic-review.storage.test.ts",
+        "tests/semantic-review.cli.test.ts",
+        "tests/semantic-governance.test.ts",
+        "tests/semantic-governance.storage.test.ts",
+        "tests/semantic-governance.limits.test.ts",
+        "tests/semantic-governance.cli.test.ts",
+        "tests/governed-semantic-review.test.ts",
+        "tests/governed-semantic-review.cli.test.ts",
+        "tests/revision-inspection.storage.test.ts",
+        "tests/revision-explanation.test.ts",
+        "tests/database-migrations.test.ts",
+        "tests/database-migration-locking.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/flyrewheel-final-regression/aggregate.json"
+      ],
+      "exitCode": 1,
+      "durationSeconds": 354.59,
+      "environment": "explicit PATH HOME LANG TZ only; no inherited credentials",
+      "filesSelected": 30
+    },
+    "passed": 186,
+    "failed": 2,
+    "skipped": 0,
+    "todo": 0,
+    "files": 30
+  },
+  "postFixTargeted": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "tests/application-jobs.storage.test.ts",
+      "tests/application-job-history.test.ts",
+      "tests/review-batch.test.ts",
+      "--reporter=json",
+      "--outputFile=/tmp/flyrewheel-final-regression/followup.json"
+    ],
+    "exitCode": 0,
+    "passed": 17,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "files": 3
+  },
+  "finalPerFileCoverage": {
+    "meaning": "latest per-file outcomes, not a single aggregate rerun; only a test helper changed after initial aggregate",
+    "files": 30,
+    "counts": {
+      "passed": 188
+    },
+    "results": [
+      {
+        "file": "tests/application-evaluation-binding.test.ts",
+        "counts": {
+          "passed": 7
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/application-job-context.test.ts",
+        "counts": {
+          "passed": 4
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/application-job-history.test.ts",
+        "counts": {
+          "passed": 1
+        },
+        "verifiedIn": "post-fix-targeted"
+      },
+      {
+        "file": "tests/application-jobs.cli.test.ts",
+        "counts": {
+          "passed": 2
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/application-jobs.storage.test.ts",
+        "counts": {
+          "passed": 13
+        },
+        "verifiedIn": "post-fix-targeted"
+      },
+      {
+        "file": "tests/application-jobs.test.ts",
+        "counts": {
+          "passed": 15
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/application-operations.cli.test.ts",
+        "counts": {
+          "passed": 1
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/application-operations.test.ts",
+        "counts": {
+          "passed": 9
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/database-migration-locking.test.ts",
+        "counts": {
+          "passed": 12
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/database-migrations.test.ts",
+        "counts": {
+          "passed": 21
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/governed-semantic-review.cli.test.ts",
+        "counts": {
+          "passed": 2
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/governed-semantic-review.test.ts",
+        "counts": {
+          "passed": 13
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/local-development-workspace.test.ts",
+        "counts": {
+          "passed": 3
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/prepared-workspace-resolver.test.ts",
+        "counts": {
+          "passed": 6
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/review-batch-cli-execution.test.ts",
+        "counts": {
+          "passed": 2
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/review-batch-export.test.ts",
+        "counts": {
+          "passed": 1
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/review-batch.test.ts",
+        "counts": {
+          "passed": 3
+        },
+        "verifiedIn": "post-fix-targeted"
+      },
+      {
+        "file": "tests/review-continuation.test.ts",
+        "counts": {
+          "passed": 5
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/revision-explanation.test.ts",
+        "counts": {
+          "passed": 1
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/revision-inspection.storage.test.ts",
+        "counts": {
+          "passed": 9
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-governance.cli.test.ts",
+        "counts": {
+          "passed": 4
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-governance.limits.test.ts",
+        "counts": {
+          "passed": 6
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-governance.storage.test.ts",
+        "counts": {
+          "passed": 11
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-governance.test.ts",
+        "counts": {
+          "passed": 2
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-review.cli.test.ts",
+        "counts": {
+          "passed": 3
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/semantic-review.storage.test.ts",
+        "counts": {
+          "passed": 12
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/worker-bootstrap-preflight.test.ts",
+        "counts": {
+          "passed": 2
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/worker-bootstrap.test.ts",
+        "counts": {
+          "passed": 12
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/worker-preflight.cli.test.ts",
+        "counts": {
+          "passed": 1
+        },
+        "verifiedIn": "initial-aggregate"
+      },
+      {
+        "file": "tests/worker-service.test.ts",
+        "counts": {
+          "passed": 5
+        },
+        "verifiedIn": "initial-aggregate"
+      }
+    ],
+    "summary": {
+      "passed": 188,
+      "failed": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "smokes": [
+    {
+      "command": [
+        "node",
+        "scripts/smoke-review-user-flow.mjs",
+        "/tmp/flyrewheel-final-regression/review-user-flow"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 27.43
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-review-batch-cli.mjs",
+        "/tmp/flyrewheel-final-regression/review-batch-cli"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 28.74
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-local-development-lifecycle.mjs",
+        "/tmp/flyrewheel-final-regression/local-development-lifecycle"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 8.47
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-feedback-discovery.mjs",
+        "/tmp/flyrewheel-final-regression/feedback-discovery"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 17.81
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-revision-explanation.mjs",
+        "/tmp/flyrewheel-final-regression/revision-explanation"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 25.29
+    }
+  ],
+  "checks": {
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "rerunAfterFix": true
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "productionCodeUnchangedByFix": true
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  },
+  "staticReview": {
+    "reviewedHead": "c044e7351066601308619498dad8346dd2f2729c",
+    "method": "fresh source inspection by the current agent, independently of test outcomes; no separate reviewer or subagent claimed",
+    "confirmedRegressions": [
+      {
+        "area": "test fixture compatibility with migration 018",
+        "symptom": "2 application-jobs.storage tests failed before their read-integrity assertions because intentional tampering reinserted an already archived attempt",
+        "fix": "Disable the attempt archive trigger only inside the always-rolled-back corruption transaction; verify both triggers are restored afterwards",
+        "productionCodeChanged": false
+      }
+    ],
+    "checks": [
+      {
+        "area": "CLI wiring",
+        "files": [
+          "src/cli.ts",
+          "src/cli-review-continuation.ts",
+          "src/cli-review-batch.ts",
+          "src/cli-feedback-inspection.ts",
+          "src/cli-revision-inspection.ts",
+          "src/worker.ts"
+        ],
+        "finding": "New command groups register once; explicit persistent database selectors remain; fixture/config execution is exclusive; local worker checks do not start production execution."
+      },
+      {
+        "area": "Persistence compatibility",
+        "files": [
+          "src/application-job-contract.ts",
+          "src/storage/migrations/016_review_continuations.sql",
+          "src/storage/migrations/017_review_batches.sql",
+          "src/storage/migrations/018_application_job_attempt_history.sql"
+        ],
+        "finding": "Only append-only migrations 016-018 added; older migration bytes unchanged. New job fields are optional; legacy normalized identities acquire no new default fields. Continuations and batches revalidate exact immutable inputs."
+      },
+      {
+        "area": "Retry and restart",
+        "files": [
+          "src/review-batch.ts",
+          "src/storage/store.ts",
+          "src/review-batch-export.ts"
+        ],
+        "finding": "Current result clearing on retry leaves append-only attempt history intact. Finished/running jobs are skipped, retryable jobs require exact selection, previous items commit independently. Migration backfills only surviving legacy outcomes and reports gaps."
+      },
+      {
+        "area": "Continuation and frozen feedback",
+        "files": [
+          "src/review-continuation.ts",
+          "src/storage/store.ts",
+          "src/revision-explanation.ts"
+        ],
+        "finding": "Continuation binds outcome, selected finding and explicit context; it cannot masquerade as a governed/evaluation offline job. Frozen request digests and comparison observations remain separate from current finding feedback and current governance selection."
+      },
+      {
+        "area": "Version selection",
+        "files": [
+          "src/revision-explanation.ts",
+          "src/storage/semantic-governance.ts",
+          "src/governed-semantic-review.ts",
+          "src/application-dispatcher.ts"
+        ],
+        "finding": "Explanation uses existing atomic scoped selector. Acceptance alone does not select; plans pin exact versions and dispatcher rechecks governed admission. Manual offline replay is explicitly nongoverned."
+      },
+      {
+        "area": "Runtime boundary",
+        "files": [
+          "src/worker-bootstrap.ts",
+          "src/local-development-workspace.ts",
+          "src/review-batch-cli-execution.ts",
+          "src/prepared-workspace-resolver.ts"
+        ],
+        "finding": "Presence-only preflight never consumes actual credential values; actual composition remains distinct. Local adapter exports exact prepared resolver entries, not a lifecycle authority. Ordinary configured batch/worker execution remains blocked without injected production authority."
+      }
+    ]
+  },
+  "commits": [
+    {
+      "sha": "4de5084ad03a8634289557f72cdbc6ec97cb53c0",
+      "title": "Add explicit context-selected review continuations",
+      "files": [
+        "docs/evidence/review-continuation-verification-2026-10-13.json",
+        "docs/review-continuations.md",
+        "docs/rule-revision-generation.md",
+        "scripts/smoke-revision-generation.mjs",
+        "src/application-dispatcher.ts",
+        "src/application-job-contract.ts",
+        "src/application-preflight.ts",
+        "src/cli-review-continuation.ts",
+        "src/cli-revision-inspection.ts",
+        "src/cli.ts",
+        "src/review-continuation.ts",
+        "src/storage/migrations/016_review_continuations.sql",
+        "src/storage/store.ts",
+        "tests/review-continuation.test.ts"
+      ]
+    },
+    {
+      "sha": "fa843e32a734ec7f3494b4eea74e7c2ed70fba87",
+      "title": "Add durable explicit review batches with selective retry",
+      "files": [
+        "docs/review-batches.md",
+        "src/cli-review-batch.ts",
+        "src/cli.ts",
+        "src/review-batch.ts",
+        "src/storage/migrations/017_review_batches.sql",
+        "src/storage/store.ts",
+        "tests/review-batch.test.ts"
+      ]
+    },
+    {
+      "sha": "695705de7c554b28cd7c3c9e1b7cceeb6cb30a88",
+      "title": "Export review batch summaries and recovery selections",
+      "files": [
+        "docs/review-batches.md",
+        "src/cli-review-batch.ts",
+        "src/review-batch-export.ts",
+        "tests/review-batch-export.test.ts"
+      ]
+    },
+    {
+      "sha": "3e9dc825555fd076085f506550c115f3b74c31c8",
+      "title": "Preserve immutable application job results across retries",
+      "files": [
+        "docs/review-batches.md",
+        "src/cli-application-operations.ts",
+        "src/storage/migrations/018_application_job_attempt_history.sql",
+        "src/storage/store.ts",
+        "tests/application-job-history.test.ts",
+        "tests/review-batch.test.ts"
+      ]
+    },
+    {
+      "sha": "d02d1bbc941135dd9ed8605fa6925559cb93c7b6",
+      "title": "Verify restarted review workflow against upstream source projection",
+      "files": [
+        "docs/evidence/review-user-flow-verification-2026-10-13.json",
+        "docs/review-user-flow-verification.md",
+        "scripts/smoke-review-user-flow.mjs"
+      ]
+    },
+    {
+      "sha": "db09bab8a48b9c279c91ed4c6fa555bb6fda8560",
+      "title": "Run review batches from CLI with explicit offline and trusted bootstrap modes",
+      "files": [
+        "docs/evidence/review-batch-cli-verification-2026-10-13.json",
+        "docs/review-batch-cli.md",
+        "docs/review-batches.md",
+        "docs/review-user-flow-verification.md",
+        "scripts/smoke-review-batch-cli.mjs",
+        "src/application-dispatcher.ts",
+        "src/application-job-contract.ts",
+        "src/cli-review-batch.ts",
+        "src/cli-review-continuation.ts",
+        "src/cli.ts",
+        "src/review-batch-cli-execution.ts",
+        "src/review-continuation.ts",
+        "src/storage/store.ts",
+        "tests/review-batch-cli-execution.test.ts"
+      ]
+    },
+    {
+      "sha": "8f4633ff752fa4afbf3eb856d9c5272c474ea224",
+      "title": "Connect prepared resolver and add presence-only real-runtime preflight",
+      "files": [
+        "docs/evidence/worker-real-mode-preflight-2026-10-13.json",
+        "docs/review-batch-cli.md",
+        "docs/worker-real-mode-readiness.md",
+        "examples/worker/preflight-only.json",
+        "src/application-preflight.ts",
+        "src/cli-application-operations.ts",
+        "src/cli-review-batch.ts",
+        "src/worker-bootstrap.ts",
+        "src/worker.ts",
+        "tests/worker-bootstrap-preflight.test.ts",
+        "tests/worker-preflight.cli.test.ts"
+      ]
+    },
+    {
+      "sha": "44a59e56947455cf334dc40ce3319afa69b8b502",
+      "title": "Add development-owned workspace lifecycle with durable evidence",
+      "files": [
+        "docs/evidence/local-development-lifecycle-verification-2026-10-13.json",
+        "docs/local-development-workspaces.md",
+        "docs/worker-real-mode-readiness.md",
+        "scripts/smoke-local-development-lifecycle.mjs",
+        "src/cli-local-development-workspace.ts",
+        "src/cli.ts",
+        "src/local-development-workspace.ts",
+        "src/worker.ts",
+        "tests/local-development-workspace.test.ts"
+      ]
+    },
+    {
+      "sha": "10a0a020f978ddd8eeb25cb02230409e76c5686e",
+      "title": "Expose feedback discovery and evidence links for rule revisions",
+      "files": [
+        "docs/evidence/feedback-discovery-verification-2026-10-13.json",
+        "docs/feedback-discovery.md",
+        "scripts/smoke-feedback-discovery.mjs",
+        "src/cli-feedback-inspection.ts",
+        "src/cli.ts",
+        "src/storage/store.ts",
+        "tests/semantic-review.storage.test.ts"
+      ]
+    },
+    {
+      "sha": "c044e7351066601308619498dad8346dd2f2729c",
+      "title": "Explain feedback-driven rule changes and scoped review eligibility",
+      "files": [
+        "docs/evidence/revision-explanation-verification-2026-10-13.json",
+        "docs/revision-explanation.md",
+        "scripts/smoke-revision-explanation.mjs",
+        "src/cli-revision-inspection.ts",
+        "src/revision-explanation.ts",
+        "tests/revision-explanation.test.ts"
+      ]
+    },
+    {
+      "sha": "da486abce5c981a57808ba342f3773cad3537d1a",
+      "title": "Keep ledger corruption tests compatible with attempt history",
+      "files": [
+        "tests/application-jobs.storage.test.ts"
+      ]
+    }
+  ],
+  "rawArtifacts": "/tmp/flyrewheel-final-regression",
+  "limits": [
+    "No full-suite run; tests outside the selected 30 files were not run and are not counted as skipped.",
+    "PGlite plus authored PostgreSQL/queue/runtime mocks; no live PostgreSQL or deployed worker verification.",
+    "Source projection reads only GitHub-origin src/application-preflight.ts and src/core/identity.ts; fixture runtime output is not real model evidence.",
+    "Remaining demo sources, candidates, feedback and decisions are authored synthetic inputs.",
+    "No credentials/W1 reads, real model calls, external publication or frozen research protocol changes."
+  ]
+}
