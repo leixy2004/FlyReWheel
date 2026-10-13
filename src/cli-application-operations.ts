@@ -4,7 +4,7 @@ import { databaseCommand, storeFor } from './cli-database.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobSummary } from './application-job-contract.js';
 import { PrMiningRequestInputSchema } from './core/pr-mining.js';
 import { prepareMiningApplicationJob, preflightApplicationJob, inspectApplicationOperation } from './application-preflight.js';
-import { inspectWorkerBootstrap } from './worker-bootstrap.js';
+import { preflightWorkerBootstrap } from './worker-bootstrap.js';
 
 async function readJson(path: string) {
   if ((await stat(path)).size > 2_000_000) throw new Error('Operation input exceeds 2MB');
@@ -29,7 +29,7 @@ export function registerApplicationOperationCommands(parent: Command,
   parent.command('bootstrap-check').description('Offline configuration presence check; no deployment authority is inferred from JSON')
     .option('--config <file>', 'Explicit administrator configuration; no ambient file or module loading')
     .action(async options => {
-      await output(inspectWorkerBootstrap(options.config ? await readJson(options.config) : undefined));
+      await output(preflightWorkerBootstrap(options.config ? await readJson(options.config) : undefined, new Set(Object.keys(process.env))));
     });
   databaseCommand(parent, 'prepare-mining').description('Persist an exact mining request and export an immutable job; does not enqueue or execute')
     .requiredOption('--request <file>', 'Existing mining request input; referenced evidence must already be in this database')

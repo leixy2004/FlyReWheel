@@ -1,10 +1,12 @@
 import { bindBatchFixtures, loadBatchFixtures, runBatchFromCli } from './review-batch-cli-execution.js';
-import type { WorkerBootstrapDependencies } from './worker-bootstrap.js';
+import { preflightWorkerBootstrap, WorkerBootstrapConfigSchema, type WorkerBootstrapDependencies } from './worker-bootstrap.js';
 import { writeFile } from 'node:fs/promises';
 import { Option } from 'commander';
 import { exportReviewBatch, reviewBatchCsv } from './review-batch-export.js';
 import type { Command } from 'commander';
 import { databaseCommand, storeFor } from './cli-database.js';
+import { digestOf } from './core/identity.js';
+import { applicationJobDigest } from './application-job-contract.js';
 import { ReviewBatchInputSchema, reviewBatchStatus } from './review-batch.js';
 
 export function registerReviewBatchCommands(reviews: Command, json: (path: string) => Promise<unknown>, output: (value: unknown, path?: string) => Promise<void>, trusted: WorkerBootstrapDependencies = {}) {
@@ -17,6 +19,29 @@ export function registerReviewBatchCommands(reviews: Command, json: (path: strin
       const store = await storeFor(options);
       try { await output({ ...await store.createReviewBatch(input), execution: 'not_run' }, options.out); }
       finally { await store.close(); }
+    });
+  databaseCommand(batch, 'preflight').description('Inspect config and exact prepared-workspace bindings without reading credential values or invoking runtime/resolver')
+    .requiredOption('--digest <sha256>').option('--config <file>').option('--out <file>').action(async options => {
+      const raw = options.config ? await json(options.config) : undefined;
+      const bootstrap = preflightWorkerBootstrap(raw, new Set(Object.keys(process.env)), trusted);
+      const parsed = WorkerBootstrapConfigSchema.safeParse(raw ?? {}), store = await storeFor(options);
+      try {
+        const stored = await store.getReviewBatch(options.digest), items = [];
+        for (const job of stored.batch.input.jobs) {
+          const jobDigest = applicationJobDigest(job);
+          const snapshot = (await store.getChangeSnapshot(job.snapshotDigest)).snapshot;
+          const selection = { workspaceId: job.workspaceId, jobDigest, kind: job.kind, repository: snapshot.repository.id,
+            expectedSha: snapshot.head, baseSha: snapshot.mergeBase, headSha: snapshot.head };
+          const bound = parsed.success && parsed.data.preparedWorkspaces?.entries.some(entry => digestOf(entry.selection) === digestOf(selection));
+          items.push({ jobDigest, mode: job.offlineFixtureDigest ? 'offline-fixture' : 'workspace',
+            workspaceBinding: job.offlineFixtureDigest ? 'not-required' : job.evaluationExportId ? 'evaluation-resolver-required'
+              : bound ? 'exact-config-selection-not-verified' : trusted.resolveWorkspace ? 'injected-not-invoked' : 'missing-exact-selection' });
+        }
+        const ready = bootstrap.status === 'configured' && items.every(item => item.mode === 'workspace'
+          && ['exact-config-selection-not-verified', 'injected-not-invoked'].includes(item.workspaceBinding));
+        await output({ batchDigest: stored.digest, status: ready ? 'configured-not-live-verified' : 'blocked', bootstrap, items,
+          claims: 'not_created', modelExecution: 'not_run', workspaceInspection: 'not_run' }, options.out);
+      } finally { await store.close(); }
     });
   databaseCommand(batch, 'run').description('Execute a stored batch; explicit offline fixtures or trusted worker bootstrap, never automatic model authorization')
     .requiredOption('--digest <sha256>').option('--offline-fixtures <files...>', 'Explicit authored fixture files matching the frozen offline jobs')

@@ -1,3 +1,5 @@
+import { readFile, stat } from 'node:fs/promises';
+import { preflightWorkerBootstrap } from './worker-bootstrap.js';
 import { openSelectedStore, resolveDatabaseSelection } from './storage/connection.js';
 import { openQueue } from './jobs.js';
 import { startWorkerService } from './worker-service.js';
@@ -20,8 +22,22 @@ async function startConfiguredWorker() {
 }
 // Build/runtime import smoke without opening a database, service, socket or model.
 if (process.argv.slice(2).includes('--check')) {
-  process.stdout.write(JSON.stringify({ status: 'checked', queues: ['replay', 'application'], applicationRuntime: 'blocked',
+  const args = process.argv.slice(2), configIndex = args.indexOf('--config');
+  if (configIndex >= 0) {
+    try {
+      const path = args[configIndex + 1];
+      if (!path || path.startsWith('--')) throw new Error('Missing configuration path');
+      if ((await stat(path)).size > 2_000_000) throw new Error('Configuration too large');
+      const bytes = await readFile(path);
+      if (bytes.length > 2_000_000) throw new Error('Configuration too large');
+      const result = preflightWorkerBootstrap(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)), new Set(Object.keys(process.env)));
+      process.stdout.write(JSON.stringify(result) + '\n');
+    } catch { process.stderr.write('Worker preflight could not read a bounded UTF-8 configuration file\n'); process.exitCode = 1; }
+  } else process.stdout.write(JSON.stringify({ status: 'checked', queues: ['replay', 'application'], applicationRuntime: 'blocked',
     reason: 'Trusted workspace resolver/backend bootstrap and production lifecycle authority are not configured' }) + '\n');
+} else if (process.argv.slice(2).includes('--config')) {
+  process.stderr.write('Worker configuration alone cannot supply lifecycle authority; use --check --config for preflight and a reviewed deployment bootstrap for execution\n');
+  process.exitCode = 1;
 } else {
   await startConfiguredWorker().catch(() => {
     process.stderr.write('Worker startup failed; check explicit DATABASE_URL configuration and secured operational logs\n');

@@ -63,13 +63,15 @@ node dist/cli.js reviews batch run --db ./state --digest <workspace-batch-sha256
 ```
 
 This uses `WorkerBootstrapConfigSchema` and `composeWorkerApplication`; no second
-runtime configuration format was introduced. The standard CLI deliberately has
-no deployment lifecycle authority, workspace resolver or credentials. Such a run
+runtime configuration format was introduced. The standard CLI can now construct the existing prepared-workspace resolver from
+`preparedWorkspaces` configuration, but has no built-in production lifecycle
+authority or credentials. Such a run
 fails before a job claim rather than inferring authorization from JSON or reading
 ambient credentials. Reviewed deployment code can pass the existing
 `WorkerBootstrapDependencies` into `registerReviewBatchCommands` to compose an
-already authorized runtime. Authority/resolver/environment remain code-injected,
-never module paths or secret values in job/fixture/config JSON. This work neither
+already authorized runtime. Lifecycle authority and credential environment remain code-injected. Resolver
+selection is either the fixed built-in `preparedWorkspaces` configuration or an
+injected resolver, never arbitrary module paths or secret values in JSON. This work neither
 sets up authentication nor validates live OpenSandbox/model execution.
 
 ## Verification
@@ -94,3 +96,7 @@ This is PGlite CLI acceptance, not PostgreSQL multi-process contention, live-mod
 accuracy, production authorization or frozen-research evidence. No W1 inputs are
 read. Offline execution does not verify a source checkout; it validates registered
 snapshot/context bytes using the same boundary as single `reviews run`.
+
+See [real-mode readiness](worker-real-mode-readiness.md) for the current factual
+limits and presence-only preflight commands; a valid config is not a working
+production lifecycle authority.
