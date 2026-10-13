@@ -39,7 +39,7 @@ export const GithubReviewCommentSchema = CommentBase.extend({
 }).strict();
 export const GithubPrEvidenceSchema = z.object({
   schemaVersion: z.literal(1), kind: z.literal('github-pr-evidence'),
-  snapshotDigest: Digest, snapshot: ChangeSnapshotSchema,
+  snapshotDigest: Digest, snapshot: ChangeSnapshotSchema.refine(value => value.comparison === 'merge-base-to-head', 'Direct-parent evidence is not PR merge-base evidence'),
   pull: GithubPullSchema,
   source: z.object({
     provider: z.literal('github'), apiOrigin: z.literal('https://api.github.com'),

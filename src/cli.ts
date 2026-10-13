@@ -34,7 +34,7 @@ import { extractBugFixPair } from './git-evidence.js';
 import { prepareWorkspace, inspectWorkspace, cleanupWorkspace } from './workspace/index.js';
 import { captureRepositoryContext, readRepositoryContextPackage, verifyRepositoryContext, validateRepositoryContextForSnapshot,
   makeRepositoryContextAnchor, makeRepositoryContextEvidence } from './repository-context.js';
-import { captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
+import { captureDirectParentSnapshot, captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
 import { captureGithubPrEvidence } from './github-pr.js';
 import { discoverGithubPrHistory, validateHistoryPlan, HISTORY_MAX_JSON_BYTES } from './github-pr-history.js';
 import { captureGithubPrHistoryBatch, HistoryCaptureOptionsSchema } from './github-pr-history-batch.js';
@@ -252,6 +252,15 @@ databaseCommand(snapshots, 'capture').requiredOption('--repo <directory>').requi
     const store = await storeFor(options);
     try { await output({ ...await store.importChangeSnapshot(result.snapshot), receipt: result.receipt }, options.out); } finally { await store.close(); }
   });
+databaseCommand(snapshots, 'capture-direct-parent').description('Verify only one original parent/head edge and complete changed bytes; not complete-history evidence')
+  .requiredOption('--repo <directory>').requiredOption('--repository-id <id>', 'Caller-supplied identity')
+  .requiredOption('--parent <sha>', 'Exact original single parent SHA-1').requiredOption('--head <sha>', 'Exact child SHA-1')
+  .option('--out <file>')
+  .action(async options => {
+    const result = await captureDirectParentSnapshot({ repositoryPath: options.repo, repositoryId: options.repositoryId, baseTip: options.parent, head: options.head });
+    const store = await storeFor(options);
+    try { await output({ ...await store.importChangeSnapshot(result.snapshot), receipt: result.receipt }, options.out); } finally { await store.close(); }
+  });
 databaseCommand(snapshots, 'import').requiredOption('--file <file>', 'Frozen snapshot package; only internal integrity is checked')
   .option('--out <file>')
   .action(async options => {
@@ -274,7 +283,7 @@ databaseCommand(snapshots, 'list').option('--repository-id <id>').option('--afte
     try {
       const records = await store.listChangeSnapshots({ repositoryId: options.repositoryId, after: options.after, limit: Number(options.limit) });
       // Inventory only; use show to retrieve the bounded byte payload.
-      await output({ snapshots: records.map(({ digest, snapshot }) => ({ digest, repository: snapshot.repository, baseTip: snapshot.baseTip, mergeBase: snapshot.mergeBase, head: snapshot.head, coverage: snapshot.coverage })),
+      await output({ snapshots: records.map(({ digest, snapshot }) => ({ digest, repository: snapshot.repository, baseTip: snapshot.baseTip, mergeBase: snapshot.mergeBase, head: snapshot.head, comparison: snapshot.comparison, ...(snapshot.evidenceScope ? { evidenceScope: snapshot.evidenceScope } : {}), coverage: snapshot.coverage })),
         nextAfter: records.length ? records.at(-1)!.digest : null, receipt: integrityReceipt }, options.out);
     } finally { await store.close(); }
   });
