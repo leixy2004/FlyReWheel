@@ -39,9 +39,11 @@ No-alert/abstention cannot be treated as demonstrated legal-neighbor resolution.
 Local digests detect mismatches, not fabricated declarations or exposure histories.
 Reidentification, prior model/source exposure, incomplete source context, subjective
 opportunity enumeration and dependent families constrain inference. Synthetic PRs,
-clock values and configuration tests are implementation evidence only. The local
-reservation prevents overwrite in one directory, not reruns under new directories;
-a durable cohort-wide attempt register remains necessary before real execution.
+clock values and configuration tests are implementation evidence only. A fixed checkout-local register now binds repository/freeze and each PR receipt
+across output directories, rejecting replacement and omission. Recovery reuses only
+registered receipts. Repository aliases, alternate checkouts, filesystem-owner
+mutation and source misrepresentation remain outside this local guarantee; real
+execution still requires authenticated study identity and exposure auditing.
 
 ## Concrete next gates
 
@@ -50,8 +52,7 @@ a durable cohort-wide attempt register remains necessary before real execution.
    new sources or expose W1 merely to fill configuration fields.
 2. Implement a raw-response parser rejecting duplicate keys and unorderable spans,
    validate anchors against pinned bytes, and test compound-rule rejection and
-   independent screening with no replacement. Extend durable slot identity across
-   directories before connecting an executor.
+   independent screening with no replacement. Audit study identity and registry storage durability before connecting an executor.
 3. Implement exact-key family grouping with retained membership/rejections and
    lineage audit; implement W1 first-index selection tests for missing earlier cells
    and unknown feedback without reading real W1 material.

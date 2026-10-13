@@ -1,8 +1,14 @@
 {
   "kind": "offline-authored-construction-verification",
   "baseCommit": "17879c1",
-  "tests": {"command": "npx vitest run tests/construction-freeze.test.ts --maxWorkers=1", "passed": 9},
-  "typecheck": {"command": "npx tsc --noEmit", "exitCode": 0},
+  "tests": {
+    "command": "npx vitest run tests/construction-freeze.test.ts tests/construction-registry.test.ts --maxWorkers=1",
+    "passed": 16
+  },
+  "typecheck": {
+    "command": "npx tsc --noEmit",
+    "exitCode": 0
+  },
   "authoredCli": "completed; two synthetic roster rows, no_rule and not_run",
   "verificationStatus": "verified-authored-only",
   "reportDigest": "509a867880a5a2af89ad0d19c39f69e6b91a3e9fb53817ca2f2f11ca7a0d1d90",
@@ -11,5 +17,14 @@
   "modelCalls": 0,
   "independentHumanLabels": 0,
   "newSourceAcquisitions": 0,
-  "empiricalAdmission": false
+  "empiricalAdmission": false,
+  "registryVerification": {
+    "scope": "fixed checkout-local repository/freeze/PR registry",
+    "differentOutputDirectory": "exact replay allowed; replacement and omission rejected",
+    "copiedOutputTamper": "rejected against authoritative registry",
+    "recovery": "registered immutable receipts only; CLI verified",
+    "partialRecordOrLock": "fail closed, no automatic takeover",
+    "concurrency": "cohort mkdir lock covers scan and bindings",
+    "independentReview": "identity_audit static final review: no remaining blocker after cohort lock fix; no independent test execution"
+  }
 }

@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { freeze, readiness } from './contracts.js';
+import { registeredInputs } from './registry.js';
 import { fixture } from './fixture.js';
 import { writeReplay, verifyReplay } from './runner.js';
 const [command,...args]=process.argv.slice(2);
@@ -9,6 +10,9 @@ if(command==='authored' && args.length===1){
     {pr:1,packetDigest:config.roster[0].packetDigest,outcome:'completed',candidates:[]},
   ]);
   console.log(JSON.stringify(report,null,2));
+} else if(command==='recover' && args.length===2){
+  const {frozen,inputs}=registeredInputs(args[0]);
+  console.log(JSON.stringify(writeReplay(args[1],frozen,inputs),null,2));
 } else if(command==='verify' && args.length===1){
   console.log(JSON.stringify(verifyReplay(args[0]),null,2));
 } else if(command==='check' && args.length===1){
@@ -22,4 +26,4 @@ if(command==='authored' && args.length===1){
   // Explicit draft retains authored placeholders; it is not a real W0 configuration.
   const output={...config};
   writeFileSync(args[0],JSON.stringify(output,null,2)+'\n',{flag:'wx',mode:0o600});
-} else throw Error('Usage: replay.ts authored NEW_DIRECTORY | verify DIRECTORY | draft NEW_FILE | check CONFIG_FILE');
+} else throw Error('Usage: replay.ts authored NEW_DIRECTORY | recover REPOSITORY NEW_DIRECTORY | verify DIRECTORY | draft NEW_FILE | check CONFIG_FILE');

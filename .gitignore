@@ -8,3 +8,6 @@ coverage/
 *.log
 .trigger/
 .sandcastle/
+
+# Local authoritative authored construction attempt registry (never source data)
+.construction-attempts/

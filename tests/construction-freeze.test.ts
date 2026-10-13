@@ -1,5 +1,8 @@
 import { describe,it,expect } from 'vitest';
 import { mkdtempSync,readFileSync,writeFileSync,rmSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { digestOf } from '../src/core/identity.js';
+import { registryRoot } from '../experiments/construction/registry.js';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { freeze,validateFreeze,readiness,ConfigSchema } from '../experiments/construction/contracts.js';
@@ -51,10 +54,11 @@ describe('offline construction freeze',()=>{
  });
  it('verifies persisted replay and rejects report alteration',()=>{
   const parent=mkdtempSync(join(tmpdir(),'construction-'));const out=join(parent,'run');
-  try {writeReplay(out,freeze(fixture(),time),[]);expect(verifyReplay(out).status).toBe('verified-authored-only');
+  const config=fixture();config.repository=`authored/freeze-test-${randomUUID()}`;
+  try {writeReplay(out,freeze(config,time),[]);expect(verifyReplay(out).status).toBe('verified-authored-only');
     const report=JSON.parse(readFileSync(join(out,'report.json'),'utf8'));report.empiricalAdmission=true;
     writeFileSync(join(out,'report.json'),JSON.stringify(report));expect(()=>verifyReplay(out)).toThrow(/report mismatch/);
-  }finally{rmSync(parent,{recursive:true,force:true});}
+  }finally{rmSync(parent,{recursive:true,force:true});rmSync(join(registryRoot,digestOf({repository:config.repository})),{recursive:true,force:true});}
  });
  it('persists failure and refuses overwrite of consumed run directory',()=>{
   const parent=mkdtempSync(join(tmpdir(),'construction-'));const out=join(parent,'run');

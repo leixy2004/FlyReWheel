@@ -32,11 +32,32 @@ raw JSON with duplicate-key rejection, independently screen candidates, deduplic
 families or select W1 episodes. These gates must be implemented before empirical use;
 no candidate is marked admitted. Existing core canonical JSON is reused.
 
-An exclusive run directory is a consumed attempt marker. It is never overwritten.
-A failed run saves `failure.json`; abrupt termination may leave only a reservation
-or inputs. Preserve such interrupted directories, do not delete and retry them as
-if they never happened. This is local evidence integrity, not cross-directory
-exactly-once execution, authenticated timestamps or a tamper-proof audit trail.
+The authoritative register is `.construction-attempts/` relative to this module's
+checkout, independent of cwd/output directory, with no CLI path override. Repository
+identity binds exactly one freeze; each PR binds an immutable original receipt.
+Changing output directories or copying reports cannot register a different receipt.
+Exact receipt replay is allowed without a new construction. Invalid bound receipts
+consume their identified slot; later corrections are rejected. Every registered
+slot must appear in a current report, including failures. `replay()` alone is a pure,
+unregistered authored projection; only `writeReplay`/`verifyReplay` use the register.
+
+A run reserves its slots before computing its report. A process interrupted after
+reservation can recover only those exact stored receipts. Missing/partial or corrupt
+registry files fail closed; they are not silently deleted or repaired. Output
+folders use exclusive creation and preserve failure records. As the registered
+prefix grows, verification rejects older shortened projections; recover the complete
+current prefix instead of concealing later failures.
+
+This is a local trusted-filesystem guarantee, not an authenticated distributed
+registry. Changing repository aliases, copying the whole checkout/registry, deleting
+records as their owner or modifying code is outside the guarantee. A cohort lock serializes registration/verification; busy or interrupted locks are
+never automatically taken over. A crash while holding that lock needs an explicit
+operator integrity audit before any lock removal, not a new output directory.
+Completed registrations can be recovered automatically after report interruption.
+Atomic exclusive file creation also prevents competing receipt replacement. There is no fsync power-loss durability claim.
+`authored/` repository names are required for authored freezes, while real-source
+and model configurations remain blocked. Names and declarations cannot authenticate
+whether maliciously relabeled bytes are synthetic. No output grants empirical admission.
 
 ## Reproduce without network
 
@@ -45,9 +66,10 @@ Run from repository root with existing dependencies. Use new output paths:
 ```sh
 node --import tsx experiments/construction/replay.ts authored /tmp/construction-example
 node --import tsx experiments/construction/replay.ts verify /tmp/construction-example
+node --import tsx experiments/construction/replay.ts recover authored/example /tmp/construction-recovered
 node --import tsx experiments/construction/replay.ts draft /tmp/construction-draft.json
 node --import tsx experiments/construction/replay.ts check /tmp/construction-draft.json
-npx vitest run tests/construction-freeze.test.ts --maxWorkers=1
+npx vitest run tests/construction-freeze.test.ts tests/construction-registry.test.ts --maxWorkers=1
 npx tsc --noEmit
 ```
 
@@ -55,5 +77,5 @@ npx tsc --noEmit
 explicit authored placeholder roster/digests and `UNCONFIGURED` repository; it is
 not the HTTPX cohort or an execution configuration. `authored` uses a fixed synthetic
 clock and two invented PR IDs solely for reproducibility. `verify` recomputes the
-report and checks reserved inputs, freeze binding and output digest without writing.
+report and checks reserved inputs, freeze binding and output digest without rewriting evidence (it briefly acquires the cohort lock).
 It cannot authenticate who originally wrote the artifacts.

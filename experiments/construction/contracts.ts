@@ -33,6 +33,7 @@ export type Config = z.infer<typeof ConfigSchema>;
 export function readiness(input: unknown) {
   const c=ConfigSchema.parse(input); const blockers: string[]=[];
   if(c.constructor.kind==='unconfigured') blockers.push(...c.constructor.missing);
+  if(c.origin==='authored-fixture' && !c.repository.startsWith('authored/')) blockers.push('authored fixtures require authored/ repository namespace');
   if(c.origin!=='authored-fixture') blockers.push('real-source exposure audit and execution adapter not implemented; no empirical freeze');
   if(c.constructor.kind==='model') blockers.push('model execution unavailable in offline runner');
   if(c.exposure.firstW1At!==null) blockers.push('W1 already exposed');

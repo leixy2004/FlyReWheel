@@ -229,7 +229,9 @@ now documents an offline authored harness for strict configuration validation,
 freeze/source-digest binding, ordered attempt slots, candidate retention, failure
 records and reproducible report verification. Public-source freezes and model
 execution remain blocked. These checks do not establish semantic source support,
-independent labels, cross-directory no-retry enforcement or empirical effectiveness.
+independent labels, authenticated cross-checkout attempt identity or empirical effectiveness.
+A fixed local register now prevents receipt replacement across output directories
+and supports recovery from immutable registered receipts.
 The planned H/U claim remains single-update constrained transfer on predefined
 opportunities under shared diagnosis, representation and gate, not autonomous
 issue discovery. The status note lists concrete remaining construction, episode

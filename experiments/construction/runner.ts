@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { z } from 'zod';
 import { digestOf } from '../../src/core/identity.js';
 import { DigestSchema } from '../../src/core/model.js';
+import { register } from './registry.js';
 import { validateFreeze } from './contracts.js';
 const Text=z.string().min(1).max(8192);
 const Candidate=z.object({path:Text.refine(p=>!p.startsWith('/') && !p.includes('\\') && p.split('/').every(s=>s && s!=='.' && s!=='..')),
@@ -39,11 +40,13 @@ export function replay(frozen:unknown, inputs:unknown[]) {
   return {kind:'authored-construction-replay',freezeDigest:f.digest,rows,modelCalls:0,independentLabels:0,empiricalAdmission:false};
 }
 export function writeReplay(directory:string,frozen:unknown,inputs:unknown[]) {
-  // An exclusive directory is the consumed attempt token. Never overwrite/retry a partial run.
+  // Output directories are disposable projections; authoritative attempt slots live in the fixed registry.
   mkdirSync(directory,{mode:0o700});
   writeFileSync(join(directory,'reservation.json'),JSON.stringify({kind:'authored-replay-reservation',inputDigest:digestOf(inputs)}),{flag:'wx',mode:0o600});
   try {
     writeFileSync(join(directory,'inputs.json'),JSON.stringify({frozen,inputs},null,2),{flag:'wx',mode:0o600});
+    const registration=register(frozen,inputs);
+    writeFileSync(join(directory,'registration.json'),JSON.stringify(registration,null,2),{flag:'wx',mode:0o600});
     const report=replay(frozen,inputs);
     writeFileSync(join(directory,'report.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
     return report;
@@ -58,6 +61,7 @@ export function verifyReplay(directory:string) {
   const {frozen,inputs}=JSON.parse(readFileSync(join(directory,'inputs.json'),'utf8'));
   const actual=JSON.parse(readFileSync(join(directory,'report.json'),'utf8'));
   if(reservation.inputDigest!==digestOf(inputs)) throw Error('reserved input digest mismatch');
+  register(frozen,inputs,false);
   const expected=replay(frozen,inputs);
   if(digestOf(actual)!==digestOf(expected)) throw Error('replay report mismatch');
   return {status:'verified-authored-only',reportDigest:digestOf(expected),modelCalls:0};
