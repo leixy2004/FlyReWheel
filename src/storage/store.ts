@@ -241,6 +241,36 @@ export class QualEvoStore {
     await this.reconcileExpiredApplicationJobs(1, jobDigest);
     return this.db.transaction(async tx => (await this.readApplicationJob(tx, jobDigest))?.record ?? null);
   }
+  /** Immutable observed outcomes, including failed attempts replaced in the current
+   * ledger by retries. Migration never invents already-lost historical results. */
+  async getApplicationJobHistory(jobDigest: string, input: { afterAttempt?: number; limit?: number } = {}) {
+    DigestSchema.parse(jobDigest);
+    const options = z.object({ afterAttempt: z.number().int().nonnegative().default(0), limit: z.number().int().min(1).max(100).default(20) }).strict().parse(input);
+    await this.reconcileExpiredApplicationJobs(1, jobDigest);
+    return this.db.transaction(async tx => {
+      const current = await this.readApplicationJob(tx, jobDigest);
+      if (!current) fail('NOT_FOUND', 'Unknown application job');
+      const rows = (await tx.query<{ attempt: number; state: string; result: unknown; result_digest: string; origin: string }>(
+        'SELECT attempt,state,result,result_digest,origin FROM qe_application_job_attempt_history WHERE job_digest=$1 AND attempt>$2 ORDER BY attempt LIMIT $3',
+        [jobDigest, options.afterAttempt, options.limit])).rows;
+      const outcomes = rows.map(row => {
+        const result = ApplicationJobResultSchema.parse(row.result);
+        if (digestOf(result) !== row.result_digest || row.attempt > current.record.attempts
+          || !['migration-current-result','recorded-transition'].includes(row.origin)
+          || (row.state === 'retryable' ? result.status !== 'failed' : row.state !== 'finished'))
+          fail('INTEGRITY_FAILURE', 'Invalid application attempt history');
+        return { attempt: row.attempt, state: row.state, result, origin: row.origin };
+      });
+      const count = await one<{ count: number }>(tx, 'SELECT count(*)::integer AS count FROM qe_application_job_attempt_history WHERE job_digest=$1', [jobDigest]);
+      const closedAttempts = current.record.attempts - (current.record.state === 'running' ? 1 : 0);
+      const recordedAttempts = count!.count;
+      if (recordedAttempts > closedAttempts) fail('INTEGRITY_FAILURE', 'Attempt history exceeds completed attempts');
+      return { jobDigest, currentState: current.record.state, attempts: current.record.attempts,
+        recordedAttempts, missingHistoricalAttempts: closedAttempts - recordedAttempts,
+        historyScope: 'observed-results-only-no-invented-backfill', outcomes,
+        nextAfterAttempt: outcomes.at(-1)?.attempt ?? null };
+    });
+  }
   private checkApplicationJobPayload(job: ApplicationJob, row: ApplicationJobRow): void {
     if (digestOf(job) !== row.job_payload_digest) fail('IMMUTABLE_CONFLICT', 'Application job identity already has different normalized content');
   }

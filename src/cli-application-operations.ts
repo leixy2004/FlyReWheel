@@ -1,7 +1,7 @@
 import type { Command } from 'commander';
 import { readFile, stat, writeFile } from 'node:fs/promises';
 import { databaseCommand, storeFor } from './cli-database.js';
-import { ApplicationJobSchema } from './application-job-contract.js';
+import { ApplicationJobSchema, applicationJobDigest, applicationJobSummary } from './application-job-contract.js';
 import { PrMiningRequestInputSchema } from './core/pr-mining.js';
 import { prepareMiningApplicationJob, preflightApplicationJob, inspectApplicationOperation } from './application-preflight.js';
 import { inspectWorkerBootstrap } from './worker-bootstrap.js';
@@ -56,6 +56,16 @@ export function registerApplicationOperationCommands(parent: Command,
       const store = await storeFor(options);
       try { await output(await preflightApplicationJob(store, job, { bootstrapConfig })); }
       finally { await store.close(); }
+    });
+  databaseCommand(parent, 'history').description('Read immutable observed attempt results; never retries a job')
+    .requiredOption('--file <file>', 'Exact application job JSON').option('--after-attempt <number>', 'Exclusive attempt cursor', '0')
+    .option('--limit <number>', '1–100 results', '20').option('--out <file>').action(async options => {
+      const job = ApplicationJobSchema.parse(await readJson(options.file));
+      const store = await storeFor(options);
+      try {
+        const history = await store.getApplicationJobHistory(applicationJobDigest(job), { afterAttempt: Number(options.afterAttempt), limit: Number(options.limit) });
+        await output({ ...history, outcomes: history.outcomes.map(item => ({ ...item, result: applicationJobSummary(item.result) })) }, options.out);
+      } finally { await store.close(); }
     });
   databaseCommand(parent, 'recovery').description('Inspect durable job and recovery instructions; reconciles expired claims, never retries or resets')
     .requiredOption('--file <file>', 'The original exact normalized application job JSON')

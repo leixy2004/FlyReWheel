@@ -45,8 +45,11 @@ Cancellation and unexpected database/integrity errors stop the invocation;
 earlier committed results remain queryable. After fixing a terminal blocked job,
 create a new job attempt in a new batch instead of resetting the old record.
 This feature adds no automatic scheduling, queue retry policy or external comments.
-The existing job ledger stores the latest retry result, not an execution-event
-archive; retrying a job can replace its earlier retryable error.
+The current job ledger stores the latest retry result. A separate append-only
+attempt history now preserves each observed failure/completion across retries.
+Use `application-jobs history --db ./state --file job.json` to page through it.
+The migration backfills only the current result and explicitly reports any older
+missing attempts; already-overwritten historical failures cannot be recovered.
 
 Status returns counts for not-started, running, retryable, completed and blocked
 items, plus each job's exact identity, result, attempts and recovery guidance.

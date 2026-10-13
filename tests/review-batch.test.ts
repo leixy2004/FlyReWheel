@@ -31,10 +31,17 @@ it('continues after a durable item failure, requires explicit retry, reuses comp
     { retryJobDigests: [applicationJobDigest(f.input.jobs[0])] });
   expect(completed).toMatchObject({ state: 'completed', counts: { completed: 3, retryable: 0 } });
   expect(completed.items.map(item => item.attempts)).toEqual([2, 1, 1]);
+  const history = await f.store.getApplicationJobHistory(applicationJobDigest(f.input.jobs[0]));
+  expect(history).toMatchObject({ recordedAttempts: 2, missingHistoricalAttempts: 0, outcomes: [
+    { attempt: 1, state: 'retryable', result: { reason: 'runtime_failed' } },
+    { attempt: 2, state: 'finished', result: { status: 'completed' } },
+  ] });
+  await expect(f.db.query('DELETE FROM qe_application_job_attempt_history WHERE job_digest=$1', [history.jobDigest])).rejects.toThrow('append-only');
   expect(completed.items.slice(1)).toEqual(first.items.slice(1));
   await f.closeStore();
   const reopened = await QualEvoStore.openPGlite(f.storePath);
-  try { expect(await reviewBatchStatus(reopened, stored.digest)).toEqual(completed); }
+  try { expect(await reviewBatchStatus(reopened, stored.digest)).toEqual(completed);
+    expect(await reopened.getApplicationJobHistory(history.jobDigest)).toEqual(history); }
   finally { await reopened.close(); }
 }, 30_000);
 it('leaves concurrent owners alone and preserves not-started items on cancellation', async () => {
