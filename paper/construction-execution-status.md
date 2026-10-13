@@ -54,8 +54,8 @@ execution still requires authenticated study identity and exposure auditing.
    validate anchors against pinned bytes, and test compound-rule rejection and
    independent screening with no replacement. Audit study identity and registry storage durability before connecting an executor.
 3. Implement exact-key family grouping with retained membership/rejections and
-   lineage audit; extend the authored first-index selector with an audited persistent
-   index/feedback lock before any real W1 material is used.
+   lineage audit; audit the now-persisted authored index/feedback lock against authenticated study
+   identity and exposure evidence before any real W1 material is used.
 4. Bind neutral packets and independent semantic-support sidecars to existing
    annotation/observation records; validate missing/conflicting assessor handling.
 5. Only in a separately configured execution stage bind actual constructor model,

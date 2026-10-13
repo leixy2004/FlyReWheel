@@ -86,11 +86,14 @@ open source files or run a review. Its `ready_authored_only` status exercises ro
 with synthetic gates; it never authorizes empirical evaluation.
 
 The index digest is a reproducible logical binding, not an authenticated timestamp
-or an externally registered freeze. Pure selector callers could create another
-plan; no empirical anti-reselection guarantee follows from those functions alone.
-The example CLI saves an exclusive index artifact before writing synthetic feedback,
-but its times and judgments are invented fixture values. Real study admission still
-needs an audited persistent index/feedback lock and exposure separation.
+or an externally registered freeze. Pure selectors alone allow another plan; the
+CLI now uses a fixed local index/feedback register that rejects changed requests
+across calls. Original requests precede derived outputs, permitting report recovery
+without review reruns. Unknown or finalized missing feedback cannot be replaced.
+Partial records or locks require an integrity audit rather than automatic takeover.
+The same checkout/identity trust assumptions as construction apply. Its times and
+judgments remain invented fixture values; real admission still needs authenticated
+study identity, external exposure auditing and independent feedback.
 
 ## Failure and missingness accounting
 
@@ -113,7 +116,9 @@ No-alert and abstention cannot alone resolve a legal-neighbor opportunity.
 
 ## Remaining empirical requirements and threats
 
-The offline checks establish structural behavior only. Still required are actual
+The offline checks establish structural behavior only. Episode family rosters are
+currently independently authored and are not linked to admitted construction
+results; end-to-end family provenance remains unimplemented. Still required are actual
 source-packet verification (including span bounds and evidence), a raw-response
 parser with duplicate-key rejection, compound-rule assessment, independent eligibility
 and lineage review, authenticated construction/index locks, neutral opportunity

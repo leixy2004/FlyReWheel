@@ -87,9 +87,9 @@ binds the complete authored plan and all review cells, then `selectEpisodes` acc
 separately bound synthetic feedback. Cells bind plan, rule and packet digests;
 duplicate exact-rule families and replacement cells are rejected. Missing/malformed
 earlier work blocks an index, and Unknown feedback cannot select a later finding.
-All raw cells, later findings and missing matrix entries are retained. Digest locks
-are reproducible pure objects, not permanent cross-call registration or proof of
-actual exposure times. There is no empirical execution path.
+All raw cells, later findings and missing matrix entries are retained. The pure functions produce reproducible objects; persisted calls now go through
+`episode-registry.ts`, which binds the first plan/cell request and final feedback
+across calls in a fixed checkout-local register. Neither proves actual exposure times. There is no empirical execution path.
 
 ```sh
 node --import tsx experiments/construction/episode-replay.ts /tmp/authored-episode-example
@@ -100,3 +100,31 @@ The demo saves `index-lock.json`, `feedback.authored.json` and `episode-report.j
 in a new exclusive directory. Synthetic PR 2 is selected; synthetic Unknown feedback
 blocks the episode despite a later finding. Repeating this demo is a software test,
 not an additional independent experiment. It never reads real W1 or source files.
+
+## Persisted index and feedback
+
+The example CLI now uses `.episode-attempts/`, keyed by declared authored repository,
+with no output-path override. `index-request.json` permanently fixes the original
+plan/cells/time in this local register; `index.json` is its derived selection.
+Changing the plan, cells or declared lock time conflicts even if new digests are
+computed. `feedback-request.json` fixes final feedback, including Unknown or an
+explicitly finalized empty list (missing). Replacing either decision is refused.
+Before finalization, recovery reports `not_finalized`; it does not invent judgments.
+
+```sh
+node --import tsx experiments/construction/episode-replay.ts --recover authored/episode-demo /tmp/episode-recovered
+```
+
+Recovery derives missing reports only from preserved requests, checks existing
+artifacts and never reruns review/construction. Validation failures leave their
+request and failure records. Partial JSON, conflicting artifacts or surviving locks
+stop recovery; there is no automatic repair or lock takeover. As with construction,
+this is one trusted checkout's append-only policy, not authentication, protection
+against owner tampering/aliases/another checkout, or power-loss durability.
+The pure selector remains available for authored tests; it cannot issue a registered
+study result. All registered reports remain `empiricalAdmission: false`.
+
+Episode families are currently supplied by an independent authored plan; they are
+not proven descendants of admitted construction results. See the
+[combined closeout matrix](../../paper/local-research-closeout.md) for the exact
+completed and incomplete boundaries and validation evidence.
