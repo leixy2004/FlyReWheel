@@ -1,0 +1,226 @@
+{
+  "status": "passed",
+  "sourceEvidence": "repository synthetic examples/pr-mining-evidence.json; no real vLLM PR package",
+  "historySetup": "explicit synthetic store transitions, not network capture",
+  "requestDigest": "53a5bc7c024aac616f7765c6be72785250e10c4af00a2bdd9082faf06a74b18c",
+  "evidenceDigest": "1104ecd3aa6bf553eb246ee9f2572a445f31de1879d962cb64d9164b484a6aae",
+  "successfulCliCalls": 13,
+  "expectedRejectedCliCalls": 5,
+  "checks": [
+    "all evidence choices listed",
+    "explicit selections bound",
+    "prepare did not persist request",
+    "existing request freeze and separate-process show agree",
+    "history batch selects same PR evidence",
+    "existing history request links exact frozen request",
+    "no candidates created"
+  ],
+  "modelCalls": 0,
+  "commands": [
+    {
+      "args": [
+        "github-pr",
+        "import",
+        "--file",
+        "examples/pr-mining-evidence.json"
+      ],
+      "exitCode": 0,
+      "outputSha256": "bc6c1a9c52adae4a60469d1f3ac9a35793951720cb3fbd5f36304af10d214709"
+    },
+    {
+      "args": [
+        "mining",
+        "choices",
+        "--evidence-digest",
+        "1104ecd3aa6bf553eb246ee9f2572a445f31de1879d962cb64d9164b484a6aae"
+      ],
+      "exitCode": 0,
+      "outputSha256": "7d3d0a901feb43db75aa9a937fd13b9cacf325945b943cc5f5ad1a60fbfb9266"
+    },
+    {
+      "args": [
+        "mining",
+        "prepare",
+        "--evidence-digest",
+        "1104ecd3aa6bf553eb246ee9f2572a445f31de1879d962cb64d9164b484a6aae",
+        "--id",
+        "prepared-cli",
+        "--rule-id",
+        "fixture-mined-rule",
+        "--rule-version",
+        "draft-1",
+        "--objective",
+        "Inspect selected synthetic sources; retain uncertainty.",
+        "--actor",
+        "synthetic-smoke",
+        "--source",
+        "fixture",
+        "--created-at",
+        "2026-10-13T00:00:00Z",
+        "--all-captured",
+        "--statement",
+        "pull",
+        "review:20"
+      ],
+      "exitCode": 0,
+      "outputSha256": "2108bd4d574219f85007d5fffd39b61a4b828efde1ec1b327831037d1d3c7ebc"
+    },
+    {
+      "args": [
+        "mining",
+        "list"
+      ],
+      "exitCode": 0,
+      "outputSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "args": [
+        "mining",
+        "request",
+        "--file",
+        "${SMOKE_OUTPUT_DIR}/request.json"
+      ],
+      "exitCode": 0,
+      "outputSha256": "973157ee9f181b0d3cbefec76a146100e39eeefb0409b0a7e076ec3d3a5359d3"
+    },
+    {
+      "args": [
+        "mining",
+        "show",
+        "--digest",
+        "53a5bc7c024aac616f7765c6be72785250e10c4af00a2bdd9082faf06a74b18c"
+      ],
+      "exitCode": 0,
+      "outputSha256": "973157ee9f181b0d3cbefec76a146100e39eeefb0409b0a7e076ec3d3a5359d3"
+    },
+    {
+      "args": [
+        "mining",
+        "choices",
+        "--batch",
+        "2587b87dd74602d0335fb9e7bb3cff3bc3e589e694f0beba50c7854038ac1448",
+        "--number",
+        "7"
+      ],
+      "exitCode": 0,
+      "outputSha256": "7d3d0a901feb43db75aa9a937fd13b9cacf325945b943cc5f5ad1a60fbfb9266"
+    },
+    {
+      "args": [
+        "mining",
+        "prepare",
+        "--batch",
+        "2587b87dd74602d0335fb9e7bb3cff3bc3e589e694f0beba50c7854038ac1448",
+        "--number",
+        "7",
+        "--id",
+        "prepared-cli",
+        "--rule-id",
+        "fixture-mined-rule",
+        "--rule-version",
+        "draft-1",
+        "--objective",
+        "Inspect selected synthetic sources; retain uncertainty.",
+        "--actor",
+        "synthetic-smoke",
+        "--source",
+        "fixture",
+        "--created-at",
+        "2026-10-13T00:00:00Z",
+        "--before",
+        "src/sample.ts",
+        "--after",
+        "src/sample.ts",
+        "--statement",
+        "pull",
+        "review:20"
+      ],
+      "exitCode": 0,
+      "outputSha256": "2108bd4d574219f85007d5fffd39b61a4b828efde1ec1b327831037d1d3c7ebc"
+    },
+    {
+      "args": [
+        "github-pr",
+        "history",
+        "mining-request",
+        "--batch",
+        "2587b87dd74602d0335fb9e7bb3cff3bc3e589e694f0beba50c7854038ac1448",
+        "--number",
+        "7",
+        "--file",
+        "${SMOKE_OUTPUT_DIR}/request.json"
+      ],
+      "exitCode": 0,
+      "outputSha256": "973157ee9f181b0d3cbefec76a146100e39eeefb0409b0a7e076ec3d3a5359d3"
+    },
+    {
+      "args": [
+        "mining",
+        "show",
+        "--digest",
+        "53a5bc7c024aac616f7765c6be72785250e10c4af00a2bdd9082faf06a74b18c"
+      ],
+      "exitCode": 0,
+      "outputSha256": "973157ee9f181b0d3cbefec76a146100e39eeefb0409b0a7e076ec3d3a5359d3"
+    },
+    {
+      "args": [
+        "github-pr",
+        "history",
+        "show",
+        "--batch",
+        "2587b87dd74602d0335fb9e7bb3cff3bc3e589e694f0beba50c7854038ac1448"
+      ],
+      "exitCode": 0,
+      "outputSha256": "8a067f896653a8ecf21ce75c404592b22dfa029733e37cab7627a8048c674f92"
+    },
+    {
+      "args": [
+        "mining",
+        "candidates"
+      ],
+      "exitCode": 0,
+      "outputSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "args": [
+        "mining",
+        "list"
+      ],
+      "exitCode": 0,
+      "outputSha256": "960d2b0e8e9d835b158b52d16118f8c3be7178b94bbedca1a850eb884d3d3626"
+    }
+  ],
+  "productBaseCommit": "7640d22ff9e157276138725a0f0fd33fa0f6b7bb",
+  "feature": "mining choices and mining prepare; existing request schema and freeze interfaces",
+  "reproduce": [
+    "npm run typecheck",
+    "npm run build",
+    "npm test -- tests/pr-mining-preparation.test.ts tests/pr-mining.test.ts tests/pr-mining.storage.test.ts tests/pr-mining.cli.test.ts",
+    "node scripts/smoke-pr-mining-preparation.mjs"
+  ],
+  "validation": {
+    "testFiles": 4,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "typecheck": "passed",
+    "build": "passed",
+    "compiledCliSuccess": 13,
+    "compiledCliExpectedRejections": 5,
+    "initialDevelopmentCheck": "11 passed and 1 failed; new test setup incorrectly used a private constructor and nonexistent migrate method. Corrected to existing QualEvoStore.openPGlite before final verification; initial typecheck reported the same setup issue. No existing product regression found."
+  },
+  "boundaries": {
+    "realPrInput": "not exercised: no valid vLLM PR evidence package found in existing vLLM artifacts",
+    "directParentRepackagedAsPr": false,
+    "historyEvidence": "synthetic only",
+    "realModelCalls": 0,
+    "miningExecutedByPrepare": false,
+    "candidateCreatedByPrepare": false,
+    "frozenResearchChanged": false,
+    "W1Read": false,
+    "credentialRead": false,
+    "pushOrPublication": false
+  },
+  "recordNotes": "Machine-specific request file paths parameterized; the compiled CLI driver also passes --db ${SMOKE_OUTPUT_DIR}/db. Output hashes refer to original stdout. Original request/response bodies are reproducible from the checked-in synthetic fixture and driver."
+}

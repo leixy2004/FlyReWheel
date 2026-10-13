@@ -1,3 +1,4 @@
+import { registerPrMiningPreparationCommands } from './cli-pr-mining-preparation.js';
 import { bindGovernedOfflineFixtures, runGovernedOfflineReview } from './governed-review-offline.js';
 import { loadBatchFixtures } from './review-batch-cli-execution.js';
 import { registerFeedbackInspectionCommands } from './cli-feedback-inspection.js';
@@ -158,6 +159,7 @@ databaseCommand(history, 'mining-request').requiredOption('--batch <sha256>').re
     try { await output(await store.createGithubPrHistoryMiningRequest(options.batch, number, value), options.out); } finally { await store.close(); }
   });
 const mining = cli.command('mining').description('Local PR evidence requests and supplied/fixture v2 candidates; no live synthesis or labels');
+registerPrMiningPreparationCommands(mining, output);
 databaseCommand(mining, 'request').requiredOption('--file <file>', 'Exact PR evidence/source/statement selection and authored objective')
   .option('--out <file>')
   .action(async options => {
