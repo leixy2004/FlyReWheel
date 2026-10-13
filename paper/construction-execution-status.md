@@ -26,8 +26,8 @@ Before W1 review, lock the source-only opportunity roster and neutral common pac
 Select the first structurally valid finding in frozen PR/anchor order before its
 correctness is disclosed. An earlier missing or malformed cell blocks selection;
 Unknown or missing feedback does not justify replacing the index. Lock shared
-feedback/diagnosis/gate before W2 content. These requirements are not implemented
-by the authored construction runner and must not be inferred from its passing tests.
+feedback/diagnosis/gate before W2 content. The authored episode selector now checks structural first-index routing and separate
+feedback binding; exposure auditing and actual review/judgment remain unimplemented.
 
 Independent source truth and output-support assessment are distinct. All predefined
 arm×repetition×opportunity slots retain missingness and failures. Citation identity
@@ -54,11 +54,14 @@ execution still requires authenticated study identity and exposure auditing.
    validate anchors against pinned bytes, and test compound-rule rejection and
    independent screening with no replacement. Audit study identity and registry storage durability before connecting an executor.
 3. Implement exact-key family grouping with retained membership/rejections and
-   lineage audit; implement W1 first-index selection tests for missing earlier cells
-   and unknown feedback without reading real W1 material.
+   lineage audit; extend the authored first-index selector with an audited persistent
+   index/feedback lock before any real W1 material is used.
 4. Bind neutral packets and independent semantic-support sidecars to existing
    annotation/observation records; validate missing/conflicting assessor handling.
 5. Only in a separately configured execution stage bind actual constructor model,
    version, seed, decoding, token/time accounting and environment. Authentication
    is relevant to that stage, not a prerequisite for items 1–4. No present credential
    or model value is guessed or marked frozen.
+
+The [system method](construction-and-episode-method.md) specifies stage ordering,
+once-only slot semantics, registry trust, failure accounting and empirical gaps.

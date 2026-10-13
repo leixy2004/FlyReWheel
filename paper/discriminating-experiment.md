@@ -236,3 +236,7 @@ The planned H/U claim remains single-update constrained transfer on predefined
 opportunities under shared diagnosis, representation and gate, not autonomous
 issue discovery. The status note lists concrete remaining construction, episode
 selection and independent output-support gates that can proceed without login.
+
+See the [construction and episode method](construction-and-episode-method.md) for
+the system flow, once-only construction semantics, register trust assumptions and
+the authored-only deterministic episode selector. No real W1 material was used.

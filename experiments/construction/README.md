@@ -79,3 +79,24 @@ not the HTTPX cohort or an execution configuration. `authored` uses a fixed synt
 clock and two invented PR IDs solely for reproducibility. `verify` recomputes the
 report and checks reserved inputs, freeze binding and output digest without rewriting evidence (it briefly acquires the cohort lock).
 It cannot authenticate who originally wrote the artifacts.
+
+## Authored episode selection
+
+`episode-selection.ts` adds a two-stage offline selector: `selectIndices` first
+binds the complete authored plan and all review cells, then `selectEpisodes` accepts
+separately bound synthetic feedback. Cells bind plan, rule and packet digests;
+duplicate exact-rule families and replacement cells are rejected. Missing/malformed
+earlier work blocks an index, and Unknown feedback cannot select a later finding.
+All raw cells, later findings and missing matrix entries are retained. Digest locks
+are reproducible pure objects, not permanent cross-call registration or proof of
+actual exposure times. There is no empirical execution path.
+
+```sh
+node --import tsx experiments/construction/episode-replay.ts /tmp/authored-episode-example
+npx vitest run tests/episode-selection.test.ts --maxWorkers=1
+```
+
+The demo saves `index-lock.json`, `feedback.authored.json` and `episode-report.json`
+in a new exclusive directory. Synthetic PR 2 is selected; synthetic Unknown feedback
+blocks the episode despite a later finding. Repeating this demo is a software test,
+not an additional independent experiment. It never reads real W1 or source files.
