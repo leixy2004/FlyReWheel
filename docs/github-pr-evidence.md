@@ -66,3 +66,7 @@ Rate limits, timeouts, missing/deleted objects, malformed data, ambiguous/trunca
 - [Compare commits, including the 300-file limit](https://docs.github.com/en/rest/commits/commits#compare-two-commits)
 - [Git trees and explicit truncation](https://docs.github.com/en/rest/git/trees#get-a-tree)
 - [Git blobs](https://docs.github.com/en/rest/git/blobs#get-a-blob)
+
+For an environment that requires a proxy and its existing trusted CA store, see
+[official Node public transport configuration](github-public-node-transport.md).
+The normal CLI can use Node's startup proxy/system-CA support without a custom transport.

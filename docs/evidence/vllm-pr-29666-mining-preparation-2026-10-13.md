@@ -48,3 +48,9 @@ node dist/cli.js mining show --digest "$REQUEST_DIGEST" --db "$LOCAL_DB"
 Set variables explicitly; use the evidence/request digests returned by that run. The output directory must not already exist. The helper makes bounded unauthenticated real requests for this one PR only and records every response hash. It preserves the collector's limits and rejects redirects. GitHub metadata can change, so future capture digests may differ. These archived helpers were path-normalized for portability and syntax-checked; the actual acquisition used their equivalent local paths. They are not a new product transport capability.
 
 The requested endpoint—one real PR request-preparation compatibility verification—is complete. Native Node public acquisition remains an environment-specific limitation. No model was called, no rule was mined or activated, no vLLM code was executed, and no production readiness or semantic quality is claimed. No push, deployment, credential reads, W1 data access or frozen research changes occurred. Existing code tests were not rerun because product code was unchanged.
+
+Subsequent transport resolution: the native Node limitation recorded above was
+resolved using official `--use-env-proxy --use-system-ca` startup flags on Node
+v24.19.0. A normal CLI capture then succeeded with identical evidence; see
+[the diagnosis and native acceptance](../github-public-node-transport.md).
+The original acquisition facts in this report remain unchanged.
