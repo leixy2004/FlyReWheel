@@ -1,0 +1,1046 @@
+{
+  "status": "passed",
+  "testedCodeHead": "8db3f87da89e1de561a956ae9c96ece2cc1d6441",
+  "checks": [
+    {
+      "scenario": "new --out file",
+      "result": "created exact bound JSON with mode 0600; stdout empty"
+    },
+    {
+      "scenario": "existing --out file",
+      "result": "existing isolated draft replaced by prepared JSON"
+    },
+    {
+      "scenario": "--out symlink",
+      "result": "symlink retained; isolated target overwritten"
+    },
+    {
+      "scenario": "invalid kind/label combination",
+      "result": "exit 1; existing output unchanged"
+    },
+    {
+      "scenario": "missing finding",
+      "result": "exit 1; existing output unchanged"
+    },
+    {
+      "scenario": "output path is directory / parent missing",
+      "result": "both exit 1 (EISDIR / ENOENT); no domain records changed"
+    },
+    {
+      "scenario": "current database domain state across all output cases",
+      "result": "all domain tables row counts and content digests unchanged; migration metadata unchanged"
+    }
+  ],
+  "databaseCases": [
+    {
+      "scenario": "new-invalid-label",
+      "commandExitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"TP\",\n      \"FP\",\n      \"Unknown\",\n      \"Disputed\"\n    ],\n    \"path\": [\n      \"label\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"TP\\\"|\\\"FP\\\"|\\\"Unknown\\\"|\\\"Disputed\\\"\"\n  }\n]\n",
+      "outputCreated": false,
+      "before": null,
+      "after": {
+        "applied": [
+          "001_initial",
+          "002_artifact_links",
+          "003_change_snapshots",
+          "004_semantic_reviews",
+          "005_github_pr_evidence",
+          "006_revision_comparisons",
+          "007_pr_mining",
+          "008_revision_generation",
+          "009_github_pr_history",
+          "010_revision_outcomes",
+          "011_semantic_governance",
+          "012_application_jobs",
+          "013_repository_contexts",
+          "014_governed_reviews",
+          "015_matched_studies",
+          "016_review_continuations",
+          "017_review_batches",
+          "018_application_job_attempt_history"
+        ],
+        "pending": [],
+        "domain": {
+          "qe_active_rules": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_job_attempt_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_jobs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_artifact_links": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_case_lineages": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_change_snapshots": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_evaluations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_evidence": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_admissions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_plans": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_heads": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_studies": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_study_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_problem_cases": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_promotions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_proposals": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_repository_contexts": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_batches": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_continuations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_outcomes": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_bundles": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_comparisons": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_decisions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_runs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_reviews": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_source_splits": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "result": "new database initialized through 018 despite failure; all domain tables empty"
+    },
+    {
+      "scenario": "new-missing-finding",
+      "commandExitCode": 1,
+      "error": "FlyReWheel: Unknown review finding review_finding_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\n",
+      "outputCreated": false,
+      "before": null,
+      "after": {
+        "applied": [
+          "001_initial",
+          "002_artifact_links",
+          "003_change_snapshots",
+          "004_semantic_reviews",
+          "005_github_pr_evidence",
+          "006_revision_comparisons",
+          "007_pr_mining",
+          "008_revision_generation",
+          "009_github_pr_history",
+          "010_revision_outcomes",
+          "011_semantic_governance",
+          "012_application_jobs",
+          "013_repository_contexts",
+          "014_governed_reviews",
+          "015_matched_studies",
+          "016_review_continuations",
+          "017_review_batches",
+          "018_application_job_attempt_history"
+        ],
+        "pending": [],
+        "domain": {
+          "qe_active_rules": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_job_attempt_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_jobs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_artifact_links": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_case_lineages": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_change_snapshots": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_evaluations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_evidence": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_admissions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_plans": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_heads": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_studies": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_study_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_problem_cases": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_promotions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_proposals": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_repository_contexts": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_batches": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_continuations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_outcomes": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_bundles": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_comparisons": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_decisions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_runs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_reviews": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_source_splits": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "result": "new database initialized through 018 despite failure; all domain tables empty"
+    },
+    {
+      "scenario": "pending-migration-invalid-label",
+      "commandExitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"TP\",\n      \"FP\",\n      \"Unknown\",\n      \"Disputed\"\n    ],\n    \"path\": [\n      \"label\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"TP\\\"|\\\"FP\\\"|\\\"Unknown\\\"|\\\"Disputed\\\"\"\n  }\n]\n",
+      "outputCreated": false,
+      "before": {
+        "applied": [
+          "001_initial",
+          "002_artifact_links",
+          "003_change_snapshots",
+          "004_semantic_reviews",
+          "005_github_pr_evidence",
+          "006_revision_comparisons",
+          "007_pr_mining",
+          "008_revision_generation",
+          "009_github_pr_history",
+          "010_revision_outcomes",
+          "011_semantic_governance",
+          "012_application_jobs",
+          "013_repository_contexts",
+          "014_governed_reviews",
+          "015_matched_studies",
+          "016_review_continuations",
+          "017_review_batches"
+        ],
+        "pending": [
+          "018_application_job_attempt_history"
+        ],
+        "domain": {
+          "qe_active_rules": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_jobs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_artifact_links": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_case_lineages": {
+            "rows": 1,
+            "digest": "19291c28021207432364f7b96d992c1e1e4c5200c69537b6c0a0dde941bb89bd"
+          },
+          "qe_change_snapshots": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_evaluations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_evidence": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_admissions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_plans": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_heads": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_studies": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_study_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_problem_cases": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_promotions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_proposals": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_repository_contexts": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_batches": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_continuations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_outcomes": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_bundles": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_comparisons": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_decisions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_runs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_reviews": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_source_splits": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "after": {
+        "applied": [
+          "001_initial",
+          "002_artifact_links",
+          "003_change_snapshots",
+          "004_semantic_reviews",
+          "005_github_pr_evidence",
+          "006_revision_comparisons",
+          "007_pr_mining",
+          "008_revision_generation",
+          "009_github_pr_history",
+          "010_revision_outcomes",
+          "011_semantic_governance",
+          "012_application_jobs",
+          "013_repository_contexts",
+          "014_governed_reviews",
+          "015_matched_studies",
+          "016_review_continuations",
+          "017_review_batches",
+          "018_application_job_attempt_history"
+        ],
+        "pending": [],
+        "domain": {
+          "qe_active_rules": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_job_attempt_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_application_jobs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_artifact_links": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_case_lineages": {
+            "rows": 1,
+            "digest": "19291c28021207432364f7b96d992c1e1e4c5200c69537b6c0a0dde941bb89bd"
+          },
+          "qe_change_snapshots": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_evaluations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_evidence": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_github_pr_history": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_admissions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_governed_review_plans": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_local_semantic_governance_heads": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_studies": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_matched_study_events": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_pr_mining_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_problem_cases": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_promotions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_proposals": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_repository_contexts": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_batches": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_review_continuations": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_candidates": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_revision_outcomes": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_bundles": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_comparisons": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_decisions": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_rule_revision_requests": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_runs": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_feedback": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_review_findings": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_semantic_reviews": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "qe_source_splits": {
+            "rows": 0,
+            "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        }
+      },
+      "result": "migration 018 applied despite invalid input; existing domain content unchanged; new attempt ledger empty"
+    }
+  ],
+  "commands": [
+    {
+      "args": [
+        "reviews",
+        "demo"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutDigest": "f6cd51c15ce658129336d98e1f13f8eff665678f136effeeb193ded4a8a121e6"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/draft.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/draft.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/draft-link.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 0,
+      "stderr": "",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "note",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/draft.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: [\n  {\n    \"code\": \"custom\",\n    \"path\": [],\n    \"message\": \"Only label events carry a label; label events require a label\"\n  }\n]\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/draft.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Unknown review finding review_finding_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/output-is-directory"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: EISDIR: illegal operation on a directory, open '${ISOLATED_ROOT}/output-is-directory'\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/absent-parent/output.json"
+      ],
+      "db": "${ISOLATED_ROOT}/current-db",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: ENOENT: no such file or directory, open '${ISOLATED_ROOT}/absent-parent/output.json'\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "invalid",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/new-invalid-label.json"
+      ],
+      "db": "${ISOLATED_ROOT}/new-invalid-label",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"TP\",\n      \"FP\",\n      \"Unknown\",\n      \"Disputed\"\n    ],\n    \"path\": [\n      \"label\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"TP\\\"|\\\"FP\\\"|\\\"Unknown\\\"|\\\"Disputed\\\"\"\n  }\n]\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/new-missing-finding.json"
+      ],
+      "db": "${ISOLATED_ROOT}/new-missing-finding",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: Unknown review finding review_finding_ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_e5ad49ebc4f3e48ef7fdc20860dd2295792b832d0c036c9916992aa157ae7f85",
+        "--id",
+        "isolated-output-check",
+        "--kind",
+        "label",
+        "--label",
+        "invalid",
+        "--source",
+        "fixture",
+        "--actor",
+        "synthetic-boundary-check",
+        "--reason",
+        "Synthetic boundary validation only; not a human assessment.",
+        "--created-at",
+        "2026-10-15T00:00:00Z",
+        "--out",
+        "${ISOLATED_ROOT}/pending-migration-invalid-label.json"
+      ],
+      "db": "${ISOLATED_ROOT}/pending-migration-invalid-label",
+      "exitCode": 1,
+      "stderr": "FlyReWheel: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"TP\",\n      \"FP\",\n      \"Unknown\",\n      \"Disputed\"\n    ],\n    \"path\": [\n      \"label\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"TP\\\"|\\\"FP\\\"|\\\"Unknown\\\"|\\\"Disputed\\\"\"\n  }\n]\n",
+      "stdoutDigest": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    }
+  ],
+  "counts": {
+    "successfulCliCalls": 4,
+    "expectedRejectedCliCalls": 7
+  },
+  "evidenceNature": "actual compiled CLI in fresh isolated synthetic databases and files; no real human feedback",
+  "staticOnly": [
+    "writeFile is non-atomic; a mid-write filesystem failure could leave truncated content. No mid-write failure or disk exhaustion was induced.",
+    "PostgreSQL initialization uses the same migration entrypoint, but only PGlite was exercised."
+  ],
+  "limitations": [
+    "pending-migration fixture had one synthetic lineage sentinel and no application-job results; migration backfill of populated job history was not exercised"
+  ],
+  "outcome": "No wrong association or unexpected domain data loss observed. Initialization/migration is an actual side effect even on invalid input; --out overwrites files and follows symlinks as the existing shared writer specifies.",
+  "noProductChanges": true,
+  "modelCalls": 0,
+  "verificationDate": "2026-10-15",
+  "reproduce": [
+    "npm run build",
+    "node scripts/verify-feedback-prepare-boundaries.mjs"
+  ],
+  "buildExitCode": 0,
+  "recordScope": "Only evidence driver and documentation added. Every database/file mutation during acceptance occurred within a newly created temporary root. No previously existing user output or database was opened. Output digests refer to executed command stdout before path normalization."
+}

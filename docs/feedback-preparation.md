@@ -50,3 +50,10 @@ Run `revisions request --file revision.json --db ./local-db` only when that sele
 The compiled CLI driver `node scripts/smoke-feedback-preparation.mjs` uses the existing synthetic review demo and selects its structural finding. It checks prepare leaves feedback/revisions/governance unchanged, then explicitly adds fixture feedback, reopens it in a separate CLI process, freezes it in an existing revision request and reopens that request. It also checks invalid inputs and confirms governance remains unchanged. The demo's pre-existing synthetic note/request are recorded as baseline state, not attributed to prepare.
 
 No real source review, model judgment or independent human feedback is claimed. The [verification record](evidence/feedback-preparation-2026-10-15.json) contains the precise commands, counts and fixture evidence identities. No research protocol or schema migration was changed.
+
+Supplementary [compiled CLI boundary acceptance](evidence/feedback-prepare-boundaries-2026-10-15.md)
+actually exercised `--out` creation, overwrite, symbolic links and path failures,
+as well as failed calls on new and pending-migration isolated databases. `--out`
+uses the existing non-atomic writer and replaces an existing target; choose a fresh
+path when an earlier draft must be preserved. Initialization/migration can happen
+before an invalid preparation request is rejected.
