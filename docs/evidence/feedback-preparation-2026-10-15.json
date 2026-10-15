@@ -1,0 +1,298 @@
+{
+  "status": "passed",
+  "sourceEvidence": "synthetic reviews demo; selected structural finding; authored fixture feedback only",
+  "prepared": {
+    "id": "prepared-fixture-feedback",
+    "findingId": "review_finding_0566146cac7700456c6784a7d02192d4d85f4be6835fb3a593ee6e3f3fd218bd",
+    "reviewId": "review_f71b20860365b4e7008de4f05e1deb68aee89a905c273169218eca0d717332c5",
+    "ruleDigest": "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed",
+    "ruleVersion": "draft-1",
+    "source": "fixture",
+    "actor": "synthetic-smoke",
+    "kind": "label",
+    "label": "FP",
+    "reason": "Synthetic compatibility declaration only; not independent human feedback.",
+    "createdAt": "2026-10-15T00:00:00Z"
+  },
+  "requestDigest": "749193bed51592d8e50b0aa61f55dea9b6535b1ecf1f2737742c28f23e099ca1",
+  "feedbackBindings": [
+    {
+      "id": "prepared-fixture-feedback",
+      "digest": "4088fd05f9704426d9f7812587c90e576da89cbcae71cca6c7fe3d595f44ee14"
+    }
+  ],
+  "successfulCliCalls": 17,
+  "expectedRejectedCliCalls": 9,
+  "checks": [
+    "exact finding/review/rule binding",
+    "prepare leaves feedback/revision/governance unchanged",
+    "add is immutable and idempotent",
+    "independent-process feedback show matches",
+    "fixture FP leaves verdict Unknown",
+    "existing revision request freezes exact feedback digest",
+    "independent-process revision show matches",
+    "no governance change"
+  ],
+  "actualHumanFeedback": false,
+  "modelCalls": 0,
+  "commands": [
+    {
+      "args": [
+        "reviews",
+        "demo"
+      ],
+      "exitCode": 0,
+      "output": "synthetic-demo.json",
+      "outputSha256": "7764072cf5ac6d57a3cdf41aedd8895a5506727d1a63310d26d715c92efd0427"
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_f71b20860365b4e7008de4f05e1deb68aee89a905c273169218eca0d717332c5"
+      ],
+      "exitCode": 0,
+      "output": "structural-review.json",
+      "outputSha256": "60f65446cdcb6b2eaa52cfe966e79125f19e7bf917aa3ad489db6a433ec666a3"
+    },
+    {
+      "args": [
+        "feedback",
+        "list"
+      ],
+      "exitCode": 0,
+      "output": "feedback-before.json",
+      "outputSha256": "81efd64e41bf28ba3ccd86b2482c1578e8f0d457613f3825dcef28454c8943c5"
+    },
+    {
+      "args": [
+        "revisions",
+        "list"
+      ],
+      "exitCode": 0,
+      "output": "revisions-before.json",
+      "outputSha256": "d8d0cead64ec1e8dcff4ae93d2d535aa8025016ef59ace4751ec73a206f52531"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "show",
+        "--rule-id",
+        "semantic-review-demo"
+      ],
+      "exitCode": 0,
+      "output": "governance-before.json",
+      "outputSha256": "61e7e1e90f4ecf1b1fb482a7336b8b00b273f4e8487d5b3c85cb24951bf1bb50"
+    },
+    {
+      "args": [
+        "feedback",
+        "prepare",
+        "--finding-id",
+        "review_finding_0566146cac7700456c6784a7d02192d4d85f4be6835fb3a593ee6e3f3fd218bd",
+        "--id",
+        "prepared-fixture-feedback",
+        "--kind",
+        "label",
+        "--label",
+        "FP",
+        "--reason",
+        "Synthetic compatibility declaration only; not independent human feedback.",
+        "--actor",
+        "synthetic-smoke",
+        "--source",
+        "fixture",
+        "--created-at",
+        "2026-10-15T00:00:00Z"
+      ],
+      "exitCode": 0,
+      "output": "prepared-feedback.json",
+      "outputSha256": "2a78a870d69f133b2c6723c55fb145a20d049f05062d45d406cfbb5ac88eb125"
+    },
+    {
+      "args": [
+        "feedback",
+        "list"
+      ],
+      "exitCode": 0,
+      "output": "feedback-after-prepare.json",
+      "outputSha256": "81efd64e41bf28ba3ccd86b2482c1578e8f0d457613f3825dcef28454c8943c5"
+    },
+    {
+      "args": [
+        "revisions",
+        "list"
+      ],
+      "exitCode": 0,
+      "output": "revisions-after-prepare.json",
+      "outputSha256": "d8d0cead64ec1e8dcff4ae93d2d535aa8025016ef59ace4751ec73a206f52531"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "show",
+        "--rule-id",
+        "semantic-review-demo"
+      ],
+      "exitCode": 0,
+      "output": "governance-after-prepare.json",
+      "outputSha256": "61e7e1e90f4ecf1b1fb482a7336b8b00b273f4e8487d5b3c85cb24951bf1bb50"
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "${SMOKE_OUTPUT_DIR}/prepared-feedback.json"
+      ],
+      "exitCode": 0,
+      "output": "added.json",
+      "outputSha256": "2a78a870d69f133b2c6723c55fb145a20d049f05062d45d406cfbb5ac88eb125"
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "${SMOKE_OUTPUT_DIR}/prepared-feedback.json"
+      ],
+      "exitCode": 0,
+      "output": "added-again.json",
+      "outputSha256": "2a78a870d69f133b2c6723c55fb145a20d049f05062d45d406cfbb5ac88eb125"
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "prepared-fixture-feedback"
+      ],
+      "exitCode": 0,
+      "output": "reopened-feedback.json",
+      "outputSha256": "cd000b9c1b4ac9b09e7d673803b5015556418d1c896bb4e021e9a9888411daf6"
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--finding-id",
+        "review_finding_0566146cac7700456c6784a7d02192d4d85f4be6835fb3a593ee6e3f3fd218bd"
+      ],
+      "exitCode": 0,
+      "output": "selected-feedback.json",
+      "outputSha256": "0eb680a312d8c01e2d2a0f044811ab5259795879f505bea97d8755daa671d18f"
+    },
+    {
+      "args": [
+        "revisions",
+        "request",
+        "--file",
+        "${SMOKE_OUTPUT_DIR}/revision-input.json"
+      ],
+      "exitCode": 0,
+      "output": "revision-frozen.json",
+      "outputSha256": "5d5f397b4cf03b9e4b3016db7b521052c4071d7154a1721b6a947ab050e4f016"
+    },
+    {
+      "args": [
+        "revisions",
+        "show",
+        "--digest",
+        "749193bed51592d8e50b0aa61f55dea9b6535b1ecf1f2737742c28f23e099ca1"
+      ],
+      "exitCode": 0,
+      "output": "revision-reopened.json",
+      "outputSha256": "5d5f397b4cf03b9e4b3016db7b521052c4071d7154a1721b6a947ab050e4f016"
+    },
+    {
+      "args": [
+        "rules",
+        "governance",
+        "show",
+        "--rule-id",
+        "semantic-review-demo"
+      ],
+      "exitCode": 0,
+      "output": "governance-final.json",
+      "outputSha256": "61e7e1e90f4ecf1b1fb482a7336b8b00b273f4e8487d5b3c85cb24951bf1bb50"
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "prepared-fixture-feedback"
+      ],
+      "exitCode": 0,
+      "output": "feedback-after-rejections.json",
+      "outputSha256": "cd000b9c1b4ac9b09e7d673803b5015556418d1c896bb4e021e9a9888411daf6"
+    }
+  ],
+  "failures": [
+    {
+      "label": "absent finding",
+      "exitCode": 1
+    },
+    {
+      "label": "non-label event cannot carry a label",
+      "exitCode": 1
+    },
+    {
+      "label": "invalid label",
+      "exitCode": 1
+    },
+    {
+      "label": "invalid source",
+      "exitCode": 1
+    },
+    {
+      "label": "caller cannot override bound version",
+      "exitCode": 1
+    },
+    {
+      "label": "source must be explicit",
+      "exitCode": 1
+    },
+    {
+      "label": "label event requires label",
+      "exitCode": 1
+    },
+    {
+      "label": "mismatched stored version",
+      "exitCode": 1
+    },
+    {
+      "label": "conflicting duplicate event",
+      "exitCode": 1
+    }
+  ],
+  "productBaseCommit": "c72dd8b6a5c8edda3a38db8224424a8c1da65e96",
+  "verificationDate": "2026-10-15",
+  "validation": {
+    "testCommand": "npm test -- tests/feedback-preparation.test.ts tests/semantic-review.storage.test.ts",
+    "files": 2,
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "typecheck": "npm run typecheck: exit 0",
+    "build": "npm run build: exit 0",
+    "compiledCliCommand": "node scripts/smoke-feedback-preparation.mjs",
+    "rawTestLogSha256": "f78f48eba92ec9121102f10ea3963442e8a1e92cc5d789d8dc729bd29f9c2e7b"
+  },
+  "boundaries": {
+    "source": "synthetic review demo and structural finding, not real repository input",
+    "humanDeclaredSourceTest": "unit preparation only, not persisted independent human feedback",
+    "projectModelCalls": 0,
+    "prepareWritesFeedback": false,
+    "prepareTriggersRevision": false,
+    "prepareChangesGovernance": false,
+    "researchProtocolChanged": false,
+    "credentialsOrSessionsRead": false,
+    "W1Read": false,
+    "pushOrDeployment": false
+  },
+  "archiveNote": "Machine-local input paths parameterized; CLI driver passes --db ${SMOKE_OUTPUT_DIR}/db for every command. Output hashes are of actual stdout. Database and synthetic output files are not committed; the checked-in driver reproduces the scenario."
+}

@@ -1,3 +1,4 @@
+import { prepareReviewFeedback } from './feedback-preparation.js';
 import type { Command } from 'commander';
 import { databaseCommand, storeFor } from './cli-database.js';
 import { ReviewFeedbackPageSchema } from './storage/store.js';
@@ -15,6 +16,22 @@ const trust = { identityVerification: 'caller-declared-unverified', certificatio
   note: 'Fixture feedback never establishes a human verdict. Explicitly select feedback IDs when creating a revision request.' };
 
 export function registerFeedbackInspectionCommands(feedback: Command, output: (value: unknown, path?: string) => Promise<void>) {
+  databaseCommand(feedback, 'prepare').description('Prepare exact finding-bound feedback JSON for inspection; no feedback write, revision or governance action')
+    .requiredOption('--finding-id <id>').requiredOption('--id <id>', 'Caller-selected immutable feedback ID')
+    .requiredOption('--kind <kind>', 'label, resolve, merge or note')
+    .option('--label <label>', 'TP, FP, Unknown or Disputed; required only for kind label')
+    .requiredOption('--reason <text>').requiredOption('--actor <text>')
+    .requiredOption('--source <source>', 'fixture or local-human-declared; identity remains caller-declared, not authenticated')
+    .requiredOption('--created-at <iso-time>').option('--out <file>')
+    .addHelpText('after', '\nInspect the generated JSON, then explicitly submit with feedback add --file. Fixture feedback never establishes a human verdict.')
+    .action(async options => {
+      const store = await storeFor(options);
+      try {
+        await output(await prepareReviewFeedback(store, { id: options.id, findingId: options.findingId,
+          kind: options.kind, label: options.label ?? null, reason: options.reason, actor: options.actor,
+          source: options.source, createdAt: options.createdAt }), options.out);
+      } finally { await store.close(); }
+    });
   databaseCommand(feedback, 'list').description('Discover immutable feedback IDs and exact evidence links for explicit revision selection')
     .option('--rule-digest <sha256>').option('--review-id <id>').option('--finding-id <id>')
     .option('--source <source>', 'fixture or local-human-declared; omitted returns both with their source labels')

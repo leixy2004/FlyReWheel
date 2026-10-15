@@ -86,3 +86,7 @@ upstream source was evaluated, no real developer feedback was collected, and no
 model (real or runtime substitute) was called. This is workflow verification, not
 evidence of rule quality or revision generation. No W1 data or credentials were
 read; the old experiment/freeze protocol is unchanged.
+
+To create the input JSON for a new finding-bound feedback event without manually
+copying review and rule identities, use [feedback prepare](feedback-preparation.md).
+Preparation does not append feedback; `feedback add` remains explicit.
