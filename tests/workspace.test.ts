@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace } from '../src/workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease } from '../src/workspace/index.js';
 import { workspaceEnvironment, workspaceGit } from '../src/workspace/process.js';
 
 const execute = promisify(execFile);
@@ -262,3 +262,33 @@ test('real CLI prepare/inspect/cleanup survives separate processes and never off
   const help = await execute(process.execPath, ['--import', 'tsx', 'src/cli.ts', 'workspace', '--help'], { cwd, env: workspaceEnvironment(), timeout: 10_000 });
   expect(help.stdout).toContain('prepare'); expect(help.stdout).not.toMatch(/\n\s+exec /);
 }, 20_000);
+
+
+test('durable cancellation fences execution, preserves active lease and remains idempotent after cleanup', async () => {
+  const f = await fixture('cancel-fence');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const first = await cancelWorkspace(identity(f), 'Operator requested stop');
+  expect(first).toMatchObject({ executionLeaseActive: true, runtimeStop: 'not-verified' });
+  expect(await cancelWorkspace(identity(f), 'Repeated request')).toEqual(first);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+  await lease.release();
+  await expect(acquireWorkspaceExecutionLease(identity(f), f.commits[0])).rejects.toThrow(/cancelled/);
+  const state = await inspectWorkspace(identity(f));
+  expect(state.cancellation).toEqual(first.cancellation);
+  expect(state.executionLeaseActive).toBe(false);
+  expect((await cleanupWorkspace(identity(f))).record.status).toBe('closed-clean');
+  expect((await inspectWorkspace(identity(f))).cancellation).toEqual(first.cancellation);
+});
+
+test('cancel racing lease acquisition never allows an uncancelled new execution after acknowledgement', async () => {
+  const f = await fixture('cancel-race');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const results = await Promise.allSettled([acquireWorkspaceExecutionLease(identity(f), f.commits[0]), cancelWorkspace(identity(f), 'race')]);
+  expect(results[1].status).toBe('fulfilled');
+  if (results[0].status === 'fulfilled') {
+    await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+    await results[0].value.release();
+  }
+  await expect(acquireWorkspaceExecutionLease(identity(f), f.commits[0])).rejects.toThrow(/cancelled/);
+});

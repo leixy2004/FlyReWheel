@@ -169,3 +169,23 @@ Explicit [evaluation workspace execution](evaluation-workspaces.md) now derives 
 separate mutable repository from that baseline and carries a path-free export
 binding through existing Sandcastle execution and application receipts. The option
 is never inferred from a date, repo path, or default production policy.
+
+## Durable attempt cancellation
+
+```sh
+node dist/cli.js workspace cancel --repo /path/to/trusted-store --run run-id --attempt attempt-id --reason 'Stop this attempt'
+node dist/cli.js workspace inspect --repo /path/to/trusted-store --run run-id --attempt attempt-id
+```
+
+Cancellation permanently fences this attempt against new execution leases. It is
+serialized with lease acquisition and cleanup; repeated requests preserve the
+first reason and timestamp. Allocate a fresh attempt to run again. Inspection
+reports `cancellation` and `executionLeaseActive`; these are observations, not a
+reservation or proof that a runtime stopped. Cancellation never removes an active
+lease. Cleanup still refuses active leases and preserves dirty worktrees, and a
+clean cleanup retains the cancellation record. A crashed owner's lease needs
+explicit recovery; no automatic expiry or PID-based takeover is provided.
+
+This is a cooperative local lifecycle constraint, not a production sandbox.
+The reproducible compiled CLI acceptance uses only a newly authored Git fixture:
+`npm run build && node scripts/verify-workspace-cancellation.mjs`.

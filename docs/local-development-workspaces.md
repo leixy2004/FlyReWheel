@@ -92,3 +92,8 @@ npm test -- tests/local-development-workspace.test.ts tests/prepared-workspace-r
 The focused tests additionally cover active leases, ignored files, altered
 ownership, evidence tampering, exact selector mismatches and repeated cleanup.
 There are no model calls, credential reads, sandbox allocations or W1 reads.
+
+Local status now includes `cancellation` and `executionLeaseActive` and withholds
+prepared resolver exports while cancelled or leased. To cancel, use `workspace
+cancel` with the exact repo/run/attempt identity in the creation receipt. This
+permanently fences that attempt and does not certify runtime termination.

@@ -82,11 +82,12 @@ export async function createLocalDevelopmentWorkspace(raw: z.input<typeof LocalD
 }
 export async function inspectLocalDevelopmentWorkspace(raw: StoredLocalDevelopmentWorkspace) {
   const { value, observed } = await owned(raw);
-  const ready = observed.record.status === 'ready' && observed.observation.identityValid && observed.observation.cleanlinessVerified
+  const ready = !observed.cancellation && !observed.executionLeaseActive && observed.record.status === 'ready' && observed.observation.identityValid && observed.observation.cleanlinessVerified
     && observed.observation.currentHeadSha === value.receipt.selection.expectedSha && digestOf(observed.record) === value.receipt.preparedManifestDigest;
   const preparedWorkspaces = PreparedWorkspaceResolverConfigSchema.parse({ schemaVersion: 1, entries: [{ selection: value.receipt.selection,
     workspace: value.receipt.workspace, manifestDigest: value.receipt.preparedManifestDigest }] });
   return { receiptDigest: value.digest, state: observed.record.status, localDevelopment: ready ? 'ready' : 'not_ready',
+    cancellation: observed.cancellation, executionLeaseActive: observed.executionLeaseActive,
     fixedCommit: value.receipt.selection.expectedSha, observedHead: observed.observation.currentHeadSha,
     worktreeExists: observed.observation.worktreeExists, evidence: { digest: value.receipt.createdEvidenceDigest, verification: 'passed-content-integrity-only' },
     preparedWorkspaces: ready ? preparedWorkspaces : null,

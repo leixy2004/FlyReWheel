@@ -201,11 +201,40 @@ export async function prepareWorkspace(input: PrepareWorkspaceInput) {
   }
 }
 
+const Cancellation = z.object({ schemaVersion: z.literal(1), requestedAt: z.iso.datetime(), reason: z.string().trim().min(1).max(1000) }).strict();
+async function cancellation(p: ReturnType<typeof paths>) {
+  const path = join(p.lease, 'cancellation.json');
+  if (!await exists(path)) return null;
+  const info = await lstat(path);
+  if (!info.isFile() || info.isSymbolicLink() || info.size > 8192) throw new Error('Invalid workspace cancellation record; explicit recovery required');
+  return Cancellation.parse(JSON.parse(await readFile(path, 'utf8')));
+}
+
+/** Permanent cooperative fence for this attempt, not proof of runtime termination. */
+export async function cancelWorkspace(input: WorkspaceIdentity, reason: string) {
+  const requested = Cancellation.parse({ schemaVersion: 1, requestedAt: new Date().toISOString(), reason });
+  const identity = Identity.parse(input);
+  identity.repoPath = await repository(identity.repoPath);
+  await managedDirectories(identity, false);
+  return withOperationLock(identity, async () => {
+    const { p } = await read(identity);
+    let request = await cancellation(p);
+    if (!request) {
+      const temporary = join(p.lease, `cancellation-${randomUUID()}.tmp`);
+      await writeFile(temporary, JSON.stringify(requested), { flag: 'wx', mode: 0o600 });
+      await rename(temporary, join(p.lease, 'cancellation.json'));
+      request = requested;
+    }
+    return { cancellation: request, executionLeaseActive: await exists(join(p.lease, 'active-execution')), runtimeStop: 'not-verified' as const };
+  });
+}
+
 export async function inspectWorkspace(input: WorkspaceIdentity) {
   const identity = Identity.parse(input);
   identity.repoPath = await repository(identity.repoPath);
   const { p, record } = await read(identity);
-  return { manifestPath: p.manifest, record, observation: await observe(record) };
+  return { manifestPath: p.manifest, record, observation: await observe(record), cancellation: await cancellation(p),
+    executionLeaseActive: await exists(join(p.lease, 'active-execution')) };
 }
 
 /** Cooperative lifecycle lease. A crash leaves it in place for explicit recovery. */
@@ -216,6 +245,7 @@ export async function acquireWorkspaceExecutionLease(input: WorkspaceIdentity, e
   await managedDirectories(identity, false);
   return withOperationLock(identity, async () => {
     const { p, record } = await read(identity);
+    if (await exists(join(p.lease, 'cancellation.json'))) throw new Error('Workspace attempt cancelled; allocate a new attempt for execution');
     const observation = await observe(record);
     if (record.status !== 'ready' || !observation.worktreeExists || !observation.identityValid
       || !observation.cleanlinessVerified || observation.currentHeadSha !== expectedSha
