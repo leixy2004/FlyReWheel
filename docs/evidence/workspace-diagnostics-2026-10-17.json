@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "input": "authored local Git fixture",
+  "modelCalls": 0,
+  "productionStopVerified": false,
+  "checks": [
+    "separate owner process exited without releasing lease",
+    "old owner does not authorize release",
+    "owner token omitted",
+    "cancellation does not certify stop",
+    "missing malformed oversized linked owner retained",
+    "damaged cancellation reported",
+    "operation lock and untracked bytes reported",
+    "manifest and history unchanged"
+  ],
+  "calls": [
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 0
+    },
+    {
+      "operation": "diagnose",
+      "exitCode": 1,
+      "error": "FlyReWheel: ENOENT: no such file or directory, lstat '${ISOLATED_REPO}/.sandcastle/flyrewheel-attempts/attempt-cancel-smoke--missing'\n"
+    }
+  ],
+  "testedBaseHead": "370de4ba422c828d0c95969c10e105708f798773",
+  "verificationDate": "2026-10-17",
+  "validation": {
+    "typecheck": "passed",
+    "initialTargetedTestsPassed": 42,
+    "postReviewDiagnosticTestsPassed": 4,
+    "build": "passed",
+    "independentReview": "registry blocker gap fixed; no remaining confirmed issues; reviewer did not run tests"
+  }
+}

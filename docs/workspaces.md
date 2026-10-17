@@ -206,3 +206,36 @@ processes. Crashed runners are not automatically recovered.
 CLI cancellation against a pending compiled runner with an injected authored
 backend. This verifies lifecycle control, not real model execution or production
 runtime stop/destruction. Both verified and unverified stop scenarios are covered.
+
+## Residual lease diagnosis
+
+```sh
+node dist/cli.js workspace diagnose --repo /path/to/trusted-store --run run-id --attempt attempt-id
+```
+
+This read-only command reports lease presence, bounded owner metadata (commit and
+creation time, never the ownership token), cancellation state, worktree
+preservation conditions, repository operation locks and registry problems that
+can block cleanup. Missing, malformed, oversized or symlinked owner records are
+`unverifiable`; a damaged cancellation record is reported without hiding the
+other diagnostics. Unknown attempts/invalid manifests fail rather than inventing
+an identity. A completed diagnostic returns exit 0 even when blockers exist;
+inspect `cleanup.blockedReasons` rather than interpreting exit 0 as permission to
+clean up. Output is an unlocked observation, not an atomic snapshot or recovery
+authorization. A no-blocker observation still requires fresh cleanup checks.
+
+Lease liveness remains unknown even when its owning process has exited or its
+creation time is old. The recovery section lists evidence still required: exact
+owner/runtime association, independent stop and restart fencing, preserved
+execution evidence, verified destruction, and ownership/worktree revalidation.
+It neither obtains nor certifies that evidence. No automatic release, force
+cleanup, PID-based takeover or production stop proof is provided. The existing
+owner lifecycle remains responsible for verified release; abandoned leases need
+operator investigation outside this diagnostic command. Hostile-host filesystem
+races and production runtime recovery are not validated here.
+
+Reproduce local acceptance with `npm run build && node
+scripts/verify-workspace-diagnostics.mjs`. It uses a new authored Git fixture, a
+separate process that exits holding a real local lease, and compiled CLI reads.
+Malformed-record experiments affect only that disposable fixture. No model,
+credential or production sandbox is involved.

@@ -32,7 +32,7 @@ import { configuredCodex, resolveCodexExecutionConfig } from './model-runtime.js
 import { enqueueReplay, enqueueApplication, APPLICATION_QUEUE } from './jobs.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobId, applicationJobSummary, applicationJobGovernance } from './application-job-contract.js';
 import { extractBugFixPair } from './git-evidence.js';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace } from './workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, diagnoseWorkspace } from './workspace/index.js';
 import { captureRepositoryContext, readRepositoryContextPackage, verifyRepositoryContext, validateRepositoryContextForSnapshot,
   makeRepositoryContextAnchor, makeRepositoryContextEvidence } from './repository-context.js';
 import { captureDirectParentSnapshot, captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
@@ -490,6 +490,8 @@ workspaceIdentity(workspace.command('prepare').description('Allocate one fresh w
   .action(async options => output(await prepareWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt, baseSha: options.base, headSha: options.head })));
 workspaceIdentity(workspace.command('inspect').description('Read persisted state and independently observe worktree/branch identity'))
   .action(async options => output(await inspectWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt })));
+workspaceIdentity(workspace.command('diagnose').description('Read-only lease, cancellation and cleanup blockers; never releases a lease'))
+  .action(async options => output(await diagnoseWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt })));
 workspaceIdentity(workspace.command('cancel').description('Permanently fence this attempt from execution; does not prove runtime termination'))
   .requiredOption('--reason <reason>')
   .action(async options => output(await cancelWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt }, options.reason)));

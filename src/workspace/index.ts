@@ -1,4 +1,5 @@
-import { mkdir, lstat, readFile, writeFile, rename, appendFile, realpath, readdir, rmdir, unlink } from 'node:fs/promises';
+import { mkdir, lstat, open, readFile, writeFile, rename, appendFile, realpath, readdir, rmdir, unlink } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
@@ -235,6 +236,78 @@ export async function inspectWorkspace(input: WorkspaceIdentity) {
   const { p, record } = await read(identity);
   return { manifestPath: p.manifest, record, observation: await observe(record), cancellation: await cancellation(p),
     executionLeaseActive: await exists(join(p.lease, 'active-execution')) };
+}
+
+/** Read-only observations, deliberately not a recovery authorization or a lock. */
+export async function diagnoseWorkspace(input: WorkspaceIdentity) {
+  const identity = Identity.parse(input);
+  identity.repoPath = await repository(identity.repoPath);
+  const { p, record } = await read(identity);
+  const blockedReasons: string[] = [];
+  const lock = join(p.lease, 'active-execution');
+  const active = await exists(lock);
+  let owner: { expectedSha: string; createdAt: string } | null = null;
+  let leaseState: 'absent' | 'present' | 'unverifiable' = active ? 'unverifiable' : 'absent';
+  if (active) {
+    blockedReasons.push('execution-lease-present');
+    try {
+      await directory(lock);
+      // No symlink following, unbounded read, or token disclosure in diagnostics.
+      const file = await open(join(lock, 'owner.json'), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+      try {
+        const stat = await file.stat();
+        if (!stat.isFile() || stat.size > 4096) throw new Error('Invalid owner record');
+        const buffer = Buffer.alloc(4097);
+        const { bytesRead } = await file.read(buffer, 0, buffer.length, 0);
+        if (bytesRead > 4096) throw new Error('Owner record exceeds bound');
+        const parsed = z.object({ token: z.uuid(), expectedSha: Sha, createdAt: z.iso.datetime() }).strict()
+          .parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, bytesRead))));
+        if (parsed.expectedSha !== record.baseSha) throw new Error('Lease commit mismatch');
+        owner = { expectedSha: parsed.expectedSha, createdAt: parsed.createdAt };
+        leaseState = 'present';
+      } finally { await file.close(); }
+    } catch { blockedReasons.push('lease-owner-unverifiable'); }
+  }
+  let cancelState: 'absent' | 'requested' | 'unverifiable' = 'absent';
+  let cancellationRequest: Awaited<ReturnType<typeof cancellation>> = null;
+  try {
+    cancellationRequest = await cancellation(p);
+    if (cancellationRequest) cancelState = 'requested';
+  } catch { cancelState = 'unverifiable'; blockedReasons.push('cancellation-record-unverifiable'); }
+  const operationLocked = await exists(join(p.managed, 'flyrewheel-operation.lock'));
+  if (operationLocked) blockedReasons.push('repository-operation-lock-present');
+  if (!['ready', 'preserved-dirty', 'closed-clean'].includes(record.status)) blockedReasons.push('manifest-requires-recovery');
+  let observation: Awaited<ReturnType<typeof observe>> | null = null;
+  try {
+    observation = await observe(record);
+    if (!observation.worktreeExists) {
+      if (record.status !== 'closed-clean' || !observation.branchRetained) blockedReasons.push('worktree-missing-or-retained-branch-unverified');
+    } else {
+      if (!observation.identityValid) blockedReasons.push('worktree-identity-unverified');
+      if (!observation.cleanlinessVerified) blockedReasons.push('worktree-content-must-be-preserved');
+    }
+  } catch { blockedReasons.push('worktree-observation-failed'); }
+  if (observation?.worktreeExists && observation.identityValid && observation.cleanlinessVerified) {
+    try { await rejectOrphans(identity); }
+    catch { blockedReasons.push('managed-worktree-registry-unverified'); }
+  }
+  return {
+    schemaVersion: 1, identity, manifestState: record.status,
+    observationConsistency: 'point-in-time-unlocked-not-an-authorization',
+    lease: { state: leaseState, path: lock, owner, liveness: 'unknown-not-inferred-from-age-or-pid' },
+    cancellation: { state: cancelState, request: cancellationRequest },
+    cleanup: { disposition: blockedReasons.length ? 'blocked-or-retained' : 'requires-fresh-cleanup-check', blockedReasons },
+    worktree: observation ? { exists: observation.worktreeExists, identityValid: observation.identityValid,
+      cleanlinessVerified: observation.cleanlinessVerified ?? null, branchRetained: observation.branchRetained } : null,
+    recovery: { automaticRelease: false, runtimeStop: 'not-verified', runtimeDestruction: 'not-verified',
+      requiredEvidence: [
+        'Identify the exact attempt, lease owner and associated runtime; timestamps or PID absence are insufficient.',
+        'Independently verify the runtime and all pending setup/descendants stopped and are fenced against restart.',
+        'Collect and preserve bounded evidence and independently verify runtime destruction before owner-authorized lease release.',
+        'Recheck ownership, worktree identity and dirty/ignored bytes under lifecycle controls; use a fresh attempt after cancellation.',
+      ],
+    },
+  };
 }
 
 /** Cooperative lifecycle lease. A crash leaves it in place for explicit recovery. */

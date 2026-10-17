@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease } from '../src/workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease, diagnoseWorkspace } from '../src/workspace/index.js';
 import { workspaceEnvironment, workspaceGit } from '../src/workspace/process.js';
 
 const execute = promisify(execFile);
@@ -291,4 +291,74 @@ test('cancel racing lease acquisition never allows an uncancelled new execution 
     await results[0].value.release();
   }
   await expect(acquireWorkspaceExecutionLease(identity(f), f.commits[0])).rejects.toThrow(/cancelled/);
+});
+
+
+test('diagnostics are read-only and never infer lease liveness from old ownership or cancellation', async () => {
+  const f = await fixture('diagnose');
+  const prepared = await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  expect((await diagnoseWorkspace(identity(f))).cleanup.disposition).toBe('requires-fresh-cleanup-check');
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const path = join(lease.leasePath, 'owner.json');
+  const owner = JSON.parse(await readFile(path, 'utf8'));
+  owner.createdAt = '2000-01-01T00:00:00.000Z';
+  await writeFile(path, JSON.stringify(owner));
+  await cancelWorkspace(identity(f), 'diagnostic fixture');
+  const before = await readFile(path, 'utf8');
+  const report = await diagnoseWorkspace(identity(f));
+  expect(report.lease).toMatchObject({ state: 'present', liveness: 'unknown-not-inferred-from-age-or-pid' });
+  expect(report.cancellation.state).toBe('requested');
+  expect(report.cleanup.blockedReasons).toContain('execution-lease-present');
+  expect(report.recovery).toMatchObject({ automaticRelease: false, runtimeStop: 'not-verified' });
+  expect(JSON.stringify(report)).not.toContain(owner.token);
+  expect(await readFile(path, 'utf8')).toBe(before);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+  await lease.release();
+  await writeFile(join(prepared.record.worktreePath, 'diagnostic.txt'), 'preserve');
+  expect((await diagnoseWorkspace(identity(f))).cleanup.blockedReasons).toContain('worktree-content-must-be-preserved');
+});
+
+test('diagnostics report missing, malformed, oversized and linked owners without releasing or exposing contents', async () => {
+  const f = await fixture('diagnose-bad-owner');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const path = join(lease.leasePath, 'owner.json');
+  const valid = await readFile(path, 'utf8');
+  for (const bad of ['{invalid-json', 'x'.repeat(4097), JSON.stringify({ ...JSON.parse(valid), expectedSha: 'f'.repeat(40) })]) {
+    await writeFile(path, bad);
+    const report = await diagnoseWorkspace(identity(f));
+    expect(report.lease.state).toBe('unverifiable');
+    expect(report.lease.owner).toBeNull();
+    expect(report.cleanup.blockedReasons).toContain('lease-owner-unverifiable');
+  }
+  await rm(path);
+  expect((await diagnoseWorkspace(identity(f))).lease.state).toBe('unverifiable');
+  const target = join(f.repoPath, 'owner-target.json'); await writeFile(target, valid);
+  await symlink(target, path);
+  expect((await diagnoseWorkspace(identity(f))).lease.state).toBe('unverifiable');
+  expect(await readFile(target, 'utf8')).toBe(valid);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+});
+
+test('diagnostics report damaged cancellation and repository operation lock without waiting or changing them', async () => {
+  const f = await fixture('diagnose-lock');
+  const prepared = await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const cancelPath = join(prepared.manifestPath, '..', 'cancellation.json');
+  await writeFile(cancelPath, '{bad');
+  const lock = join(f.repoPath, '.sandcastle', 'flyrewheel-operation.lock'); await mkdir(lock);
+  const report = await diagnoseWorkspace(identity(f));
+  expect(report.cancellation.state).toBe('unverifiable');
+  expect(report.cleanup.blockedReasons).toEqual(expect.arrayContaining(['cancellation-record-unverifiable', 'repository-operation-lock-present']));
+  expect(await exists(lock)).toBe(true);
+  expect(await readFile(cancelPath, 'utf8')).toBe('{bad');
+});
+
+
+test('diagnostics expose orphan registry blockers also rejected by actual cleanup', async () => {
+  const f = await fixture('diagnose-orphan');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const orphan = join(f.repoPath, '.sandcastle', 'worktrees', 'unregistered'); await mkdir(orphan);
+  expect((await diagnoseWorkspace(identity(f))).cleanup.blockedReasons).toContain('managed-worktree-registry-unverified');
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/orphan|unregistered/i);
+  expect(await exists(orphan)).toBe(true);
 });
