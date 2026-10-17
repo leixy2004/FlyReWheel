@@ -189,3 +189,20 @@ explicit recovery; no automatic expiry or PID-based takeover is provided.
 This is a cooperative local lifecycle constraint, not a production sandbox.
 The reproducible compiled CLI acceptance uses only a newly authored Git fixture:
 `npm run build && node scripts/verify-workspace-cancellation.mjs`.
+
+The Codex workspace runner observes durable cancellation before reserving a
+runtime, polls every 100 ms during preparation/execution, and checks again before
+accepting output. Polling is cooperative and depends on a responsive host event
+loop; it is not a hard real-time stop guarantee. A request arriving after output
+acceptance does not retroactively invalidate that result, but still fences future
+leases. Cancellation during cleanup never skips stop/collect/destroy verification.
+Unverified stop, evidence collection or destruction retains the recovery lease
+and continues to block worktree cleanup. The cancellation record remains after a
+successful release. Other callers of the lease API must observe
+`isCancellationRequested()` themselves; cancellation does not kill arbitrary host
+processes. Crashed runners are not automatically recovered.
+
+`node scripts/verify-workspace-cancellation-runner.mjs` verifies actual compiled
+CLI cancellation against a pending compiled runner with an injected authored
+backend. This verifies lifecycle control, not real model execution or production
+runtime stop/destruction. Both verified and unverified stop scenarios are covered.

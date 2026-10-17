@@ -262,7 +262,9 @@ export async function acquireWorkspaceExecutionLease(input: WorkspaceIdentity, e
     // A write failure deliberately leaves the lock: ownership cannot be verified.
     await writeFile(join(lock, 'owner.json'), JSON.stringify({ token, expectedSha, createdAt: new Date().toISOString() }), { mode: 0o600 });
     let released = false;
-    return { record, observation, leasePath: lock, async release() {
+    return { record, observation, leasePath: lock,
+      isCancellationRequested: () => exists(join(p.lease, 'cancellation.json')),
+      async release() {
       if (released) return;
       await withOperationLock(identity, async () => {
         await directory(lock);

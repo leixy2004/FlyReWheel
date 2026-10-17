@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { access, mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { prepareWorkspace, cleanupWorkspace, acquireWorkspaceExecutionLease } from '../src/workspace/index.js';
+import { prepareWorkspace, cleanupWorkspace, acquireWorkspaceExecutionLease, cancelWorkspace } from '../src/workspace/index.js';
 import { workspaceGit } from '../src/workspace/process.js';
 import { CodexWorkspaceRequestSchema, createCodexWorkspaceRunner, type CodexWorkspaceRequest, type CodexWorkspaceBackend, type CodexWorkspaceRuntime } from '../src/workspace/codex-runner.js';
 
@@ -145,4 +145,41 @@ describe('bounded workspace lifecycle contract (injected authored backend, no pr
     expect(result.errors.join('\n')).toMatch(/Invalid or duplicate artifact/);
     expect(result.cleanup).toBe('retained-for-recovery'); expect(f.calls).not.toContain('destroy');
   });
+});
+
+
+it.each([true, false])('durable cancellation interrupts pending execution; verified stop=%s controls lease retention', async verified => {
+  const f = await fixture(`durable-${verified}`);
+  f.request.limits.timeoutMs = 5000;
+  f.runtime.execute = async () => {
+    await cancelWorkspace(f.request.workspace, 'authored cancellation');
+    await expect(cleanupWorkspace(f.request.workspace)).rejects.toThrow(/lease is active/);
+    return new Promise(() => {});
+  };
+  f.runtime.stop = async () => { f.calls.push('stop'); return { stopped: true, verified }; };
+  const result = await createCodexWorkspaceRunner(f.backend).run(f.request);
+  expect(result.execution).toBe('cancelled');
+  expect(result.output).toBeNull();
+  expect(result.cleanup).toBe(verified ? 'verified' : 'retained-for-recovery');
+  if (verified) {
+    expect(f.calls.slice(-3)).toEqual(['stop', 'collect', 'destroy']);
+    await expect(access(result.leasePath)).rejects.toThrow();
+    expect((await cleanupWorkspace(f.request.workspace)).record.status).toBe('closed-clean');
+  } else {
+    await access(result.leasePath);
+    expect(f.calls).not.toContain('collect');
+    expect(f.calls).not.toContain('destroy');
+    await expect(cleanupWorkspace(f.request.workspace)).rejects.toThrow(/lease is active/);
+  }
+  await expect(acquireWorkspaceExecutionLease(f.request.workspace, f.request.expectedSha)).rejects.toThrow(/cancelled/);
+});
+
+it('rejects output returned after durable cancellation even before the polling tick', async () => {
+  const f = await fixture('cancel-output');
+  f.runtime.execute = async () => {
+    await cancelWorkspace(f.request.workspace, 'discard late output');
+    return { shouldNotBeAccepted: true };
+  };
+  const result = await createCodexWorkspaceRunner(f.backend).run(f.request);
+  expect(result).toMatchObject({ execution: 'cancelled', output: null, cleanup: 'verified' });
 });

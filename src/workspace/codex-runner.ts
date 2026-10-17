@@ -121,6 +121,19 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
       signal?.addEventListener('abort', abort, { once: true });
       if (signal?.aborted) controller.abort();
       let runtime: CodexWorkspaceRuntime | undefined;
+      let monitoring = true;
+      let monitorFailure: unknown;
+      const checkCancellation = async () => {
+        try {
+          if (await lease.isCancellationRequested() && monitoring) controller.abort();
+        } catch (error) {
+          if (monitoring) { monitorFailure = error; controller.abort(); }
+        }
+      };
+      // Cooperative cross-process request, never a stop/destroy receipt. Keep the
+      // lease until the existing backend lifecycle independently verifies cleanup.
+      const cancellationTimer = setInterval(() => { void checkCancellation(); }, 100);
+
       try {
         // Sandcastle 0.12.0 otherwise reads this file and falls back to ambient env.
         // Never read its contents, forward env, or invoke repository hooks.
@@ -131,6 +144,7 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
         }
         if (digestOf(request.evaluation ?? null) !== digestOf(lease.record.evaluation?.binding ?? null)) throw new Error('Workspace request/export binding mismatch');
         await verifyEvaluationWorkspace(lease.record);
+        await checkCancellation();
         if (controller.signal.aborted) throw new RunCancelled('Workspace run cancelled before runtime reservation');
         runtime = backend.reserve(request, lease.record);
         result.lifecycle.push('runtime-reserved');
@@ -143,6 +157,8 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
         }
         result.lifecycle.push('runtime-workspace-verified', 'worker-started');
         const output = await bounded(runtime.execute(controller.signal), Math.max(1, deadline - Date.now()), controller.signal);
+        await checkCancellation();
+        if (controller.signal.aborted) throw new RunCancelled('Workspace run cancelled before output acceptance');
         // Acceptance guard supplements the backend's pre-buffer byte enforcement.
         const outputJson = JSON.stringify(output);
         if (outputJson === undefined || Buffer.byteLength(outputJson) > request.limits.maxOutputBytes) throw new Error('Worker output exceeds its acceptance bound');
@@ -150,9 +166,12 @@ export function createCodexWorkspaceRunner(backend?: CodexWorkspaceBackend) {
         result.execution = 'succeeded';
         result.lifecycle.push('worker-completed');
       } catch (error) {
-        result.execution = error instanceof RunTimeout ? 'timed-out' : error instanceof RunCancelled ? 'cancelled' : 'failed';
-        result.errors.push(error instanceof Error ? error.message.slice(0, 2000) : 'Workspace execution failed');
+        result.execution = monitorFailure ? 'failed' : error instanceof RunTimeout ? 'timed-out' : error instanceof RunCancelled ? 'cancelled' : 'failed';
+        const failure = monitorFailure ?? error;
+        result.errors.push(failure instanceof Error ? failure.message.slice(0, 2000) : 'Workspace execution failed');
       } finally {
+        monitoring = false;
+        clearInterval(cancellationTimer);
         controller.abort(); // A request to stop is NOT proof that anything stopped.
         signal?.removeEventListener('abort', abort);
         if (!runtime) {
