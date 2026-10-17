@@ -1,0 +1,57 @@
+{
+  "status": "passed",
+  "input": "authored temporary Git repository",
+  "modelCalls": 0,
+  "productionIsolationTested": false,
+  "checks": [
+    "empty inventory",
+    "separate process exited holding lease",
+    "cross-process cancellation and cleanup blockers",
+    "closed attempts retained",
+    "all four damaged entries reported",
+    "ownership token omitted",
+    "manifest history and lease unchanged",
+    "cleanup still refuses active lease"
+  ],
+  "calls": [
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    }
+  ],
+  "testedBaseHead": "60e896868b826eef164e5a6b29582e9107e473d3",
+  "verificationDate": "2026-10-17",
+  "validation": {
+    "typecheck": "passed",
+    "testFiles": 4,
+    "testsPassed": 54,
+    "testsFailed": 0,
+    "build": "passed",
+    "independentReview": "no confirmed defects; read-only reviewer did not execute tests"
+  }
+}

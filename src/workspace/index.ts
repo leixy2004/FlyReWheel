@@ -310,6 +310,38 @@ export async function diagnoseWorkspace(input: WorkspaceIdentity) {
   };
 }
 
+/** Enumerate managed entries without trusting their manifests to choose paths. */
+export async function listWorkspaces(repo: string) {
+  const repoPath = await repository(z.string().min(1).parse(repo));
+  const managed = join(repoPath, '.sandcastle');
+  const attempts = join(managed, 'flyrewheel-attempts');
+  const entries: { entry: string; identity: WorkspaceIdentity | null;
+    diagnosis: Awaited<ReturnType<typeof diagnoseWorkspace>> | null; error: string | null }[] = [];
+  if (await exists(managed)) {
+    await directory(managed);
+    if (await exists(attempts)) {
+      await directory(attempts);
+      for (const entry of (await readdir(attempts)).sort()) {
+        let identity: WorkspaceIdentity | null = null;
+        try {
+          const match = /^attempt-(.+)--(.+)$/.exec(entry);
+          if (!match) throw new Error('Invalid entry name');
+          identity = Identity.parse({ repoPath, runId: match[1], attemptId: match[2] });
+          await directory(join(attempts, entry));
+        } catch {
+          entries.push({ entry, identity, diagnosis: null, error: 'invalid-attempt-entry' });
+          continue;
+        }
+        try { entries.push({ entry, identity, diagnosis: await diagnoseWorkspace(identity), error: null }); }
+        catch { entries.push({ entry, identity, diagnosis: null, error: 'attempt-record-or-observation-unverifiable' }); }
+      }
+    }
+  }
+  return { schemaVersion: 1, repoPath, observationConsistency: 'point-in-time-unlocked-not-an-authorization',
+    entries, summary: { total: entries.length, diagnosed: entries.filter(entry => entry.diagnosis !== null).length,
+      unavailable: entries.filter(entry => entry.error !== null).length }, automaticRelease: false };
+}
+
 /** Cooperative lifecycle lease. A crash leaves it in place for explicit recovery. */
 export async function acquireWorkspaceExecutionLease(input: WorkspaceIdentity, expectedSha: string) {
   const identity = Identity.parse(input);

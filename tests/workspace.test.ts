@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease, diagnoseWorkspace } from '../src/workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease, diagnoseWorkspace, listWorkspaces } from '../src/workspace/index.js';
 import { workspaceEnvironment, workspaceGit } from '../src/workspace/process.js';
 
 const execute = promisify(execFile);
@@ -361,4 +361,44 @@ test('diagnostics expose orphan registry blockers also rejected by actual cleanu
   expect((await diagnoseWorkspace(identity(f))).cleanup.blockedReasons).toContain('managed-worktree-registry-unverified');
   await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/orphan|unregistered/i);
   expect(await exists(orphan)).toBe(true);
+});
+
+
+test('inventory lists empty stores without allocating metadata and aggregates all attempts read-only', async () => {
+  const f = await fixture('inventory');
+  expect((await listWorkspaces(f.repoPath)).summary).toEqual({ total: 0, diagnosed: 0, unavailable: 0 });
+  expect(await exists(join(f.repoPath, '.sandcastle'))).toBe(false);
+  const a = await prepareWorkspace({ ...identity(f, 'a'), baseSha: f.commits[0] });
+  await prepareWorkspace({ ...identity(f, 'b'), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f, 'a'), f.commits[0]);
+  await cancelWorkspace(identity(f, 'a'), 'inventory fixture');
+  await cleanupWorkspace(identity(f, 'b'));
+  const manifest = await readFile(a.manifestPath, 'utf8');
+  const ownerBytes = await readFile(join(lease.leasePath, 'owner.json'), 'utf8');
+  const inventory = await listWorkspaces(f.repoPath);
+  expect(inventory.summary).toEqual({ total: 2, diagnosed: 2, unavailable: 0 });
+  expect(inventory.entries.map(entry => entry.identity?.attemptId)).toEqual(['a', 'b']);
+  expect(inventory.entries[0].diagnosis?.cancellation.state).toBe('requested');
+  expect(inventory.entries[0].diagnosis?.cleanup.blockedReasons).toContain('execution-lease-present');
+  expect(inventory.entries[1].diagnosis?.manifestState).toBe('closed-clean');
+  expect(JSON.stringify(inventory)).not.toContain(JSON.parse(ownerBytes).token);
+  expect(await readFile(a.manifestPath, 'utf8')).toBe(manifest);
+  expect(await readFile(join(lease.leasePath, 'owner.json'), 'utf8')).toBe(ownerBytes);
+  await lease.release();
+});
+
+test('inventory retains malformed, missing, linked and invalid entries as errors alongside valid attempts', async () => {
+  const f = await fixture('inventory-corrupt');
+  const a = await prepareWorkspace({ ...identity(f, 'valid'), baseSha: f.commits[0] });
+  const attempts = join(a.manifestPath, '..', '..');
+  const bad = join(attempts, 'attempt-inventory-corrupt--bad'); await mkdir(bad);
+  await writeFile(join(bad, 'manifest.json'), '{broken');
+  await mkdir(join(attempts, 'attempt-inventory-corrupt--missing'));
+  await writeFile(join(attempts, 'unknown-file'), 'do not omit');
+  await symlink(join(a.manifestPath, '..'), join(attempts, 'attempt-inventory-corrupt--linked'));
+  const inventory = await listWorkspaces(f.repoPath);
+  expect(inventory.summary).toEqual({ total: 5, diagnosed: 1, unavailable: 4 });
+  expect(inventory.entries.filter(entry => entry.error).map(entry => entry.entry)).toHaveLength(4);
+  expect(await readFile(join(bad, 'manifest.json'), 'utf8')).toBe('{broken');
+  expect(inventory.entries.find(entry => entry.identity?.attemptId === 'linked')?.error).toBe('invalid-attempt-entry');
 });

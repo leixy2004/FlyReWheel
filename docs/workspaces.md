@@ -239,3 +239,32 @@ scripts/verify-workspace-diagnostics.mjs`. It uses a new authored Git fixture, a
 separate process that exits holding a real local lease, and compiled CLI reads.
 Malformed-record experiments affect only that disposable fixture. No model,
 credential or production sandbox is involved.
+
+## Repository inventory
+
+```sh
+node dist/cli.js workspace list --repo /path/to/trusted-store
+```
+
+No run/attempt IDs are required. Entries are sorted by managed directory name and
+include the existing diagnosis: cancellation, lease metadata without owner tokens,
+cleanup blockers and outstanding recovery evidence. Closed attempts remain listed.
+A repository with no workspace metadata returns an empty inventory without
+creating metadata. Invalid entries, missing/corrupt/mismatched manifests and
+linked attempt directories appear with a fixed error code and null diagnosis;
+healthy entries remain visible. Shared metadata directory corruption fails the
+command rather than silently presenting an empty or complete inventory.
+
+`summary.diagnosed` counts returned diagnostics, not healthy or recoverable
+workspaces. Check each diagnosis's blockers and each entry's `error`.
+A completed listing exits 0 even with damaged entries. Enumeration and diagnosis
+are unlocked observations: concurrent changes can produce per-entry errors and
+newly allocated entries may not be included. This is not an atomic snapshot,
+recovery authorization, liveness determination or cleanup operation. It never
+releases leases or edits manifests. Only managed attempts are enumerated; unrelated
+Git worktrees are not adopted.
+
+Reproduce compiled CLI acceptance with `npm run build && node
+scripts/verify-workspace-list.mjs`. This uses a fresh authored Git fixture and a
+separate process that exits holding a real local lease, without model calls or
+production sandbox claims.

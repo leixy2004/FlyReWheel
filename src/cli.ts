@@ -32,7 +32,7 @@ import { configuredCodex, resolveCodexExecutionConfig } from './model-runtime.js
 import { enqueueReplay, enqueueApplication, APPLICATION_QUEUE } from './jobs.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobId, applicationJobSummary, applicationJobGovernance } from './application-job-contract.js';
 import { extractBugFixPair } from './git-evidence.js';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, diagnoseWorkspace } from './workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, diagnoseWorkspace, listWorkspaces } from './workspace/index.js';
 import { captureRepositoryContext, readRepositoryContextPackage, verifyRepositoryContext, validateRepositoryContextForSnapshot,
   makeRepositoryContextAnchor, makeRepositoryContextEvidence } from './repository-context.js';
 import { captureDirectParentSnapshot, captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
@@ -484,6 +484,9 @@ function workspaceIdentity(command: Command) {
     .requiredOption('--run <id>', 'Lowercase letters/digits with single hyphens; up to 40 characters')
     .requiredOption('--attempt <id>', 'Fresh identity; cannot be reused after failure or cleanup');
 }
+workspace.command('list').description('Read-only inventory of all managed attempts, including damaged entries')
+  .requiredOption('--repo <directory>', 'Full-history main repository root')
+  .action(async options => output(await listWorkspaces(options.repo)));
 workspaceIdentity(workspace.command('prepare').description('Allocate one fresh worktree at an exact base commit'))
   .requiredOption('--base <sha>', 'Full immutable SHA-1 commit to check out')
   .option('--head <sha>', 'Full immutable comparison head; defaults to base, is recorded without changing checkout')
