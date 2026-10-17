@@ -1,0 +1,118 @@
+{
+  "status": "passed",
+  "input": "authored temporary Git repository",
+  "modelCalls": 0,
+  "productionIsolationTested": false,
+  "checks": [
+    "empty inventory",
+    "separate process exited holding lease",
+    "cross-process cancellation and cleanup blockers",
+    "closed attempts retained",
+    "all four damaged entries reported",
+    "ownership token omitted",
+    "manifest history and lease unchanged",
+    "cleanup still refuses active lease",
+    "all filters retain damaged records",
+    "stable filtered pagination without omissions or duplicates",
+    "beyond-end empty page",
+    "invalid options rejected"
+  ],
+  "calls": [
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 0
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"code\": \"invalid_value\",\n    \"values\": [\n      \"all\",\n      \"leased\",\n      \"cancelled\",\n      \"attention\"\n    ],\n    \"path\": [\n      \"filter\"\n    ],\n    \"message\": \"Invalid option: expected one of \\\"all\\\"|\\\"leased\\\"|\\\"cancelled\\\"|\\\"attention\\\"\"\n  }\n]\n"
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"origin\": \"number\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"limit\"\n    ],\n    \"message\": \"Too small: expected number to be >=1\"\n  }\n]\n"
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"origin\": \"number\",\n    \"code\": \"too_big\",\n    \"maximum\": 1000,\n    \"inclusive\": true,\n    \"path\": [\n      \"limit\"\n    ],\n    \"message\": \"Too big: expected number to be <=1000\"\n  }\n]\n"
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"received\": \"NaN\",\n    \"path\": [\n      \"offset\"\n    ],\n    \"message\": \"Invalid input: expected number, received NaN\"\n  }\n]\n"
+    },
+    {
+      "operation": "list",
+      "exitCode": 1,
+      "error": "FlyReWheel: [\n  {\n    \"expected\": \"number\",\n    \"code\": \"invalid_type\",\n    \"received\": \"NaN\",\n    \"path\": [\n      \"offset\"\n    ],\n    \"message\": \"Invalid input: expected number, received NaN\"\n  }\n]\n"
+    }
+  ],
+  "testedBaseHead": "6102e82cb800e8f23a1ecbdda050880b9a1d3b0e",
+  "verificationDate": "2026-10-17",
+  "validation": {
+    "typecheck": "passed",
+    "testFiles": 4,
+    "testsPassed": 56,
+    "testsFailed": 0,
+    "build": "passed",
+    "independentReview": "no confirmed defects; reviewer did not execute tests"
+  }
+}

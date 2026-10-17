@@ -402,3 +402,39 @@ test('inventory retains malformed, missing, linked and invalid entries as errors
   expect(await readFile(join(bad, 'manifest.json'), 'utf8')).toBe('{broken');
   expect(inventory.entries.find(entry => entry.identity?.attemptId === 'linked')?.error).toBe('invalid-attempt-entry');
 });
+
+test('inventory filters preserve damaged entries and paginate deterministically after filtering', async () => {
+  const f = await fixture('inventory-pages');
+  for (const attemptId of ['f', 'e', 'd', 'c', 'b', 'a']) {
+    await prepareWorkspace({ ...identity(f, attemptId), baseSha: f.commits[0] });
+  }
+  await cleanupWorkspace(identity(f, 'a'));
+  await cancelWorkspace(identity(f, 'c'), 'filter fixture');
+  const lease = await acquireWorkspaceExecutionLease(identity(f, 'd'), f.commits[0]);
+  const damagedLease = await acquireWorkspaceExecutionLease(identity(f, 'f'), f.commits[0]);
+  await writeFile(join(damagedLease.leasePath, 'owner.json'), '{broken');
+  const dirty = await inspectWorkspace(identity(f, 'e'));
+  await writeFile(join(dirty.record.worktreePath, 'untracked'), 'preserve');
+  await mkdir(join(f.repoPath, '.sandcastle', 'flyrewheel-attempts', 'unknown-entry'));
+  const names = (value: Awaited<ReturnType<typeof listWorkspaces>>) => value.entries.map(entry => entry.identity?.attemptId ?? entry.entry);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'leased' }))).toEqual(['d', 'f', 'unknown-entry']);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'cancelled' }))).toEqual(['c', 'f', 'unknown-entry']);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'attention' }))).toEqual(['c', 'd', 'e', 'f', 'unknown-entry']);
+  const first = await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2 });
+  const second = await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2, offset: first.pagination.nextOffset });
+  expect(names(first).concat(names(second))).toEqual(['c', 'f', 'unknown-entry']);
+  expect(first.pagination).toMatchObject({ matched: 3, returned: 2, nextOffset: 2 });
+  expect(second.pagination).toMatchObject({ matched: 3, returned: 1, nextOffset: null });
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2 }))).toEqual(names(first));
+  const beyond = await listWorkspaces(f.repoPath, { offset: 100 });
+  expect(beyond.entries).toEqual([]); expect(beyond.pagination.nextOffset).toBeNull();
+  expect(beyond.summary.total).toBe(7);
+  await lease.release();
+}, 15_000);
+
+test('inventory rejects unsupported filters and invalid pagination before repository access', async () => {
+  for (const options of [{ filter: 'unknown' }, { limit: 0 }, { limit: 1001 }, { offset: -1 }, { offset: 0.5 },
+    { offset: Number.MAX_SAFE_INTEGER + 1 }, { limit: NaN }, { limit: '10' }, { unexpected: true }]) {
+    await expect(listWorkspaces('/nonexistent-repository', options)).rejects.toThrow();
+  }
+});

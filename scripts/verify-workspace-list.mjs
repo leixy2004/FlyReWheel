@@ -63,7 +63,27 @@ assert.equal(await readFile(historyPath, 'utf8'), historyBefore);
 assert.equal(await readFile(badPath, 'utf8'), '{malformed');
 identity.attemptId = 'one';
 assert.match(cli('cleanup', [], true), /lease is active/);
+const filtered = cli('list', ['--filter', 'leased']);
+assert.equal(filtered.pagination.matched, 5); // one lease and all four damaged entries
+assert.equal(filtered.entries.some(entry => entry.identity?.attemptId === 'closed'), false);
+assert.deepEqual(cli('list', ['--filter', 'cancelled']).entries, filtered.entries);
+assert.deepEqual(cli('list', ['--filter', 'attention']).entries, filtered.entries);
+const collected = [];
+let offset = 0;
+do {
+  const page = cli('list', ['--filter', 'leased', '--limit', '2', '--offset', String(offset)]);
+  collected.push(...page.entries.map(entry => entry.entry));
+  offset = page.pagination.nextOffset;
+} while (offset !== null);
+assert.deepEqual(collected, filtered.entries.map(entry => entry.entry));
+assert.equal(new Set(collected).size, 5);
+assert.deepEqual(cli('list', ['--filter', 'leased', '--limit', '2']).entries.map(entry => entry.entry), collected.slice(0, 2));
+assert.deepEqual(cli('list', ['--offset', '999']).entries, []);
+for (const args of [['--filter', 'unknown'], ['--limit', '0'], ['--limit', '1001'], ['--offset', '-1'], ['--offset', '1.5']]) cli('list', args, true);
+assert.equal(await readFile(ownerPath, 'utf8'), ownerBefore);
+assert.equal(await readFile(prepared.manifestPath, 'utf8'), manifestBefore);
+assert.equal(await readFile(historyPath, 'utf8'), historyBefore);
 const report = { status: 'passed', input: 'authored temporary Git repository', modelCalls: 0, productionIsolationTested: false,
- checks: ['empty inventory', 'separate process exited holding lease', 'cross-process cancellation and cleanup blockers', 'closed attempts retained', 'all four damaged entries reported', 'ownership token omitted', 'manifest history and lease unchanged', 'cleanup still refuses active lease'], calls };
+ checks: ['empty inventory', 'separate process exited holding lease', 'cross-process cancellation and cleanup blockers', 'closed attempts retained', 'all four damaged entries reported', 'ownership token omitted', 'manifest history and lease unchanged', 'cleanup still refuses active lease', 'all filters retain damaged records', 'stable filtered pagination without omissions or duplicates', 'beyond-end empty page', 'invalid options rejected'], calls };
 await writeFile(join(repoPath, 'inventory-verification.json'), JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));

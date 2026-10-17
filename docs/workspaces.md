@@ -268,3 +268,29 @@ Reproduce compiled CLI acceptance with `npm run build && node
 scripts/verify-workspace-list.mjs`. This uses a fresh authored Git fixture and a
 separate process that exits holding a real local lease, without model calls or
 production sandbox claims.
+
+### Filter and page the inventory
+
+```sh
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter leased --limit 20 --offset 0
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter cancelled
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter attention
+```
+
+`--filter` defaults to `all`. `leased` selects present leases, `cancelled` selects
+cancellation requests, and `attention` selects either plus cleanup blockers
+(including dirty worktrees and repository operation locks). Errors and unverifiable
+records remain included in **every** filter, even when their lease or cancellation
+state cannot be determined. Such entries occupy ordinary page positions: follow
+all pages to see every damaged record.
+
+Entries are sorted by directory name in ascending JavaScript code-unit order,
+then filtered, then paged. `--limit` defaults to 100 and accepts 1–1000;
+`--offset` is a nonnegative safe integer and defaults to 0. `pagination.matched`
+counts all filtered entries, `returned` counts this page, and `nextOffset` is null
+at the end. An offset beyond the end returns an empty page. `summary` continues to
+count the entire inventory before filtering. Invalid options fail the command.
+The implementation still inspects the complete inventory to preserve damaged
+records; pagination limits output, not scan cost. Ordering is deterministic for
+an unchanged store, but concurrent additions/removals/state changes can shift
+pages. No cursor snapshot or cross-call consistency is claimed.

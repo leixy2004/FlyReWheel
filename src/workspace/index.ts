@@ -311,7 +311,12 @@ export async function diagnoseWorkspace(input: WorkspaceIdentity) {
 }
 
 /** Enumerate managed entries without trusting their manifests to choose paths. */
-export async function listWorkspaces(repo: string) {
+export async function listWorkspaces(repo: string, rawOptions: unknown = {}) {
+  const options = z.object({
+    filter: z.enum(['all', 'leased', 'cancelled', 'attention']).default('all'),
+    offset: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).default(0),
+    limit: z.number().int().min(1).max(1000).default(100),
+  }).strict().parse(rawOptions);
   const repoPath = await repository(z.string().min(1).parse(repo));
   const managed = join(repoPath, '.sandcastle');
   const attempts = join(managed, 'flyrewheel-attempts');
@@ -337,8 +342,24 @@ export async function listWorkspaces(repo: string) {
       }
     }
   }
+  const matching = entries.filter(entry => {
+    const diagnosis = entry.diagnosis;
+    // Damaged or unverifiable entries survive every filter; page through them
+    // in the same sorted order as ordinary matches, never silently discard them.
+    if (entry.error || !diagnosis || diagnosis.lease.state === 'unverifiable'
+      || diagnosis.cancellation.state === 'unverifiable'
+      || diagnosis.cleanup.blockedReasons.some(reason => reason.includes('unverified') || reason.includes('unverifiable') || reason === 'manifest-requires-recovery' || reason === 'worktree-observation-failed')) return true;
+    if (options.filter === 'leased') return diagnosis.lease.state !== 'absent';
+    if (options.filter === 'cancelled') return diagnosis.cancellation.state !== 'absent';
+    if (options.filter === 'attention') return diagnosis.lease.state !== 'absent' || diagnosis.cancellation.state !== 'absent' || diagnosis.cleanup.blockedReasons.length > 0;
+    return true;
+  });
+  const page = matching.slice(options.offset, options.offset + options.limit);
   return { schemaVersion: 1, repoPath, observationConsistency: 'point-in-time-unlocked-not-an-authorization',
-    entries, summary: { total: entries.length, diagnosed: entries.filter(entry => entry.diagnosis !== null).length,
+    filter: options.filter, pagination: { offset: options.offset, limit: options.limit, matched: matching.length, returned: page.length,
+      nextOffset: options.offset + page.length < matching.length ? options.offset + page.length : null,
+      ordering: 'entry-name-code-unit-ascending', damagedEntries: 'included-in-all-filters' },
+    entries: page, summary: { total: entries.length, diagnosed: entries.filter(entry => entry.diagnosis !== null).length,
       unavailable: entries.filter(entry => entry.error !== null).length }, automaticRelease: false };
 }
 

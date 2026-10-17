@@ -486,7 +486,13 @@ function workspaceIdentity(command: Command) {
 }
 workspace.command('list').description('Read-only inventory of all managed attempts, including damaged entries')
   .requiredOption('--repo <directory>', 'Full-history main repository root')
-  .action(async options => output(await listWorkspaces(options.repo)));
+  .option('--filter <filter>', 'all, leased, cancelled or attention; damaged entries remain included', 'all')
+  .option('--offset <number>', 'Zero-based offset in the filtered sorted entries', '0')
+  .option('--limit <number>', 'Page size, 1–1000', '100')
+  .action(async options => output(await listWorkspaces(options.repo, { filter: options.filter,
+    offset: /^[0-9]+$/.test(options.offset) ? Number(options.offset) : NaN,
+    limit: /^[0-9]+$/.test(options.limit) ? Number(options.limit) : NaN })));
+
 workspaceIdentity(workspace.command('prepare').description('Allocate one fresh worktree at an exact base commit'))
   .requiredOption('--base <sha>', 'Full immutable SHA-1 commit to check out')
   .option('--head <sha>', 'Full immutable comparison head; defaults to base, is recorded without changing checkout')
