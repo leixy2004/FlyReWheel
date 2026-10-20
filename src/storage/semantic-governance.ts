@@ -82,27 +82,46 @@ export class SemanticGovernanceStore {
     if (head && (head.digest !== state.headDigest || head.sequence !== state.sequence)) fail('INTEGRITY_FAILURE', 'Governance head digest differs from validated history');
     return { state, history };
   }
+  private async prepareCommand(tx: Queryable, command: SemanticGovernanceCommand) {
+    const resources = this.resources(tx), binding = await resources.binding(command.ruleDigest, command.scopeDigest);
+    const previous = (await tx.query<EventRow>('SELECT * FROM qe_local_semantic_governance_events WHERE id=$1', [command.id])).rows[0];
+    if (previous) {
+      if (digestOf(SemanticGovernanceEventSchema.parse(previous.payload).command) !== digestOf(command)) fail('IMMUTABLE_CONFLICT', 'Governance command ID already has different immutable content');
+      const { state, history } = await this.read(tx, previous.rule_id, resources);
+      const stored = history.find(value => value.digest === previous.digest) ?? fail('INTEGRITY_FAILURE', 'Idempotent governance event is not in its current validated history');
+      return { state, stored, alreadyApplied: true };
+    }
+    const { state } = await this.read(tx, binding.ruleId, resources);
+    if (command.expectedHeadDigest !== state.headDigest) fail('STALE_GOVERNANCE_HEAD', 'Local governance changed; inspect its current head before submitting another command');
+    if (state.headDigest === null) {
+      const heads = (await tx.query('SELECT rule_id FROM qe_local_semantic_governance_heads LIMIT 100')).rows;
+      if (heads.length >= GOVERNANCE_LIMITS.rules) fail('GOVERNANCE_LIMIT', 'Local governance is limited to 100 logical rules; no new stream was created');
+    }
+    const event = await this.derive(command, state, resources), digest = digestOf(event);
+    resources.count(event);
+    return { state, stored: { digest, event }, alreadyApplied: false };
+  }
+  async preview(input: SemanticGovernanceCommand) {
+    const command = SemanticGovernanceCommandSchema.parse(input);
+    return this.db.transaction(async tx => {
+      await tx.query('LOCK TABLE qe_local_semantic_governance_heads IN SHARE MODE');
+      const { state, stored, alreadyApplied } = await this.prepareCommand(tx, command);
+      return { schemaVersion: 1, kind: 'local-semantic-governance-preview',
+        status: alreadyApplied ? 'already-applied' : 'ready', command,
+        currentState: state, resultingState: alreadyApplied ? state : advanceSemanticGovernance(state, stored.event, stored.digest),
+        event: stored, transitions: alreadyApplied ? [] : stored.event.transitions,
+        governanceWritesPerformed: false, reservation: 'none-revalidate-on-apply', trust: semanticGovernanceTrust };
+    });
+  }
   async apply(input: SemanticGovernanceCommand): Promise<StoredSemanticGovernanceEvent> {
     const command = SemanticGovernanceCommandSchema.parse(input);
     return this.db.transaction(async tx => {
       // This PostgreSQL lock serializes absent-head creation as well as same-ID retries.
       // PGlite serializes transactions already; both backends also exercise the explicit CAS below.
       await tx.query('LOCK TABLE qe_local_semantic_governance_heads IN SHARE ROW EXCLUSIVE MODE');
-      const resources = this.resources(tx), binding = await resources.binding(command.ruleDigest, command.scopeDigest);
-      const previous = (await tx.query<EventRow>('SELECT * FROM qe_local_semantic_governance_events WHERE id=$1', [command.id])).rows[0];
-      if (previous) {
-        if (digestOf(SemanticGovernanceEventSchema.parse(previous.payload).command) !== digestOf(command)) fail('IMMUTABLE_CONFLICT', 'Governance command ID already has different immutable content');
-        const { history } = await this.read(tx, previous.rule_id, resources);
-        return history.find(value => value.digest === previous.digest) ?? fail('INTEGRITY_FAILURE', 'Idempotent governance event is not in its current validated history');
-      }
-      const { state } = await this.read(tx, binding.ruleId, resources);
-      if (command.expectedHeadDigest !== state.headDigest) fail('STALE_GOVERNANCE_HEAD', 'Local governance changed; inspect its current head before submitting another command');
-      if (state.headDigest === null) {
-        const heads = (await tx.query('SELECT rule_id FROM qe_local_semantic_governance_heads LIMIT 100')).rows;
-        if (heads.length >= GOVERNANCE_LIMITS.rules) fail('GOVERNANCE_LIMIT', 'Local governance is limited to 100 logical rules; no new stream was created');
-      }
-      const event = await this.derive(command, state, resources), digest = digestOf(event);
-      resources.count(event);
+      const { state, stored, alreadyApplied } = await this.prepareCommand(tx, command);
+      if (alreadyApplied) return stored;
+      const { event, digest } = stored;
       await tx.query('INSERT INTO qe_local_semantic_governance_events(digest,id,rule_id,sequence,previous_digest,rule_digest,payload) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb)',
         [digest, command.id, event.ruleId, event.sequence, event.previousEventDigest, command.ruleDigest, JSON.stringify(event)]);
       const result = state.headDigest === null

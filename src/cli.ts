@@ -451,6 +451,13 @@ databaseCommand(rules, 'list').option('--rule-id <id>', 'Exact logical rule ID')
     try { await output(await store.listRuleVersions(options.ruleId), options.out); } finally { await store.close(); }
   });
 const governance = rules.command('governance').description('Explicit local semantic-review selection and immutable history; no review, activation, certification or publication');
+databaseCommand(governance, 'preview').description('Validate an exact governance command and project its transition without writing governance records')
+  .requiredOption('--file <file>', 'Same strict command JSON accepted by governance apply').option('--out <file>')
+  .action(async options => {
+    const value = SemanticGovernanceCommandSchema.parse(await json(options.file));
+    const store = await storeFor(options);
+    try { await output(await store.previewSemanticGovernance(value), options.out); } finally { await store.close(); }
+  });
 databaseCommand(governance, 'apply').requiredOption('--file <file>', 'Strict local governance command with explicit actor, source, reason and expected head')
   .option('--out <file>')
   .action(async options => {

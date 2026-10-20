@@ -1326,6 +1326,7 @@ export class QualEvoStore {
     });
   }
   /** Explicit opt-in local review governance. Never updates the v1 active registry. */
+  async previewSemanticGovernance(input: SemanticGovernanceCommand) { return this.semanticGovernanceStore().preview(input); }
   async applySemanticGovernance(input: SemanticGovernanceCommand) { return this.semanticGovernanceStore().apply(input); }
   async getSemanticGovernance(ruleId: string) { return this.semanticGovernanceStore().get(ruleId); }
   async getSemanticGovernanceHistory(ruleId: string) { return this.semanticGovernanceStore().history(ruleId); }
