@@ -1,6 +1,8 @@
 import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { afterEach, expect, it } from 'vitest';
 import { createLocalDevelopmentWorkspace, inspectLocalDevelopmentWorkspace, createLocalDevelopmentResolver,
   cleanupLocalDevelopmentWorkspace, readLocalDevelopmentEvidence } from '../src/local-development-workspace.js';
@@ -25,6 +27,13 @@ it('creates only a fresh owned worktree, reopens evidence, resolves exact select
   const status = await inspectLocalDevelopmentWorkspace(created);
   expect(status).toMatchObject({ localDevelopment: 'ready', productionReady: false, fixedCommit: f.selection.headSha,
     capabilities: { physicalResourceDestruction: 'unsupported', wholeRuntimeStop: 'unsupported' } });
+  const receiptPath = join(f.directory, 'receipt.json');
+  await writeFile(receiptPath, JSON.stringify(created));
+  const command = process.env.WORKER_LAUNCH_COMPILED === '1' ? [resolve('dist/worker.js')] : ['--import', 'tsx', resolve('src/worker.ts')];
+  const checked = await promisify(execFile)(process.execPath, [...command, '--check', '--local-development', receiptPath],
+    { env: { PATH: process.env.PATH }, timeout: 15000 });
+  expect(JSON.parse(checked.stdout)).toMatchObject({ localDevelopment: 'ready', productionReady: false,
+    workerExecution: 'not_supported_by_development_adapter' });
   const resolver = await createLocalDevelopmentResolver(created);
   expect(await resolver(f.selection, new AbortController().signal)).toEqual(created.receipt.workspace);
   await expect(resolver({ ...f.selection, expectedSha: f.selection.baseSha }, new AbortController().signal)).rejects.toThrow();

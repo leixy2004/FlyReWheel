@@ -22,6 +22,7 @@ Supplying both a configured and injected resolver is rejected as ambiguous.
 | `reviews batch run --offline-fixtures ...` | Explicit fixture review; no workspace/model receipt |
 | `reviews batch run --config ...` | Existing worker composition; built-in prepared resolver now available, production authority still required |
 | `node dist/worker.js` | Existing queue service with application runtime blocked unless trusted service bootstrap is used |
+| Explicit enable/path/SHA-256 launch | [Reviewed deployment-module compatibility](worker-launch-compatibility.md); actual authority still required |
 | `node dist/worker.js --config ...` | Explicit error before database/queue startup; config is not silently ignored |
 | `startConfiguredWorkerService(config, dependencies, options)` | Reviewed deployment code injects the missing lifecycle authority and authorized credential environment |
 

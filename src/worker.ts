@@ -1,60 +1,53 @@
 import { inspectLocalDevelopmentWorkspace, StoredLocalDevelopmentWorkspaceSchema } from './local-development-workspace.js';
 import { readFile, stat } from 'node:fs/promises';
 import { preflightWorkerBootstrap } from './worker-bootstrap.js';
-import { openSelectedStore, resolveDatabaseSelection } from './storage/connection.js';
-import { openQueue } from './jobs.js';
-import { startWorkerService } from './worker-service.js';
+import { parseWorkerLaunchOptions, startWorkerFromOptions, type WorkerLaunchOptions } from './worker-launch.js';
 
-async function startConfiguredWorker() {
-  // Starting this PostgreSQL-only service is the explicit selection; never fall back to a local store.
-  const selection = resolveDatabaseSelection({ postgres: true }, process.env, { postgresOnly: true });
-  if (selection.kind !== 'postgres') throw new Error('Worker requires PostgreSQL');
-  const store = await openSelectedStore(selection);
-  let boss;
-  try { boss = await openQueue({ connectionString: selection.connectionString }); }
-  catch (error) { await store.close(); throw error; }
-  // No ambient runtime module loading, fixture fallback, credentials or backend
-  // selection. A reviewed deployment bootstrap must inject startWorkerService's
-  // application dependencies before workspace execution can become configured.
-  const service = await startWorkerService({ store, boss });
-  const shutdown = () => { void service.stop().catch(() => { process.stderr.write('Worker shutdown failed; inspect secured operational logs\n'); process.exitCode = 1; }); };
-  process.once('SIGTERM', shutdown);
-  process.once('SIGINT', shutdown);
-}
-// Build/runtime import smoke without opening a database, service, socket or model.
-if (process.argv.slice(2).includes('--check')) {
-  const args = process.argv.slice(2), localIndex = args.indexOf('--local-development'), configIndex = args.indexOf('--config');
-  if (localIndex >= 0) {
-    try {
-      if (configIndex >= 0) throw new Error('Local and production checks are separate');
-      const path = args[localIndex + 1];
-      if (!path || path.startsWith('--') || (await stat(path)).size > 2_000_000) throw new Error('Invalid development receipt');
-      const bytes = await readFile(path);
-      if (bytes.length > 2_000_000) throw new Error('Invalid development receipt');
-      const inspection = await inspectLocalDevelopmentWorkspace(StoredLocalDevelopmentWorkspaceSchema.parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes))));
-      process.stdout.write(JSON.stringify({ ...inspection, workerExecution: 'not_supported_by_development_adapter' }) + '\n');
-    } catch { process.stderr.write('Development workspace inspection failed; no runtime was started\n'); process.exitCode = 1; }
-  } else if (configIndex >= 0) {
-    try {
-      const path = args[configIndex + 1];
-      if (!path || path.startsWith('--')) throw new Error('Missing configuration path');
-      if ((await stat(path)).size > 2_000_000) throw new Error('Configuration too large');
-      const bytes = await readFile(path);
-      if (bytes.length > 2_000_000) throw new Error('Configuration too large');
-      const result = preflightWorkerBootstrap(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)), new Set(Object.keys(process.env)));
-      process.stdout.write(JSON.stringify(result) + '\n');
-    } catch { process.stderr.write('Worker preflight could not read a bounded UTF-8 configuration file\n'); process.exitCode = 1; }
-  } else process.stdout.write(JSON.stringify({ status: 'checked', queues: ['replay', 'application'], applicationRuntime: 'blocked',
-    reason: 'Trusted workspace resolver/backend bootstrap and production lifecycle authority are not configured' }) + '\n');
-} else if (process.argv.slice(2).includes('--local-development')) {
-  process.stderr.write('Local development supports --check inspection and workspace local lifecycle commands only; it cannot execute repository programs or models\n');
-  process.exitCode = 1;
-} else if (process.argv.slice(2).includes('--config')) {
-  process.stderr.write('Worker configuration alone cannot supply lifecycle authority; use --check --config for preflight and a reviewed deployment bootstrap for execution\n');
-  process.exitCode = 1;
-} else {
-  await startConfiguredWorker().catch(() => {
-    process.stderr.write('Worker startup failed; check explicit DATABASE_URL configuration and secured operational logs\n');
+async function run(options: WorkerLaunchOptions) {
+  // Build/runtime import smoke without opening a database, service, socket or model.
+  if (options.check) {
+    if (options.localDevelopment !== undefined) {
+      try {
+        const path = options.localDevelopment;
+        if (!path || path.startsWith('--') || (await stat(path)).size > 2_000_000) throw new Error('Invalid development receipt');
+        const bytes = await readFile(path);
+        if (bytes.length > 2_000_000) throw new Error('Invalid development receipt');
+        const inspection = await inspectLocalDevelopmentWorkspace(StoredLocalDevelopmentWorkspaceSchema.parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes))));
+        process.stdout.write(JSON.stringify({ ...inspection, workerExecution: 'not_supported_by_development_adapter' }) + '\n');
+      } catch { process.stderr.write('Development workspace inspection failed; no runtime was started\n'); process.exitCode = 1; }
+    } else if (options.config !== undefined) {
+      try {
+        const path = options.config;
+        if (!path || path.startsWith('--')) throw new Error('Missing configuration path');
+        if ((await stat(path)).size > 2_000_000) throw new Error('Configuration too large');
+        const bytes = await readFile(path);
+        if (bytes.length > 2_000_000) throw new Error('Configuration too large');
+        const result = preflightWorkerBootstrap(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)), new Set(Object.keys(process.env)));
+        process.stdout.write(JSON.stringify(result) + '\n');
+      } catch { process.stderr.write('Worker preflight could not read a bounded UTF-8 configuration file\n'); process.exitCode = 1; }
+    } else process.stdout.write(JSON.stringify({ status: 'checked', queues: ['replay', 'application'], applicationRuntime: 'blocked',
+      ...(options.application ? { applicationBootstrapRequested: true, trustedDependencies: 'not_loaded_or_verified' } : {}),
+      reason: 'Trusted workspace resolver/backend bootstrap and production lifecycle authority are not configured' }) + '\n');
+  } else if (options.localDevelopment !== undefined) {
+    process.stderr.write('Local development supports --check inspection and workspace local lifecycle commands only; it cannot execute repository programs or models\n');
     process.exitCode = 1;
-  });
+  } else if (options.config !== undefined) {
+    process.stderr.write('Worker configuration alone cannot supply lifecycle authority; use --check --config for preflight and a reviewed deployment bootstrap for execution\n');
+    process.exitCode = 1;
+  } else {
+    await startWorkerFromOptions(options, process.env).then(service => {
+      const shutdown = () => { void service.stop().catch(() => { process.stderr.write('Worker shutdown failed; inspect secured operational logs\n'); process.exitCode = 1; }); };
+      process.once('SIGTERM', shutdown);
+      process.once('SIGINT', shutdown);
+    }).catch(() => {
+      process.stderr.write('Worker startup failed; verify explicit bootstrap, DATABASE_URL configuration and secured operational logs\n');
+      process.exitCode = 1;
+    });
+  }
+}
+
+try { await run(parseWorkerLaunchOptions(process.argv.slice(2))); }
+catch {
+  process.stderr.write('Invalid worker arguments; use --check, --check --config FILE, --check --local-development FILE, or explicit --enable-application-execution with --application-bootstrap and --application-bootstrap-sha256\n');
+  process.exitCode = 1;
 }

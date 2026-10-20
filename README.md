@@ -341,3 +341,5 @@ See [governed semantic reviews](docs/governed-semantic-reviews.md) for the CLI,
 ### Versioned storage upgrades
 
 Domain migrations now reuse pinned node-pg-migrate with ordered history, SHA-256 checksums and atomic upgrades. Existing pre-ledger databases must be backed up, reviewed with `database inspect`, then explicitly adopted without replaying historical SQL. See [database migrations and recovery](docs/database-migrations.md) before upgrading an existing store.
+
+Worker deployment entrypoint compatibility and explicit opt-in flags: [worker launch guide](docs/worker-launch-compatibility.md). JSON preflight remains inspection-only.

@@ -83,7 +83,8 @@ backend or resolver**. It registers the application queue but returns a durable
 `blocked / not_run / runtime_unavailable` result before reading private domain
 inputs, resolving a workspace, or reserving a runtime. It does not fall back to
 fixtures or infer backend setup from environment variables. A reviewed deployment
-bootstrap must call the service with trusted dependencies. There is deliberately
+bootstrap can call the service with trusted dependencies or use the
+[explicit pinned-module launch](worker-launch-compatibility.md). There is deliberately
 no arbitrary module/executable loader controlled by environment or job JSON.
 `node dist/worker.js --check` checks compiled imports and reports this blocked
 boundary without opening sockets, connecting a database, or invoking a model.
