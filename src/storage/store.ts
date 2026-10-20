@@ -1,3 +1,5 @@
+import { deriveReviewBatch, ReviewBatchSchema, type ReviewBatchInput, type StoredReviewBatch } from '../review-batch.js';
+import { ReviewContinuationInputSchema, ReviewContinuationSchema, reviewContinuationJob, type ReviewContinuationInput, type StoredReviewContinuation } from '../review-continuation.js';
 import { readTrustedComparisonApplicability, type TrustedComparisonApplicability } from '../adapters/comparison-applicability-model.js';
 import { GovernedReviewPlanSchema, GovernedReviewAdmissionSchema, GOVERNED_REVIEW_LIMITS, deriveGovernedReviewPlan,
   normalizeGovernedReviewInput, governedReviewJobs, type GovernedReviewPlan, type GovernedReviewPlanInput,
@@ -69,7 +71,10 @@ type ApplicationJobRow = {
   state: string; owner: string | null; lease_expires_at: unknown; lease_valid: boolean;
   attempts: number; result: unknown; result_digest: string | null;
 };
-export type ApplicationJobClaim = { state: 'claimed'; owner: string } | { state: 'busy' } | { state: 'finished'; record: ApplicationJobRecord };
+export type ApplicationJobClaim = { state: 'claimed'; owner: string } | { state: 'busy' }
+  | { state: 'finished' | 'retry-not-authorized'; record: ApplicationJobRecord };
+const ApplicationJobClaimOptionsSchema = z.object({ allowRetry: z.boolean().default(true) }).strict();
+export type ApplicationJobClaimOptions = z.input<typeof ApplicationJobClaimOptionsSchema>;
 const ApplicationJobOwnerSchema = z.uuid().transform(value => value.toLowerCase());
 // Exceeds the bounded 300-second execution plus all bounded cleanup steps.
 const APPLICATION_JOB_LEASE_SECONDS = 15 * 60;
@@ -94,6 +99,12 @@ async function one<T extends Record<string, unknown>>(tx: Queryable, sql: string
 }
 
 /** Page options only affect discovery; every returned record still uses its exact getter validator. */
+export const ReviewFeedbackPageSchema = z.object({
+  ruleDigest: DigestSchema.optional(), reviewId: LocalReviewFeedbackSchema.shape.reviewId.optional(),
+  findingId: LocalReviewFeedbackSchema.shape.findingId.optional(), source: LocalReviewFeedbackSchema.shape.source.optional(),
+  after: IdSchema.optional(), limit: z.number().int().min(1).max(100).default(20),
+}).strict();
+
 export const RevisionCatalogPageSchema = z.object({
   requestDigest: DigestSchema.optional(), id: IdSchema.optional(), after: DigestSchema.optional(),
   limit: z.number().int().min(1).max(100).default(20),
@@ -158,11 +169,14 @@ export class QualEvoStore {
     if (job.kind === 'semantic-review') {
       if (outcome.kind !== 'semantic-review') mismatch();
       const review = await this.readSemanticReview(tx, outcome.id);
+      const executionMatches = job.offlineFixtureDigest
+        ? review.config.mode === 'offline_fixture' && review.config.fixtureDigest === job.offlineFixtureDigest
+          && result.modelExecution === 'not_run' && review.executionReceipt === undefined
+        : review.config.mode === 'workspace_execution' && review.executionReceipt?.modelExecution === result.modelExecution
+          && review.executionReceipt.context.checkout === 'after' && review.executionReceipt.context.evaluation?.exportId === job.evaluationExportId;
       if (digestOf(review) !== outcome.digest || review.ruleDigest !== job.ruleDigest || review.snapshotDigest !== job.snapshotDigest
         || digestOf(review.config.repositoryContextDigests ?? []) !== digestOf(job.repositoryContextDigests ?? [])
-        || review.config.attempt !== expectedId || review.config.mode !== 'workspace_execution'
-        || review.executionReceipt?.modelExecution !== result.modelExecution || review.executionReceipt.context.checkout !== 'after'
-        || review.executionReceipt.context.evaluation?.exportId !== job.evaluationExportId) mismatch();
+        || review.config.attempt !== expectedId || !executionMatches) mismatch();
       return;
     }
     if (outcome.id !== expectedId) mismatch();
@@ -239,6 +253,36 @@ export class QualEvoStore {
     await this.reconcileExpiredApplicationJobs(1, jobDigest);
     return this.db.transaction(async tx => (await this.readApplicationJob(tx, jobDigest))?.record ?? null);
   }
+  /** Immutable observed outcomes, including failed attempts replaced in the current
+   * ledger by retries. Migration never invents already-lost historical results. */
+  async getApplicationJobHistory(jobDigest: string, input: { afterAttempt?: number; limit?: number } = {}) {
+    DigestSchema.parse(jobDigest);
+    const options = z.object({ afterAttempt: z.number().int().nonnegative().default(0), limit: z.number().int().min(1).max(100).default(20) }).strict().parse(input);
+    await this.reconcileExpiredApplicationJobs(1, jobDigest);
+    return this.db.transaction(async tx => {
+      const current = await this.readApplicationJob(tx, jobDigest);
+      if (!current) fail('NOT_FOUND', 'Unknown application job');
+      const rows = (await tx.query<{ attempt: number; state: string; result: unknown; result_digest: string; origin: string }>(
+        'SELECT attempt,state,result,result_digest,origin FROM qe_application_job_attempt_history WHERE job_digest=$1 AND attempt>$2 ORDER BY attempt LIMIT $3',
+        [jobDigest, options.afterAttempt, options.limit])).rows;
+      const outcomes = rows.map(row => {
+        const result = ApplicationJobResultSchema.parse(row.result);
+        if (digestOf(result) !== row.result_digest || row.attempt > current.record.attempts
+          || !['migration-current-result','recorded-transition'].includes(row.origin)
+          || (row.state === 'retryable' ? result.status !== 'failed' : row.state !== 'finished'))
+          fail('INTEGRITY_FAILURE', 'Invalid application attempt history');
+        return { attempt: row.attempt, state: row.state, result, origin: row.origin };
+      });
+      const count = await one<{ count: number }>(tx, 'SELECT count(*)::integer AS count FROM qe_application_job_attempt_history WHERE job_digest=$1', [jobDigest]);
+      const closedAttempts = current.record.attempts - (current.record.state === 'running' ? 1 : 0);
+      const recordedAttempts = count!.count;
+      if (recordedAttempts > closedAttempts) fail('INTEGRITY_FAILURE', 'Attempt history exceeds completed attempts');
+      return { jobDigest, currentState: current.record.state, attempts: current.record.attempts,
+        recordedAttempts, missingHistoricalAttempts: closedAttempts - recordedAttempts,
+        historyScope: 'observed-results-only-no-invented-backfill', outcomes,
+        nextAfterAttempt: outcomes.at(-1)?.attempt ?? null };
+    });
+  }
   private checkApplicationJobPayload(job: ApplicationJob, row: ApplicationJobRow): void {
     if (digestOf(job) !== row.job_payload_digest) fail('IMMUTABLE_CONFLICT', 'Application job identity already has different normalized content');
   }
@@ -246,8 +290,9 @@ export class QualEvoStore {
     if (this.applicationJobScope) fail('APPLICATION_JOB_SCOPE_INVALID', 'Application job persistence cannot mutate job claims or outcomes');
   }
   /** Claim once; an interrupted lease is terminally blocked, never silently stolen. */
-  async claimApplicationJob(raw: ApplicationJob, rawOwner: string): Promise<ApplicationJobClaim> {
+  async claimApplicationJob(raw: ApplicationJob, rawOwner: string, options: ApplicationJobClaimOptions = {}): Promise<ApplicationJobClaim> {
     this.checkApplicationJobScope();
+    const { allowRetry } = ApplicationJobClaimOptionsSchema.parse(options);
     const job = ApplicationJobSchema.parse(raw), owner = ApplicationJobOwnerSchema.parse(rawOwner), digest = applicationJobDigest(job);
     return this.db.transaction(async tx => {
       const inserted = await tx.query(`INSERT INTO qe_application_jobs(job_digest,job_payload,job_payload_digest,state,owner,lease_expires_at,attempts)
@@ -268,6 +313,9 @@ export class QualEvoStore {
         }
         return inserted.rows.length ? { state: 'claimed', owner } : { state: 'busy' };
       }
+      // The row is locked: an earlier status read cannot authorize a retry of
+      // a failure committed by a concurrent invocation before this claim.
+      if (!allowRetry) return { state: 'retry-not-authorized', record: current.record };
       const claimed = await tx.query(`UPDATE qe_application_jobs SET state='running',owner=$2,lease_expires_at=clock_timestamp() + $3 * interval '1 second',
         attempts=attempts+1,result=NULL,result_digest=NULL WHERE job_digest=$1 AND state='retryable' RETURNING job_digest`,
       [digest, owner, APPLICATION_JOB_LEASE_SECONDS]);
@@ -639,6 +687,21 @@ export class QualEvoStore {
       ...(repositoryContexts === undefined ? {} : { repositoryContexts }), ...(options.attempt === undefined ? {} : { attempt: options.attempt }) });
     return this.saveSemanticReview(review);
   }
+  /** Explicit fixture job only. Review plus job result still commit together;
+   * this path never mints a workspace/model execution receipt. */
+  async completeOfflineSemanticReviewJob(job: Extract<ApplicationJob, { kind: 'semantic-review' }>, owner: string,
+    fixtures: ReviewFixture, signal: AbortSignal): Promise<ApplicationJobRecord> {
+    if (!job.offlineFixtureDigest || digestOf(fixtures) !== job.offlineFixtureDigest || job.evaluationExportId)
+      fail('OFFLINE_REVIEW_REJECTED', 'Offline job must bind exact fixture bytes and cannot claim an evaluation workspace');
+    const rule = await this.readSemanticRuleVersion(this.db, job.ruleDigest), snapshot = await this.readChangeSnapshot(this.db, job.snapshotDigest);
+    const repositoryContexts = job.repositoryContextDigests === undefined ? undefined
+      : await Promise.all(job.repositoryContextDigests.map(digest => this.readRepositoryContext(this.db, digest)));
+    const review = buildSemanticReview({ rule, snapshot, fixtures, repositoryContexts, attempt: `application-${applicationJobDigest(job)}` });
+    try {
+      return await this.completeApplicationJob(job, owner, { status: 'completed', modelExecution: 'not_run', cleanup: 'verified',
+        outcome: { kind: 'semantic-review', id: review.id, digest: digestOf(review) } }, async scoped => { await scoped.saveSemanticReview(review); }, signal);
+    } catch { fail('OFFLINE_REVIEW_PERSISTENCE_FAILED', 'Offline review/result transaction did not complete'); }
+  }
   /** Runtime capability only. A JSON receipt/result cannot claim execution. */
   async saveSemanticReviewModelResult(capability: TrustedSemanticReview): Promise<SemanticReview> {
     const review = readTrustedSemanticReview(capability);
@@ -744,6 +807,21 @@ export class QualEvoStore {
       return { finding, feedback, verdict: deriveLocalReviewVerdict(feedback), identityVerification: 'caller-declared-unverified' };
     });
   }
+  async getReviewFeedback(id: string): Promise<LocalReviewFeedback> { return this.readReviewFeedback(this.db, id); }
+  async listReviewFeedback(input: z.input<typeof ReviewFeedbackPageSchema> = {}): Promise<LocalReviewFeedback[]> {
+    const options = ReviewFeedbackPageSchema.parse(input);
+    return this.db.transaction(async tx => {
+      const rows = (await tx.query<{ id: string }>(`SELECT id FROM qe_semantic_review_feedback
+        WHERE ($1::text IS NULL OR rule_digest=$1) AND ($2::text IS NULL OR review_id=$2)
+          AND ($3::text IS NULL OR finding_id=$3) AND ($4::text IS NULL OR payload->>'source'=$4)
+          AND ($5::text IS NULL OR id>$5) ORDER BY id LIMIT $6`,
+        [options.ruleDigest ?? null, options.reviewId ?? null, options.findingId ?? null,
+          options.source ?? null, options.after ?? null, options.limit])).rows;
+      const feedback: LocalReviewFeedback[] = [];
+      for (const row of rows) feedback.push(await this.readReviewFeedback(tx, row.id));
+      return feedback;
+    });
+  }
   async appendReviewFeedback(input: LocalReviewFeedback): Promise<LocalReviewFeedback> {
     const feedback = LocalReviewFeedbackSchema.parse(input);
     return this.db.transaction(async tx => {
@@ -763,10 +841,15 @@ export class QualEvoStore {
     return this.db.transaction(async tx => {
       const rule = await this.readSemanticRuleVersion(tx, options.baseRuleDigest);
       if (options.requestedRuleVersion === rule.rule.version) fail('INVALID_REVISION_REQUEST', 'Requested version must differ from the pinned base version');
+      // Reject unusable selections before reserving an immutable request ID.
+      // These are declared event times, not proof of historical availability.
+      const requestedAt = Date.parse(options.createdAt);
+      if (Date.parse(rule.rule.provenance.createdAt) > requestedAt) fail('INVALID_REVISION_REQUEST', 'Revision base postdates the requested revision');
       const feedbackBindings = [];
       for (const id of options.feedbackIds) {
         const feedback = await this.readReviewFeedback(tx, id);
         if (feedback.ruleDigest !== options.baseRuleDigest) fail('VERSION_MISMATCH', 'Selected revision feedback must bind to the exact base rule digest');
+        if (Date.parse(feedback.createdAt) > requestedAt) fail('INVALID_REVISION_REQUEST', 'Selected feedback postdates the requested revision');
         feedbackBindings.push({ id, digest: digestOf(feedback) });
       }
       const request = RevisionRequestSchema.parse({ ...options, schemaVersion: 1, kind: 'rule-revision-request', status: 'pending', feedbackBindings, synthesis: 'not_run' });
@@ -958,6 +1041,107 @@ export class QualEvoStore {
   }
   async getRevisionOutcome(digest: string): Promise<StoredRevisionNoMutationOutcome> {
     return this.db.transaction(tx => this.readRevisionOutcome(tx, digest));
+  }
+  private async validateReviewBatchJobs(tx: Queryable, stored: StoredReviewBatch): Promise<void> {
+    for (const job of stored.batch.input.jobs) {
+      await this.readSemanticRuleVersion(tx, job.ruleDigest);
+      const snapshot = await this.readChangeSnapshot(tx, job.snapshotDigest);
+      if (job.repositoryContextDigests) validateReviewRepositoryContexts(
+        await Promise.all(job.repositoryContextDigests.map(digest => this.readRepositoryContext(tx, digest))), snapshot);
+      if (job.continuationDigest) {
+        const plan = await this.readReviewContinuation(tx, job.continuationDigest);
+        if (applicationJobDigest(reviewContinuationJob(plan)) !== applicationJobDigest(job))
+          fail('CONTINUATION_REJECTED', 'Batch job differs from continuation selection');
+      }
+      if (job.governancePlanDigest) {
+        const plan = await this.readGovernedReviewPlan(tx, job.governancePlanDigest);
+        if (!governedReviewJobs(plan).some(member => applicationJobDigest(member) === applicationJobDigest(job)))
+          fail('GOVERNANCE_PLAN_MISMATCH', 'Batch job differs from governed plan selection');
+      }
+    }
+  }
+  async createReviewBatch(input: ReviewBatchInput): Promise<StoredReviewBatch> {
+    const stored = deriveReviewBatch(input);
+    return this.db.transaction(async tx => {
+      await this.validateReviewBatchJobs(tx, stored);
+      await tx.query('INSERT INTO qe_review_batches(digest,id,payload) VALUES($1,$2,$3::jsonb) ON CONFLICT DO NOTHING',
+        [stored.digest, stored.batch.input.id, JSON.stringify(stored.batch)]);
+      const row = await one<{ digest: string }>(tx, 'SELECT digest FROM qe_review_batches WHERE id=$1', [stored.batch.input.id]);
+      if (row?.digest !== stored.digest) fail('IMMUTABLE_CONFLICT', 'Batch ID already binds different jobs or order');
+      return this.readReviewBatch(tx, stored.digest);
+    });
+  }
+  private async readReviewBatch(tx: Queryable, digest: string): Promise<StoredReviewBatch> {
+    DigestSchema.parse(digest);
+    const row = await one<{ id: string; payload: unknown }>(tx, 'SELECT id,payload FROM qe_review_batches WHERE digest=$1', [digest]);
+    if (!row) fail('NOT_FOUND', 'Unknown review batch');
+    const batch = ReviewBatchSchema.parse(row.payload), stored = deriveReviewBatch(batch.input);
+    if (digestOf(batch) !== digest || stored.digest !== digest || row.id !== batch.input.id)
+      fail('INTEGRITY_FAILURE', 'Stored review batch identity mismatch');
+    await this.validateReviewBatchJobs(tx, stored);
+    return stored;
+  }
+  async getReviewBatch(digest: string): Promise<StoredReviewBatch> {
+    return this.db.transaction(tx => this.readReviewBatch(tx, digest));
+  }
+  private async deriveReviewContinuation(tx: Queryable, raw: ReviewContinuationInput): Promise<StoredReviewContinuation> {
+    const input = ReviewContinuationInputSchema.parse(raw);
+    const { outcome } = await this.readRevisionOutcome(tx, input.outcomeDigest);
+    if (!['request_context', 'retain_rule'].includes(outcome.result.operator))
+      fail('CONTINUATION_REJECTED', 'Only request_context or retain_rule outcomes permit explicit continuation');
+    const graph = await this.readRevisionGenerationEvidence(tx, outcome.requestDigest);
+    const selected = graph.feedback.find(entry => entry.finding.id === input.findingId);
+    if (!selected || !outcome.result.diagnoses.some(diagnosis => diagnosis.feedbackId === selected.feedback.id))
+      fail('CONTINUATION_REJECTED', 'Finding must have a diagnosis in the frozen selected feedback');
+    const snapshot = await this.readChangeSnapshot(tx, selected.finding.snapshotDigest);
+    const contexts = await Promise.all(input.repositoryContextDigests.map(digest => this.readRepositoryContext(tx, digest)));
+    validateReviewRepositoryContexts(contexts, snapshot);
+    const continuation = ReviewContinuationSchema.parse({ schemaVersion: 1, kind: 'explicit-review-continuation', input,
+      requestDigest: outcome.requestDigest, ruleDigest: outcome.baseRuleDigest, snapshotDigest: snapshot.digest,
+      sourceReviewId: selected.review.id, reviewSelection: 'explicit-digest-replay-not-governance-governed',
+      scope: 'full-snapshot-review-single-anchor-followup', originalRecords: 'unchanged', experimentAttribution: 'separate-product-action' });
+    return { digest: digestOf(continuation), continuation };
+  }
+  async createReviewContinuation(input: ReviewContinuationInput): Promise<StoredReviewContinuation> {
+    return this.db.transaction(async tx => {
+      const stored = await this.deriveReviewContinuation(tx, input);
+      await tx.query('INSERT INTO qe_review_continuations(digest,id,outcome_digest,payload) VALUES($1,$2,$3,$4::jsonb) ON CONFLICT DO NOTHING',
+        [stored.digest, stored.continuation.input.id, stored.continuation.input.outcomeDigest, JSON.stringify(stored.continuation)]);
+      const row = await one<{ digest: string }>(tx, 'SELECT digest FROM qe_review_continuations WHERE id=$1', [stored.continuation.input.id]);
+      if (row?.digest !== stored.digest) fail('IMMUTABLE_CONFLICT', 'Continuation ID already binds a different selection or attempt');
+      return this.readReviewContinuation(tx, stored.digest);
+    });
+  }
+  private async readReviewContinuation(tx: Queryable, digest: string): Promise<StoredReviewContinuation> {
+    DigestSchema.parse(digest);
+    const row = await one<{ digest: string; id: string; outcome_digest: string; payload: unknown }>(tx,
+      'SELECT * FROM qe_review_continuations WHERE digest=$1', [digest]);
+    if (!row) fail('NOT_FOUND', 'Unknown review continuation');
+    const plan = ReviewContinuationSchema.parse(row.payload);
+    const stored = await this.deriveReviewContinuation(tx, plan.input);
+    if (stored.digest !== digest || digestOf(plan) !== digest || row.digest !== digest
+      || row.id !== plan.input.id || row.outcome_digest !== plan.input.outcomeDigest)
+      fail('INTEGRITY_FAILURE', 'Stored continuation differs from its frozen evidence');
+    return stored;
+  }
+  async getReviewContinuation(digest: string): Promise<StoredReviewContinuation> {
+    return this.db.transaction(tx => this.readReviewContinuation(tx, digest));
+  }
+  async listReviewContinuations(input: { outcomeDigest: string; after?: string; limit?: number }): Promise<StoredReviewContinuation[]> {
+    const options = z.object({ outcomeDigest: DigestSchema, after: DigestSchema.optional(), limit: z.number().int().min(1).max(100).default(20) }).strict().parse(input);
+    return this.db.transaction(async tx => {
+      const rows = (await tx.query<{ digest: string }>('SELECT digest FROM qe_review_continuations WHERE outcome_digest=$1 AND ($2::text IS NULL OR digest>$2) ORDER BY digest LIMIT $3',
+        [options.outcomeDigest, options.after ?? null, options.limit])).rows;
+      const records = [];
+      for (const row of rows) records.push(await this.readReviewContinuation(tx, row.digest));
+      return records;
+    });
+  }
+  async requireReviewContinuationJob(job: Extract<ApplicationJob, { kind: 'semantic-review' }>): Promise<void> {
+    if (!job.continuationDigest) fail('CONTINUATION_REJECTED', 'Missing continuation digest');
+    const stored = await this.getReviewContinuation(job.continuationDigest);
+    if (applicationJobDigest(job) !== applicationJobDigest(reviewContinuationJob(stored)))
+      fail('CONTINUATION_REJECTED', 'Job does not match the exact continuation selection');
   }
   async listRevisionOutcomes(input?: string | RevisionCatalogPage): Promise<StoredRevisionNoMutationOutcome[]> {
     const paged = typeof input === 'object' && input !== null;
@@ -1154,6 +1338,7 @@ export class QualEvoStore {
     });
   }
   /** Explicit opt-in local review governance. Never updates the v1 active registry. */
+  async previewSemanticGovernance(input: SemanticGovernanceCommand) { return this.semanticGovernanceStore().preview(input); }
   async applySemanticGovernance(input: SemanticGovernanceCommand) { return this.semanticGovernanceStore().apply(input); }
   async getSemanticGovernance(ruleId: string) { return this.semanticGovernanceStore().get(ruleId); }
   async getSemanticGovernanceHistory(ruleId: string) { return this.semanticGovernanceStore().history(ruleId); }

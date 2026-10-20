@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "model": "replace-with-authorized-model",
+  "generationLimits": {
+    "maxInputBytes": 262144,
+    "maxOutputBytes": 131072,
+    "timeoutMs": 30000
+  },
+  "runtime": {
+    "id": "review-runtime",
+    "backend": "opensandbox",
+    "endpoint": "https://sandbox.example.invalid",
+    "apiKeyEnv": "OPENSANDBOX_API_KEY",
+    "image": "registry.example.invalid/worker@sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "cpu": "1000m",
+    "memory": "512Mi",
+    "maxBundleBytes": 1048576,
+    "workerExecutable": "/opt/flyrewheel/bin/workspace-worker",
+    "gatewayHost": "gateway.example.invalid",
+    "limits": {
+      "maxInputBytes": 262144,
+      "maxOutputBytes": 131072,
+      "timeoutMs": 30000,
+      "cleanupTimeoutMs": 1000,
+      "maxArtifactBytes": 1024,
+      "maxArtifacts": 1
+    }
+  },
+  "preparedWorkspaces": {
+    "schemaVersion": 1,
+    "entries": []
+  }
+}

@@ -169,3 +169,197 @@ Explicit [evaluation workspace execution](evaluation-workspaces.md) now derives 
 separate mutable repository from that baseline and carries a path-free export
 binding through existing Sandcastle execution and application receipts. The option
 is never inferred from a date, repo path, or default production policy.
+
+## Durable attempt cancellation
+
+```sh
+node dist/cli.js workspace cancel --repo /path/to/trusted-store --run run-id --attempt attempt-id --reason 'Stop this attempt'
+node dist/cli.js workspace inspect --repo /path/to/trusted-store --run run-id --attempt attempt-id
+```
+
+Cancellation permanently fences this attempt against new execution leases. It is
+serialized with lease acquisition and cleanup; repeated requests preserve the
+first reason and timestamp. Allocate a fresh attempt to run again. Inspection
+reports `cancellation` and `executionLeaseActive`; these are observations, not a
+reservation or proof that a runtime stopped. Cancellation never removes an active
+lease. Cleanup still refuses active leases and preserves dirty worktrees, and a
+clean cleanup retains the cancellation record. A crashed owner's lease needs
+explicit recovery; no automatic expiry or PID-based takeover is provided.
+
+This is a cooperative local lifecycle constraint, not a production sandbox.
+The reproducible compiled CLI acceptance uses only a newly authored Git fixture:
+`npm run build && node scripts/verify-workspace-cancellation.mjs`.
+
+The Codex workspace runner observes durable cancellation before reserving a
+runtime, polls every 100 ms during preparation/execution, and checks again before
+accepting output. Polling is cooperative and depends on a responsive host event
+loop; it is not a hard real-time stop guarantee. A request arriving after output
+acceptance does not retroactively invalidate that result, but still fences future
+leases. Cancellation during cleanup never skips stop/collect/destroy verification.
+Unverified stop, evidence collection or destruction retains the recovery lease
+and continues to block worktree cleanup. The cancellation record remains after a
+successful release. Other callers of the lease API must observe
+`isCancellationRequested()` themselves; cancellation does not kill arbitrary host
+processes. Crashed runners are not automatically recovered.
+
+`node scripts/verify-workspace-cancellation-runner.mjs` verifies actual compiled
+CLI cancellation against a pending compiled runner with an injected authored
+backend. This verifies lifecycle control, not real model execution or production
+runtime stop/destruction. Both verified and unverified stop scenarios are covered.
+
+## Residual lease diagnosis
+
+```sh
+node dist/cli.js workspace diagnose --repo /path/to/trusted-store --run run-id --attempt attempt-id
+```
+
+This read-only command reports lease presence, bounded owner metadata (commit and
+creation time, never the ownership token), cancellation state, worktree
+preservation conditions, repository operation locks and registry problems that
+can block cleanup. Missing, malformed, oversized or symlinked owner records are
+`unverifiable`; a damaged cancellation record is reported without hiding the
+other diagnostics. Unknown attempts/invalid manifests fail rather than inventing
+an identity. A completed diagnostic returns exit 0 even when blockers exist;
+inspect `cleanup.blockedReasons` rather than interpreting exit 0 as permission to
+clean up. Output is an unlocked observation, not an atomic snapshot or recovery
+authorization. A no-blocker observation still requires fresh cleanup checks.
+
+Lease liveness remains unknown even when its owning process has exited or its
+creation time is old. The recovery section lists evidence still required: exact
+owner/runtime association, independent stop and restart fencing, preserved
+execution evidence, verified destruction, and ownership/worktree revalidation.
+It neither obtains nor certifies that evidence. No automatic release, force
+cleanup, PID-based takeover or production stop proof is provided. The existing
+owner lifecycle remains responsible for verified release; abandoned leases need
+operator investigation outside this diagnostic command. Hostile-host filesystem
+races and production runtime recovery are not validated here.
+
+Reproduce local acceptance with `npm run build && node
+scripts/verify-workspace-diagnostics.mjs`. It uses a new authored Git fixture, a
+separate process that exits holding a real local lease, and compiled CLI reads.
+Malformed-record experiments affect only that disposable fixture. No model,
+credential or production sandbox is involved.
+
+## Repository inventory
+
+```sh
+node dist/cli.js workspace list --repo /path/to/trusted-store
+```
+
+No run/attempt IDs are required. Entries are sorted by managed directory name and
+include the existing diagnosis: cancellation, lease metadata without owner tokens,
+cleanup blockers and outstanding recovery evidence. Closed attempts remain listed.
+A repository with no workspace metadata returns an empty inventory without
+creating metadata. Invalid entries, missing/corrupt/mismatched manifests and
+linked attempt directories appear with a fixed error code and null diagnosis;
+healthy entries remain visible. Shared metadata directory corruption fails the
+command rather than silently presenting an empty or complete inventory.
+
+`summary.diagnosed` counts returned diagnostics, not healthy or recoverable
+workspaces. Check each diagnosis's blockers and each entry's `error`.
+A completed listing exits 0 even with damaged entries. Enumeration and diagnosis
+are unlocked observations: concurrent changes can produce per-entry errors and
+newly allocated entries may not be included. This is not an atomic snapshot,
+recovery authorization, liveness determination or cleanup operation. It never
+releases leases or edits manifests. Only managed attempts are enumerated; unrelated
+Git worktrees are not adopted.
+
+Reproduce compiled CLI acceptance with `npm run build && node
+scripts/verify-workspace-list.mjs`. This uses a fresh authored Git fixture and a
+separate process that exits holding a real local lease, without model calls or
+production sandbox claims.
+
+### Filter and page the inventory
+
+```sh
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter leased --limit 20 --offset 0
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter cancelled
+node dist/cli.js workspace list --repo /path/to/trusted-store --filter attention
+```
+
+`--filter` defaults to `all`. `leased` selects present leases, `cancelled` selects
+cancellation requests, and `attention` selects either plus cleanup blockers
+(including dirty worktrees and repository operation locks). Errors and unverifiable
+records remain included in **every** filter, even when their lease or cancellation
+state cannot be determined. Such entries occupy ordinary page positions: follow
+all pages to see every damaged record.
+
+Entries are sorted by directory name in ascending JavaScript code-unit order,
+then filtered, then paged. `--limit` defaults to 100 and accepts 1–1000;
+`--offset` is a nonnegative safe integer and defaults to 0. `pagination.matched`
+counts all filtered entries, `returned` counts this page, and `nextOffset` is null
+at the end. An offset beyond the end returns an empty page. `summary` continues to
+count the entire inventory before filtering. Invalid options fail the command.
+The implementation still inspects the complete inventory to preserve damaged
+records; pagination limits output, not scan cost. Ordering is deterministic for
+an unchanged store, but concurrent additions/removals/state changes can shift
+pages. No cursor snapshot or cross-call consistency is claimed.
+
+## Real local process cancellation verification
+
+`boundedProcessBytes` accepts an optional final `AbortSignal`. A pre-aborted
+signal prevents spawning. Aborting an owned running command requests SIGKILL on
+its Linux process group by default, and rejects after the child's close event;
+with `detached=false` only the direct child is targeted. Abort listeners are
+removed when the child closes or spawn fails. Existing callers without a signal
+retain their timeout/output-bound behavior. This does not add an arbitrary
+program execution CLI or automatic abandoned-lease recovery.
+
+Run `npm run build && node scripts/verify-workspace-real-process-cancellation.mjs`
+to exercise compiled CLI cancellation while a real owned Node child and same-group
+descendant are running. The authored adapter passes the runner's AbortSignal to
+the process helper. The check observes both processes running before cancellation,
+then waits for helper completion and verifies both are absent or terminated
+zombies in Linux `/proc`. A zombie awaits the host reaper; PID existence alone
+is not proof of a running process. No signals target pre-existing processes.
+The success case releases the lease only after the adapter's stop check. A second
+case actually terminates the processes but deliberately refuses a verified stop
+receipt, demonstrating that the lease and cleanup block remain.
+
+The child code is an authored fixture, not upstream repository code or model
+output. Prepare/collect/destroy callbacks remain authored test adapters; no
+production runtime destruction is being verified. Process groups do not contain
+descendants that escape with a new session/group, and this check does not test
+hostile programs, sandbox isolation, crash takeover, PID reuse or production
+recovery authority. A local child close does not authorize recovery of another
+attempt. Temporary diagnostic artifacts and the intentionally retained lease
+remain available; terminated zombies may await the environment's PID 1 reaper.
+
+## Persistent evidence for a fixed owned local child
+
+```sh
+node dist/cli.js workspace process-evidence probe --directory /tmp/new-probe-evidence
+node dist/cli.js workspace process-evidence inspect --directory /tmp/new-probe-evidence --identity-digest <digest-from-probe>
+```
+
+`probe` requires a new absolute directory. It starts only an embedded Node probe,
+not repository code or a supplied command. The fixed program creates no descendants
+and exits when asked by its original creator or when its IPC owner disconnects.
+Before stopping it, the creator persists a UUID, Linux boot ID, PID, `/proc`
+start ticks and fixed-program digest. Only the original in-memory child handle
+can request stop. A three-second fallback requests SIGKILL on that same handle;
+this is not a promise of bounded kernel termination. No reopen/kill-by-PID API is
+provided. `probe` records actual child `close` evidence before returning.
+
+`inspect` can run in a new process. It requires the expected identity digest,
+validates bounded non-symlink evidence files, boot identity, current birth identity
+if the PID is present, and the creator-close evidence binding. It returns exit 2
+when stop evidence is insufficient (including a missing creator record even if
+the process is absent or zombie); malformed/mismatched evidence fails with exit 1.
+It returns exit 0 only for verified **fixed-child** exit. Checksums protect content
+integrity relative to the caller's digest, not against a malicious local writer.
+The caller should retain that digest separately. Inspection is an unlocked
+observation, does not signal a process, and never authorizes lease release.
+
+This deliberately does not bind or adopt any existing workspace attempt/runtime.
+`automaticRecovery` and `leaseReleaseAuthorized` are always false. A creator crash
+can leave only identity evidence. Even though this cooperative probe exits on IPC
+disconnection, absence is not used to invent the missing creator-close receipt.
+Production containment, escaped descendants, arbitrary crashed workloads and
+recovery ownership remain unsupported. A kernel/host crash can also lose buffered
+writes; incomplete evidence fails closed rather than authorizing takeover.
+
+Run `npm run build && node scripts/verify-local-process-evidence.mjs` for actual
+compiled CLI verification across process restart, identity mismatch, insufficient
+and corrupt evidence, normal child exit, and a separately launched owner exiting
+without recording stop. These are local owned processes, not a production sandbox.

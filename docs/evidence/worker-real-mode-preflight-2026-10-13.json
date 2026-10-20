@@ -1,0 +1,184 @@
+{
+  "implementationBase": "db09bab8a48b9c279c91ed4c6fa555bb6fda8560",
+  "codeAudit": {
+    "singleReview": "offline structural/fixtures only",
+    "worker": "unconfigured application service unless reviewed bootstrap injects dependencies",
+    "batch": "existing worker composition plus newly connected prepared resolver",
+    "productionLifecycleAuthorityFactory": "not implemented in src; interface and external injection only"
+  },
+  "records": [
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "application-jobs",
+        "bootstrap-check",
+        "--config",
+        "examples/worker/preflight-only.json"
+      ],
+      "exitCode": 0,
+      "result": {
+        "status": "blocked",
+        "issues": [
+          {
+            "code": "lifecycle_authority_required",
+            "nextAction": "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority."
+          },
+          {
+            "code": "api_key_required",
+            "nextAction": "Provision the nonempty credential in the environment variable explicitly named by runtime.apiKeyEnv."
+          }
+        ],
+        "nextActions": [
+          "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority.",
+          "Provision the nonempty credential in the environment variable explicitly named by runtime.apiKeyEnv."
+        ],
+        "liveVerification": "not_run",
+        "configuration": "schema-valid",
+        "resolver": "built-in-prepared-workspace-resolver",
+        "resolverVerification": "not_run",
+        "lifecycleAuthority": "missing-no-built-in-production-factory",
+        "credential": {
+          "environmentName": "OPENSANDBOX_API_KEY",
+          "presence": "name-absent",
+          "valueRead": false,
+          "authentication": "not_verified"
+        },
+        "modelExecution": "not_run",
+        "allocation": "not_performed",
+        "authorization": "not_created_or_assumed",
+        "note": "Valid configuration and a present environment name do not establish a nonempty credential, authentication, deployment authorization or runtime readiness."
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "application-jobs",
+        "bootstrap-check"
+      ],
+      "exitCode": 0,
+      "result": {
+        "status": "disabled",
+        "issues": [
+          {
+            "code": "disabled",
+            "nextAction": "Explicitly enable the reviewed worker configuration before composing application execution."
+          },
+          {
+            "code": "model_required",
+            "nextAction": "Select an explicit model in the deployment configuration."
+          },
+          {
+            "code": "generation_limits_required",
+            "nextAction": "Supply explicit generation input/output byte limits and timeoutMs."
+          },
+          {
+            "code": "runtime_required",
+            "nextAction": "Supply the fixed OpenSandbox deployment settings and workspace limits."
+          },
+          {
+            "code": "lifecycle_authority_required",
+            "nextAction": "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority."
+          },
+          {
+            "code": "workspace_resolver_required",
+            "nextAction": "Configure preparedWorkspaces for the built-in exact prepared-workspace resolver, or inject a trusted resolver. Evaluation exports still require their dedicated resolver."
+          }
+        ],
+        "nextActions": [
+          "Explicitly enable the reviewed worker configuration before composing application execution.",
+          "Select an explicit model in the deployment configuration.",
+          "Supply explicit generation input/output byte limits and timeoutMs.",
+          "Supply the fixed OpenSandbox deployment settings and workspace limits.",
+          "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority.",
+          "Configure preparedWorkspaces for the built-in exact prepared-workspace resolver, or inject a trusted resolver. Evaluation exports still require their dedicated resolver."
+        ],
+        "liveVerification": "not_run",
+        "configuration": "schema-valid",
+        "resolver": "missing",
+        "resolverVerification": "not_run",
+        "lifecycleAuthority": "missing-no-built-in-production-factory",
+        "credential": {
+          "environmentName": null,
+          "presence": "not-configured",
+          "valueRead": false,
+          "authentication": "not_verified"
+        },
+        "modelExecution": "not_run",
+        "allocation": "not_performed",
+        "authorization": "not_created_or_assumed",
+        "note": "Valid configuration and a present environment name do not establish a nonempty credential, authentication, deployment authorization or runtime readiness."
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--check",
+        "--config",
+        "examples/worker/preflight-only.json"
+      ],
+      "exitCode": 0,
+      "result": {
+        "status": "blocked",
+        "issues": [
+          {
+            "code": "lifecycle_authority_required",
+            "nextAction": "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority."
+          },
+          {
+            "code": "api_key_required",
+            "nextAction": "Provision the nonempty credential in the environment variable explicitly named by runtime.apiKeyEnv."
+          }
+        ],
+        "nextActions": [
+          "Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority.",
+          "Provision the nonempty credential in the environment variable explicitly named by runtime.apiKeyEnv."
+        ],
+        "liveVerification": "not_run",
+        "configuration": "schema-valid",
+        "resolver": "built-in-prepared-workspace-resolver",
+        "resolverVerification": "not_run",
+        "lifecycleAuthority": "missing-no-built-in-production-factory",
+        "credential": {
+          "environmentName": "OPENSANDBOX_API_KEY",
+          "presence": "name-absent",
+          "valueRead": false,
+          "authentication": "not_verified"
+        },
+        "modelExecution": "not_run",
+        "allocation": "not_performed",
+        "authorization": "not_created_or_assumed",
+        "note": "Valid configuration and a present environment name do not establish a nonempty credential, authentication, deployment authorization or runtime readiness."
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--config",
+        "examples/worker/preflight-only.json"
+      ],
+      "exitCode": 1,
+      "result": null,
+      "stderr": "Worker configuration alone cannot supply lifecycle authority; use --check --config for preflight and a reviewed deployment bootstrap for execution\n"
+    }
+  ],
+  "verification": {
+    "typecheck": "passed",
+    "build": "passed",
+    "focusedBootstrapTests": "16 passed",
+    "liveModel": "not_run",
+    "networkOrAllocation": "not_performed",
+    "credentialValues": "not_read",
+    "persistentAuthorization": "not_created",
+    "W1": "not_read",
+    "compiledBatchPreflight": "passed: exact declared selection / missing configuration / invalid configuration; no job claim or workspace inspection",
+    "applicationOperationTests": "9 passed after routing existing job preflight through presence-only inspection"
+  },
+  "limitation": "Missing lifecycle authority implementation/integration is not resolved by login. Environment-name presence is not authentication."
+}

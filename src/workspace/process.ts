@@ -20,8 +20,10 @@ export function workspaceEnvironment(): NodeJS.ProcessEnv {
   };
 }
 
-/** Linux process group termination bounds descendants as well as the direct child. */
-export async function boundedProcessBytes(command: string, args: string[], cwd: string, maxBytes = 8_000_000, detached = true, timeoutMs = 30_000, input?: Uint8Array) {
+/** Signal only the owned Linux process group (direct child when detached=false).
+ * Escaped descendants are not contained. Child close is not a sandbox stop proof. */
+export async function boundedProcessBytes(command: string, args: string[], cwd: string, maxBytes = 8_000_000, detached = true, timeoutMs = 30_000, input?: Uint8Array, signal?: AbortSignal) {
+  if (signal?.aborted) throw new Error('Workspace process cancelled before spawn');
   if (process.platform !== 'linux') throw new Error('Workspace commands currently support Linux only');
   return new Promise<Buffer>((resolve, reject) => {
     const child = spawn(command, args, { cwd, env: workspaceEnvironment(), detached, stdio: [input ? 'pipe' : 'ignore', 'pipe', 'pipe'] });
@@ -31,6 +33,9 @@ export async function boundedProcessBytes(command: string, args: string[], cwd: 
       failure ??= error;
       if (child.pid) { try { if (detached) process.kill(-child.pid, 'SIGKILL'); else child.kill('SIGKILL'); } catch (e) { if ((e as NodeJS.ErrnoException).code !== 'ESRCH') failure = e as Error; } }
     };
+    const abort = () => stop(new Error('Workspace process cancelled; owned process stop requested, not sandbox recovery proof'));
+    signal?.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) abort();
     const timeout = setTimeout(() => stop(new Error(`Workspace process exceeded ${timeoutMs} milliseconds; inspect the retained attempt before recovery`)), timeoutMs);
     // Optional bounded in-memory input for Git plumbing. No shell, file redirection,
     // ambient environment, or independently surviving pipeline is introduced.
@@ -43,9 +48,10 @@ export async function boundedProcessBytes(command: string, args: string[], cwd: 
       if (bytes > maxBytes) stop(new Error(`Workspace process output exceeded ${maxBytes} bytes; no successful cleanup is assumed`));
       else chunks.push(chunk);
     });
-    child.once('error', error => { clearTimeout(timeout); reject(error); });
+    child.once('error', error => { clearTimeout(timeout); signal?.removeEventListener('abort', abort); reject(error); });
     child.once('close', code => {
       clearTimeout(timeout);
+      signal?.removeEventListener('abort', abort);
       if (failure) reject(failure);
       else if (code !== 0) reject(new Error(`${command} exited ${code}: ${Buffer.concat(stderr).toString('utf8').trim().slice(0, 2000)}`));
       else resolve(Buffer.concat(stdout));

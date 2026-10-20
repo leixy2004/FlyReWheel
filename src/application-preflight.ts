@@ -4,7 +4,7 @@ import { PrMiningRequestInputSchema, type PrMiningRequestInput } from './core/pr
 import { derivePrMiningRequest } from './pr-mining.js';
 import type { QualEvoStore } from './storage/store.js';
 import { validateReviewRepositoryContexts } from './semantic-review-context.js';
-import { inspectWorkerBootstrap, type WorkerBootstrapDependencies } from './worker-bootstrap.js';
+import { preflightWorkerBootstrap, type WorkerBootstrapDependencies } from './worker-bootstrap.js';
 
 /** Persists the existing domain request, not a second queue or an execution claim.
  * The returned normalized job is passed unchanged to application-jobs enqueue. */
@@ -23,9 +23,10 @@ export async function prepareMiningApplicationJob(store: QualEvoStore, raw: PrMi
 }
 
 /** No resolver/backend invocation, queue access, claims, lease reconciliation or model call.
+ * Inspect revision evidence without reserving training sources; execution revalidates and reserves.
  * Opening the caller's store can still run the existing database migrations. */
 export async function preflightApplicationJob(store: QualEvoStore, raw: ApplicationJobInput,
-  options: { bootstrapConfig?: unknown; bootstrapDependencies?: WorkerBootstrapDependencies } = {}) {
+  options: { bootstrapConfig?: unknown; bootstrapDependencies?: WorkerBootstrapDependencies; environmentNames?: ReadonlySet<string> } = {}) {
   const job = ApplicationJobSchema.parse(raw);
   const issues: { code: string; nextAction: string }[] = [];
   let workspace: { repository: string; expectedSha: string; baseSha: string; headSha: string; workspaceId: string } | null = null;
@@ -45,8 +46,9 @@ export async function preflightApplicationJob(store: QualEvoStore, raw: Applicat
       if (job.repositoryContextDigests !== undefined) validateReviewRepositoryContexts(
         await Promise.all(job.repositoryContextDigests.map(digest => store.getRepositoryContext(digest))), stored);
       if (job.governancePlanDigest) await store.requireCurrentGovernedReviewJob(job);
+      if (job.continuationDigest) await store.requireReviewContinuationJob(job);
     } else {
-      const graph = await store.prepareRevisionGeneration(job.requestDigest);
+      const graph = await store.getRevisionGenerationEvidence(job.requestDigest);
       if (Date.parse(job.candidateCreatedAt) < Date.parse(graph.request.request.createdAt)) {
         issues.push({ code: 'candidate_predates_request', nextAction: 'Choose an explicit candidate timestamp at or after the frozen revision request timestamp.' });
       }
@@ -62,7 +64,8 @@ export async function preflightApplicationJob(store: QualEvoStore, raw: Applicat
         : code === 'STALE_GOVERNANCE_PLAN' ? 'Create a fresh governed plan after reviewing the current governance selection.'
           : 'Inspect the referenced domain records and their exact identity/context/governance bindings; no job was claimed.' });
   }
-  const bootstrap = inspectWorkerBootstrap(options.bootstrapConfig, options.bootstrapDependencies);
+  const bootstrap = preflightWorkerBootstrap(options.bootstrapConfig,
+    options.environmentNames ?? new Set(Object.keys(options.bootstrapDependencies?.environment ?? process.env)), options.bootstrapDependencies);
   issues.push(...bootstrap.issues);
   return { job, jobDigest: applicationJobDigest(job), jobId: applicationJobId(job),
     status: issues.length ? 'blocked' as const : 'ready-for-enqueue' as const, issues, workspace,

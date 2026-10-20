@@ -76,7 +76,10 @@ async function stageCodex() {
   await cp(source, resolve('codex'), { recursive: true, errorOnExist: true, force: false });
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Kept self-contained: Docker copies this file alone before source/dependencies.
+// Same native-path comparison as scripts/lib/is-main.mjs; covered by the CLI matrix.
+const launchPath = process.argv[1] ? await realpath(process.argv[1]).catch(() => undefined) : undefined;
+if (launchPath && launchPath === await realpath(fileURLToPath(import.meta.url))) {
   const action = process.argv[2];
   if (action === 'check-base') await checkBase();
   else if (action === 'stage-codex') await stageCodex();

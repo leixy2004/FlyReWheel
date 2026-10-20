@@ -1,0 +1,977 @@
+{
+  "status": "blocked-by-existing-capture-contract",
+  "officialRepository": "https://github.com/vllm-project/vllm",
+  "head": "953d9c820b0d8f9a55ee455814287536a498498c",
+  "base": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+  "commitObjects": [
+    {
+      "sha": "953d9c820b0d8f9a55ee455814287536a498498c",
+      "byteLength": 1165,
+      "hashVerified": true,
+      "parents": [
+        "33b06a6f24be632e99c19cadb5004a27cf9605a0"
+      ]
+    },
+    {
+      "sha": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+      "byteLength": 1151,
+      "hashVerified": true,
+      "parents": [
+        "5c2b5cb422182ae2a0c22a17532d465174396613"
+      ]
+    }
+  ],
+  "blobObjects": [
+    {
+      "path": "tools/pre_commit/mypy.py",
+      "side": "before",
+      "sha": "34f6e8c928ffb00180f4bbeebf04a0279f32fca1",
+      "byteLength": 4469
+    },
+    {
+      "path": "tools/pre_commit/mypy.py",
+      "side": "after",
+      "sha": "e3dc40fd0ec7d9ad08cf00bce5f13051e2a94685",
+      "byteLength": 4487
+    },
+    {
+      "path": "vllm/utils/async_utils.py",
+      "side": "before",
+      "sha": "b6c24e1ceeee79ed30e66c08c893856dae047f25",
+      "byteLength": 11061
+    },
+    {
+      "path": "vllm/utils/async_utils.py",
+      "side": "after",
+      "sha": "77234cbd0c8ca151c0de36ee3353198841e41178",
+      "byteLength": 11193
+    },
+    {
+      "path": "vllm/utils/jsontree.py",
+      "side": "before",
+      "sha": "cde9aa6ff901c7699a66ae8ba8ae2b913b00d41a",
+      "byteLength": 3840
+    },
+    {
+      "path": "vllm/utils/jsontree.py",
+      "side": "after",
+      "sha": "fe757c2f337485506ac333467747d622d14a8033",
+      "byteLength": 3755
+    },
+    {
+      "path": "vllm/utils/mem_utils.py",
+      "side": "before",
+      "sha": "c6a6757bed3bfb589f24e00809e6885f1ff7b06e",
+      "byteLength": 8834
+    },
+    {
+      "path": "vllm/utils/mem_utils.py",
+      "side": "after",
+      "sha": "e2517b935bf287f7ededc525e8dc10dfdbf05d0f",
+      "byteLength": 8850
+    },
+    {
+      "path": "vllm/utils/nccl.py",
+      "side": "before",
+      "sha": "b1459fcbd246a1f4af2a43085b5c796f8ad723ab",
+      "byteLength": 1927
+    },
+    {
+      "path": "vllm/utils/nccl.py",
+      "side": "after",
+      "sha": "4807bc076f82404cb14fe362b4f34c1ad18e7cb4",
+      "byteLength": 1915
+    },
+    {
+      "path": "vllm/utils/network_utils.py",
+      "side": "before",
+      "sha": "0a68e48ba5e7a320b9847caa014684871a5cf802",
+      "byteLength": 10058
+    },
+    {
+      "path": "vllm/utils/network_utils.py",
+      "side": "after",
+      "sha": "80ff0df28c66c8f147b90bb611ea22780dc5f8bd",
+      "byteLength": 10076
+    },
+    {
+      "path": "vllm/utils/registry.py",
+      "side": "before",
+      "sha": "ac9b859159eadba3ecd7db902c3a081fee9fdf43",
+      "byteLength": 1504
+    },
+    {
+      "path": "vllm/utils/registry.py",
+      "side": "after",
+      "sha": "a136d450e7b14c249b29aee93efd3812d4391cd4",
+      "byteLength": 1555
+    },
+    {
+      "path": "vllm/utils/torch_utils.py",
+      "side": "before",
+      "sha": "3661dfd09047aea5471325b8fc0d0be920f9d7df",
+      "byteLength": 21521
+    },
+    {
+      "path": "vllm/utils/torch_utils.py",
+      "side": "after",
+      "sha": "f5c49ac169f0c7a448395dba0f9885724ef19401",
+      "byteLength": 21217
+    },
+    {
+      "path": "vllm/v1/pool/metadata.py",
+      "side": "before",
+      "sha": "9883ab8fb9964c1a8caae0d1c6524a2640bed87d",
+      "byteLength": 2735
+    },
+    {
+      "path": "vllm/v1/pool/metadata.py",
+      "side": "after",
+      "sha": "7bd2c7415dafe9f47ff82e09b3e56857492f5d55",
+      "byteLength": 2747
+    }
+  ],
+  "diff": [
+    {
+      "path": "tools/pre_commit/mypy.py",
+      "status": "M",
+      "beforeBlob": "34f6e8c928ffb00180f4bbeebf04a0279f32fca1",
+      "afterBlob": "e3dc40fd0ec7d9ad08cf00bce5f13051e2a94685",
+      "beforeMode": "100755",
+      "afterMode": "100755"
+    },
+    {
+      "path": "vllm/utils/async_utils.py",
+      "status": "M",
+      "beforeBlob": "b6c24e1ceeee79ed30e66c08c893856dae047f25",
+      "afterBlob": "77234cbd0c8ca151c0de36ee3353198841e41178",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/jsontree.py",
+      "status": "M",
+      "beforeBlob": "cde9aa6ff901c7699a66ae8ba8ae2b913b00d41a",
+      "afterBlob": "fe757c2f337485506ac333467747d622d14a8033",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/mem_utils.py",
+      "status": "M",
+      "beforeBlob": "c6a6757bed3bfb589f24e00809e6885f1ff7b06e",
+      "afterBlob": "e2517b935bf287f7ededc525e8dc10dfdbf05d0f",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/nccl.py",
+      "status": "M",
+      "beforeBlob": "b1459fcbd246a1f4af2a43085b5c796f8ad723ab",
+      "afterBlob": "4807bc076f82404cb14fe362b4f34c1ad18e7cb4",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/network_utils.py",
+      "status": "M",
+      "beforeBlob": "0a68e48ba5e7a320b9847caa014684871a5cf802",
+      "afterBlob": "80ff0df28c66c8f147b90bb611ea22780dc5f8bd",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/registry.py",
+      "status": "M",
+      "beforeBlob": "ac9b859159eadba3ecd7db902c3a081fee9fdf43",
+      "afterBlob": "a136d450e7b14c249b29aee93efd3812d4391cd4",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/utils/torch_utils.py",
+      "status": "M",
+      "beforeBlob": "3661dfd09047aea5471325b8fc0d0be920f9d7df",
+      "afterBlob": "f5c49ac169f0c7a448395dba0f9885724ef19401",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    },
+    {
+      "path": "vllm/v1/pool/metadata.py",
+      "status": "M",
+      "beforeBlob": "9883ab8fb9964c1a8caae0d1c6524a2640bed87d",
+      "afterBlob": "7bd2c7415dafe9f47ff82e09b3e56857492f5d55",
+      "beforeMode": "100644",
+      "afterMode": "100644"
+    }
+  ],
+  "rawDiffSha256": "bc14565ba16e6afe6b9ede9517f56b8b410f0f3d043cad418d676b717f8a80e8",
+  "mergeBase": "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+  "shallow": "true",
+  "shallowBoundary": [
+    "33b06a6f24be632e99c19cadb5004a27cf9605a0"
+  ],
+  "packSummary": "count: 18\nsize: 80\nin-pack: 402\npacks: 1\nsize-pack: 141\nprune-packable: 0\ngarbage: 0\nsize-garbage: 0\n",
+  "gitCommands": [
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "commit",
+        "953d9c820b0d8f9a55ee455814287536a498498c"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "commit",
+        "33b06a6f24be632e99c19cadb5004a27cf9605a0"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "34f6e8c928ffb00180f4bbeebf04a0279f32fca1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "e3dc40fd0ec7d9ad08cf00bce5f13051e2a94685"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "b6c24e1ceeee79ed30e66c08c893856dae047f25"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "77234cbd0c8ca151c0de36ee3353198841e41178"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "cde9aa6ff901c7699a66ae8ba8ae2b913b00d41a"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "fe757c2f337485506ac333467747d622d14a8033"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "c6a6757bed3bfb589f24e00809e6885f1ff7b06e"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "e2517b935bf287f7ededc525e8dc10dfdbf05d0f"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "b1459fcbd246a1f4af2a43085b5c796f8ad723ab"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "4807bc076f82404cb14fe362b4f34c1ad18e7cb4"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "0a68e48ba5e7a320b9847caa014684871a5cf802"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "80ff0df28c66c8f147b90bb611ea22780dc5f8bd"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "ac9b859159eadba3ecd7db902c3a081fee9fdf43"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "a136d450e7b14c249b29aee93efd3812d4391cd4"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "3661dfd09047aea5471325b8fc0d0be920f9d7df"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "f5c49ac169f0c7a448395dba0f9885724ef19401"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "9883ab8fb9964c1a8caae0d1c6524a2640bed87d"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "hash-object",
+        "-w",
+        "--stdin"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "cat-file",
+        "blob",
+        "7bd2c7415dafe9f47ff82e09b3e56857492f5d55"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "diff-tree",
+        "--no-commit-id",
+        "--raw",
+        "-z",
+        "-r",
+        "--no-abbrev",
+        "--no-ext-diff",
+        "--no-textconv",
+        "--find-renames=100%",
+        "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+        "953d9c820b0d8f9a55ee455814287536a498498c",
+        "--"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "rev-parse",
+        "--is-shallow-repository"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "merge-base",
+        "--all",
+        "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+        "953d9c820b0d8f9a55ee455814287536a498498c"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "count-objects",
+        "-v"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "capture": {
+    "command": [
+      "node",
+      "dist/cli.js",
+      "snapshots",
+      "capture",
+      "--repo",
+      "/tmp/flyrewheel-vllm-native/official.git",
+      "--repository-id",
+      "github.com/vllm-project/vllm",
+      "--base-tip",
+      "33b06a6f24be632e99c19cadb5004a27cf9605a0",
+      "--head",
+      "953d9c820b0d8f9a55ee455814287536a498498c",
+      "--db",
+      "/tmp/flyrewheel-vllm-native/capture-db",
+      "--out",
+      "/tmp/flyrewheel-vllm-native/captured.json"
+    ],
+    "exitCode": 1,
+    "stderr": "FlyReWheel: Snapshot capture requires complete local commit history\n",
+    "snapshotWritten": false,
+    "databaseCreated": false
+  },
+  "scope": "two original commits and their fetched trees; 18 exact official blobs; no unrelated commit ancestry traversal",
+  "preserved": "shallow metadata and original parent headers retained; no grafts, replacement commits or removed boundary",
+  "conclusion": "Real objects and the complete nine-file direct diff match the prior official sample, but production capture explicitly requires complete history. No captured snapshot or native-capture downstream execution is claimed.",
+  "noTargetExecution": true,
+  "noModelCalls": true,
+  "noCredentialReadsOrAuthentication": true,
+  "W1": "not_read",
+  "productCodeChanges": "none",
+  "acquisition": [
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-c",
+        "protocol.file.allow=never",
+        "init",
+        "--bare",
+        "/tmp/flyrewheel-vllm-native/official.git"
+      ],
+      "exitCode": 0,
+      "stdout": "Initialized empty Git repository in /tmp/flyrewheel-vllm-native/official.git/\n",
+      "stderr": "hint: Using 'master' as the name for the initial branch. This default branch name\nhint: will change to \"main\" in Git 3.0. To configure the initial branch name\nhint: to use in all of your new repositories, which will suppress this warning,\nhint: call:\nhint:\nhint: \tgit config --global init.defaultBranch <name>\nhint:\nhint: Names commonly chosen instead of 'master' are 'main', 'trunk' and\nhint: 'development'. The just-created branch can be renamed via this command:\nhint:\nhint: \tgit branch -m <name>\nhint:\nhint: Disable this message with \"git config set advice.defaultBranchName false\"\n",
+      "seconds": 0.0
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "-c",
+        "protocol.file.allow=never",
+        "-C",
+        "/tmp/flyrewheel-vllm-native/official.git",
+        "fetch",
+        "--depth=2",
+        "--filter=blob:none",
+        "--no-tags",
+        "https://github.com/vllm-project/vllm.git",
+        "953d9c820b0d8f9a55ee455814287536a498498c"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/vllm-project/vllm\n * branch            953d9c820b0d8f9a55ee455814287536a498498c -> FETCH_HEAD\n",
+      "seconds": 0.56
+    }
+  ],
+  "partialRepositoryConfig": "[core]\n\trepositoryformatversion = 1\n\tfilemode = true\n\tbare = true\n[remote \"https://github.com/vllm-project/vllm.git\"]\n\tpromisor = true\n\tpartialclonefilter = blob:none\n",
+  "testedProductCommit": "0edff99f5c502877c3f651c47e312fc02fbf041e",
+  "objectInventory": {
+    "tree": 400,
+    "blob": 18,
+    "commit": 2
+  },
+  "parentBeyondBoundaryObject": "not downloaded; original parent SHA remains in the base commit header",
+  "contractValidation": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "tests/git-evidence.test.ts",
+      "tests/change-snapshot.test.ts",
+      "tests/change-snapshot.cli.test.ts",
+      "--reporter=json",
+      "--outputFile=/tmp/flyrewheel-vllm-native/contract-tests.json"
+    ],
+    "exitCode": 0,
+    "success": true,
+    "numPassedTests": 10,
+    "numFailedTests": 0,
+    "numPendingTests": 0,
+    "numTodoTests": 0,
+    "files": [
+      {
+        "file": "change-snapshot.cli.test.ts",
+        "counts": {
+          "passed": 1
+        }
+      },
+      {
+        "file": "change-snapshot.test.ts",
+        "counts": {
+          "passed": 8
+        }
+      },
+      {
+        "file": "git-evidence.test.ts",
+        "counts": {
+          "passed": 1
+        }
+      }
+    ],
+    "source": "Existing independent authored Git fixtures; not real vLLM history or real vLLM capture success"
+  }
+}

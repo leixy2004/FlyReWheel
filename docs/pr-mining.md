@@ -145,3 +145,6 @@ human labels and production promotion remain separate work.
 ## Bounded repository discovery
 
 [PR-history ingestion](github-pr-history.md) can discover and capture a small explicit repository/time-window selection, then link these same authored requests to exact per-PR captured evidence. It reuses the request and unknown-case derivation here; it does not automatically select sources, synthesize rules, label defects or start queue work.
+
+To inspect captured sides/discussions and generate the existing request JSON using
+explicit CLI selections, see [PR mining request preparation](pr-mining-preparation.md).

@@ -1,4 +1,5 @@
-import { mkdir, lstat, readFile, writeFile, rename, appendFile, realpath, readdir, rmdir, unlink } from 'node:fs/promises';
+import { mkdir, lstat, open, readFile, writeFile, rename, appendFile, realpath, readdir, rmdir, unlink } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
@@ -201,11 +202,165 @@ export async function prepareWorkspace(input: PrepareWorkspaceInput) {
   }
 }
 
+const Cancellation = z.object({ schemaVersion: z.literal(1), requestedAt: z.iso.datetime(), reason: z.string().trim().min(1).max(1000) }).strict();
+async function cancellation(p: ReturnType<typeof paths>) {
+  const path = join(p.lease, 'cancellation.json');
+  if (!await exists(path)) return null;
+  const info = await lstat(path);
+  if (!info.isFile() || info.isSymbolicLink() || info.size > 8192) throw new Error('Invalid workspace cancellation record; explicit recovery required');
+  return Cancellation.parse(JSON.parse(await readFile(path, 'utf8')));
+}
+
+/** Permanent cooperative fence for this attempt, not proof of runtime termination. */
+export async function cancelWorkspace(input: WorkspaceIdentity, reason: string) {
+  const requested = Cancellation.parse({ schemaVersion: 1, requestedAt: new Date().toISOString(), reason });
+  const identity = Identity.parse(input);
+  identity.repoPath = await repository(identity.repoPath);
+  await managedDirectories(identity, false);
+  return withOperationLock(identity, async () => {
+    const { p } = await read(identity);
+    let request = await cancellation(p);
+    if (!request) {
+      const temporary = join(p.lease, `cancellation-${randomUUID()}.tmp`);
+      await writeFile(temporary, JSON.stringify(requested), { flag: 'wx', mode: 0o600 });
+      await rename(temporary, join(p.lease, 'cancellation.json'));
+      request = requested;
+    }
+    return { cancellation: request, executionLeaseActive: await exists(join(p.lease, 'active-execution')), runtimeStop: 'not-verified' as const };
+  });
+}
+
 export async function inspectWorkspace(input: WorkspaceIdentity) {
   const identity = Identity.parse(input);
   identity.repoPath = await repository(identity.repoPath);
   const { p, record } = await read(identity);
-  return { manifestPath: p.manifest, record, observation: await observe(record) };
+  return { manifestPath: p.manifest, record, observation: await observe(record), cancellation: await cancellation(p),
+    executionLeaseActive: await exists(join(p.lease, 'active-execution')) };
+}
+
+/** Read-only observations, deliberately not a recovery authorization or a lock. */
+export async function diagnoseWorkspace(input: WorkspaceIdentity) {
+  const identity = Identity.parse(input);
+  identity.repoPath = await repository(identity.repoPath);
+  const { p, record } = await read(identity);
+  const blockedReasons: string[] = [];
+  const lock = join(p.lease, 'active-execution');
+  const active = await exists(lock);
+  let owner: { expectedSha: string; createdAt: string } | null = null;
+  let leaseState: 'absent' | 'present' | 'unverifiable' = active ? 'unverifiable' : 'absent';
+  if (active) {
+    blockedReasons.push('execution-lease-present');
+    try {
+      await directory(lock);
+      // No symlink following, unbounded read, or token disclosure in diagnostics.
+      const file = await open(join(lock, 'owner.json'), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+      try {
+        const stat = await file.stat();
+        if (!stat.isFile() || stat.size > 4096) throw new Error('Invalid owner record');
+        const buffer = Buffer.alloc(4097);
+        const { bytesRead } = await file.read(buffer, 0, buffer.length, 0);
+        if (bytesRead > 4096) throw new Error('Owner record exceeds bound');
+        const parsed = z.object({ token: z.uuid(), expectedSha: Sha, createdAt: z.iso.datetime() }).strict()
+          .parse(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(buffer.subarray(0, bytesRead))));
+        if (parsed.expectedSha !== record.baseSha) throw new Error('Lease commit mismatch');
+        owner = { expectedSha: parsed.expectedSha, createdAt: parsed.createdAt };
+        leaseState = 'present';
+      } finally { await file.close(); }
+    } catch { blockedReasons.push('lease-owner-unverifiable'); }
+  }
+  let cancelState: 'absent' | 'requested' | 'unverifiable' = 'absent';
+  let cancellationRequest: Awaited<ReturnType<typeof cancellation>> = null;
+  try {
+    cancellationRequest = await cancellation(p);
+    if (cancellationRequest) cancelState = 'requested';
+  } catch { cancelState = 'unverifiable'; blockedReasons.push('cancellation-record-unverifiable'); }
+  const operationLocked = await exists(join(p.managed, 'flyrewheel-operation.lock'));
+  if (operationLocked) blockedReasons.push('repository-operation-lock-present');
+  if (!['ready', 'preserved-dirty', 'closed-clean'].includes(record.status)) blockedReasons.push('manifest-requires-recovery');
+  let observation: Awaited<ReturnType<typeof observe>> | null = null;
+  try {
+    observation = await observe(record);
+    if (!observation.worktreeExists) {
+      if (record.status !== 'closed-clean' || !observation.branchRetained) blockedReasons.push('worktree-missing-or-retained-branch-unverified');
+    } else {
+      if (!observation.identityValid) blockedReasons.push('worktree-identity-unverified');
+      if (!observation.cleanlinessVerified) blockedReasons.push('worktree-content-must-be-preserved');
+    }
+  } catch { blockedReasons.push('worktree-observation-failed'); }
+  if (observation?.worktreeExists && observation.identityValid && observation.cleanlinessVerified) {
+    try { await rejectOrphans(identity); }
+    catch { blockedReasons.push('managed-worktree-registry-unverified'); }
+  }
+  return {
+    schemaVersion: 1, identity, manifestState: record.status,
+    observationConsistency: 'point-in-time-unlocked-not-an-authorization',
+    lease: { state: leaseState, path: lock, owner, liveness: 'unknown-not-inferred-from-age-or-pid' },
+    cancellation: { state: cancelState, request: cancellationRequest },
+    cleanup: { disposition: blockedReasons.length ? 'blocked-or-retained' : 'requires-fresh-cleanup-check', blockedReasons },
+    worktree: observation ? { exists: observation.worktreeExists, identityValid: observation.identityValid,
+      cleanlinessVerified: observation.cleanlinessVerified ?? null, branchRetained: observation.branchRetained } : null,
+    recovery: { automaticRelease: false, runtimeStop: 'not-verified', runtimeDestruction: 'not-verified',
+      requiredEvidence: [
+        'Identify the exact attempt, lease owner and associated runtime; timestamps or PID absence are insufficient.',
+        'Independently verify the runtime and all pending setup/descendants stopped and are fenced against restart.',
+        'Collect and preserve bounded evidence and independently verify runtime destruction before owner-authorized lease release.',
+        'Recheck ownership, worktree identity and dirty/ignored bytes under lifecycle controls; use a fresh attempt after cancellation.',
+      ],
+    },
+  };
+}
+
+/** Enumerate managed entries without trusting their manifests to choose paths. */
+export async function listWorkspaces(repo: string, rawOptions: unknown = {}) {
+  const options = z.object({
+    filter: z.enum(['all', 'leased', 'cancelled', 'attention']).default('all'),
+    offset: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).default(0),
+    limit: z.number().int().min(1).max(1000).default(100),
+  }).strict().parse(rawOptions);
+  const repoPath = await repository(z.string().min(1).parse(repo));
+  const managed = join(repoPath, '.sandcastle');
+  const attempts = join(managed, 'flyrewheel-attempts');
+  const entries: { entry: string; identity: WorkspaceIdentity | null;
+    diagnosis: Awaited<ReturnType<typeof diagnoseWorkspace>> | null; error: string | null }[] = [];
+  if (await exists(managed)) {
+    await directory(managed);
+    if (await exists(attempts)) {
+      await directory(attempts);
+      for (const entry of (await readdir(attempts)).sort()) {
+        let identity: WorkspaceIdentity | null = null;
+        try {
+          const match = /^attempt-(.+)--(.+)$/.exec(entry);
+          if (!match) throw new Error('Invalid entry name');
+          identity = Identity.parse({ repoPath, runId: match[1], attemptId: match[2] });
+          await directory(join(attempts, entry));
+        } catch {
+          entries.push({ entry, identity, diagnosis: null, error: 'invalid-attempt-entry' });
+          continue;
+        }
+        try { entries.push({ entry, identity, diagnosis: await diagnoseWorkspace(identity), error: null }); }
+        catch { entries.push({ entry, identity, diagnosis: null, error: 'attempt-record-or-observation-unverifiable' }); }
+      }
+    }
+  }
+  const matching = entries.filter(entry => {
+    const diagnosis = entry.diagnosis;
+    // Damaged or unverifiable entries survive every filter; page through them
+    // in the same sorted order as ordinary matches, never silently discard them.
+    if (entry.error || !diagnosis || diagnosis.lease.state === 'unverifiable'
+      || diagnosis.cancellation.state === 'unverifiable'
+      || diagnosis.cleanup.blockedReasons.some(reason => reason.includes('unverified') || reason.includes('unverifiable') || reason === 'manifest-requires-recovery' || reason === 'worktree-observation-failed')) return true;
+    if (options.filter === 'leased') return diagnosis.lease.state !== 'absent';
+    if (options.filter === 'cancelled') return diagnosis.cancellation.state !== 'absent';
+    if (options.filter === 'attention') return diagnosis.lease.state !== 'absent' || diagnosis.cancellation.state !== 'absent' || diagnosis.cleanup.blockedReasons.length > 0;
+    return true;
+  });
+  const page = matching.slice(options.offset, options.offset + options.limit);
+  return { schemaVersion: 1, repoPath, observationConsistency: 'point-in-time-unlocked-not-an-authorization',
+    filter: options.filter, pagination: { offset: options.offset, limit: options.limit, matched: matching.length, returned: page.length,
+      nextOffset: options.offset + page.length < matching.length ? options.offset + page.length : null,
+      ordering: 'entry-name-code-unit-ascending', damagedEntries: 'included-in-all-filters' },
+    entries: page, summary: { total: entries.length, diagnosed: entries.filter(entry => entry.diagnosis !== null).length,
+      unavailable: entries.filter(entry => entry.error !== null).length }, automaticRelease: false };
 }
 
 /** Cooperative lifecycle lease. A crash leaves it in place for explicit recovery. */
@@ -216,6 +371,7 @@ export async function acquireWorkspaceExecutionLease(input: WorkspaceIdentity, e
   await managedDirectories(identity, false);
   return withOperationLock(identity, async () => {
     const { p, record } = await read(identity);
+    if (await exists(join(p.lease, 'cancellation.json'))) throw new Error('Workspace attempt cancelled; allocate a new attempt for execution');
     const observation = await observe(record);
     if (record.status !== 'ready' || !observation.worktreeExists || !observation.identityValid
       || !observation.cleanlinessVerified || observation.currentHeadSha !== expectedSha
@@ -232,7 +388,9 @@ export async function acquireWorkspaceExecutionLease(input: WorkspaceIdentity, e
     // A write failure deliberately leaves the lock: ownership cannot be verified.
     await writeFile(join(lock, 'owner.json'), JSON.stringify({ token, expectedSha, createdAt: new Date().toISOString() }), { mode: 0o600 });
     let released = false;
-    return { record, observation, leasePath: lock, async release() {
+    return { record, observation, leasePath: lock,
+      isCancellationRequested: () => exists(join(p.lease, 'cancellation.json')),
+      async release() {
       if (released) return;
       await withOperationLock(identity, async () => {
         await directory(lock);

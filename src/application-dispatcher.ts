@@ -1,8 +1,9 @@
+import type { ReviewFixture } from './core/semantic-review.js';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { EvaluationWorkspaceBindingSchema, type EvaluationWorkspaceBinding } from './workspace/history-policy.js';
 import { digestOf } from './core/identity.js';
-import type { QualEvoStore } from './storage/store.js';
+import type { QualEvoStore, ApplicationJobClaimOptions } from './storage/store.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobSummary,
   type ApplicationJob, type ApplicationJobInput, type ApplicationJobResult } from './application-job-contract.js';
 import { createPrMiningWorkspaceModelAdapter, type PrMiningModelConfig, type PrMiningWorkspaceRuntime, type TrustedPrMiningNoCandidate } from './adapters/pr-mining-model.js';
@@ -21,6 +22,8 @@ const ApplicationWorkspaceResolutionSchema = z.union([CodexWorkspaceRequestSchem
   z.object({ workspace: CodexWorkspaceRequestSchema.shape.workspace, evaluation: EvaluationWorkspaceBindingSchema.optional() }).strict()]);
 export interface ApplicationDispatcherDependencies {
   store: QualEvoStore;
+  /** Explicit fixture bytes keyed by canonical digest. Never a live-runtime fallback. */
+  offlineReviewFixtures?: ReadonlyMap<string, ReviewFixture>;
   /** Trusted bootstrap code supplies these dependencies. Nothing loads from queue JSON. */
   runtime?: PrMiningWorkspaceRuntime;
   config?: PrMiningModelConfig;
@@ -52,11 +55,13 @@ function governanceRejection(error: unknown): 'stale_governance_plan' | 'governa
  * Inference is at-least-once across a crash before commit, never exactly-once. */
 export function createApplicationJobDispatcher(dependencies: ApplicationDispatcherDependencies) {
   const { store, resolveWorkspace, runtime, config } = dependencies;
-  return async (input: ApplicationJobInput, signal: AbortSignal) => {
+  return async (input: ApplicationJobInput, signal: AbortSignal, claimOptions: ApplicationJobClaimOptions = {}) => {
     const job = ApplicationJobSchema.parse(input), jobDigest = applicationJobDigest(job), owner = randomUUID();
-    const claim = await store.claimApplicationJob(job, owner);
+    if (job.kind === 'semantic-review' && job.continuationDigest) await store.requireReviewContinuationJob(job);
+    const claim = await store.claimApplicationJob(job, owner, claimOptions);
     if (claim.state === 'finished') return applicationJobSummary(claim.record.result!);
     if (claim.state === 'busy') throw new ApplicationJobBusyError();
+    if (claim.state === 'retry-not-authorized') throw new ApplicationJobRetryError(claim.record.result!);
     const finish = async (result: ApplicationJobResult, persist?: (scoped: QualEvoStore) => Promise<void>, noCandidate?: TrustedPrMiningNoCandidate) => {
       if (result.status === 'completed' && signal.aborted)
         return retry({ status: 'failed', modelExecution: result.modelExecution, cleanup: 'verified', reason: 'cancelled' });
@@ -66,6 +71,22 @@ export function createApplicationJobDispatcher(dependencies: ApplicationDispatch
       await store.failApplicationJob(job, owner, result);
       throw new ApplicationJobRetryError(result);
     };
+    if (job.kind === 'semantic-review' && job.offlineFixtureDigest) {
+      const fixtures = dependencies.offlineReviewFixtures?.get(job.offlineFixtureDigest);
+      if (!fixtures) return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started', reason: 'input_rejected' });
+      try {
+        signal.throwIfAborted();
+        if (job.governancePlanDigest) await store.requireCurrentGovernedReviewJob(job);
+        if (job.governancePlanDigest) await store.admitGovernedReviewJob(job, owner);
+        const completed = await store.completeOfflineSemanticReviewJob(job, owner, fixtures, signal);
+        return applicationJobSummary(completed.result!);
+      } catch (error) {
+        const rejected = job.governancePlanDigest ? governanceRejection(error) : undefined;
+        if (rejected) return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started', reason: rejected });
+        const persistence = error instanceof Error && 'code' in error && error.code === 'OFFLINE_REVIEW_PERSISTENCE_FAILED';
+        return retry({ status: 'failed', modelExecution: 'not_run', cleanup: 'not_started', reason: signal.aborted ? 'cancelled' : persistence ? 'persistence_failed' : 'input_rejected' });
+      }
+    }
     if (!runtime || !config || !config.enabled || !resolveWorkspace) {
       return finish({ status: 'blocked', modelExecution: 'not_run', cleanup: 'not_started',
         reason: !runtime || !config ? 'runtime_unavailable' : !config.enabled ? 'disabled' : 'workspace_resolver_unavailable' });

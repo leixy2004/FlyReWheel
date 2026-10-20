@@ -1,0 +1,203 @@
+{
+  "verifiedCommit": "db205be57920664661c2f7ba3c8f93e2b362a69f",
+  "aggregate": {
+    "command": {
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "tests/governed-review-offline.test.ts",
+        "tests/governed-semantic-review.test.ts",
+        "tests/governed-semantic-review.cli.test.ts",
+        "tests/semantic-governance.cli.test.ts",
+        "tests/review-batch-cli-execution.test.ts",
+        "tests/review-batch.test.ts",
+        "tests/review-batch-export.test.ts",
+        "tests/review-continuation.test.ts",
+        "tests/application-job-history.test.ts",
+        "tests/application-jobs.test.ts",
+        "tests/application-jobs.storage.test.ts",
+        "tests/application-job-context.test.ts",
+        "tests/application-jobs.cli.test.ts",
+        "tests/semantic-review.storage.test.ts",
+        "tests/semantic-review.cli.test.ts",
+        "tests/revision-explanation.test.ts",
+        "tests/revision-inspection.storage.test.ts",
+        "tests/application-operations.test.ts",
+        "tests/application-evaluation-binding.test.ts",
+        "--reporter=json",
+        "--outputFile=/tmp/flyrewheel-governed-offline-check/aggregate.json"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 293.61
+    },
+    "files": 19,
+    "passed": 109,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "results": [
+      {
+        "file": "tests/application-evaluation-binding.test.ts",
+        "counts": {
+          "passed": 7
+        }
+      },
+      {
+        "file": "tests/application-job-context.test.ts",
+        "counts": {
+          "passed": 4
+        }
+      },
+      {
+        "file": "tests/application-job-history.test.ts",
+        "counts": {
+          "passed": 1
+        }
+      },
+      {
+        "file": "tests/application-jobs.cli.test.ts",
+        "counts": {
+          "passed": 2
+        }
+      },
+      {
+        "file": "tests/application-jobs.storage.test.ts",
+        "counts": {
+          "passed": 13
+        }
+      },
+      {
+        "file": "tests/application-jobs.test.ts",
+        "counts": {
+          "passed": 15
+        }
+      },
+      {
+        "file": "tests/application-operations.test.ts",
+        "counts": {
+          "passed": 9
+        }
+      },
+      {
+        "file": "tests/governed-review-offline.test.ts",
+        "counts": {
+          "passed": 3
+        }
+      },
+      {
+        "file": "tests/governed-semantic-review.cli.test.ts",
+        "counts": {
+          "passed": 2
+        }
+      },
+      {
+        "file": "tests/governed-semantic-review.test.ts",
+        "counts": {
+          "passed": 13
+        }
+      },
+      {
+        "file": "tests/review-batch-cli-execution.test.ts",
+        "counts": {
+          "passed": 2
+        }
+      },
+      {
+        "file": "tests/review-batch-export.test.ts",
+        "counts": {
+          "passed": 1
+        }
+      },
+      {
+        "file": "tests/review-batch.test.ts",
+        "counts": {
+          "passed": 3
+        }
+      },
+      {
+        "file": "tests/review-continuation.test.ts",
+        "counts": {
+          "passed": 5
+        }
+      },
+      {
+        "file": "tests/revision-explanation.test.ts",
+        "counts": {
+          "passed": 1
+        }
+      },
+      {
+        "file": "tests/revision-inspection.storage.test.ts",
+        "counts": {
+          "passed": 9
+        }
+      },
+      {
+        "file": "tests/semantic-governance.cli.test.ts",
+        "counts": {
+          "passed": 4
+        }
+      },
+      {
+        "file": "tests/semantic-review.cli.test.ts",
+        "counts": {
+          "passed": 3
+        }
+      },
+      {
+        "file": "tests/semantic-review.storage.test.ts",
+        "counts": {
+          "passed": 12
+        }
+      }
+    ]
+  },
+  "priorCliFlows": [
+    {
+      "command": [
+        "node",
+        "scripts/smoke-review-user-flow.mjs",
+        "/tmp/flyrewheel-governed-offline-check/review-user-flow"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 27.19
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-review-batch-cli.mjs",
+        "/tmp/flyrewheel-governed-offline-check/review-batch-cli"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 26.45
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-feedback-discovery.mjs",
+        "/tmp/flyrewheel-governed-offline-check/feedback-discovery"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 17.72
+    },
+    {
+      "command": [
+        "node",
+        "scripts/smoke-revision-explanation.mjs",
+        "/tmp/flyrewheel-governed-offline-check/revision-explanation"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 25.19
+    }
+  ],
+  "newFlowEvidence": "governed-review-offline-verification-2026-10-13.json",
+  "environment": "Explicit PATH, fresh HOME, LANG and TZ only for aggregate and compiled flows; no inherited credentials",
+  "artifacts": "/tmp/flyrewheel-governed-offline-check",
+  "limits": [
+    "No full-suite run; unselected tests are not counted as skipped.",
+    "New governed flow: synthetic source/candidate/feedback/decisions with explicit authored response files; no model or substitute runtime.",
+    "Prior source-projection flows: two GitHub-origin source files and authored runtime envelopes, not empirical model results.",
+    "No credentials, W1, production deployment, publication or research protocol changes."
+  ]
+}

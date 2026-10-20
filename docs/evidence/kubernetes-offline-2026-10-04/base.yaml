@@ -1,0 +1,235 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: flyrewheel
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/warn: restricted
+  name: flyrewheel
+---
+apiVersion: v1
+automountServiceAccountToken: false
+kind: ServiceAccount
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+---
+apiVersion: v1
+data:
+  PORT: "8080"
+  QE_CODEX_AUTH_MODE: account
+  QE_CODEX_HOME: /codex-home
+  QE_CODEX_MODEL: ""
+  QE_ENABLE_MODEL: "false"
+  QE_MODEL_TIMEOUT_MS: "120000"
+  QE_MODEL_TOKEN_ACCEPTANCE_LIMIT: "30000"
+  QE_S3_ENABLED: "false"
+kind: ConfigMap
+metadata:
+  name: flyrewheel-config
+  namespace: flyrewheel
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+spec:
+  ports:
+  - name: health
+    port: 8080
+    targetPort: health
+  selector:
+    app.kubernetes.io/name: flyrewheel-worker
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flyrewheel-codex-home
+  namespace: flyrewheel
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flyrewheel-worker
+        app.kubernetes.io/part-of: flyrewheel
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - command:
+        - node
+        - dist/worker.js
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: flyrewheel-runtime
+        envFrom:
+        - configMapRef:
+            name: flyrewheel-config
+        image: flyrewheel:dev
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 20
+          timeoutSeconds: 2
+        name: worker
+        ports:
+        - containerPort: 8080
+          name: health
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: health
+          periodSeconds: 10
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "2"
+            ephemeral-storage: 2Gi
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 256Mi
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 5
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /home/flyrewheel
+          name: home
+        - mountPath: /codex-home
+          name: codex-home
+      securityContext:
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: flyrewheel-worker
+      terminationGracePeriodSeconds: 180
+      volumes:
+      - emptyDir:
+          sizeLimit: 1Gi
+        name: tmp
+      - emptyDir:
+          sizeLimit: 64Mi
+        name: home
+      - name: codex-home
+        persistentVolumeClaim:
+          claimName: flyrewheel-codex-home
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cluster-dns
+  namespace: flyrewheel
+spec:
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+  podSelector: {}
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: flyrewheel
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-health-clients
+  namespace: flyrewheel
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          flyrewheel.io/health-client: "true"
+    ports:
+    - port: 8080
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-to-postgres
+  namespace: flyrewheel
+spec:
+  egress:
+  - ports:
+    - port: 5432
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          flyrewheel.io/role: postgres
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes:
+  - Egress

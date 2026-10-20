@@ -28,11 +28,18 @@ async function withTamperedLedger(db: Database, fn: (tx: Queryable, store: QualE
   const rollback = new Error('Rollback test-only corruption');
   await expect(db.transaction(async tx => {
     await tx.query('ALTER TABLE qe_application_jobs DISABLE TRIGGER qe_application_jobs_transition');
+    // Corrupt only the current ledger for read-validator tests. The new history
+    // trigger would otherwise try to archive the same completed attempt twice.
+    // Both trigger changes and corrupt writes roll back with this transaction.
+    await tx.query('ALTER TABLE qe_application_jobs DISABLE TRIGGER qe_application_job_attempt_result');
     const scoped = await QualEvoStore.initialize({ query: tx.query.bind(tx), transaction: operation => operation(tx), migrationTransaction: operation => operation(tx),
       exec: async () => {}, close: async () => {} });
     await fn(tx, scoped);
     throw rollback;
   })).rejects.toBe(rollback);
+  const triggers = await db.query<{ tgenabled: string }>(
+    "SELECT tgenabled FROM pg_trigger WHERE tgrelid='qe_application_jobs'::regclass AND tgname IN ('qe_application_jobs_transition','qe_application_job_attempt_result')");
+  expect(triggers.rows).toEqual([{ tgenabled: 'O' }, { tgenabled: 'O' }]);
 }
 
 describe('durable application job storage', () => {

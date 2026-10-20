@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "kind": "explicit-review-continuation-offline-verification",
+  "date": "2026-10-13",
+  "codeOrigin": "https://github.com/leixy2004/FlyReWheel",
+  "baseCommit": "17879c170b7ba6bdbbe86a5c977a9b4de88da386",
+  "branch": "codex/explicit-review-continuation",
+  "evidenceBoundary": {
+    "repositoryInputs": "authored synthetic Git repositories; not real GitHub PR observations",
+    "modelExecution": "not_run",
+    "developerFeedback": "fixture declarations only",
+    "researchData": "W1 not accessed",
+    "oldSessionPatches": "not imported"
+  },
+  "verification": {
+    "typecheck": "passed",
+    "build": "passed",
+    "targetedSuite": {
+      "files": 4,
+      "tests": 39,
+      "status": "passed"
+    },
+    "commands": [
+      "npm run typecheck",
+      "npm test -- tests/review-continuation.test.ts tests/application-job-context.test.ts tests/revision-inspection.storage.test.ts tests/database-migrations.test.ts",
+      "npm run build",
+      "node scripts/smoke-revision-generation.mjs --context --continuation",
+      "node dist/cli.js closed-loop demo --out-dir /tmp/flyrewheel-closed-loop-17879c1"
+    ],
+    "expandedContinuationTests": {
+      "tests": 5,
+      "status": "passed",
+      "additionalChecks": [
+        "valid context substitution under same ID rejected",
+        "preflight rejects substituted job",
+        "coherent record tampering rejected after digest recomputation"
+      ]
+    }
+  },
+  "continuationSmoke": {
+    "mode": "compiled-authored-sdk-context-revision-generation",
+    "evidencePolicyVersion": "selected-context-evidence-v1",
+    "repositoryContextBindings": [
+      {
+        "feedbackId": "compiled-fp",
+        "reviewId": "review_cb81ad64c4a97117e974ca33f86f55dcf553a8fb82fb9219c8370aaaa1b56b8c",
+        "reviewDigest": "415d01e76a74fee7156073035ccfd11ca67926f03556ea56bb705fac9a8f239d",
+        "snapshotDigest": "afdec5f8dc1e7926136a99311128e3c76e704275249a91fd905290e15ea9b9fa",
+        "repositoryContextDigests": [
+          "c59027c33b828a7650c1c41236e57a764e5415170d9c4fa1dce3597c27801c5f"
+        ],
+        "evidenceRefs": [
+          "041db920dff175df7125b3433b2dc06cd1f87aef4937819c97f0c546284c7bde"
+        ]
+      }
+    ],
+    "sourceRepositoryRemovedBeforeReopen": true,
+    "modelExecution": "not_run",
+    "isolation": "not_verified",
+    "requestDigest": "55d0afb0e3f9ff3f46d014cd4fcc6d202b0f1abfffa30b49f44fc7e416acf74f",
+    "candidateDigest": "b6c43727ad31f9b90c7872e9e739f08134661b491c0e16e771c7f80eb1feea22",
+    "ruleDigest": "8764e69526b3f8ecd8f60d3074654ab1e644f84371c98b08c6def5289a84e5ab",
+    "source": "fixture",
+    "protocol": "rule-revision-v3",
+    "sessionId": "compiled-revision-sdk",
+    "policyVersion": "diagnosis-operators-v1",
+    "operator": "boundary_update",
+    "explicitContinuation": {
+      "digest": "987da89cae8a1ac4205ae1065b7e0190a4b453d40fa853268b2a595704267e83",
+      "continuation": {
+        "schemaVersion": 1,
+        "kind": "explicit-review-continuation",
+        "input": {
+          "id": "compiled-continuation",
+          "outcomeDigest": "dfbb9b077fc6689b6d9a916afbae44e7a87130e805d1db9870c7bcaf2b9a69bf",
+          "findingId": "review_finding_a2a587fc2f15508f7ae8f203fff1cc4cc149ecaf7a9579c5b0aa67a97a651c64",
+          "repositoryContextDigests": [
+            "c59027c33b828a7650c1c41236e57a764e5415170d9c4fa1dce3597c27801c5f"
+          ],
+          "workspaceId": "compiled-review",
+          "attempt": "context-followup"
+        },
+        "requestDigest": "55d0afb0e3f9ff3f46d014cd4fcc6d202b0f1abfffa30b49f44fc7e416acf74f",
+        "ruleDigest": "e1ebbadf7c8d6eaa33c02adeb998ce9bf59dc5f348880dc32b9c3444d069debf",
+        "snapshotDigest": "afdec5f8dc1e7926136a99311128e3c76e704275249a91fd905290e15ea9b9fa",
+        "sourceReviewId": "review_cb81ad64c4a97117e974ca33f86f55dcf553a8fb82fb9219c8370aaaa1b56b8c",
+        "reviewSelection": "explicit-digest-replay-not-governance-governed",
+        "scope": "full-snapshot-review-single-anchor-followup",
+        "originalRecords": "unchanged",
+        "experimentAttribution": "separate-product-action"
+      },
+      "jobDigest": "4176518d62181d96cf59843315a8cb7004402c03bad0f48800df535069b5478a",
+      "state": "completed",
+      "attempts": 1,
+      "result": {
+        "status": "completed",
+        "modelExecution": "not_run",
+        "cleanup": "verified",
+        "outcome": {
+          "kind": "semantic-review",
+          "id": "review_e5bcfbfa5d12844c3abccc7654e65ace4f39aa78b9cff94c353f00b28f0a9736",
+          "digest": "80ba822fe1496527925439d3b6e3ee85066efd8603f37260853f84f33ece7b8c"
+        }
+      },
+      "reviewId": "review_e5bcfbfa5d12844c3abccc7654e65ace4f39aa78b9cff94c353f00b28f0a9736",
+      "findingId": "review_finding_f2a56f0fbbc972297928bd69cee00b96845ed61a43a197b3dd6b310c2cecfe07",
+      "assessment": "safe",
+      "assessmentMeaning": "new-review-declaration-not-repair-certification",
+      "activation": "not_performed",
+      "notification": "not_performed",
+      "certification": "none"
+    },
+    "persistedNonMutationOperators": [
+      "retain_rule",
+      "request_context",
+      "abstain"
+    ],
+    "diagnosisMutationMismatch": "rejected",
+    "protectedBoundaryEdit": "rejected",
+    "diagnosis": "model-proposal-not-ground-truth",
+    "comparison": {
+      "status": "compatible",
+      "preserved": 1,
+      "corrected": 2,
+      "regressed": 0,
+      "stillFailing": 0,
+      "inconclusive": 0
+    },
+    "regression": {
+      "status": "regressed",
+      "preserved": 0,
+      "corrected": 2,
+      "regressed": 1,
+      "stillFailing": 0,
+      "inconclusive": 0
+    },
+    "regressionAcceptance": "blocked",
+    "localDecision": "accept",
+    "humanVerdict": "Unknown",
+    "activation": "not_performed",
+    "reopenedIdentically": true,
+    "cleanup": "verified",
+    "lifecycle": [
+      "lease-acquired",
+      "host-workspace-verified",
+      "runtime-reserved",
+      "runtime-workspace-verified",
+      "worker-started",
+      "worker-completed",
+      "stop-verified",
+      "evidence-collected",
+      "destroy-verified",
+      "lease-released"
+    ],
+    "inspectionVerification": {
+      "checks": 67,
+      "candidates": 1,
+      "outcomes": 3,
+      "repeatedJson": "byte-identical",
+      "outFiles": "byte-identical",
+      "filtersAndPagination": "passed",
+      "malformedAndMissingSelectors": "rejected",
+      "linkedComparisons": "exact-request-and-candidate-rule",
+      "recordsUnchanged": true,
+      "authoredExecutableRemoved": true,
+      "runtimeExecutionsDuringInspection": 0,
+      "networkAttempts": 0,
+      "modelExecution": "not_run",
+      "certification": "none"
+    }
+  },
+  "closedLoop": {
+    "mode": "authored-fixture-only",
+    "modelExecution": "not_run",
+    "isolation": "not_verified",
+    "history": {
+      "schemaVersion": 1,
+      "base": "f436acc7a02b46c9bff5ad73ad70b42f4302081b",
+      "historicalFix": "7dd35d6c6d02b912d6aabef803e15c963dd854ab",
+      "target": "b0b2dcedd401180c87fe60e83e72f37f331c688e",
+      "repository": "github:flyrewheel-fixture/local-closed-loop",
+      "repositoryPath": "/tmp/flyrewheel-closed-loop-17879c1/repository",
+      "provenance": "real-git-synthetic-content",
+      "miningInput": "historical-base-to-fix",
+      "reviewInput": "historical-fix-to-later-target"
+    },
+    "evidence": {
+      "historicalSnapshotDigest": "e7d6dac7db91da77ed82e65687b22311d8cb3b47112656b1d8c21f0f34d69592",
+      "prEvidenceDigest": "51ec4eed91caae67059d519f29f32a663f7454e017fb399d5934ae8851acd7a4",
+      "miningRequestDigest": "64329c84bf3910f15926a7d286e23fb6d243a038472a55a09074a52a8a90ed72",
+      "minedCandidateDigest": "aad63c04ed57a27bd6ab8772eb1d0ef04cddd433e9a2672de6e45887c317cdf4",
+      "baseRuleDigest": "1ff3b08560e2f1648617dfc9eb33e78da56154308f3785ef4ec8c8bdeb407d4e",
+      "targetSnapshotDigest": "2a2fbff812298c19057fd4e4524cdf6626edcf0c47bac5c85f36562857af45ce",
+      "baseReviewId": "review_466225e136a59010f2c7cdb8c0c6226776d091a0ba05f6bb97e3d3819d91835d"
+    },
+    "outcomes": [
+      {
+        "scenario": "compatible",
+        "requestDigest": "6332a673164aebc969be421b8dc6e05daa86167e2507f8f260db4aa766482084",
+        "candidateDigest": "c4fd3321a35f14f4b3eec7576f560157f9b9a4fe6df74f4ae573b240e9611022",
+        "ruleDigest": "1cc377218b647d06daae221a9b8a2481e0780f44c42322f500c8e9db2fbab895",
+        "reviewId": "review_5c1ca6968004559550f2f600a77e8946b3bb567b706de8171919e71c504c4288",
+        "comparisonDigest": "a3937483ad17bf3e940e5389f40aaf23d042f4779a442aab914163a5819e8ce7",
+        "summary": {
+          "status": "compatible",
+          "preserved": 1,
+          "corrected": 1,
+          "regressed": 0,
+          "stillFailing": 0,
+          "inconclusive": 0
+        },
+        "decisionDigest": "24c35ed1fe82c248b4289803dffd82ea0435dfba572872d8e8d5409ff008d120",
+        "localDecision": "accept",
+        "acceptance": "fixture-only",
+        "activation": "not_performed"
+      },
+      {
+        "scenario": "regressed",
+        "requestDigest": "22d6bc9de5623e831232402e4588fdf6bcff912810c7a4079fe705289ae833e2",
+        "candidateDigest": "87132dc9639cd714dbf87a6ce4af63450dff26f2b1145ee0aaa01dc639e6184e",
+        "ruleDigest": "1a244f56e75a36b405711658eba3d7aaf3e87ab56f723fd1dcd80ca402d32ba3",
+        "reviewId": "review_31dce947d09bcb7d74e945f64c708232030f9c8a9f8014a973e413a9fa348191",
+        "comparisonDigest": "83953d6114b83909b763f4a2589ef647db852f59995df02f70812f10fd5973d0",
+        "summary": {
+          "status": "regressed",
+          "preserved": 0,
+          "corrected": 1,
+          "regressed": 1,
+          "stillFailing": 0,
+          "inconclusive": 0
+        },
+        "decisionDigest": "3992268694f34eb246ef8fe9fc9c2d82492cc7ad6ab8ac7fe02afe16a3e04ade",
+        "localDecision": "reject",
+        "acceptance": "blocked-as-expected",
+        "activation": "not_performed"
+      }
+    ],
+    "checks": {
+      "realAstGrepTargets": 2,
+      "historicalSourceLabels": "unknown-only",
+      "futureBytesExcludedFromMiningPrompt": true,
+      "positivePreserved": true,
+      "negativeCorrected": true,
+      "regressionAcceptanceBlocked": true,
+      "humanVerdicts": "Unknown",
+      "activation": "not_performed",
+      "reopenedIdentically": true,
+      "reopenedRecords": 28,
+      "rerunPolicy": "reuse-and-revalidate-immutable-records",
+      "fullModelRun": "not_run"
+    },
+    "status": "succeeded",
+    "stage": "complete",
+    "limitations": [
+      "Fixture-only plumbing demonstration: proposals, semantic judgments, TP/FP expectations and local decisions are authored; no live model or developer feedback.",
+      "The Git history is real but synthetic. GitHub metadata is authored in the evidence format, not acquired from GitHub; package integrity is not provider verification.",
+      "Mining consumes only selected historical changed sides; source cases remain unknown. Later fixture feedback is anchor-scoped, not whole-file ground truth.",
+      "The authored CLI runs through the installed Codex SDK with selected evidence and tools disabled; this is not sandbox isolation or a production backend.",
+      "Comparisons cover two selected feedback anchors only. No regression cases are invented for unlabelled mined sources; these scenarios are not empirical efficacy or a heldout evaluation.",
+      "Full local history is available to workspace infrastructure. No certified temporal isolation, repository-wide semantic correctness or notification eligibility is established.",
+      "Local accept/reject never activates a rule. Immutable mining/revision requests remain pending and synthesis not_run; fixture feedback leaves human verdicts Unknown."
+    ]
+  },
+  "remainingLimits": [
+    "No live model or real developer-feedback validation",
+    "No claim of repair certification, experiment efficacy, isolation or production readiness",
+    "No PostgreSQL server exercised in this session; storage tests use PGlite"
+  ]
+}

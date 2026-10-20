@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "6c2185c7eb47e3856fd86f5aeb56d8ba7f3aed5f",
+  "kubernetesSourceCommit": "93248f9ae092f571eb870b7664c534bfc7d00f03",
+  "python": "3.12.14",
+  "kubectl": {
+    "version": "v1.34.1",
+    "platform": "linux/amd64",
+    "kustomize": "v5.7.1",
+    "url": "https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl",
+    "checksumUrl": "https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl.sha256",
+    "sha256": "7721f265e18709862655affba5343e85e1980639395d5754473dafaadcaa69e3",
+    "bytes": 60559544
+  },
+  "verifiedArtifactBytes": 65392689,
+  "tests": {
+    "deploymentContractsPassed": 14,
+    "deploymentContractsSkipped": 0,
+    "officialSchemaTestsPassed": 9,
+    "officialSchemaTestsSkipped": 0
+  },
+  "clusterAccess": false,
+  "containerOrModelExecution": false,
+  "manifestChanges": false,
+  "schemaScope": "official OpenAPI 3.0 constraints, not server semantic validation or admission",
+  "preparationFailure": {
+    "command": "pip download with env -i, no proxy environment",
+    "error": "[Errno 101] Network is unreachable",
+    "resolution": "Downloaded exact official PyPI release wheels with curl using the existing environment; verified release SHA-256; installed the complete pinned closure with --no-index --only-binary=:all: --require-hashes. No network/proxy/TLS settings changed."
+  }
+}

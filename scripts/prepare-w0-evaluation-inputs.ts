@@ -1,9 +1,10 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { createHash, randomUUID } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { lstat, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { resolve, join, dirname, basename, relative, isAbsolute } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { z } from 'zod';
 import { digestOf } from '../src/core/identity.js';
@@ -168,7 +169,7 @@ export async function prepareW0EvaluationInputs(output: string, privateDirectory
     formalFormsGenerated: false, reason: 'Existing schemas require real rules/families/authors; none are fabricated.' });
   return ledger;
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (await isMainModule(import.meta.url)) {
   const { values } = parseArgs({ options: { out: { type: 'string' }, 'private-dir': { type: 'string' } } });
   if (!values.out || !values['private-dir']) throw new Error('Supply new --out and --private-dir paths');
   console.log(JSON.stringify(await prepareW0EvaluationInputs(resolve(values.out), resolve(values['private-dir'])), null, 2));

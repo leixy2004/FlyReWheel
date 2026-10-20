@@ -1,0 +1,415 @@
+{
+  "status": "passed",
+  "testedCodeHead": "9835ff428a17e01882ec286b0c37f8010df0f61a",
+  "runtime": "Node v24.19.0",
+  "probes": [
+    {
+      "flags": [],
+      "exitCode": 1,
+      "result": {
+        "errorChain": [
+          {
+            "name": "TypeError",
+            "code": null
+          },
+          {
+            "name": "Error",
+            "code": "ECONNREFUSED"
+          }
+        ]
+      }
+    },
+    {
+      "flags": [
+        "--use-env-proxy"
+      ],
+      "exitCode": 1,
+      "result": {
+        "errorChain": [
+          {
+            "name": "TypeError",
+            "code": null
+          },
+          {
+            "name": "Error",
+            "code": "SELF_SIGNED_CERT_IN_CHAIN"
+          }
+        ]
+      }
+    },
+    {
+      "flags": [
+        "--use-env-proxy",
+        "--use-system-ca"
+      ],
+      "exitCode": 0,
+      "result": {
+        "status": 200
+      }
+    }
+  ],
+  "cause": "Direct connection refused; environment proxy without system trust produced SELF_SIGNED_CERT_IN_CHAIN. Official proxy + system CA startup flags succeeded with TLS verification intact.",
+  "presenceOnly": {
+    "routing": [
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "NO_PROXY",
+      "http_proxy",
+      "https_proxy",
+      "no_proxy"
+    ],
+    "ambientTrust": [
+      "NODE_EXTRA_CA_CERTS",
+      "SSL_CERT_FILE"
+    ],
+    "valuesRecorded": false,
+    "trustVariablesPassedToSuccessfulRun": false
+  },
+  "capture": {
+    "argv": [
+      "node",
+      "--use-env-proxy",
+      "--use-system-ca",
+      "dist/cli.js",
+      "github-pr",
+      "capture",
+      "--repository",
+      "vllm-project/vllm",
+      "--number",
+      "29666",
+      "--max-requests",
+      "50",
+      "--db",
+      "${OUTPUT_DIR}/db",
+      "--out",
+      "${OUTPUT_DIR}/native-evidence.json"
+    ],
+    "exitCode": 0,
+    "stderr": "",
+    "receipt": {
+      "kind": "github-api-observation",
+      "startedAt": "2026-10-13T10:33:01.703Z",
+      "completedAt": "2026-10-13T10:33:14.111Z",
+      "authentication": "none",
+      "transport": "@octokit/rest@22.0.1",
+      "verification": "live-api-observation-not-verified-history",
+      "requestLimit": 50,
+      "requests": 40,
+      "decodedResponseBytes": 361368,
+      "observations": [
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/pulls/29666",
+          "observedAt": "2026-10-13T10:33:02.416Z",
+          "dataDigest": "bdd541e29791a90bfdfedba55b8a2c3f6b00eef044e5df26cb655439f102a24e",
+          "requestId": "C4DB:2E3615:4B15B4:F6D02C:6ACE08DD",
+          "serverDate": "Tue, 13 Oct 2026 10:33:02 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/compare/3cb32e5d6e227fe91d93902e302ef6f667308e04...72c2b149c376ad6020c3f9022493e75d4a7adc35?page=1&per_page=1",
+          "observedAt": "2026-10-13T10:33:02.874Z",
+          "dataDigest": "cd2589f6daac8a106635f00a91eebd4d5acd53c4e1fab7a0def82806cf20129f",
+          "requestId": "E774:2DA533:4BE77B:F93E6C:6ACE08DE",
+          "serverDate": "Tue, 13 Oct 2026 10:33:02 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/commits/3cb32e5d6e227fe91d93902e302ef6f667308e04",
+          "observedAt": "2026-10-13T10:33:03.238Z",
+          "dataDigest": "19475cf3a4325138f79f5cc6ee07be20bfa2fbb78663f0168676ca0698a49a89",
+          "requestId": "9C53:25A4F0:3D4423:CB35FA:6ACE08DE",
+          "serverDate": "Tue, 13 Oct 2026 10:33:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/commits/72c2b149c376ad6020c3f9022493e75d4a7adc35",
+          "observedAt": "2026-10-13T10:33:03.574Z",
+          "dataDigest": "f2b77087bf05735809314113e3dd1423c3c6d3ac3b4a3aea0aae8eee96dcc0f3",
+          "requestId": "9C53:25A4F0:3D45C7:CB3B53:6ACE08DF",
+          "serverDate": "Tue, 13 Oct 2026 10:33:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/7410f0e81e80997cc6c6674e909bb635663c3d66",
+          "observedAt": "2026-10-13T10:33:03.897Z",
+          "dataDigest": "3f8e0cbbf0761bfc3d94053b12eb96ad40788f4008c350e867b7b73b0701f2f3",
+          "requestId": "4044:33D8E5:414C8F:D699E8:6ACE08DF",
+          "serverDate": "Tue, 13 Oct 2026 10:33:03 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/fd6da75a6e46216ccc834c5bf24ea2c455401a9f",
+          "observedAt": "2026-10-13T10:33:04.126Z",
+          "dataDigest": "0b3bd8a31e5feb4f455a442cb9b105255835050c555f4a8e034bca68e2dc561e",
+          "requestId": "C4DB:2E3615:4B2665:F7066C:6ACE08DE",
+          "serverDate": "Tue, 13 Oct 2026 10:33:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/6eb6261a69f66d8406507943899859e87f126ce7",
+          "observedAt": "2026-10-13T10:33:04.386Z",
+          "dataDigest": "deb487f06b3efdeb3760ef1256e692e143e2fd9c99a0eaa37ec5c0d626e3161e",
+          "requestId": "4044:33D8E5:414F55:D6A3D7:6ACE08DF",
+          "serverDate": "Tue, 13 Oct 2026 10:33:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/c739ed99b9d431916baf17893c4b00ad416a470e",
+          "observedAt": "2026-10-13T10:33:04.714Z",
+          "dataDigest": "5e7ca847e78a67b54ebb8a03fc0e7011b580cc1cf135d56eaafb187e849e3e05",
+          "requestId": "79D6:B6C46:3C7D44:C77DBA:6ACE08E0",
+          "serverDate": "Tue, 13 Oct 2026 10:33:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/ef98549d80419999c4a821874f5b7d54916c4bb6",
+          "observedAt": "2026-10-13T10:33:04.939Z",
+          "dataDigest": "ed9218623ff074b4cdeba4e6d5824a32735b745ea29869f397c7e16ed97c9eda",
+          "requestId": "79D6:B6C46:3C7EBD:C782AC:6ACE08E0",
+          "serverDate": "Tue, 13 Oct 2026 10:33:04 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/c83bfe2739b01a3f095250924b85e6e5f754dcb5",
+          "observedAt": "2026-10-13T10:33:05.184Z",
+          "dataDigest": "bd9d95946cd657d8a89d396e47476a3be6210b5f23c94dcc130a7a85818d0127",
+          "requestId": "C4DB:2E3615:4B2E8C:F7224F:6ACE08E0",
+          "serverDate": "Tue, 13 Oct 2026 10:33:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/ed8a727050e1126c0e03130a5e33f9814209a1b8",
+          "observedAt": "2026-10-13T10:33:05.423Z",
+          "dataDigest": "3068d0400c9a6c811eea9b341af3e95f4ff758ce0e6f5ec4d505c2a1b5786afb",
+          "requestId": "4044:33D8E5:415683:D6BBF2:6ACE08E0",
+          "serverDate": "Tue, 13 Oct 2026 10:33:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/ecada343ba47f85bdd07d7c1f4b7ad2b6e4907e3",
+          "observedAt": "2026-10-13T10:33:05.677Z",
+          "dataDigest": "26ba692284463ab2bfc5b8183fae0bb115491d7f6318e6bd35633cabd4afaee8",
+          "requestId": "C4DB:2E3615:4B327E:F72F04:6ACE08E1",
+          "serverDate": "Tue, 13 Oct 2026 10:33:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/d9d44c2283da43f2ed86e7eeca92623b786a9ba3",
+          "observedAt": "2026-10-13T10:33:05.909Z",
+          "dataDigest": "4b138ed0bc373be800804b15f2c9e95a955dd4728389a9a3c13614c423191c68",
+          "requestId": "4044:33D8E5:4159F2:D6C694:6ACE08E1",
+          "serverDate": "Tue, 13 Oct 2026 10:33:05 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/77b88b0cc1811aee9f0c4e490ec3e4b79d3ac489",
+          "observedAt": "2026-10-13T10:33:06.167Z",
+          "dataDigest": "6e21c8e000609aa0fdce485fa303917448534de2b758d27549a19cd8d316b59c",
+          "requestId": "9C53:25A4F0:3D569D:CB72DC:6ACE08DF",
+          "serverDate": "Tue, 13 Oct 2026 10:33:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/81b954277ed206e81864ee5f24585606021b18b2",
+          "observedAt": "2026-10-13T10:33:06.378Z",
+          "dataDigest": "007dc817445a83b8f064350ab05d6493e9746c4efcfbb2d88e0699a59cdfca44",
+          "requestId": "C4DB:2E3615:4B382F:F74202:6ACE08E1",
+          "serverDate": "Tue, 13 Oct 2026 10:33:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/aaeaef0651528d8bb55c7d5c51cbdafa061eb328",
+          "observedAt": "2026-10-13T10:33:06.589Z",
+          "dataDigest": "368969536b978c92a37c3f491ebdcdc1894b70d8728ff73534b6d60e03f50c8f",
+          "requestId": "9C53:25A4F0:3D5960:CB7C69:6ACE08E2",
+          "serverDate": "Tue, 13 Oct 2026 10:33:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/ea72d5915b70edd2d9014366f37212297437008d",
+          "observedAt": "2026-10-13T10:33:06.970Z",
+          "dataDigest": "ec73a8534ba4240671753c49af38de631b1412ef04660d5e590957de90f1fd93",
+          "requestId": "D4A7:2F146:4CF219:FC2E0F:6ACE08E2",
+          "serverDate": "Tue, 13 Oct 2026 10:33:06 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/trees/6d5fe6892b0072d9d1f8af52a1b7ea685fe19c51",
+          "observedAt": "2026-10-13T10:33:07.183Z",
+          "dataDigest": "20ab3c89eb2b79a692c337ce4fc75c2c8d1b8682218ba2f09ca500915cd2c0a3",
+          "requestId": "4044:33D8E5:41626F:D6E302:6ACE08E1",
+          "serverDate": "Tue, 13 Oct 2026 10:33:07 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/34f6e8c928ffb00180f4bbeebf04a0279f32fca1",
+          "observedAt": "2026-10-13T10:33:07.391Z",
+          "dataDigest": "40c154790d87a3e31d96c4517b8e8ab155e308b36ec0af49f34a55740b709c50",
+          "requestId": "9C53:25A4F0:3D5E68:CB8CF8:6ACE08E2",
+          "serverDate": "Tue, 13 Oct 2026 10:33:07 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/e3dc40fd0ec7d9ad08cf00bce5f13051e2a94685",
+          "observedAt": "2026-10-13T10:33:07.617Z",
+          "dataDigest": "c662455ba50e86750399d74a9bc9d48a25f32a985b63c7b8b0b4a9734b88abd9",
+          "requestId": "79D6:B6C46:3C8E84:C7B6F9:6ACE08E0",
+          "serverDate": "Tue, 13 Oct 2026 10:33:07 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/b6c24e1ceeee79ed30e66c08c893856dae047f25",
+          "observedAt": "2026-10-13T10:33:07.815Z",
+          "dataDigest": "5f96c2940a518a8a4bc5ceb77ef6ce794e0a681ee4beb11c5a75e08ad29f71aa",
+          "requestId": "4044:33D8E5:4166D0:D6F204:6ACE08E3",
+          "serverDate": "Tue, 13 Oct 2026 10:33:07 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/77234cbd0c8ca151c0de36ee3353198841e41178",
+          "observedAt": "2026-10-13T10:33:08.033Z",
+          "dataDigest": "4530ebeeb04b905862623eb98fa40ff3993e97bd3554db36a76402535d362aa3",
+          "requestId": "79D6:B6C46:3C9106:C7BF44:6ACE08E3",
+          "serverDate": "Tue, 13 Oct 2026 10:33:07 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/cde9aa6ff901c7699a66ae8ba8ae2b913b00d41a",
+          "observedAt": "2026-10-13T10:33:08.256Z",
+          "dataDigest": "1bc6b2aafb587f1c9706930db2401b326b70e984939eb53d260779689c99f845",
+          "requestId": "C4DB:2E3615:4B46A7:F7710B:6ACE08E2",
+          "serverDate": "Tue, 13 Oct 2026 10:33:08 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/fe757c2f337485506ac333467747d622d14a8033",
+          "observedAt": "2026-10-13T10:33:08.519Z",
+          "dataDigest": "cf4a48f1d66b9d2ba7b5943c7f6c7f7af9bc1ef5310f443196ce5dd975fe8891",
+          "requestId": "C4DB:2E3615:4B4845:F7769A:6ACE08E4",
+          "serverDate": "Tue, 13 Oct 2026 10:33:08 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/c6a6757bed3bfb589f24e00809e6885f1ff7b06e",
+          "observedAt": "2026-10-13T10:33:08.800Z",
+          "dataDigest": "94661851757d69fff8a26bf2c3319565c1b2d57da62542efd5b98f7a7008af03",
+          "requestId": "9C53:25A4F0:3D6653:CBA69B:6ACE08E3",
+          "serverDate": "Tue, 13 Oct 2026 10:33:08 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/e2517b935bf287f7ededc525e8dc10dfdbf05d0f",
+          "observedAt": "2026-10-13T10:33:09.043Z",
+          "dataDigest": "84c551417e0410871d0111ca66071bc0f79fd83db7995c4abd39def12fa615b2",
+          "requestId": "4044:33D8E5:416F38:D70D2E:6ACE08E3",
+          "serverDate": "Tue, 13 Oct 2026 10:33:09 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/b1459fcbd246a1f4af2a43085b5c796f8ad723ab",
+          "observedAt": "2026-10-13T10:33:09.267Z",
+          "dataDigest": "024ae4d50a7a15ce173eeaf52ac52853b92fa39963a9bb5ca532c900cbd28a89",
+          "requestId": "4044:33D8E5:4170D3:D7126E:6ACE08E5",
+          "serverDate": "Tue, 13 Oct 2026 10:33:09 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/4807bc076f82404cb14fe362b4f34c1ad18e7cb4",
+          "observedAt": "2026-10-13T10:33:09.471Z",
+          "dataDigest": "e69e2b1f105df6bf357783d3c6666144df41c3a77d0f29fe96a6fb147b3c4028",
+          "requestId": "9C53:25A4F0:3D6A95:CBB516:6ACE08E4",
+          "serverDate": "Tue, 13 Oct 2026 10:33:09 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/0a68e48ba5e7a320b9847caa014684871a5cf802",
+          "observedAt": "2026-10-13T10:33:09.694Z",
+          "dataDigest": "95c668d695f6b381f1558e3337fadfe2ae7a85338b34951db4604b29e54cddc9",
+          "requestId": "4044:33D8E5:4173A0:D71C55:6ACE08E5",
+          "serverDate": "Tue, 13 Oct 2026 10:33:09 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/80ff0df28c66c8f147b90bb611ea22780dc5f8bd",
+          "observedAt": "2026-10-13T10:33:09.894Z",
+          "dataDigest": "f8148ac75f00c4281b8c1785e221d1cad1cd16ec14bb2d90c46fda7dbd7e085d",
+          "requestId": "9C53:25A4F0:3D6D16:CBBD88:6ACE08E5",
+          "serverDate": "Tue, 13 Oct 2026 10:33:09 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/ac9b859159eadba3ecd7db902c3a081fee9fdf43",
+          "observedAt": "2026-10-13T10:33:10.130Z",
+          "dataDigest": "2f07a5abfdc4823f43717034d36ff0958e71b4c0931151fc338f8ac0ca0c983e",
+          "requestId": "9C53:25A4F0:3D6E5F:CBC159:6ACE08E5",
+          "serverDate": "Tue, 13 Oct 2026 10:33:10 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/a136d450e7b14c249b29aee93efd3812d4391cd4",
+          "observedAt": "2026-10-13T10:33:10.362Z",
+          "dataDigest": "0f0e5c700ecd657ff292c41e7cf41bad4d41e68985ad9ff2a0e67208d773e1c3",
+          "requestId": "4044:33D8E5:417842:D72C6F:6ACE08E5",
+          "serverDate": "Tue, 13 Oct 2026 10:33:10 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/3661dfd09047aea5471325b8fc0d0be920f9d7df",
+          "observedAt": "2026-10-13T10:33:10.605Z",
+          "dataDigest": "9b0c16b27e98b752d495fd3c3f11ac7f65d89db784bf01f6d78f8c81be7572b3",
+          "requestId": "9C53:25A4F0:3D7139:CBCB09:6ACE08E6",
+          "serverDate": "Tue, 13 Oct 2026 10:33:10 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/f5c49ac169f0c7a448395dba0f9885724ef19401",
+          "observedAt": "2026-10-13T10:33:11.845Z",
+          "dataDigest": "cf44e91f4ffa97c8f150ecef1d51dfaeba009dedf2f19e4a0564ea6193f96e0f",
+          "requestId": "9C53:25A4F0:3D72A1:CBCFC3:6ACE08E6",
+          "serverDate": "Tue, 13 Oct 2026 10:33:11 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/9883ab8fb9964c1a8caae0d1c6524a2640bed87d",
+          "observedAt": "2026-10-13T10:33:12.081Z",
+          "dataDigest": "9fddfee07bbc404d9b51e607ff55b6f03b6fbe01248d28bfc725bd39faa1f476",
+          "requestId": "9C53:25A4F0:3D7A82:CBEA57:6ACE08E7",
+          "serverDate": "Tue, 13 Oct 2026 10:33:12 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/git/blobs/7bd2c7415dafe9f47ff82e09b3e56857492f5d55",
+          "observedAt": "2026-10-13T10:33:12.348Z",
+          "dataDigest": "400bd8b55e0019a2be3dcadcda4c2bad706f76ed8b3f431bdc59c9f7efd786a0",
+          "requestId": "C4DB:2E3615:4B6735:F7DC48:6ACE08E4",
+          "serverDate": "Tue, 13 Oct 2026 10:33:12 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/issues/29666/comments?page=1&per_page=100",
+          "observedAt": "2026-10-13T10:33:12.599Z",
+          "dataDigest": "7a2d00d6cabce8849b606fa75e3847343aba0776f06753f0cbf7888697bde8db",
+          "requestId": "9C53:25A4F0:3D7D8D:CBF4A1:6ACE08E8",
+          "serverDate": "Tue, 13 Oct 2026 10:33:12 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/pulls/29666/reviews?page=1&per_page=100",
+          "observedAt": "2026-10-13T10:33:13.192Z",
+          "dataDigest": "8f1594d520fb890ca5db5beb66fb6fe393112655b1df65e51a278067ed00cb47",
+          "requestId": "4044:33D8E5:41895C:D763B3:6ACE08E6",
+          "serverDate": "Tue, 13 Oct 2026 10:33:13 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/pulls/29666/comments?page=1&per_page=100",
+          "observedAt": "2026-10-13T10:33:13.630Z",
+          "dataDigest": "8d2be1d694ef1790e0934c34fd2ad48e13e4ab90a512949d0b4869feb23bd140",
+          "requestId": "D4A7:2F146:4D25F9:FCD939:6ACE08E2",
+          "serverDate": "Tue, 13 Oct 2026 10:33:13 GMT"
+        },
+        {
+          "endpoint": "GET /repos/vllm-project/vllm/pulls/29666",
+          "observedAt": "2026-10-13T10:33:14.100Z",
+          "dataDigest": "bdd541e29791a90bfdfedba55b8a2c3f6b00eef044e5df26cb655439f102a24e",
+          "requestId": "C4DB:2E3615:4B7478:F8079F:6ACE08E8",
+          "serverDate": "Tue, 13 Oct 2026 10:33:14 GMT"
+        }
+      ]
+    }
+  },
+  "verification": {
+    "evidenceDigest": "da82756031a6e8e92a2730305f5373878437df049754cb401151fa32b6349110",
+    "identicalToPriorPythonTransportEvidence": true,
+    "changedPaths": 9,
+    "capturedSides": 18,
+    "capturedBytes": 131744,
+    "excludedSides": 0,
+    "sourceBlobHashesVerified": true,
+    "persistedReopen": true,
+    "showExitCode": 0,
+    "showOutputSha256": "71f41bc1de6f00c5184ca78269471685a0fc9bed0e4b985ac7ff49f3c42d1f5d"
+  },
+  "tests": {
+    "command": "npm test -- tests/github-pr-diagnostics.test.ts tests/github-pr-failure-classification.test.ts",
+    "files": 2,
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "boundaries": {
+    "productCodeChanged": false,
+    "newDependencies": false,
+    "customFetch": false,
+    "pythonTransport": false,
+    "tlsVerificationDisabled": false,
+    "hostTrustStoreModified": false,
+    "credentialValuesRead": false,
+    "modelsCalled": false,
+    "W1Read": false,
+    "push": false
+  },
+  "requestBudget": "Three small public metadata probes, one complete native 40-GET capture, then offline evidence verification and database readback. No other PRs or history batches acquired."
+}

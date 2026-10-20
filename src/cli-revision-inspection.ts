@@ -1,3 +1,4 @@
+import { explainRevision, RevisionExplanationInputSchema } from './revision-explanation.js';
 import type { Command } from 'commander';
 import { DigestSchema } from './core/model.js';
 import { deriveLocalReviewVerdict } from './core/semantic-review.js';
@@ -38,6 +39,7 @@ export function revisionInspectionSummary(stored: StoredGeneration) {
       rule: ruleDigest === null ? null : ['rules', 'show', '--digest', ruleDigest],
       snapshot: ['snapshots', 'show', '--digest', receipt.context.snapshotDigest],
       repositoryContexts: contextDigests.map(digest => ['contexts', 'show', '--digest', digest]),
+      continuations: ruleDigest === null ? ['revisions', 'continuations', 'list', '--outcome-digest', stored.digest] : null,
       comparisons: ruleDigest === null ? null : ['revisions', 'comparisons', '--request-digest', record.requestDigest, '--candidate-rule-digest', ruleDigest],
     },
   };
@@ -61,6 +63,16 @@ export function revisionInspection(stored: StoredGeneration, graph: RevisionGene
 }
 
 export function registerRevisionInspectionCommands(revisions: Command, output: Output) {
+  databaseCommand(revisions, 'explain').description('Trace a stored comparison through feedback, literal version changes, evaluation and current scoped local selection')
+    .requiredOption('--digest <sha256>', 'Exact comparison digest').option('--feedback-id <id>', 'Focus an exact member of the frozen request')
+    .requiredOption('--repository <id>', 'Repository for current local governance selection')
+    .requiredOption('--path <path>', 'Literal path; repeat for multiple paths', (value: string, previous: string[]) => [...previous, value], [])
+    .option('--out <file>').action(async options => {
+      const input = RevisionExplanationInputSchema.parse({ comparisonDigest: options.digest, feedbackId: options.feedbackId,
+        repository: options.repository, paths: options.path });
+      const store = await storeFor(options);
+      try { await output(await explainRevision(store, input), options.out); } finally { await store.close(); }
+    });
   for (const kind of ['candidate', 'outcome'] as const) {
     databaseCommand(revisions, kind).description(`Inspect one immutable generated ${kind} and its evidence links; no generation or quality certification`)
       .requiredOption('--digest <sha256>', `Exact ${kind} record digest, not a rule or request digest`).option('--out <file>')

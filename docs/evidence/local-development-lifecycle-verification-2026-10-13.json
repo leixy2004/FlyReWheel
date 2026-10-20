@@ -1,0 +1,188 @@
+{
+  "status": "passed",
+  "source": "fresh authored local Git repository only",
+  "directory": "/tmp/flyrewheel-local-development-final",
+  "commands": [
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "create",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/input.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "status",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/receipt.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--check",
+        "--local-development",
+        "/tmp/flyrewheel-local-development-final/receipt.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--local-development",
+        "/tmp/flyrewheel-local-development-final/receipt.json"
+      ],
+      "exitCode": 1
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--check",
+        "--config",
+        "/tmp/flyrewheel-local-development-final/production-preflight-only.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "evidence",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/receipt.json",
+        "--digest",
+        "0f4e63edb5409c16a3b5a24893b414f8d91c2adb1bdc2707aa7b8aecf4e1b8fd"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "cleanup",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/receipt.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/worker.js",
+        "--check",
+        "--local-development",
+        "/tmp/flyrewheel-local-development-final/receipt.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "evidence",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/receipt.json",
+        "--digest",
+        "0f4e63edb5409c16a3b5a24893b414f8d91c2adb1bdc2707aa7b8aecf4e1b8fd"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "evidence",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/receipt.json",
+        "--digest",
+        "582396ac58cbd526ebfb067e54a03cd226036fb49c9409507593dfc6b73f0cad"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "create",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/input.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "node",
+        "dist/cli.js",
+        "workspace",
+        "local",
+        "cleanup",
+        "--file",
+        "/tmp/flyrewheel-local-development-final/dirty-receipt.json"
+      ],
+      "exitCode": 2
+    }
+  ],
+  "checks": {
+    "fixedHead": "524ce7bfa49af51fb05d7cbc22942fa276539656",
+    "exactResolverBinding": true,
+    "crossProcessReadback": true,
+    "cleanOwnedWorktreeRemoved": true,
+    "sourceFilesAndMainHeadUnchanged": true,
+    "dirtyWorktreeRetained": true,
+    "evidenceReadableAfterCleanup": true,
+    "localPreflight": "ready-before-cleanup-not-ready-after",
+    "productionPreflight": "blocked-lifecycle-authority-required"
+  },
+  "guaranteesNotProvided": [
+    "security isolation",
+    "arbitrary repository program execution",
+    "whole-runtime stop",
+    "externally frozen snapshot",
+    "physical resource destruction"
+  ],
+  "preserved": [
+    "source repository",
+    "attempt branches",
+    "manifest/history",
+    "content-addressed evidence",
+    "dirty worktree"
+  ],
+  "modelExecution": "not_run",
+  "sandboxAllocation": "not_performed",
+  "credentialAccess": "none",
+  "W1": "not_read",
+  "productionReady": false,
+  "implementationBase": "8f4633ff752fa4afbf3eb856d9c5272c474ea224",
+  "validation": {
+    "typecheck": "passed",
+    "build": "passed-before-compiled-acceptance",
+    "focusedTests": {
+      "files": 2,
+      "passed": 9,
+      "command": "npm test -- tests/local-development-workspace.test.ts tests/prepared-workspace-resolver.test.ts"
+    }
+  }
+}

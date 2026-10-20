@@ -1,0 +1,586 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: flyrewheel
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/warn: restricted
+  name: flyrewheel
+---
+apiVersion: v1
+automountServiceAccountToken: false
+kind: ServiceAccount
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+---
+apiVersion: v1
+data:
+  PORT: "8080"
+  QE_CODEX_AUTH_MODE: account
+  QE_CODEX_HOME: /codex-home
+  QE_CODEX_MODEL: ""
+  QE_ENABLE_MODEL: "false"
+  QE_MODEL_TIMEOUT_MS: "120000"
+  QE_MODEL_TOKEN_ACCEPTANCE_LIMIT: "30000"
+  QE_S3_ALLOW_INSECURE: "true"
+  QE_S3_BUCKET: flyrewheel-artifacts
+  QE_S3_ENABLED: "true"
+  QE_S3_ENDPOINT: http://flyrewheel-s3:8333
+  QE_S3_REGION: us-east-1
+kind: ConfigMap
+metadata:
+  name: flyrewheel-config
+  namespace: flyrewheel
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyrewheel-postgres
+  namespace: flyrewheel
+spec:
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: postgres
+  selector:
+    app.kubernetes.io/name: flyrewheel-postgres
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyrewheel-s3
+  namespace: flyrewheel
+spec:
+  ports:
+  - name: s3
+    port: 8333
+    targetPort: s3
+  selector:
+    app.kubernetes.io/name: flyrewheel-s3
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+spec:
+  ports:
+  - name: health
+    port: 8080
+    targetPort: health
+  selector:
+    app.kubernetes.io/name: flyrewheel-worker
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flyrewheel-codex-home
+  namespace: flyrewheel
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flyrewheel-postgres-data
+  namespace: flyrewheel
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flyrewheel-s3-data
+  namespace: flyrewheel
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyrewheel-postgres
+  namespace: flyrewheel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flyrewheel-postgres
+        app.kubernetes.io/part-of: flyrewheel
+        flyrewheel.io/role: postgres
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - args:
+        - postgres
+        - -c
+        - shared_buffers=128MB
+        - -c
+        - max_connections=30
+        env:
+        - name: POSTGRES_USER
+          value: qual_evo
+        - name: POSTGRES_DB
+          value: qual_evo
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: flyrewheel-postgres
+        - name: POSTGRES_INITDB_ARGS
+          value: --auth-host=scram-sha-256
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        image: postgres:17.11-bookworm
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - qual_evo
+            - -d
+            - qual_evo
+          failureThreshold: 6
+          periodSeconds: 20
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - qual_evo
+            - -d
+            - qual_evo
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: "1"
+            ephemeral-storage: 512Mi
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 128Mi
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        startupProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - qual_evo
+            - -d
+            - qual_evo
+          failureThreshold: 60
+          periodSeconds: 5
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: data
+        - mountPath: /var/run/postgresql
+          name: run
+        - mountPath: /tmp
+          name: tmp
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 999
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: flyrewheel-postgres-data
+      - emptyDir:
+          sizeLimit: 16Mi
+        name: run
+      - emptyDir:
+          sizeLimit: 128Mi
+        name: tmp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyrewheel-s3
+  namespace: flyrewheel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-s3
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flyrewheel-s3
+        app.kubernetes.io/part-of: flyrewheel
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - args:
+        - mini
+        - -dir=/data
+        - -ip=127.0.0.1
+        - -ip.bind=0.0.0.0
+        - -s3.port=8333
+        - -s3.port.iceberg=0
+        - -s3.port.lance=0
+        - -webdav=false
+        - -admin.ui=false
+        - -master.volumeSizeLimitMB=128
+        command:
+        - /usr/bin/weed
+        env:
+        - name: HOME
+          value: /tmp
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: AWS_ACCESS_KEY_ID
+              name: flyrewheel-s3
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: AWS_SECRET_ACCESS_KEY
+              name: flyrewheel-s3
+        - name: S3_BUCKET
+          value: flyrewheel-artifacts
+        image: chrislusf/seaweedfs:4.48
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          periodSeconds: 30
+          tcpSocket:
+            port: s3
+        name: seaweedfs
+        ports:
+        - containerPort: 8333
+          name: s3
+        readinessProbe:
+          periodSeconds: 10
+          tcpSocket:
+            port: s3
+        resources:
+          limits:
+            cpu: "2"
+            ephemeral-storage: 512Mi
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 128Mi
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        startupProbe:
+          failureThreshold: 60
+          periodSeconds: 5
+          tcpSocket:
+            port: s3
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /tmp
+          name: tmp
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: flyrewheel-s3-data
+      - emptyDir:
+          sizeLimit: 128Mi
+        name: tmp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyrewheel-worker
+  namespace: flyrewheel
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: flyrewheel-worker
+        app.kubernetes.io/part-of: flyrewheel
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - command:
+        - node
+        - dist/worker.js
+        env:
+        - name: QE_S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: AWS_ACCESS_KEY_ID
+              name: flyrewheel-s3
+        - name: QE_S3_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: AWS_SECRET_ACCESS_KEY
+              name: flyrewheel-s3
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: flyrewheel-runtime
+        envFrom:
+        - configMapRef:
+            name: flyrewheel-config
+        image: flyrewheel:dev
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 20
+          timeoutSeconds: 2
+        name: worker
+        ports:
+        - containerPort: 8080
+          name: health
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: health
+          periodSeconds: 10
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "2"
+            ephemeral-storage: 2Gi
+            memory: 2Gi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 256Mi
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 5
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /home/flyrewheel
+          name: home
+        - mountPath: /codex-home
+          name: codex-home
+      securityContext:
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: flyrewheel-worker
+      terminationGracePeriodSeconds: 180
+      volumes:
+      - emptyDir:
+          sizeLimit: 1Gi
+        name: tmp
+      - emptyDir:
+          sizeLimit: 64Mi
+        name: home
+      - name: codex-home
+        persistentVolumeClaim:
+          claimName: flyrewheel-codex-home
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cluster-dns
+  namespace: flyrewheel
+spec:
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+  podSelector: {}
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: flyrewheel
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-from-worker
+  namespace: flyrewheel
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flyrewheel-worker
+    ports:
+    - port: 5432
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      flyrewheel.io/role: postgres
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: s3-from-worker
+  namespace: flyrewheel
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flyrewheel-worker
+    ports:
+    - port: 8333
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-s3
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-health-clients
+  namespace: flyrewheel
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          flyrewheel.io/health-client: "true"
+    ports:
+    - port: 8080
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-to-postgres
+  namespace: flyrewheel
+spec:
+  egress:
+  - ports:
+    - port: 5432
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          flyrewheel.io/role: postgres
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: worker-to-s3
+  namespace: flyrewheel
+spec:
+  egress:
+  - ports:
+    - port: 8333
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: flyrewheel-s3
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: flyrewheel-worker
+  policyTypes:
+  - Egress

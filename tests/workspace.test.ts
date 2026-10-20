@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace } from '../src/workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, acquireWorkspaceExecutionLease, diagnoseWorkspace, listWorkspaces } from '../src/workspace/index.js';
 import { workspaceEnvironment, workspaceGit } from '../src/workspace/process.js';
 
 const execute = promisify(execFile);
@@ -262,3 +262,179 @@ test('real CLI prepare/inspect/cleanup survives separate processes and never off
   const help = await execute(process.execPath, ['--import', 'tsx', 'src/cli.ts', 'workspace', '--help'], { cwd, env: workspaceEnvironment(), timeout: 10_000 });
   expect(help.stdout).toContain('prepare'); expect(help.stdout).not.toMatch(/\n\s+exec /);
 }, 20_000);
+
+
+test('durable cancellation fences execution, preserves active lease and remains idempotent after cleanup', async () => {
+  const f = await fixture('cancel-fence');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const first = await cancelWorkspace(identity(f), 'Operator requested stop');
+  expect(first).toMatchObject({ executionLeaseActive: true, runtimeStop: 'not-verified' });
+  expect(await cancelWorkspace(identity(f), 'Repeated request')).toEqual(first);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+  await lease.release();
+  await expect(acquireWorkspaceExecutionLease(identity(f), f.commits[0])).rejects.toThrow(/cancelled/);
+  const state = await inspectWorkspace(identity(f));
+  expect(state.cancellation).toEqual(first.cancellation);
+  expect(state.executionLeaseActive).toBe(false);
+  expect((await cleanupWorkspace(identity(f))).record.status).toBe('closed-clean');
+  expect((await inspectWorkspace(identity(f))).cancellation).toEqual(first.cancellation);
+});
+
+test('cancel racing lease acquisition never allows an uncancelled new execution after acknowledgement', async () => {
+  const f = await fixture('cancel-race');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const results = await Promise.allSettled([acquireWorkspaceExecutionLease(identity(f), f.commits[0]), cancelWorkspace(identity(f), 'race')]);
+  expect(results[1].status).toBe('fulfilled');
+  if (results[0].status === 'fulfilled') {
+    await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+    await results[0].value.release();
+  }
+  await expect(acquireWorkspaceExecutionLease(identity(f), f.commits[0])).rejects.toThrow(/cancelled/);
+});
+
+
+test('diagnostics are read-only and never infer lease liveness from old ownership or cancellation', async () => {
+  const f = await fixture('diagnose');
+  const prepared = await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  expect((await diagnoseWorkspace(identity(f))).cleanup.disposition).toBe('requires-fresh-cleanup-check');
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const path = join(lease.leasePath, 'owner.json');
+  const owner = JSON.parse(await readFile(path, 'utf8'));
+  owner.createdAt = '2000-01-01T00:00:00.000Z';
+  await writeFile(path, JSON.stringify(owner));
+  await cancelWorkspace(identity(f), 'diagnostic fixture');
+  const before = await readFile(path, 'utf8');
+  const report = await diagnoseWorkspace(identity(f));
+  expect(report.lease).toMatchObject({ state: 'present', liveness: 'unknown-not-inferred-from-age-or-pid' });
+  expect(report.cancellation.state).toBe('requested');
+  expect(report.cleanup.blockedReasons).toContain('execution-lease-present');
+  expect(report.recovery).toMatchObject({ automaticRelease: false, runtimeStop: 'not-verified' });
+  expect(JSON.stringify(report)).not.toContain(owner.token);
+  expect(await readFile(path, 'utf8')).toBe(before);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+  await lease.release();
+  await writeFile(join(prepared.record.worktreePath, 'diagnostic.txt'), 'preserve');
+  expect((await diagnoseWorkspace(identity(f))).cleanup.blockedReasons).toContain('worktree-content-must-be-preserved');
+});
+
+test('diagnostics report missing, malformed, oversized and linked owners without releasing or exposing contents', async () => {
+  const f = await fixture('diagnose-bad-owner');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f), f.commits[0]);
+  const path = join(lease.leasePath, 'owner.json');
+  const valid = await readFile(path, 'utf8');
+  for (const bad of ['{invalid-json', 'x'.repeat(4097), JSON.stringify({ ...JSON.parse(valid), expectedSha: 'f'.repeat(40) })]) {
+    await writeFile(path, bad);
+    const report = await diagnoseWorkspace(identity(f));
+    expect(report.lease.state).toBe('unverifiable');
+    expect(report.lease.owner).toBeNull();
+    expect(report.cleanup.blockedReasons).toContain('lease-owner-unverifiable');
+  }
+  await rm(path);
+  expect((await diagnoseWorkspace(identity(f))).lease.state).toBe('unverifiable');
+  const target = join(f.repoPath, 'owner-target.json'); await writeFile(target, valid);
+  await symlink(target, path);
+  expect((await diagnoseWorkspace(identity(f))).lease.state).toBe('unverifiable');
+  expect(await readFile(target, 'utf8')).toBe(valid);
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/lease is active/);
+});
+
+test('diagnostics report damaged cancellation and repository operation lock without waiting or changing them', async () => {
+  const f = await fixture('diagnose-lock');
+  const prepared = await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const cancelPath = join(prepared.manifestPath, '..', 'cancellation.json');
+  await writeFile(cancelPath, '{bad');
+  const lock = join(f.repoPath, '.sandcastle', 'flyrewheel-operation.lock'); await mkdir(lock);
+  const report = await diagnoseWorkspace(identity(f));
+  expect(report.cancellation.state).toBe('unverifiable');
+  expect(report.cleanup.blockedReasons).toEqual(expect.arrayContaining(['cancellation-record-unverifiable', 'repository-operation-lock-present']));
+  expect(await exists(lock)).toBe(true);
+  expect(await readFile(cancelPath, 'utf8')).toBe('{bad');
+});
+
+
+test('diagnostics expose orphan registry blockers also rejected by actual cleanup', async () => {
+  const f = await fixture('diagnose-orphan');
+  await prepareWorkspace({ ...identity(f), baseSha: f.commits[0] });
+  const orphan = join(f.repoPath, '.sandcastle', 'worktrees', 'unregistered'); await mkdir(orphan);
+  expect((await diagnoseWorkspace(identity(f))).cleanup.blockedReasons).toContain('managed-worktree-registry-unverified');
+  await expect(cleanupWorkspace(identity(f))).rejects.toThrow(/orphan|unregistered/i);
+  expect(await exists(orphan)).toBe(true);
+});
+
+
+test('inventory lists empty stores without allocating metadata and aggregates all attempts read-only', async () => {
+  const f = await fixture('inventory');
+  expect((await listWorkspaces(f.repoPath)).summary).toEqual({ total: 0, diagnosed: 0, unavailable: 0 });
+  expect(await exists(join(f.repoPath, '.sandcastle'))).toBe(false);
+  const a = await prepareWorkspace({ ...identity(f, 'a'), baseSha: f.commits[0] });
+  await prepareWorkspace({ ...identity(f, 'b'), baseSha: f.commits[0] });
+  const lease = await acquireWorkspaceExecutionLease(identity(f, 'a'), f.commits[0]);
+  await cancelWorkspace(identity(f, 'a'), 'inventory fixture');
+  await cleanupWorkspace(identity(f, 'b'));
+  const manifest = await readFile(a.manifestPath, 'utf8');
+  const ownerBytes = await readFile(join(lease.leasePath, 'owner.json'), 'utf8');
+  const inventory = await listWorkspaces(f.repoPath);
+  expect(inventory.summary).toEqual({ total: 2, diagnosed: 2, unavailable: 0 });
+  expect(inventory.entries.map(entry => entry.identity?.attemptId)).toEqual(['a', 'b']);
+  expect(inventory.entries[0].diagnosis?.cancellation.state).toBe('requested');
+  expect(inventory.entries[0].diagnosis?.cleanup.blockedReasons).toContain('execution-lease-present');
+  expect(inventory.entries[1].diagnosis?.manifestState).toBe('closed-clean');
+  expect(JSON.stringify(inventory)).not.toContain(JSON.parse(ownerBytes).token);
+  expect(await readFile(a.manifestPath, 'utf8')).toBe(manifest);
+  expect(await readFile(join(lease.leasePath, 'owner.json'), 'utf8')).toBe(ownerBytes);
+  await lease.release();
+});
+
+test('inventory retains malformed, missing, linked and invalid entries as errors alongside valid attempts', async () => {
+  const f = await fixture('inventory-corrupt');
+  const a = await prepareWorkspace({ ...identity(f, 'valid'), baseSha: f.commits[0] });
+  const attempts = join(a.manifestPath, '..', '..');
+  const bad = join(attempts, 'attempt-inventory-corrupt--bad'); await mkdir(bad);
+  await writeFile(join(bad, 'manifest.json'), '{broken');
+  await mkdir(join(attempts, 'attempt-inventory-corrupt--missing'));
+  await writeFile(join(attempts, 'unknown-file'), 'do not omit');
+  await symlink(join(a.manifestPath, '..'), join(attempts, 'attempt-inventory-corrupt--linked'));
+  const inventory = await listWorkspaces(f.repoPath);
+  expect(inventory.summary).toEqual({ total: 5, diagnosed: 1, unavailable: 4 });
+  expect(inventory.entries.filter(entry => entry.error).map(entry => entry.entry)).toHaveLength(4);
+  expect(await readFile(join(bad, 'manifest.json'), 'utf8')).toBe('{broken');
+  expect(inventory.entries.find(entry => entry.identity?.attemptId === 'linked')?.error).toBe('invalid-attempt-entry');
+});
+
+test('inventory filters preserve damaged entries and paginate deterministically after filtering', async () => {
+  const f = await fixture('inventory-pages');
+  for (const attemptId of ['f', 'e', 'd', 'c', 'b', 'a']) {
+    await prepareWorkspace({ ...identity(f, attemptId), baseSha: f.commits[0] });
+  }
+  await cleanupWorkspace(identity(f, 'a'));
+  await cancelWorkspace(identity(f, 'c'), 'filter fixture');
+  const lease = await acquireWorkspaceExecutionLease(identity(f, 'd'), f.commits[0]);
+  const damagedLease = await acquireWorkspaceExecutionLease(identity(f, 'f'), f.commits[0]);
+  await writeFile(join(damagedLease.leasePath, 'owner.json'), '{broken');
+  const dirty = await inspectWorkspace(identity(f, 'e'));
+  await writeFile(join(dirty.record.worktreePath, 'untracked'), 'preserve');
+  await mkdir(join(f.repoPath, '.sandcastle', 'flyrewheel-attempts', 'unknown-entry'));
+  const names = (value: Awaited<ReturnType<typeof listWorkspaces>>) => value.entries.map(entry => entry.identity?.attemptId ?? entry.entry);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'leased' }))).toEqual(['d', 'f', 'unknown-entry']);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'cancelled' }))).toEqual(['c', 'f', 'unknown-entry']);
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'attention' }))).toEqual(['c', 'd', 'e', 'f', 'unknown-entry']);
+  const first = await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2 });
+  const second = await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2, offset: first.pagination.nextOffset });
+  expect(names(first).concat(names(second))).toEqual(['c', 'f', 'unknown-entry']);
+  expect(first.pagination).toMatchObject({ matched: 3, returned: 2, nextOffset: 2 });
+  expect(second.pagination).toMatchObject({ matched: 3, returned: 1, nextOffset: null });
+  expect(names(await listWorkspaces(f.repoPath, { filter: 'cancelled', limit: 2 }))).toEqual(names(first));
+  const beyond = await listWorkspaces(f.repoPath, { offset: 100 });
+  expect(beyond.entries).toEqual([]); expect(beyond.pagination.nextOffset).toBeNull();
+  expect(beyond.summary.total).toBe(7);
+  await lease.release();
+}, 15_000);
+
+test('inventory rejects unsupported filters and invalid pagination before repository access', async () => {
+  for (const options of [{ filter: 'unknown' }, { limit: 0 }, { limit: 1001 }, { offset: -1 }, { offset: 0.5 },
+    { offset: Number.MAX_SAFE_INTEGER + 1 }, { limit: NaN }, { limit: '10' }, { unexpected: true }]) {
+    await expect(listWorkspaces('/nonexistent-repository', options)).rejects.toThrow();
+  }
+});

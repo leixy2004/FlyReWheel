@@ -1,3 +1,4 @@
+import { PreparedWorkspaceResolverConfigSchema, createPreparedWorkspaceResolver } from './prepared-workspace-resolver.js';
 import { z } from 'zod';
 import { IdSchema } from './core/model.js';
 import { PrMiningModelLimitsSchema } from './core/pr-mining-model.js';
@@ -34,6 +35,7 @@ export const WorkerBootstrapConfigSchema = z.object({
   model: CodexWorkspaceRequestSchema.shape.model.optional(),
   generationLimits: PrMiningModelLimitsSchema.optional(),
   runtime: Runtime.optional(),
+  preparedWorkspaces: PreparedWorkspaceResolverConfigSchema.optional(),
 }).strict();
 export type WorkerBootstrapConfig = z.input<typeof WorkerBootstrapConfigSchema>;
 export interface WorkerBootstrapDependencies extends OpenSandboxWorkspaceDependencies {
@@ -59,7 +61,7 @@ const actions: Record<WorkerBootstrapIssueCode, string> = {
   runtime_required: 'Supply the fixed OpenSandbox deployment settings and workspace limits.',
   workspace_limits_exceed_generation: 'Keep workspace maxOutputBytes and timeoutMs within the corresponding generation limits.',
   lifecycle_authority_required: 'Inject deployment code implementing preflight, stopAndVerify, collectFrozen, and destroyAndVerify; a JSON declaration cannot establish lifecycle authority.',
-  workspace_resolver_required: 'Inject a trusted resolver for already prepared, authorized workspace identities and exact evaluation bindings.',
+  workspace_resolver_required: 'Configure preparedWorkspaces for the built-in exact prepared-workspace resolver, or inject a trusted resolver. Evaluation exports still require their dedicated resolver.',
   api_key_required: 'Provision the nonempty credential in the environment variable explicitly named by runtime.apiKeyEnv.',
 };
 const report = (codes: WorkerBootstrapIssueCode[], disabled = false): WorkerBootstrapInspection => ({
@@ -72,6 +74,32 @@ function authorityPresent(authority: WorkerBootstrapDependencies['authority']): 
     .every(method => typeof authority[method as keyof typeof authority] === 'function');
 }
 
+/** Only the existing built-in resolver factory is available from JSON. It reads
+ * no workspace until invoked by execution; lifecycle authority is never invented. */
+function withPreparedResolver(config: z.output<typeof WorkerBootstrapConfigSchema>, deps: WorkerBootstrapDependencies): WorkerBootstrapDependencies {
+  if (!config.preparedWorkspaces) return deps;
+  if (deps.resolveWorkspace) throw new Error('Choose either the built-in prepared resolver or an injected resolver');
+  return { ...deps, resolveWorkspace: createPreparedWorkspaceResolver(config.preparedWorkspaces) };
+}
+
+/** Presence-only inspection: environment names can be enumerated, but secret
+ * values, credential files, resolver targets and lifecycle operations are not read. */
+export function preflightWorkerBootstrap(raw: unknown, environmentNames: ReadonlySet<string> = new Set(), deps: WorkerBootstrapDependencies = {}) {
+  const parsed = WorkerBootstrapConfigSchema.safeParse(raw === undefined ? {} : raw);
+  const name = parsed.success ? parsed.data.runtime?.apiKeyEnv : undefined;
+  const present = name !== undefined && environmentNames.has(name);
+  // Placeholder is used ONLY by the pure inspector, never composition or a backend.
+  const inspection = inspectWorkerBootstrap(raw, { ...deps, environment: name && present ? { [name]: 'presence-only-not-a-credential' } : {} });
+  return { ...inspection, configuration: parsed.success ? 'schema-valid' : 'invalid',
+    resolver: parsed.success && parsed.data.preparedWorkspaces ? 'built-in-prepared-workspace-resolver'
+      : deps.resolveWorkspace ? 'injected' : 'missing',
+    resolverVerification: 'not_run', lifecycleAuthority: authorityPresent(deps.authority) ? 'injected-not-verified' : 'missing-no-built-in-production-factory',
+    credential: { environmentName: name ?? null, presence: name ? present ? 'name-present-value-unread' : 'name-absent' : 'not-configured',
+      valueRead: false, authentication: 'not_verified' },
+    modelExecution: 'not_run', allocation: 'not_performed', authorization: 'not_created_or_assumed',
+    note: 'Valid configuration and a present environment name do not establish a nonempty credential, authentication, deployment authorization or runtime readiness.' };
+}
+
 /** Pure wiring inspection. Does not invoke resolver, authority, SDK, preflight or reserve.
  * Configured means dependencies are present, not that deployment checks have passed.
  */
@@ -79,6 +107,7 @@ export function inspectWorkerBootstrap(raw: unknown = undefined, deps: WorkerBoo
   const parsed = WorkerBootstrapConfigSchema.safeParse(raw === undefined ? {} : raw);
   if (!parsed.success) return report(['invalid_configuration']);
   const config = parsed.data;
+  try { deps = withPreparedResolver(config, deps); } catch { return report(['invalid_configuration']); }
   const issues: WorkerBootstrapIssueCode[] = [];
   if (!config.enabled) issues.push('disabled');
   if (!config.model) issues.push('model_required');
@@ -111,6 +140,7 @@ export function composeWorkerApplication(raw: unknown, deps: WorkerBootstrapDepe
   const inspection = inspectWorkerBootstrap(raw, deps);
   if (inspection.status !== 'configured') throw new WorkerBootstrapBlockedError(inspection);
   const config = WorkerBootstrapConfigSchema.parse(raw), runtime = config.runtime!;
+  deps = withPreparedResolver(config, deps);
   const { id, backend: _backend, apiKeyEnv, limits, ...settings } = runtime;
   const backend = createOpenSandboxWorkspaceBackend({ ...settings, apiKey: (deps.environment ?? process.env)[apiKeyEnv]! }, {
     authority: deps.authority, createSandbox: deps.createSandbox, transfer: deps.transfer,

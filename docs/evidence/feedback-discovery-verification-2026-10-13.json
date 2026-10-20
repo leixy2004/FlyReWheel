@@ -1,0 +1,159 @@
+{
+  "status": "passed",
+  "directory": "/tmp/flyrewheel-feedback-discovery-final",
+  "commands": [
+    {
+      "args": [
+        "reviews",
+        "demo"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "/tmp/flyrewheel-feedback-discovery-final/note.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--rule-digest",
+        "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed",
+        "--source",
+        "fixture",
+        "--limit",
+        "1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--rule-digest",
+        "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed",
+        "--source",
+        "fixture",
+        "--after",
+        "catalog-authored-note",
+        "--limit",
+        "1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--rule-digest",
+        "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed",
+        "--source",
+        "fixture",
+        "--after",
+        "semantic-review-demo-note"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "list",
+        "--source",
+        "local-human-declared"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "catalog-authored-note"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "rules",
+        "show",
+        "--digest",
+        "05922ee97f8694a6de1eb38cf26c28605c797210b386259f5bb4238398e7aaed"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "reviews",
+        "show",
+        "--id",
+        "review_f83b6ef8b2d5e5d03ae0a5f0be2a6865c369e93551a28988162c94997800d718"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "request",
+        "--file",
+        "/tmp/flyrewheel-feedback-discovery-final/request-input.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "add",
+        "--file",
+        "/tmp/flyrewheel-feedback-discovery-final/later.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "revisions",
+        "show",
+        "--digest",
+        "fb2967561ce341287fa581c785e84cc74853f81f3aac5a87c9038ecb08b10ac2"
+      ],
+      "exitCode": 0
+    },
+    {
+      "args": [
+        "feedback",
+        "show",
+        "--id",
+        "catalog-authored-note"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "checks": [
+    "compiled cross-process feedback add/list/show",
+    "source filter and ID pagination",
+    "exact rule/review links",
+    "fixture feedback retains Unknown verdict",
+    "discovered ID freezes exact revision binding",
+    "later feedback leaves frozen request unchanged"
+  ],
+  "inputs": "authored synthetic review-demo source, judgments and feedback",
+  "realRepositorySourceEvaluated": false,
+  "modelExecution": "not_run",
+  "realDeveloperFeedback": false,
+  "revisionGeneration": "not_run",
+  "governanceMutation": "not_performed",
+  "credentials": "not_read",
+  "W1": "not_read",
+  "externalPublication": "not_performed",
+  "implementationBase": "44a59e56947455cf334dc40ce3319afa69b8b502",
+  "validation": {
+    "typecheck": "passed",
+    "build": "passed",
+    "targetedTest": "discovers exact feedback across reviews with intersecting filters and ID pagination for revision selection",
+    "targetedTestResult": "1 passed; 11 unrelated tests skipped"
+  }
+}

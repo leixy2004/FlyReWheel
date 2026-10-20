@@ -2,7 +2,7 @@ import {it,expect} from 'vitest';
 import {mkdtempSync,writeFileSync,rmSync,existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {TrialGuard,TRIAL_WORKER_IMAGE,TRIAL_EXECD_IMAGE,observeRequest,startupCategories,errorCategory} from '../scripts/opensandbox-smoke-request.js';
+import {TrialGuard,TRIAL_WORKER_IMAGE,TRIAL_EXECD_IMAGE,observeRequest,startupCategories,errorCategory,noNewPrivilegesEnabled} from '../scripts/opensandbox-smoke-request.js';
 function fixture(changes:object={}){
  const dir=mkdtempSync(join(tmpdir(),'trial-offline-'));const now=Date.now();
  writeFileSync(join(dir,'admission.json'),JSON.stringify({schema:1,workerImage:TRIAL_WORKER_IMAGE,execdImage:TRIAL_EXECD_IMAGE,owner:'fixture',network:'fixture-net',approvalReference:'fixture-only',startedUnixMs:now-100,deadlineUnixMs:now+60000,...changes}),{mode:0o600});
@@ -57,4 +57,11 @@ it('two competing processes can consume the persistent claim only once',async()=
   p.once('error',reject);p.once('exit',resolve);
  });
  try{expect((await Promise.all([run(),run()])).sort()).toEqual([0,2]);}finally{f.done();}
+});
+
+it('accepts upstream explicit no-new-privileges=true while rejecting disabled or ambiguous policy',()=>{
+ expect(noNewPrivilegesEnabled(['no-new-privileges=true'])).toBe(true);
+ expect(noNewPrivilegesEnabled(['no-new-privileges','seccomp=fixture'])).toBe(true);
+ for(const value of [undefined,[],['no-new-privileges=false'],['no-new-privileges=true','no-new-privileges=false'],['no-new-privileges=garbage']])
+  expect(noNewPrivilegesEnabled(value)).toBe(false);
 });

@@ -1,0 +1,89 @@
+{
+  "status": "passed",
+  "source": "authored temporary Git fixture and injected backend",
+  "modelCalls": 0,
+  "productionIsolationTested": false,
+  "results": [
+    {
+      "verifiedStop": true,
+      "execution": "cancelled",
+      "cleanup": "verified",
+      "stages": [
+        "stop",
+        "collect",
+        "destroy"
+      ],
+      "lifecycle": [
+        "lease-acquired",
+        "host-workspace-verified",
+        "runtime-reserved",
+        "runtime-workspace-verified",
+        "worker-started",
+        "stop-verified",
+        "evidence-collected",
+        "destroy-verified",
+        "lease-released"
+      ]
+    },
+    {
+      "verifiedStop": false,
+      "execution": "cancelled",
+      "cleanup": "retained-for-recovery",
+      "stages": [
+        "stop"
+      ],
+      "lifecycle": [
+        "lease-acquired",
+        "host-workspace-verified",
+        "runtime-reserved",
+        "runtime-workspace-verified",
+        "worker-started"
+      ]
+    }
+  ],
+  "calls": [
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 0
+    },
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    }
+  ]
+}

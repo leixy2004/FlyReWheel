@@ -17,6 +17,7 @@ export function evaluationGenerationContext(evaluation: EvaluationWorkspaceBindi
  * This also rejects unavailable baseTip/mergeBase objects before runtime access. */
 export async function recaptureEvaluationSnapshot(snapshot: StoredChangeSnapshot, repositoryPath: string): Promise<void> {
   const frozen = snapshot.snapshot;
+  if (frozen.comparison !== 'merge-base-to-head') throw new Error('Evaluation workspaces require merge-base evidence; direct-parent scope is unsupported');
   const recaptured = await captureChangeSnapshot({ repositoryPath, repositoryId: frozen.repository.id,
     baseTip: frozen.baseTip, head: frozen.head, limits: frozen.limits,
     ...(frozen.prMetadata ? { prMetadata: frozen.prMetadata } : {}) });

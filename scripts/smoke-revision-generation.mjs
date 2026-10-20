@@ -14,6 +14,9 @@ const { prepareWorkspace, cleanupWorkspace } = await fromDist('workspace/index.j
 const { captureRepositoryContext, makeRepositoryContextAnchor, makeRepositoryContextEvidence } = await fromDist('repository-context.js');
 const { revisionRepositoryContextBindings } = await fromDist('revision-generation.js');
 const contextEnabled = process.argv.includes('--context');
+const continuationEnabled = process.argv.includes('--continuation');
+if (continuationEnabled && !contextEnabled) throw new Error('--continuation requires --context');
+const { runReviewContinuation, reviewContinuationStatus } = await fromDist('review-continuation.js');
 const { captureChangeSnapshot } = await fromDist('change-snapshot.js');
 const { sourceDigest } = await fromDist('adapters/candidates.js');
 const { makeReviewEvidence, makeSnapshotAnchor } = await fromDist('adapters/semantic-review-fixture.js');
@@ -87,8 +90,12 @@ try {
   const limits = { maxInputBytes: 262144, maxOutputBytes: 131072, maxArtifactBytes: 4096, maxArtifacts: 2, timeoutMs: 3000, cleanupTimeoutMs: 1500 };
   let runtimeExecutions = 0;
   const backend = { kind: 'authored-test-no-isolation', reserve(request, record) {
-    assert.equal(request.outputContract, contextEnabled ? 'rule-revision-v3' : 'rule-revision-v2');
-    if (contextEnabled) { assert.ok(request.prompt.includes(policySource.trim())); assert.ok(!request.prompt.includes('UNCITED_CONTEXT_SENTINEL')); assert.ok(!request.prompt.includes('bytesBase64')); } assert.equal(request.toolPolicy, 'selected-evidence-no-tools-v1'); assert.equal(request.expectedSha, head);
+    if (request.outputContract === 'semantic-review-v3') {
+      assert.ok(continuationEnabled); assert.equal(request.toolPolicy, 'full-repo-shell-v1');
+    } else {
+      assert.equal(request.outputContract, contextEnabled ? 'rule-revision-v3' : 'rule-revision-v2');
+      if (contextEnabled) { assert.ok(request.prompt.includes(policySource.trim())); assert.ok(!request.prompt.includes('UNCITED_CONTEXT_SENTINEL')); assert.ok(!request.prompt.includes('bytesBase64')); } assert.equal(request.toolPolicy, 'selected-evidence-no-tools-v1'); assert.equal(request.expectedSha, head);
+    }
     return { async prepare() { return { expectedSha: head, headSha: head, clean: true, identityValid: true, historyPolicy: 'all-local-refs-v1' }; },
       async execute(signal) {
         runtimeExecutions++;
@@ -141,9 +148,27 @@ try {
   const protectedEdit = await generateRuleRevision(store, { ...options, candidateId: 'compiled-protected-edit' }, config, { id: 'compiled-authored-runtime', backend, limits });
   assert.equal(protectedEdit.execution, 'failed'); assert.match(protectedEdit.error, /preserve invariant/);
   assert.equal((await store.listRevisionCandidates()).length, 1); assert.equal((await store.listRuleVersions()).length, 2);
+  let continuationStatus = null;
+  if (continuationEnabled) {
+    const outcome = outcomes.find(item => item.outcome.result.operator === 'request_context');
+    const originalFinding = await store.getReviewFinding(finding.id);
+    const selected = await store.createReviewContinuation({ id: 'compiled-continuation', outcomeDigest: outcome.digest,
+      findingId: finding.id, repositoryContextDigests: reviewOptions.repositoryContextDigests, workspaceId: 'compiled-review', attempt: 'context-followup' });
+    const { schemaVersion, kind, ...reviewResponse } = fixtures(baseRule, ['violation', 'safe']);
+    await setResponse(reviewResponse);
+    const dependencies = { store, config, runtime: { id: 'compiled-authored-runtime', backend, limits }, resolveWorkspace: async () => workspace };
+    continuationStatus = await runReviewContinuation(dependencies, selected.digest, new AbortController().signal);
+    assert.equal(continuationStatus.state, 'completed'); assert.equal(continuationStatus.assessment, 'safe');
+    assert.equal(continuationStatus.result.modelExecution, 'not_run');
+    const executed = runtimeExecutions;
+    assert.deepEqual(await runReviewContinuation(dependencies, selected.digest, new AbortController().signal), continuationStatus);
+    assert.equal(runtimeExecutions, executed); assert.deepEqual(await store.getReviewFinding(finding.id), originalFinding);
+    assert.deepEqual(await store.getRevisionOutcome(outcome.digest), outcome);
+  }
   assert.equal((await cleanupWorkspace(workspace)).record.status, 'closed-clean');
   if (contextEnabled) await rm(repoPath, { recursive: true, force: true });
   await store.close(); store = await QualEvoStore.openPGlite(dbPath);
+  if (continuationStatus) assert.deepEqual(await reviewContinuationStatus(store, continuationStatus.digest), continuationStatus);
   assert.deepEqual(await store.getRevisionCandidate(saved.digest), saved); assert.deepEqual(await store.getRevisionComparison(comparison.digest), comparison); assert.deepEqual(await store.getRevisionDecision(decision.digest), decision);
   for (const outcome of outcomes) assert.deepEqual(await store.getRevisionOutcome(outcome.digest), outcome);
   assert.equal(await store.getActive(baseInput.ruleId), null);
@@ -270,6 +295,7 @@ try {
     requestDigest: request.digest, candidateDigest: saved.digest, ruleDigest: rule.digest, source: saved.candidate.source,
     protocol: result.executionReceipt.workerResult.outputContract, sessionId: result.executionReceipt.workerResult.sessionId,
     policyVersion: saved.candidate.policyVersion, operator: saved.candidate.operator,
+    explicitContinuation: continuationStatus,
     persistedNonMutationOperators: outcomes.map(item => item.outcome.result.operator),
     diagnosisMutationMismatch: 'rejected', protectedBoundaryEdit: 'rejected',
     diagnosis: saved.candidate.diagnosis, comparison: comparison.comparison.summary, regression: regression.comparison.summary,

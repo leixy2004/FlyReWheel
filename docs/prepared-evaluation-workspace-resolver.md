@@ -55,11 +55,9 @@ lease and does not guarantee the repository remains unchanged afterward.
 
 ## Bounded CLI inspection
 
-Integration must import `registerEvaluationWorkspaceCommands` from
-`./cli-evaluation-workspace.js` in `src/cli.ts` and call it with the existing
-`evaluation` command. This lane leaves that shared-file registration to the main
-integrator. After registration, preparation, and saving the exact registry and
-selection JSON, the default CLI can perform a read-only lookup:
+The default `src/cli.ts` registers `registerEvaluationWorkspaceCommands` on its
+`evaluation` command. After preparing and saving the exact registry and selection
+JSON, the default CLI can perform a read-only lookup:
 
 ```sh
 timeout --kill-after=5s 90s npm run cli -- evaluation workspace resolve \
@@ -82,12 +80,9 @@ separately validated execution configuration.
 
 ## Native study command chain
 
-Before main registration, use the identical source command chain directly with
-`node --import tsx experiments/matched-revision/native-evaluation-cli.ts native --help`.
-Replace `npm run cli -- evaluation` in the examples with that entrypoint.
-
-After main registers the existing command module, the same source CLI provides
-`evaluation native init-authored`, `init-w0`, and `run`. The deployment build
+The registered default source CLI provides `evaluation native init-authored`,
+`init-w0`, and `run`. The [offline reproducibility guide](offline-reproducibility.md)
+provides complete copyable commands with all input files and reopen. The deployment build
 intentionally excludes research fixtures; compiled deployment commands explain
 that this offline research flow requires the source checkout and `tsx`. They do
 not fall back to production execution.

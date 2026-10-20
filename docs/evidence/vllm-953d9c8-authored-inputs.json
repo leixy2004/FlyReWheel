@@ -1,0 +1,393 @@
+{
+  "purpose": "Authored input records for software compatibility against real fixed vLLM source; no semantic quality claim",
+  "sourceCommit": "953d9c820b0d8f9a55ee455814287536a498498c",
+  "sourceProvenance": "vllm-953d9c8-cli-compatibility-2026-10-13.json",
+  "inputs": {
+    "base-plan-input.json": {
+      "id": "vllm-baseline-plan",
+      "repository": "github.com/vllm-project/vllm",
+      "paths": [
+        "vllm/utils/network_utils.py"
+      ],
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "workspaceId": "offline-no-vllm-execution"
+    },
+    "base-register-input.json": {
+      "namespace": "local-semantic-review",
+      "scopeDigest": "8203e46f3e4827f48f9068109804f5eff98f26d07cecc8daab9f9955c329450a",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "reason": "Explicit local-only compatibility operation; no endorsement",
+      "createdAt": "2026-10-13T00:00:00Z",
+      "id": "vllm-base-register",
+      "ruleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "action": "register",
+      "expectedHeadDigest": null
+    },
+    "base-shadow-input.json": {
+      "namespace": "local-semantic-review",
+      "scopeDigest": "8203e46f3e4827f48f9068109804f5eff98f26d07cecc8daab9f9955c329450a",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "reason": "Explicit local-only compatibility operation; no endorsement",
+      "createdAt": "2026-10-13T00:00:00Z",
+      "id": "vllm-base-bootstrap",
+      "ruleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "action": "bootstrap-shadow",
+      "expectedHeadDigest": "aa15ba6718eb6df4772ca49a5ad6f411ceb05e3145a60c897f3965859a790519"
+    },
+    "candidate-register-input.json": {
+      "namespace": "local-semantic-review",
+      "scopeDigest": "8203e46f3e4827f48f9068109804f5eff98f26d07cecc8daab9f9955c329450a",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "reason": "Explicit local-only compatibility operation; no endorsement",
+      "createdAt": "2026-10-13T00:00:00Z",
+      "id": "vllm-candidate-register",
+      "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+      "action": "register",
+      "expectedHeadDigest": "edeccaf613fdb3ef884a8767461d74db2bf9e2a2f05735dad239f1394928c574"
+    },
+    "candidate-shadow-input.json": {
+      "namespace": "local-semantic-review",
+      "scopeDigest": "8203e46f3e4827f48f9068109804f5eff98f26d07cecc8daab9f9955c329450a",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "reason": "Explicit local-only compatibility operation; no endorsement",
+      "createdAt": "2026-10-13T00:00:00Z",
+      "id": "vllm-supersede",
+      "ruleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "action": "supersede",
+      "expectedHeadDigest": "0e6e41956c58ebd1b918c72fb6abf7a5d96382c9faab3f1e7ed5a8359a040f80",
+      "successor": {
+        "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+        "scopeDigest": "8203e46f3e4827f48f9068109804f5eff98f26d07cecc8daab9f9955c329450a"
+      },
+      "decisionDigest": "b7ba5de7813d769ec7d63b549fee7ee4e448fa3c9b37000f0140b7b1b70bb8e0"
+    },
+    "comparison-input.json": {
+      "id": "vllm-authored-comparison",
+      "requestDigest": "07770c63b07547c495dfef5b55068f0e3d86ce085a0f1569a0c05f1d425e377a",
+      "candidateRuleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+      "reviewPairs": [
+        {
+          "baseReviewId": "review_6ccc758ce4f2c3cbc2189cd52c20a5de28998ed26be07a7ed891271353d55bd1",
+          "candidateReviewId": "review_57900cb22ebb42af5f43cc4089a6a8a8a322f948685b1a137b82b54a1d9979f3"
+        }
+      ],
+      "caseBindings": [
+        {
+          "caseId": "vllm-fixed-signature-case",
+          "baseReviewId": "review_6ccc758ce4f2c3cbc2189cd52c20a5de28998ed26be07a7ed891271353d55bd1"
+        }
+      ]
+    },
+    "decision-input.json": {
+      "id": "vllm-authored-accept",
+      "comparisonDigest": "877b950ee6f1b0510306e431ea8e5842242c617ec1e3d5d5a7a630f831fc7a8c",
+      "choice": "accept",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "reason": "Accept only for explicit local compatibility walkthrough; authored results are not semantic evidence of improvement",
+      "createdAt": "2026-10-13T00:00:00Z"
+    },
+    "export-batch-input.json": {
+      "id": "vllm-governed-export",
+      "jobs": [
+        {
+          "schemaVersion": 1,
+          "workspaceId": "offline-no-vllm-execution",
+          "attempt": "initial",
+          "kind": "semantic-review",
+          "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+          "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+          "governancePlanDigest": "c70d4803aa928018200188b440db66150ec5bd96d7d323d1cd854b19bf951506",
+          "offlineFixtureDigest": "92518a33cb856bc752c9e1fe3dcc61e7c9f678a5369ee74a72e37c2e10a09534"
+        }
+      ]
+    },
+    "feedback-input.json": {
+      "id": "vllm-authored-fp",
+      "findingId": "review_finding_83d7acabf26092bd0d2d7c89277734740ed9021a8542553c6f7a5e45508b0888",
+      "reviewId": "review_6ccc758ce4f2c3cbc2189cd52c20a5de28998ed26be07a7ed891271353d55bd1",
+      "ruleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "ruleVersion": "authored-base",
+      "source": "fixture",
+      "actor": "authored-compatibility-probe",
+      "kind": "label",
+      "label": "FP",
+      "reason": "Authored correction at an already annotated real signature to exercise the workflow, not real developer feedback",
+      "createdAt": "2026-10-13T00:00:00Z"
+    },
+    "next-plan-input.json": {
+      "id": "vllm-followup-plan",
+      "repository": "github.com/vllm-project/vllm",
+      "paths": [
+        "vllm/utils/network_utils.py"
+      ],
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "workspaceId": "offline-no-vllm-execution"
+    },
+    "request-input.json": {
+      "id": "vllm-authored-request",
+      "baseRuleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "requestedRuleVersion": "authored-candidate",
+      "feedbackIds": [
+        "vllm-authored-fp"
+      ],
+      "requestedChange": "Explicit authored clarification to avoid flagging the selected typed signature",
+      "actor": "authored-compatibility-probe",
+      "source": "fixture",
+      "createdAt": "2026-10-13T00:00:00Z"
+    },
+    "base-rule.json": {
+      "schemaVersion": 2,
+      "ruleId": "vllm-annotation-compatibility",
+      "version": "authored-base",
+      "semantics": {
+        "title": "Annotation review compatibility probe",
+        "mechanism": "Authored inspection of a Python signature",
+        "invariant": "Inspect explicit parameter and return annotations",
+        "applicability": [
+          "Selected network helper signature only"
+        ],
+        "exceptions": [],
+        "requiredContext": [],
+        "expectedBehavior": "Authored baseline response deliberately flags the typed signature to exercise feedback; not a real defect claim"
+      },
+      "scope": {
+        "repositories": [
+          "github.com/vllm-project/vllm"
+        ],
+        "paths": {
+          "include": [
+            "vllm/utils/network_utils.py"
+          ],
+          "exclude": []
+        }
+      },
+      "regressionCases": [
+        {
+          "caseId": "vllm-fixed-signature-case",
+          "role": "negative"
+        }
+      ],
+      "provenance": {
+        "sourceCases": [
+          {
+            "caseId": "vllm-fixed-signature-case",
+            "repository": "github.com/vllm-project/vllm",
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "path": "vllm/utils/network_utils.py",
+            "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2"
+          }
+        ],
+        "parentDigest": null,
+        "author": "authored-compatibility-probe",
+        "createdAt": "2026-10-13T00:00:00Z",
+        "rationale": "Explicit manual rule over authentic source, not mined by a model; no quality inference"
+      }
+    },
+    "candidate-rule.json": {
+      "schemaVersion": 2,
+      "ruleId": "vllm-annotation-compatibility",
+      "version": "authored-candidate",
+      "semantics": {
+        "title": "Annotation review compatibility probe",
+        "mechanism": "Authored inspection of a Python signature",
+        "invariant": "Inspect explicit parameter and return annotations",
+        "applicability": [
+          "Selected network helper signature only"
+        ],
+        "exceptions": [
+          "An explicitly annotated parameter and return signature is not missing annotations"
+        ],
+        "requiredContext": [],
+        "expectedBehavior": "Authored candidate response marks the selected typed signature safe; no model quality claim"
+      },
+      "scope": {
+        "repositories": [
+          "github.com/vllm-project/vllm"
+        ],
+        "paths": {
+          "include": [
+            "vllm/utils/network_utils.py"
+          ],
+          "exclude": []
+        }
+      },
+      "regressionCases": [
+        {
+          "caseId": "vllm-fixed-signature-case",
+          "role": "negative"
+        }
+      ],
+      "provenance": {
+        "sourceCases": [
+          {
+            "caseId": "vllm-fixed-signature-case",
+            "repository": "github.com/vllm-project/vllm",
+            "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+            "path": "vllm/utils/network_utils.py",
+            "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2"
+          }
+        ],
+        "parentDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+        "author": "authored-compatibility-probe",
+        "createdAt": "2026-10-13T00:00:00Z",
+        "rationale": "Manually authored compatibility candidate, not generated from feedback by a model"
+      }
+    },
+    "cases.json": [
+      {
+        "id": "vllm-fixed-signature-case",
+        "lineageId": "vllm-fixed-signature-case",
+        "split": "training",
+        "expected": "safe",
+        "title": "Real vLLM source; authored safe expectation solely for compatibility, not independently adjudicated",
+        "repository": "github.com/vllm-project/vllm",
+        "commit": "953d9c820b0d8f9a55ee455814287536a498498c",
+        "path": "vllm/utils/network_utils.py",
+        "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+        "provenance": {
+          "kind": "imported",
+          "reference": "https://github.com/vllm-project/vllm/blob/953d9c820b0d8f9a55ee455814287536a498498c/vllm/utils/network_utils.py",
+          "reviewedBy": null,
+          "derivedFromCaseId": null
+        }
+      }
+    ],
+    "baseline-authored-response.json": {
+      "schemaVersion": 1,
+      "kind": "semantic-review-offline-fixtures",
+      "ruleDigest": "598b88981f380a651d0736146c130404155135446d2a5b962f7fa16f97490e24",
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "evidence": [
+        {
+          "id": "7fbb7d70410b337c90905c6573d393507ebe9fd67440a9766bad0e7c517f0a77",
+          "kind": "source-signature",
+          "anchor": {
+            "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+            "side": "after",
+            "path": "vllm/utils/network_utils.py",
+            "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+            "span": {
+              "start": {
+                "line": 75,
+                "column": 1,
+                "offset": 2077
+              },
+              "end": {
+                "line": 75,
+                "column": 59,
+                "offset": 2135
+              }
+            }
+          },
+          "content": "def test_loopback_bind(address: str, family: int) -> bool:"
+        }
+      ],
+      "judgments": [
+        {
+          "targetId": "b52ee5b48f9a8dca746ba009bbbb3eccc7f5ed812c4426e164604d873614f5f8",
+          "decision": "violation",
+          "reasoning": "Authored violation response solely for real-input software compatibility; no model/human quality evidence",
+          "evidenceRefs": [
+            "7fbb7d70410b337c90905c6573d393507ebe9fd67440a9766bad0e7c517f0a77"
+          ],
+          "findingAnchors": [
+            {
+              "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+              "side": "after",
+              "path": "vllm/utils/network_utils.py",
+              "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+              "span": {
+                "start": {
+                  "line": 75,
+                  "column": 1,
+                  "offset": 2077
+                },
+                "end": {
+                  "line": 75,
+                  "column": 59,
+                  "offset": 2135
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "candidate-authored-response.json": {
+      "schemaVersion": 1,
+      "kind": "semantic-review-offline-fixtures",
+      "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "evidence": [
+        {
+          "id": "7fbb7d70410b337c90905c6573d393507ebe9fd67440a9766bad0e7c517f0a77",
+          "kind": "source-signature",
+          "anchor": {
+            "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+            "side": "after",
+            "path": "vllm/utils/network_utils.py",
+            "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+            "span": {
+              "start": {
+                "line": 75,
+                "column": 1,
+                "offset": 2077
+              },
+              "end": {
+                "line": 75,
+                "column": 59,
+                "offset": 2135
+              }
+            }
+          },
+          "content": "def test_loopback_bind(address: str, family: int) -> bool:"
+        }
+      ],
+      "judgments": [
+        {
+          "targetId": "072a630464b8300c761d2d7fc8429d7109298578b9eebb88b3e646b4b32fcb78",
+          "decision": "safe",
+          "reasoning": "Authored safe response solely for real-input software compatibility; no model/human quality evidence",
+          "evidenceRefs": [
+            "7fbb7d70410b337c90905c6573d393507ebe9fd67440a9766bad0e7c517f0a77"
+          ],
+          "findingAnchors": [
+            {
+              "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+              "side": "after",
+              "path": "vllm/utils/network_utils.py",
+              "sourceDigest": "2774ac64646183fe3bb2e8d7ae9283f3c1dd8abc7146b912a30f5d4136719ac2",
+              "span": {
+                "start": {
+                  "line": 75,
+                  "column": 1,
+                  "offset": 2077
+                },
+                "end": {
+                  "line": 75,
+                  "column": 59,
+                  "offset": 2135
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "executed-job.json": {
+      "schemaVersion": 1,
+      "workspaceId": "offline-no-vllm-execution",
+      "attempt": "initial",
+      "kind": "semantic-review",
+      "ruleDigest": "5e63a6a64f2afd33ef563ad05c319620a25a16da1e52281b02f0b2bd1a402789",
+      "snapshotDigest": "079496cb39edaf6b4879d5649669a3f61dedcbd1e79217dd5b35e4421f7a99e2",
+      "governancePlanDigest": "c70d4803aa928018200188b440db66150ec5bd96d7d323d1cd854b19bf951506",
+      "offlineFixtureDigest": "92518a33cb856bc752c9e1fe3dcc61e7c9f678a5369ee74a72e37c2e10a09534"
+    }
+  }
+}

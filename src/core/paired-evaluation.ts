@@ -40,7 +40,7 @@ export const EvaluationDatasetSchema = z.object({
     id: Id, repository: Text, number: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
     split: z.enum(['synthetic', 'development', 'holdout']), lineageId: Id,
     inclusionProbability: z.number().gt(0).max(1).nullable(), checkpointAt: Timestamp.nullable(),
-    checkpointEvidenceDigest: DigestSchema.nullable(), snapshot: ChangeSnapshotPackageSchema,
+    checkpointEvidenceDigest: DigestSchema.nullable(), snapshot: ChangeSnapshotPackageSchema.refine(value => value.snapshot.comparison === 'merge-base-to-head', 'Direct-parent evidence is not supported by this frozen research contract'),
   }).strict()).min(1).max(PAIRED_EVALUATION_LIMITS.prs),
 }).strict();
 export type EvaluationDataset = z.infer<typeof EvaluationDatasetSchema>;

@@ -16,7 +16,9 @@ export const GovernedReviewPlanInputSchema = LocalSemanticSelectionInputSchema.e
   id: ApplicationLogicalIdSchema, snapshotDigest: DigestSchema, workspaceId: ApplicationLogicalIdSchema,
   attempt: ApplicationLogicalIdSchema.default('initial'), evaluationExportId: ApplicationLogicalIdSchema.optional(),
   repositoryContextDigests: RepositoryContextDigestSetSchema.optional(),
-}).strict();
+  offlineFixtures: z.array(z.object({ ruleDigest: DigestSchema, fixtureDigest: DigestSchema }).strict()).min(1).max(20)
+    .refine(entries => new Set(entries.map(entry => entry.ruleDigest)).size === entries.length, 'Duplicate offline rule binding').optional(),
+}).strict().refine(value => !value.offlineFixtures || !value.evaluationExportId, 'Offline plans cannot use evaluation exports');
 export type GovernedReviewPlanInput = z.input<typeof GovernedReviewPlanInputSchema>;
 const HeadSchema = z.object({ ruleId: IdSchema, headDigest: DigestSchema }).strict();
 export const GovernedReviewPlanSchema = z.object({
@@ -39,7 +41,8 @@ export const GovernedReviewAdmissionSchema = z.object({
 export type GovernedReviewAdmission = z.infer<typeof GovernedReviewAdmissionSchema>;
 export function normalizeGovernedReviewInput(input: GovernedReviewPlanInput) {
   const value = GovernedReviewPlanInputSchema.parse(input);
-  return { ...value, paths: [...value.paths].sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b))) };
+  return { ...value, paths: [...value.paths].sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b))),
+    ...(value.offlineFixtures ? { offlineFixtures: [...value.offlineFixtures].sort((a, b) => a.ruleDigest.localeCompare(b.ruleDigest)) } : {}) };
 }
 export function governanceSelectionHeads(selection: LocalSemanticSelection) {
   const heads = new Map<string, string>();
@@ -54,6 +57,9 @@ export function deriveGovernedReviewPlan(input: GovernedReviewPlanInput, selecti
   const normalized = normalizeGovernedReviewInput(input);
   if (selection.selected.length > GOVERNED_REVIEW_LIMITS.jobs) throw new Error('Governed review exceeds 20 jobs; narrow the explicit path selection');
   if (selection.repository !== normalized.repository || digestOf(selection.paths) !== digestOf(normalized.paths)) throw new Error('Plan selection query mismatch');
+  if (normalized.offlineFixtures && (normalized.offlineFixtures.length !== selection.selected.length
+    || selection.selected.some(entry => !normalized.offlineFixtures!.some(binding => binding.ruleDigest === entry.ruleDigest))))
+    throw new Error('Offline fixtures must bind every selected rule exactly, with no extra candidates');
   const plan = GovernedReviewPlanSchema.parse({ schemaVersion: 1, kind: 'local-governed-semantic-review-plan', input: normalized,
     selection, selectionDigest: digestOf(selection), governanceHeads: governanceSelectionHeads(selection),
     admissionPolicy: 'recheck-full-registry-before-each-execution', afterAdmission: 'historical-selection-not-revoked-by-later-governance',
@@ -67,6 +73,7 @@ export function governedReviewJobs(stored: StoredGovernedReviewPlan): Extract<Ap
   return plan.selection.selected.map(entry => ApplicationJobSchema.parse({ schemaVersion: 1, kind: 'semantic-review',
     ruleDigest: entry.ruleDigest, snapshotDigest: plan.input.snapshotDigest, governancePlanDigest: stored.digest,
     workspaceId: plan.input.workspaceId, attempt: plan.input.attempt,
+    ...(plan.input.offlineFixtures ? { offlineFixtureDigest: plan.input.offlineFixtures.find(binding => binding.ruleDigest === entry.ruleDigest)!.fixtureDigest } : {}),
     ...(plan.input.repositoryContextDigests === undefined ? {} : { repositoryContextDigests: plan.input.repositoryContextDigests }),
     ...(plan.input.evaluationExportId === undefined ? {} : { evaluationExportId: plan.input.evaluationExportId }),
   }) as Extract<ApplicationJob, { kind: 'semantic-review' }>);
@@ -80,6 +87,7 @@ export async function runGovernedReviewPlan(dependencies: ApplicationDispatcherD
 /** Partial enqueue is recoverable by retrying this exact plan; execution rechecks heads again. */
 export async function enqueueGovernedReviewPlan(store: QualEvoStore, boss: PgBoss, digest: string) {
   const stored = await store.requireCurrentGovernedReviewPlan(digest), jobs = [];
+  if (stored.plan.input.offlineFixtures) throw new Error('Use reviews governed run for an authored offline plan; do not enqueue it to a workspace worker');
   for (const job of governedReviewJobs(stored)) {
     const id = await enqueueApplication(boss, job);
     jobs.push({ jobDigest: applicationJobDigest(job), jobId: applicationJobId(job), enqueued: id !== null });
@@ -92,11 +100,13 @@ export async function governedReviewStatus(store: QualEvoStore, digest: string) 
   for (const job of governedReviewJobs(stored)) {
     const jobDigest = applicationJobDigest(job), record = await store.getApplicationJob(jobDigest);
     const admission = record ? await store.getGovernedReviewAdmission(job, record.attempts) : null;
-    jobs.push({ jobDigest, jobId: applicationJobId(job), ruleDigest: job.ruleDigest, state: record?.state ?? 'not_started',
+    jobs.push({ jobDigest, jobId: applicationJobId(job), ruleDigest: job.ruleDigest,
+      ...(job.offlineFixtureDigest ? { offlineFixtureDigest: job.offlineFixtureDigest } : {}), state: record?.state ?? 'not_started',
       attempts: record?.attempts ?? 0, admission, result: record?.result ? applicationJobSummary(record.result) : null });
   }
   return { planDigest: digest, reviewSelection: 'local-governed', currentGovernance: current ? 'matches-plan' : 'stale-plan',
     state: jobs.length === 0 ? 'no_eligible_rules' : jobs.every(job => job.state === 'finished') ? 'finished' : 'pending',
+    ...(stored.plan.input.offlineFixtures ? { executionMode: 'authored-offline-fixtures' } : {}),
     selectedRules: stored.plan.selection.selected.length, excluded: stored.plan.selection.excluded,
     admissionPolicy: stored.plan.admissionPolicy, afterAdmission: stored.plan.afterAdmission, jobs,
     trust: stored.plan.selection.trust, notification: 'not_performed', certification: 'none' };

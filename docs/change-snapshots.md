@@ -167,3 +167,8 @@ No live model, provider API, authentication change, deployment, external upload,
 repository publication, scientific-effectiveness claim or full PR workflow is
 part of this checkpoint. [Verification results](verification.md) record the checks
 actually run.
+
+For a fixed original parent/child pair in a shallow or partial local object store,
+use the separate [verified direct-parent capture](direct-parent-snapshots.md)
+command. Its digest-bound limited evidence scope is rejected by PR/research
+contracts and does not weaken this command's complete-history requirements.

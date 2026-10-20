@@ -4,7 +4,7 @@
 
 本目录是唯一持续维护的 FlyReWheel 版本：基于恢复的公开提交 `7bc18b4ac4cd932d8cde12d085b1d947c7816c4e`，现已合入固定版本 Sandcastle 的工作区生命周期。重启前报告的 425 项测试对应的后续源码未找回，不能将旧结果用于当前版本；恢复范围与本次实测见[验证记录](docs/verification.md)。旁边的 `workspace-proof/` 仅保留作历史实验归档，不是第二个产品版本。
 
-当前是 **0.1 验证版本**：领域证据、真实 AST 检测、规则版本、回放、反馈、晋升门禁、队列和 Codex 适配已经实现。它尚未覆盖完整的持续治理工作流。没有调用真实模型、连接你的 Codex 账号、部署 k3s，或向任何仓库发评论。
+当前是 **0.1 验证版本**：领域证据、真实 AST 检测、规则版本、回放、反馈、晋升门禁、队列和 Codex 适配已经实现。它尚未覆盖完整的持续治理工作流。没有完成真实模型调用或部署 k3s；开发验证不等于真实效果或生产就绪。
 
 ## 为什么这样选
 
@@ -35,6 +35,12 @@
 
 ## 无账号快速运行
 
+先按[离线复现指南](docs/offline-reproducibility.md)选择路径：默认 source CLI 的
+`evaluation native init-authored/run` 可完成模拟 SDK 研究并跨进程重开；
+`evaluation native init-w0/run` 只保存六份真实 W0 上下文的 blocked 状态。
+指南提供完整输入准备和可复制命令，并分别列出模型与实际部署的前提。
+以下保留原有产品本地闭环演示；它与研究路径使用各自的 authored 输入。
+
 完整本地闭环需要 Linux、Git、Node.js 22 或更新版本，以及 npm。
 
 ```bash
@@ -48,6 +54,14 @@ node dist/cli.js closed-loop demo --out-dir .flyrewheel/closed-loop
 这条命令在同一个本地数据库中完成：真实合成 Git 历史 → PR 证据与挖掘候选 → 后续目标审查 → 精确 fixture 反馈 → 生成修订 → 同快照对照 → 本地 accept/reject。报告和 33 份带摘要的 JSON 保存在输出目录；关闭再打开数据库验证 28 个记录后才报告成功。重复命令会复用并校验既有记录。
 
 所有提案、语义判断和反馈均为 authored fixture；`modelExecution: not_run`、人工 verdict 为 `Unknown`，没有规则激活。compatible 场景保留正例并修正负例，regressed 场景验证接受被阻止。这些场景只验证功能链路，不能作为真实效果。完整命令、产物和故障恢复见[本地闭环快速上手](docs/local-closed-loop.md)。
+
+要继续验证显式治理和后续审查，使用独立输出目录：
+
+```bash
+node dist/cli.js closed-loop governance-demo --out-dir .flyrewheel/governance-loop
+```
+
+此[持久化治理示例](docs/local-governance-loop.md)复用上述闭环，显式选择获接受的修订版本进入 `local-shadow`，验证旧计划失效，并执行 authored governed review。PGlite 与模拟判断只验证功能接线；`local-shadow` 不代表生产激活，fixture 反馈不改变人工 `Unknown`。
 
 ### 旧版检测器演示
 
@@ -87,7 +101,7 @@ npm run cli -- workspace cleanup --repo /path/to/repo --run pilot-001 --attempt 
 
 通过真实 `@ai-hero/sandcastle@0.12.0` API 创建和清理工作区。不同提交可以独立编辑；同一身份不会默默复用。清理只移除已确认干净的工作区，保留分支、提交、身份记录和证据；未提交及 ignored 文件保留原地，命令返回 2，等待明确处理。详细限制、返回值和故障恢复见[工作区文档](docs/workspaces.md)。
 
-完整历史中可见后续提交，所以这不是防止未来信息泄漏的历史评测隔离。OpenSandbox 是后续执行后端选择，目前未接入、未部署；本命令不执行仓库代码，也未连接 Codex 工作区运行。暂不引入 Temporal。
+完整历史中可见后续提交，所以这不是防止未来信息泄漏的历史评测隔离。OpenSandbox 适配和离线保护已实现，单次真实试验在 SDK readiness 阶段超时；[该记录](deploy/opensandbox/README.md)不证明完整生命周期或生产就绪。本命令不执行仓库代码，也未连接 Codex 工作区运行。暂不引入 Temporal。
 
 ## 使用自己的样本
 

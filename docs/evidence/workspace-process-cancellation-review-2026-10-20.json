@@ -1,0 +1,178 @@
+{
+  "reviewedBaseHead": "80592e81d324147bce9fccbb1cde442fc0520343",
+  "date": "2026-10-20",
+  "typecheck": "passed",
+  "build": "passed",
+  "testFiles": 4,
+  "testsPassed": 69,
+  "testsFailed": 0,
+  "independentReview": "confirmed evidence error fixed; no confirmed production release defect",
+  "cliReports": {
+    "real-process-cancellation": {
+      "status": "passed",
+      "source": "real owned Linux child and same-group descendant; authored adapter, no production sandbox",
+      "modelCalls": 0,
+      "productionIsolationTested": false,
+      "adapterPrepareCollectDestroy": "authored callbacks, not production evidence",
+      "results": [
+        {
+          "verifiedStop": true,
+          "actualOwnedProcessesTerminated": true,
+          "injectedStopReceiptRefusal": false,
+          "execution": "cancelled",
+          "cleanup": "verified",
+          "stages": [
+            "stop",
+            "collect",
+            "destroy"
+          ],
+          "lifecycle": [
+            "lease-acquired",
+            "host-workspace-verified",
+            "runtime-reserved",
+            "runtime-workspace-verified",
+            "worker-started",
+            "stop-verified",
+            "evidence-collected",
+            "destroy-verified",
+            "lease-released"
+          ]
+        },
+        {
+          "verifiedStop": false,
+          "actualOwnedProcessesTerminated": true,
+          "injectedStopReceiptRefusal": true,
+          "execution": "cancelled",
+          "cleanup": "retained-for-recovery",
+          "stages": [
+            "stop"
+          ],
+          "lifecycle": [
+            "lease-acquired",
+            "host-workspace-verified",
+            "runtime-reserved",
+            "runtime-workspace-verified",
+            "worker-started"
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "operation": "prepare",
+          "exitCode": 0
+        },
+        {
+          "operation": "cancel",
+          "exitCode": 0
+        },
+        {
+          "operation": "cleanup",
+          "exitCode": 1,
+          "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+        },
+        {
+          "operation": "inspect",
+          "exitCode": 0
+        },
+        {
+          "operation": "cleanup",
+          "exitCode": 0
+        },
+        {
+          "operation": "prepare",
+          "exitCode": 0
+        },
+        {
+          "operation": "cancel",
+          "exitCode": 0
+        },
+        {
+          "operation": "cleanup",
+          "exitCode": 1,
+          "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+        },
+        {
+          "operation": "inspect",
+          "exitCode": 0
+        },
+        {
+          "operation": "cleanup",
+          "exitCode": 1,
+          "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+        }
+      ]
+    },
+    "diagnostics": {
+      "status": "passed",
+      "input": "authored local Git fixture",
+      "modelCalls": 0,
+      "productionStopVerified": false,
+      "checks": [
+        "separate owner process exited without releasing lease",
+        "old owner does not authorize release",
+        "owner token omitted",
+        "cancellation does not certify stop",
+        "missing malformed oversized linked owner retained",
+        "damaged cancellation reported",
+        "operation lock and untracked bytes reported",
+        "manifest and history unchanged"
+      ],
+      "calls": [
+        {
+          "operation": "prepare",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "cancel",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "cleanup",
+          "exitCode": 1,
+          "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 0
+        },
+        {
+          "operation": "diagnose",
+          "exitCode": 1,
+          "error": "FlyReWheel: ENOENT: no such file or directory, lstat '${ISOLATED_REPO}/.sandcastle/flyrewheel-attempts/attempt-cancel-smoke--missing'\n"
+        }
+      ]
+    }
+  }
+}

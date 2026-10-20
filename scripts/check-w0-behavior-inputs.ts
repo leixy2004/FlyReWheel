@@ -1,6 +1,5 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { parseDocument } from 'yaml';
 import { validateGithubPrEvidence } from '../src/github-pr-evidence.js';
 import { buildPrMiningModelInput } from '../src/adapters/pr-mining-model.js';
@@ -41,7 +40,7 @@ export async function checkW0BehaviorInputs() {
   return { schemaVersion: 1, kind: 'offline-w0-mining-input-and-workflow-check', items,
     upstreamRequests: 0, modelCalls: 0, independentHumanLabels: 0, behavioralOracle: 'none' };
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (await isMainModule(import.meta.url)) {
   if (!process.argv[2]) throw new Error('Supply a new output JSON path');
   await writeFile(process.argv[2], JSON.stringify(await checkW0BehaviorInputs(), null, 2) + '\n', { flag: 'wx' });
 }

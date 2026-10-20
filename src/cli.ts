@@ -1,3 +1,11 @@
+import { startLocalProcessProbe, inspectLocalProcessEvidence } from './local-process-evidence.js';
+import { registerPrMiningPreparationCommands } from './cli-pr-mining-preparation.js';
+import { bindGovernedOfflineFixtures, runGovernedOfflineReview } from './governed-review-offline.js';
+import { loadBatchFixtures } from './review-batch-cli-execution.js';
+import { registerFeedbackInspectionCommands } from './cli-feedback-inspection.js';
+import { registerLocalDevelopmentWorkspaceCommands } from './cli-local-development-workspace.js';
+import { registerReviewBatchCommands } from './cli-review-batch.js';
+import { registerReviewContinuationCommands } from './cli-review-continuation.js';
 import { GovernedReviewPlanInputSchema, governedReviewJobs, governedReviewStatus, enqueueGovernedReviewPlan } from './governed-semantic-review.js';
 import { Command } from 'commander';
 import { exportEvaluationCheckout, inspectEvaluationCheckout, EvaluationVisibilityManifestSchema, EVALUATION_CHECKOUT_LIMITS } from './workspace/evaluation-checkout.js';
@@ -19,16 +27,17 @@ import { runDemo } from './demo.js';
 import { runSemanticReviewDemo } from './review-demo.js';
 import { runRevisionComparisonDemo } from './revision-demo.js';
 import { runLocalClosedLoop } from './local-closed-loop.js';
+import { runLocalGovernanceLoop } from './local-governance-loop.js';
 import { detectAstGrep } from './adapters/index.js';
 import { bundleDigest } from './core/index.js';
 import { configuredCodex, resolveCodexExecutionConfig } from './model-runtime.js';
 import { enqueueReplay, enqueueApplication, APPLICATION_QUEUE } from './jobs.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobId, applicationJobSummary, applicationJobGovernance } from './application-job-contract.js';
 import { extractBugFixPair } from './git-evidence.js';
-import { prepareWorkspace, inspectWorkspace, cleanupWorkspace } from './workspace/index.js';
+import { prepareWorkspace, inspectWorkspace, cleanupWorkspace, cancelWorkspace, diagnoseWorkspace, listWorkspaces } from './workspace/index.js';
 import { captureRepositoryContext, readRepositoryContextPackage, verifyRepositoryContext, validateRepositoryContextForSnapshot,
   makeRepositoryContextAnchor, makeRepositoryContextEvidence } from './repository-context.js';
-import { captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
+import { captureDirectParentSnapshot, captureChangeSnapshot, ChangeSnapshotPackageSchema, SNAPSHOT_MAX_JSON_BYTES, integrityReceipt } from './change-snapshot.js';
 import { captureGithubPrEvidence } from './github-pr.js';
 import { discoverGithubPrHistory, validateHistoryPlan, HISTORY_MAX_JSON_BYTES } from './github-pr-history.js';
 import { captureGithubPrHistoryBatch, HistoryCaptureOptionsSchema } from './github-pr-history-batch.js';
@@ -152,6 +161,7 @@ databaseCommand(history, 'mining-request').requiredOption('--batch <sha256>').re
     try { await output(await store.createGithubPrHistoryMiningRequest(options.batch, number, value), options.out); } finally { await store.close(); }
   });
 const mining = cli.command('mining').description('Local PR evidence requests and supplied/fixture v2 candidates; no live synthesis or labels');
+registerPrMiningPreparationCommands(mining, output);
 databaseCommand(mining, 'request').requiredOption('--file <file>', 'Exact PR evidence/source/statement selection and authored objective')
   .option('--out <file>')
   .action(async options => {
@@ -246,6 +256,15 @@ databaseCommand(snapshots, 'capture').requiredOption('--repo <directory>').requi
     const store = await storeFor(options);
     try { await output({ ...await store.importChangeSnapshot(result.snapshot), receipt: result.receipt }, options.out); } finally { await store.close(); }
   });
+databaseCommand(snapshots, 'capture-direct-parent').description('Verify only one original parent/head edge and complete changed bytes; not complete-history evidence')
+  .requiredOption('--repo <directory>').requiredOption('--repository-id <id>', 'Caller-supplied identity')
+  .requiredOption('--parent <sha>', 'Exact original single parent SHA-1').requiredOption('--head <sha>', 'Exact child SHA-1')
+  .option('--out <file>')
+  .action(async options => {
+    const result = await captureDirectParentSnapshot({ repositoryPath: options.repo, repositoryId: options.repositoryId, baseTip: options.parent, head: options.head });
+    const store = await storeFor(options);
+    try { await output({ ...await store.importChangeSnapshot(result.snapshot), receipt: result.receipt }, options.out); } finally { await store.close(); }
+  });
 databaseCommand(snapshots, 'import').requiredOption('--file <file>', 'Frozen snapshot package; only internal integrity is checked')
   .option('--out <file>')
   .action(async options => {
@@ -268,11 +287,11 @@ databaseCommand(snapshots, 'list').option('--repository-id <id>').option('--afte
     try {
       const records = await store.listChangeSnapshots({ repositoryId: options.repositoryId, after: options.after, limit: Number(options.limit) });
       // Inventory only; use show to retrieve the bounded byte payload.
-      await output({ snapshots: records.map(({ digest, snapshot }) => ({ digest, repository: snapshot.repository, baseTip: snapshot.baseTip, mergeBase: snapshot.mergeBase, head: snapshot.head, coverage: snapshot.coverage })),
+      await output({ snapshots: records.map(({ digest, snapshot }) => ({ digest, repository: snapshot.repository, baseTip: snapshot.baseTip, mergeBase: snapshot.mergeBase, head: snapshot.head, comparison: snapshot.comparison, ...(snapshot.evidenceScope ? { evidenceScope: snapshot.evidenceScope } : {}), coverage: snapshot.coverage })),
         nextAfter: records.length ? records.at(-1)!.digest : null, receipt: integrityReceipt }, options.out);
     } finally { await store.close(); }
   });
-const reviews = cli.command('reviews').description('Local snapshot review with optional selected context packages; explicit fixtures only, no model or notifications');
+const reviews = cli.command('reviews').description('Local snapshot reviews with explicit fixtures or trusted configured execution; no notifications');
 databaseCommand(reviews, 'demo').option('--out <file>')
   .action(async options => { const store = await storeFor(options); try { await output(await runSemanticReviewDemo(store), options.out); } finally { await store.close(); } });
 databaseCommand(reviews, 'run').description('Explicit digest historical/manual replay; not governance-governed').requiredOption('--rule-digest <sha256>').requiredOption('--snapshot-digest <sha256>')
@@ -289,15 +308,30 @@ databaseCommand(reviews, 'run').description('Explicit digest historical/manual r
       if (review.coverage.targets.some(target => target.scans.some(scan => ['execution_error', 'budget_exceeded'].includes(scan.state)))) process.exitCode = 2;
     } finally { await store.close(); }
   });
+registerReviewBatchCommands(reviews, json, output);
 const governedReviews = reviews.command('governed').description('Freeze and dispatch bounded local governance-selected reviews; no implicit activation or publication');
 databaseCommand(governedReviews, 'plan').requiredOption('--file <file>', 'Strict plan input: id, repository, snapshotDigest, literal paths and trusted workspaceId')
+  .option('--offline-fixtures <files...>', 'Explicit authored response files; freeze exact digests for every selected rule')
   .option('--out <file>').action(async options => {
-    const input = GovernedReviewPlanInputSchema.parse(await json(options.file));
+    const raw = GovernedReviewPlanInputSchema.parse(await json(options.file));
+    const input = options.offlineFixtures ? bindGovernedOfflineFixtures(raw, await loadBatchFixtures(options.offlineFixtures, json)) : raw;
     const store = await storeFor(options);
     try {
       const stored = await store.createGovernedReviewPlan(input);
       await output({ ...stored, jobs: governedReviewJobs(stored), execution: 'not_run' }, options.out);
     } finally { await store.close(); }
+  });
+databaseCommand(governedReviews, 'run').description('Execute an explicitly fixture-bound governed plan locally; rechecks selection, no model or workspace')
+  .requiredOption('--digest <sha256>').requiredOption('--offline-fixtures <files...>', 'Exact authored files bound when the plan was created')
+  .option('--out <file>').action(async options => {
+    const fixtures = await loadBatchFixtures(options.offlineFixtures, json), store = await storeFor(options);
+    const controller = new AbortController(), abort = () => controller.abort();
+    process.once('SIGINT', abort); process.once('SIGTERM', abort);
+    try {
+      const result = await runGovernedOfflineReview(store, options.digest, fixtures, controller.signal);
+      await output(result, options.out);
+      if (result.jobs.some(job => job.result?.status !== 'completed')) process.exitCode = 2;
+    } finally { process.removeListener('SIGINT', abort); process.removeListener('SIGTERM', abort); await store.close(); }
   });
 databaseCommand(governedReviews, 'show').requiredOption('--digest <sha256>').option('--out <file>').action(async options => {
   const store = await storeFor(options);
@@ -313,7 +347,8 @@ databaseCommand(governedReviews, 'enqueue', { postgresOnly: true }).requiredOpti
   const store = await openSelectedStore(selection);
   try {
     // Validate before queue startup/DDL; enqueue repeats the check and workers check at admission.
-    await store.requireCurrentGovernedReviewPlan(options.digest);
+    const plan = await store.requireCurrentGovernedReviewPlan(options.digest);
+    if (plan.plan.input.offlineFixtures) throw new Error('Use reviews governed run for authored offline plans');
     await output(await withSelectedQueue(selection, boss => enqueueGovernedReviewPlan(store, boss, options.digest)), options.out);
   } finally { await store.close(); }
 });
@@ -333,6 +368,7 @@ databaseCommand(reviews, 'list').option('--rule-digest <sha256>').option('--snap
 databaseCommand(reviews, 'finding').requiredOption('--id <finding-id>').option('--out <file>')
   .action(async options => { const store = await storeFor(options); try { await output(await store.getReviewFinding(options.id), options.out); } finally { await store.close(); } });
 const feedback = cli.command('feedback').description('Append exact local finding feedback; fixture and caller-declared human sources stay separate');
+registerFeedbackInspectionCommands(feedback, output);
 databaseCommand(feedback, 'add').requiredOption('--file <file>').option('--out <file>')
   .action(async options => {
     const value = LocalReviewFeedbackSchema.parse(await json(options.file));
@@ -341,6 +377,7 @@ databaseCommand(feedback, 'add').requiredOption('--file <file>').option('--out <
   });
 const revisions = cli.command('revisions').description('Local immutable requests, generated candidates/outcomes, comparisons and declared decisions; no synthesis, activation or publication');
 registerRevisionInspectionCommands(revisions, output);
+registerReviewContinuationCommands(revisions, output);
 databaseCommand(revisions, 'request').requiredOption('--file <file>').option('--out <file>')
   .action(async options => {
     const value = RevisionRequestInputSchema.parse(await json(options.file));
@@ -415,6 +452,13 @@ databaseCommand(rules, 'list').option('--rule-id <id>', 'Exact logical rule ID')
     try { await output(await store.listRuleVersions(options.ruleId), options.out); } finally { await store.close(); }
   });
 const governance = rules.command('governance').description('Explicit local semantic-review selection and immutable history; no review, activation, certification or publication');
+databaseCommand(governance, 'preview').description('Validate an exact governance command and project its transition without writing governance records')
+  .requiredOption('--file <file>', 'Same strict command JSON accepted by governance apply').option('--out <file>')
+  .action(async options => {
+    const value = SemanticGovernanceCommandSchema.parse(await json(options.file));
+    const store = await storeFor(options);
+    try { await output(await store.previewSemanticGovernance(value), options.out); } finally { await store.close(); }
+  });
 databaseCommand(governance, 'apply').requiredOption('--file <file>', 'Strict local governance command with explicit actor, source, reason and expected head')
   .option('--out <file>')
   .action(async options => {
@@ -443,17 +487,38 @@ databaseCommand(governance, 'select').requiredOption('--repository <id>', 'Exact
     try { await output(await store.selectLocalSemanticRules(value), options.out); } finally { await store.close(); }
   });
 const workspace = cli.command('workspace').description('Local Sandcastle attempt lifecycle in a dedicated trusted Linux Git store; no code execution or sandbox launch');
+registerLocalDevelopmentWorkspaceCommands(workspace, json, output);
+const processEvidence = workspace.command('process-evidence').description('Fixed owned child evidence only; no lease recovery or arbitrary execution');
+processEvidence.command('probe').requiredOption('--directory <path>', 'New absolute evidence directory')
+  .action(async options => { const probe = await startLocalProcessProbe(options.directory); await output(await probe.stop()); });
+processEvidence.command('inspect').requiredOption('--directory <path>').requiredOption('--identity-digest <digest>')
+  .action(async options => { const result = await inspectLocalProcessEvidence(options.directory, options.identityDigest); await output(result); if (!result.childStopVerified) process.exitCode = 2; });
+
 function workspaceIdentity(command: Command) {
   return command.requiredOption('--repo <directory>', 'Full-history main repository root')
     .requiredOption('--run <id>', 'Lowercase letters/digits with single hyphens; up to 40 characters')
     .requiredOption('--attempt <id>', 'Fresh identity; cannot be reused after failure or cleanup');
 }
+workspace.command('list').description('Read-only inventory of all managed attempts, including damaged entries')
+  .requiredOption('--repo <directory>', 'Full-history main repository root')
+  .option('--filter <filter>', 'all, leased, cancelled or attention; damaged entries remain included', 'all')
+  .option('--offset <number>', 'Zero-based offset in the filtered sorted entries', '0')
+  .option('--limit <number>', 'Page size, 1–1000', '100')
+  .action(async options => output(await listWorkspaces(options.repo, { filter: options.filter,
+    offset: /^[0-9]+$/.test(options.offset) ? Number(options.offset) : NaN,
+    limit: /^[0-9]+$/.test(options.limit) ? Number(options.limit) : NaN })));
+
 workspaceIdentity(workspace.command('prepare').description('Allocate one fresh worktree at an exact base commit'))
   .requiredOption('--base <sha>', 'Full immutable SHA-1 commit to check out')
   .option('--head <sha>', 'Full immutable comparison head; defaults to base, is recorded without changing checkout')
   .action(async options => output(await prepareWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt, baseSha: options.base, headSha: options.head })));
 workspaceIdentity(workspace.command('inspect').description('Read persisted state and independently observe worktree/branch identity'))
   .action(async options => output(await inspectWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt })));
+workspaceIdentity(workspace.command('diagnose').description('Read-only lease, cancellation and cleanup blockers; never releases a lease'))
+  .action(async options => output(await diagnoseWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt })));
+workspaceIdentity(workspace.command('cancel').description('Permanently fence this attempt from execution; does not prove runtime termination'))
+  .requiredOption('--reason <reason>')
+  .action(async options => output(await cancelWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt }, options.reason)));
 workspaceIdentity(workspace.command('cleanup').description('Remove only a clean worktree; retain branches, commits, attempt history, dirty and ignored bytes'))
   .action(async options => {
     const result = await cleanupWorkspace({ repoPath: options.repo, runId: options.run, attemptId: options.attempt });
@@ -468,6 +533,9 @@ closedLoop.command('demo').description('Deterministic authored fixtures only; no
   .requiredOption('--out-dir <directory>', 'Dedicated artifact directory; rerun the same path to validate and reuse immutable records')
   .option('--db <directory>', 'Local PGlite database; defaults to <out-dir>/db')
   .action(async options => { await output(await runLocalClosedLoop({ outDir: options.outDir, db: options.db })); });
+closedLoop.command('governance-demo').description('Persistent authored feedback → revision → explicit local-shadow governance → governed review; no live model or production activation')
+  .requiredOption('--out-dir <directory>', 'Dedicated artifact directory; rerun the same path to validate and reuse immutable records')
+  .action(async options => { await output(await runLocalGovernanceLoop({ outDir: options.outDir })); });
 databaseCommand(cli, 'demo', { allowMemory: true }).option('--out <file>').action(async options => {
   const store = await storeFor(options, { allowMemory: true });
   try { await output(await runDemo(store), options.out); } finally { await store.close(); }

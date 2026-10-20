@@ -401,3 +401,11 @@ See [repository context](repository-context.md).
 The [context revision verification record](evidence/context-revision-generation-verification-2026-10-02.txt)
 and [compiled v3 smoke output](evidence/compiled-context-revision-generation-smoke-2026-10-02.json)
 record the final frozen-source aggregate checks and authored application results.
+
+### Separate explicit follow-up
+
+Product callers may now create an [explicit review continuation](review-continuations.md)
+from a stored `request_context` or `retain_rule` outcome. This binds one selected
+finding and registered context to a new review job. It does not amend the original
+outcome, execute acquisition, repair an old finding, or alter frozen experiment
+attribution. `abstain` remains ineligible, and review completion never certifies repair.

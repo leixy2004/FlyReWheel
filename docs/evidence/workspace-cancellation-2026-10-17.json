@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "source": "authored temporary Git fixture",
+  "modelCalls": 0,
+  "productionIsolationTested": false,
+  "calls": [
+    {
+      "operation": "prepare",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "cancel",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 1,
+      "error": "FlyReWheel: Workspace execution lease is active; cleanup refused\n"
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 0
+    },
+    {
+      "operation": "cleanup",
+      "exitCode": 0
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 0
+    }
+  ],
+  "checks": [
+    "durable cross-process cancellation",
+    "idempotent request",
+    "active lease prevents cleanup",
+    "cancelled attempt rejects new lease",
+    "clean removal retains cancellation and main HEAD"
+  ]
+}

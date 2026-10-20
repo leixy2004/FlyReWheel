@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { digestOf } from './core/identity.js';
+import { openDirectParentRepository } from './direct-parent-repository.js';
 import { openGitEvidenceRepository } from './git-evidence-repository.js';
 import { GitShaSchema as Sha, GitSizeSchema as Size, GitDigestSchema as Digest, GitPathSchema as Path, GitBlobSideSchema as Side,
   gitUtf8 as utf8, gitSha256 as sha256, gitBlobId as blobId, validateGitBlobSides, type GitBlobSide as SnapshotSide } from './git-object-evidence.js';
@@ -39,7 +40,8 @@ export const ChangeSnapshotSchema = z.object({
   schemaVersion: z.literal(1), kind: z.literal('git-change-snapshot'),
   repository: z.object({ id: z.string().min(1).max(300), identityVerification: z.literal('caller-supplied-unverified'), objectFormat: z.literal('sha1') }).strict(),
   baseTip: Sha, mergeBase: Sha, head: Sha,
-  comparison: z.literal('merge-base-to-head'), renamePolicy: z.literal('exact-content-only'),
+  comparison: z.enum(['merge-base-to-head', 'direct-parent-to-head']),
+  evidenceScope: z.literal('verified-direct-parent-only').optional(), renamePolicy: z.literal('exact-content-only'),
   limits: SnapshotLimitsSchema, prMetadata: PrMetadata.optional(),
   changes: z.array(Change).max(500),
   coverage: z.object({
@@ -48,6 +50,9 @@ export const ChangeSnapshotSchema = z.object({
   }).strict(),
 }).strict().superRefine((value, ctx) => {
   const invalid = (message: string) => ctx.addIssue({ code: 'custom', message });
+  if (value.comparison === 'direct-parent-to-head') {
+    if (value.evidenceScope !== 'verified-direct-parent-only' || value.baseTip !== value.mergeBase || value.head === value.baseTip || value.coverage.excludedSides !== 0) invalid('Direct-parent evidence requires explicit limited scope, parent binding and complete captured sides');
+  } else if (value.evidenceScope !== undefined) invalid('Limited-history evidence cannot declare merge-base comparison');
   if (value.changes.length > value.limits.maxChanges) invalid('Changed-entry limit exceeded');
   const oldPaths = new Set<string>(), newPaths = new Set<string>();
   let previousChange: z.infer<typeof Change> | undefined;
@@ -83,7 +88,7 @@ export type StoredChangeSnapshot = { digest: string; snapshot: ChangeSnapshot };
 
 export const SnapshotReceiptSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('package-integrity-only') }).strict(),
-  z.object({ kind: z.literal('local-git-check'), checkedAt: z.string().datetime(), repositoryPath: z.string().max(4096), gitCommonDirectory: z.string().max(4096) }).strict(),
+  z.object({ kind: z.enum(['local-git-check', 'local-direct-parent-check']), checkedAt: z.string().datetime(), repositoryPath: z.string().max(4096), gitCommonDirectory: z.string().max(4096) }).strict(),
 ]);
 /** Receipts in files are untrusted declarations; an import never adopts their verification level. */
 export const ChangeSnapshotPackageSchema = z.object({ digest: Digest, snapshot: ChangeSnapshotSchema, receipt: SnapshotReceiptSchema.optional() }).strict()
@@ -103,11 +108,23 @@ export type CaptureChangeSnapshotInput = z.infer<typeof CaptureInput>;
 /** Reads only installed Git/object data. No worktree, hooks, external diff, checkout filters or network. */
 export async function captureChangeSnapshot(input: CaptureChangeSnapshotInput) {
   const deadline = Date.now() + 120_000;
-  const options = CaptureInput.parse(input), limits = options.limits ?? { ...DEFAULT_SNAPSHOT_LIMITS };
+  const options = CaptureInput.parse(input);
   const { repositoryPath, gitCommonDirectory, gitBytes, git } = await openGitEvidenceRepository(options.repositoryPath, [options.baseTip, options.head], deadline, 'Snapshot');
   const bases = (await git('merge-base', '--all', options.baseTip, options.head)).trim().split('\n');
   if (bases.length !== 1 || !Sha.safeParse(bases[0]).success) throw new Error('Snapshot requires exactly one common merge base');
-  const mergeBase = bases[0];
+  return captureTreeDifference(options, { repositoryPath, gitCommonDirectory, gitBytes, git }, bases[0], false);
+}
+
+/** Verifies one original direct-parent edge, both trees and all changed bytes. No history completeness claim. */
+export async function captureDirectParentSnapshot(input: CaptureChangeSnapshotInput) {
+  const options = CaptureInput.parse(input);
+  const repository = await openDirectParentRepository(options.repositoryPath, options.baseTip, options.head, Date.now() + 120_000);
+  return captureTreeDifference(options, repository, options.baseTip, true);
+}
+
+async function captureTreeDifference(options: CaptureChangeSnapshotInput, repository: Awaited<ReturnType<typeof openGitEvidenceRepository>>, mergeBase: string, direct: boolean) {
+  const { repositoryPath, gitCommonDirectory, gitBytes, git } = repository;
+  const limits = options.limits ?? { ...DEFAULT_SNAPSHOT_LIMITS };
   const raw = await gitBytes('-c', 'diff.renameLimit=500', 'diff-tree', '--no-commit-id', '--raw', '-z', '-r', '--no-abbrev', '--no-ext-diff', '--no-textconv', '--ignore-submodules=none', '--find-renames=100%', mergeBase, options.head, '--');
   const tokens = utf8(raw).split('\0');
   if (tokens.pop() !== '' && raw.length) throw new Error('Incomplete Git diff inventory');
@@ -151,14 +168,16 @@ export async function captureChangeSnapshot(input: CaptureChangeSnapshotInput) {
     return { ...base, mode: side.mode as '100644' | '100755', state: 'captured', byteLength: bytes.length, sha256: digest, bytesBase64: bytes.toString('base64') };
   };
   for (const change of inventory) { change.before = await captureSide(change.before); change.after = await captureSide(change.after); }
+  if (direct && inventory.some(change => [change.before, change.after].some(side => side.state === 'excluded'))) throw new Error('Direct-parent capture requires every changed side to be a captured regular UTF-8 blob within limits; no snapshot produced');
   const sides = inventory.flatMap(change => [change.before, change.after]);
   const stored = validateChangeSnapshot({
     schemaVersion: 1, kind: 'git-change-snapshot',
     repository: { id: options.repositoryId, identityVerification: 'caller-supplied-unverified', objectFormat: 'sha1' },
-    baseTip: options.baseTip, mergeBase, head: options.head, comparison: 'merge-base-to-head', renamePolicy: 'exact-content-only',
+    baseTip: options.baseTip, mergeBase, head: options.head, comparison: direct ? 'direct-parent-to-head' : 'merge-base-to-head',
+    ...(direct ? { evidenceScope: 'verified-direct-parent-only' } : {}), renamePolicy: 'exact-content-only',
     limits, ...(options.prMetadata ? { prMetadata: options.prMetadata } : {}), changes: inventory,
     coverage: { changedPaths: inventory.length, capturedSides: sides.filter(side => side.state === 'captured').length,
       excludedSides: sides.filter(side => side.state === 'excluded').length, capturedBytes, scope: 'changed-entries-only' },
   });
-  return { ...stored, receipt: SnapshotReceiptSchema.parse({ kind: 'local-git-check', checkedAt: new Date().toISOString(), repositoryPath, gitCommonDirectory }) };
+  return { ...stored, receipt: SnapshotReceiptSchema.parse({ kind: direct ? 'local-direct-parent-check' : 'local-git-check', checkedAt: new Date().toISOString(), repositoryPath, gitCommonDirectory }) };
 }

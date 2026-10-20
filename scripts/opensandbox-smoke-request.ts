@@ -78,3 +78,10 @@ export async function observeRequest<T extends {status:number}>(
  try{const response=await send();record({status:response.status});if(category==='readiness'&&(response.status<200||response.status>=300))try{capture();}catch{}return response;}
  catch(error){record({error:errorCategory(error)});if(category==='readiness')try{capture();}catch{}throw error;}
 }
+
+/** Docker accepts a bare enabled flag or the server's explicit '=true' form. */
+export function noNewPrivilegesEnabled(options:unknown):boolean {
+ if(!Array.isArray(options))return false;
+ const flags=options.filter((value:unknown)=>typeof value==='string'&&value.startsWith('no-new-privileges'));
+ return flags.length>0&&flags.every(value=>value==='no-new-privileges'||value==='no-new-privileges=true');
+}

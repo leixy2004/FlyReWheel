@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "kind": "native-evaluation-blocked",
+  "purpose": "offline-study",
+  "execution": "blocked",
+  "executable": false,
+  "modelExecution": "not_run",
+  "providerModelCalls": 0,
+  "independentHumanLabels": 0,
+  "manifestDigest": "71796dc9f708ae5badf9157e0977a4056904b06c82ffc3cd6d81a4dea9676ca5",
+  "evaluation": {
+    "purpose": "offline-study",
+    "semantics": "verified-source-provenance-only",
+    "bindings": [
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-before",
+        "requestDigest": "94def93b43cd1278bf4118f1c99dd88e4f8ca433b91093006da5e06989fca23a",
+        "recordDigest": "27b2b38f960ccccf945f6649a9ac608a79f9aa43ecf5ded7f2b56f15788d744a",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2",
+        "allowedHeads": [
+          "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+        ],
+        "inventory": {
+          "count": 9380,
+          "expandedBytes": 49367125,
+          "digest": "68583e5246c2a79a9cacf1ccd0081ed2cdda506f799fe1e2aceabc2b3b9c9dc7"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3035-after",
+        "requestDigest": "9920cc68957ce301ee74a714fc8425fd600b2e6df7f20f4a96f747dbe9a51052",
+        "recordDigest": "712345e35434b77127b830a41e23f8d09cc56ccd3bef71dd1890ce3fea23d18b",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac",
+        "allowedHeads": [
+          "33fe111559ecdfb7d7bf9e982ea5b41c04fc55ac"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369573,
+          "digest": "6988f6b218f3d48f7bc92987b816241d0b554d55152e1fb6b36a6de73f276415"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-before",
+        "requestDigest": "d6486b5534b49a0c28d7ce92d8ec8b54617ca680b4e3a6dc37552e2c8e201f5e",
+        "recordDigest": "f5fe9c907fcf39e3e204843901a1deea1fd4e1ea2d912a070f7abde3e3d069f9",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+        "allowedHeads": [
+          "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+        ],
+        "inventory": {
+          "count": 9383,
+          "expandedBytes": 49369678,
+          "digest": "b5caff26e9a4de67e7d4eb128d956d9da3569258660f5a2448067cc335c7850d"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3031-after",
+        "requestDigest": "d90bbf204f0ab36487d38be8a24c3488ad5e33f70e68bc468344f13575007c5d",
+        "recordDigest": "c6e538cee58b7987bd8430099d84aaa3d0cd61059c9a27b5eaaeaafdae78e5ed",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "abcfb791a03affbeee40c38eb8fedd6a02accbaa",
+        "allowedHeads": [
+          "abcfb791a03affbeee40c38eb8fedd6a02accbaa"
+        ],
+        "inventory": {
+          "count": 9389,
+          "expandedBytes": 49374024,
+          "digest": "32b83d9334feee788b9921577d6f308e81db251491c8087176a90f46a4e85420"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-before",
+        "requestDigest": "faa99b5f75787ad5dac22b42aad1aaf61d2fd103767066ae35dd58f019e6d33a",
+        "recordDigest": "3fdf738c5073c7a7e9690463f06aa02e883ea9fd128e368e2ae91ad6dd307c27",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "ea3071642d12ed546d901861a5901da6fad37073",
+        "allowedHeads": [
+          "ea3071642d12ed546d901861a5901da6fad37073"
+        ],
+        "inventory": {
+          "count": 9386,
+          "expandedBytes": 49372234,
+          "digest": "56fd971d608953b6b0ede14f729630710857ebc73e0e9f4d742dc87a155bf3da"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "exportId": "httpx-w0-3036-after",
+        "requestDigest": "5e45977fab6b22c6f4d757137432be4ffb324428117e5a948a714a62c18a5507",
+        "recordDigest": "4510f4b539e2e0c2256dd9bcf3f513bfb6894384dca8461b6065c687335e73a3",
+        "repositoryId": "github:encode/httpx",
+        "checkoutSha": "7f4c512fe9db5eb0876adc2bff4153c04541006b",
+        "allowedHeads": [
+          "7f4c512fe9db5eb0876adc2bff4153c04541006b"
+        ],
+        "inventory": {
+          "count": 9394,
+          "expandedBytes": 49376949,
+          "digest": "ac2394bc9e599b0953740bbb919b3efbbd2c22aab1e3d1a93af5f0c8be57fc76"
+        }
+      }
+    ]
+  },
+  "workspaceVerification": "verified-current-prepared-exports",
+  "sourceVerification": "frozen-contexts-match-provenance-ledger",
+  "blockers": [
+    "semantic_rule_families_not_materialized",
+    "independent_human_annotations_absent",
+    "developer_feedback_absent",
+    "frozen_revision_packet_and_future_cases_absent"
+  ],
+  "nativeStudy": null,
+  "resources": "not_allocated",
+  "checkpoint": "immutable-blocked-record",
+  "digest": "c00a7715a48c66cbd7b267a3cc3b1b47fb6ad289d2e89eb4ae135b1cca69066a"
+}
