@@ -105,3 +105,6 @@ Real generation still needs the existing trusted runtime and authorization;
 semantic correctness and representativeness still need real model/human evidence.
 The explanation cannot establish causality or quality beyond its stored evidence.
 No credentials, W1 data, publication or frozen research protocol changes are involved.
+
+Before committing a governance transition, use [governance preview](governance-preview.md)
+to validate the exact command and inspect projected state without writing governance records.

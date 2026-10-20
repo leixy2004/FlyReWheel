@@ -244,3 +244,52 @@ it('rejects v1 governance but leaves its exact bundle and active registry behavi
   expect(await f.store.getSemanticGovernanceHistory(bundle.ruleId)).toEqual([]);
   expect((await f.database.query('SELECT * FROM qe_active_rules')).rows).toEqual([]);
 }, 30_000);
+
+it('previews accepted replacement without domain writes, then applies the identical event and keeps retries current', async () => {
+  const database = await openPGliteDatabase(); let readonly = false;
+  const wrapped: Database = { ...database, transaction: fn => database.transaction(tx => fn({
+    query: (async (sql: string, params?: unknown[]) => {
+      if (readonly && !/^(SELECT|LOCK TABLE)/.test(sql)) throw new Error('Preview attempted a domain write');
+      return tx.query(sql, params);
+    }) as Queryable['query'],
+  })) };
+  const f = await fixture({ database: wrapped }), decision = await accepted(f), head = await registerPair(f);
+  const command: SemanticGovernanceCommand = { ...fields(f.baseRule, 'preview-replace', head.digest), action: 'supersede',
+    successor: { ruleDigest: f.candidateRule.digest, scopeDigest: digestOf(f.candidateInput.scope) }, decisionDigest: decision.digest };
+  const before = await f.store.getSemanticGovernance(f.baseInput.ruleId);
+  readonly = true;
+  const preview = await f.store.previewSemanticGovernance(command);
+  expect(preview).toMatchObject({ status: 'ready', governanceWritesPerformed: false, currentState: before,
+    resultingState: { shadowRuleDigest: f.candidateRule.digest } });
+  expect(preview.transitions).toHaveLength(2);
+  expect(await f.store.getSemanticGovernance(f.baseInput.ruleId)).toEqual(before);
+  readonly = false;
+  expect(await f.store.applySemanticGovernance(command)).toEqual(preview.event);
+  expect(await f.store.getSemanticGovernance(f.baseInput.ruleId)).toEqual(preview.resultingState);
+  await f.store.applySemanticGovernance({ ...fields(f.candidateRule, 'preview-later-suspend', preview.event.digest), action: 'suspend' });
+  const current = await f.store.getSemanticGovernance(f.baseInput.ruleId);
+  readonly = true;
+  const retry = await f.store.previewSemanticGovernance(command);
+  expect(retry).toMatchObject({ status: 'already-applied', currentState: current, resultingState: current, transitions: [] });
+  expect(retry.event).toEqual(preview.event);
+  await expect(f.store.previewSemanticGovernance({ ...command, reason: 'changed' })).rejects.toMatchObject({ code: 'IMMUTABLE_CONFLICT' });
+}, 30_000);
+
+it('preview is not a reservation and shares evidence, scope and stale-head refusals with apply', async () => {
+  const f = await fixture(), decision = await accepted(f);
+  const registration: SemanticGovernanceCommand = { ...fields(f.candidateRule, 'preview-register', null), action: 'register' };
+  const initial = await f.store.previewSemanticGovernance(registration);
+  expect(initial.resultingState.versions[0].status).toBe('candidate');
+  expect((await f.store.getSemanticGovernanceHistory(f.baseInput.ruleId))).toEqual([]);
+  await f.store.applySemanticGovernance({ ...registration, id: 'competing-register' });
+  await expect(f.store.applySemanticGovernance(registration)).rejects.toMatchObject({ code: 'STALE_GOVERNANCE_HEAD' });
+  await expect(f.store.previewSemanticGovernance(registration)).rejects.toMatchObject({ code: 'STALE_GOVERNANCE_HEAD' });
+  const before = await f.store.getSemanticGovernance(f.baseInput.ruleId);
+  const select: SemanticGovernanceCommand = { ...fields(f.candidateRule, 'preview-select', before.headDigest), action: 'select-shadow', decisionDigest: decision.digest };
+  const rejected = await f.store.recordRevisionDecision({ ...revisionDecision(decision.decision.comparisonDigest), id: 'preview-reject', choice: 'reject' });
+  for (const input of [{ ...select, scopeDigest: '0'.repeat(64) }, { ...select, decisionDigest: rejected.digest }, { ...select, expectedHeadDigest: null }]) {
+    await expect(f.store.previewSemanticGovernance(input)).rejects.toThrow();
+    await expect(f.store.applySemanticGovernance(input)).rejects.toThrow();
+    expect(await f.store.getSemanticGovernance(f.baseInput.ruleId)).toEqual(before);
+  }
+}, 30_000);
