@@ -1,7 +1,6 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { createHash } from 'node:crypto';
 import { mkdir, open, readFile, writeFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { diagnoseW0FirstRead } from './diagnose-w0-first-read.js';
 import { runW0Capture } from './capture-w0-first-three.js';
@@ -63,6 +62,6 @@ export async function main() {
     requests: result.summary.requests, packages: result.packages.length }));
   if (result.summary.status !== 'captured_quarantined') process.exitCode = 1;
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (await isMainModule(import.meta.url)) {
   main().catch(error => { console.error(error instanceof Error && /^[A-Z_]+$/.test(error.message) ? error.message : 'PROXY_ATTEMPT_LOCAL_GATE_OR_IO_FAILED'); process.exitCode = 1; });
 }

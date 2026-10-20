@@ -1,0 +1,26 @@
+{
+  "kubernetes": "v1.34.1",
+  "sourceCommit": "93248f9ae092f571eb870b7664c534bfc7d00f03",
+  "validation": "official-openapi-3.0-offline",
+  "clusterAccess": false,
+  "unknownFieldsRejected": false,
+  "unvalidatedFormats": [
+    "int-or-string"
+  ],
+  "kubernetesExtensionsEnforced": false,
+  "profiles": [
+    {
+      "file": "base.yaml",
+      "sha256": "c2198f681e6de13afe02b51873bff0ad0f2c5a6a5536aab91c19a478484224e1",
+      "resources": 10,
+      "errors": []
+    },
+    {
+      "file": "single-node-dev.yaml",
+      "sha256": "f9a2caadc364fd90f30d969bdef148b26ec2247f2161623c00b5d9a81df37b4c",
+      "resources": 19,
+      "errors": []
+    }
+  ],
+  "passed": true
+}

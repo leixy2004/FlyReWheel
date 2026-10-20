@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "timeout",
+    "--kill-after=5s",
+    "180s",
+    "node",
+    "--import",
+    "tsx",
+    "experiments/matched-revision/native-evaluation-cli.ts",
+    "native",
+    "run",
+    "--manifest",
+    "/tmp/flyrewheel-bridge31-evidence/native-manifest.json",
+    "--checkpoint",
+    "/tmp/flyrewheel-bridge31-evidence/checkpoint",
+    "--timeout-ms",
+    "150000"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 0.7256675939988781,
+  "error": "FlyReWheel: ENOENT: no such file or directory, realpath '/tmp/flyrewheel-bridge31-evidence/derived-3035-before'\n",
+  "originalResultAndManifestBytesUnchanged": true,
+  "classification": "same run after deliberate derived-workspace cleanup rejects stale registry before returning stored result"
+}

@@ -1,0 +1,12 @@
+{
+  "kind": "authored-episode-selector-validation",
+  "implementationCommit": "bd83322",
+  "tests": {"command": "npx vitest run tests/episode-selection.test.ts --maxWorkers=1", "passed": 7},
+  "typecheck": {"command": "npx tsc --noEmit", "exitCode": 0},
+  "cli": {"command": "node --import tsx experiments/construction/episode-replay.ts NEW_DIRECTORY", "indexPR": 2, "episodeStatus": "blocked_feedback_or_gates", "indexDigest": "c0966674a4c6cd20c78fb59b41273909113057e88988a5a90fa9276b7e1a6677", "reportDigest": "b111735e3419d9fb4e2f8f5d674c9f228199913e08cf6109767b2337b607c0bd"},
+  "independentReview": "identity_audit final static review: rule/plan bindings and duplicate-family identity fixed; no remaining blocker within authored pure-projection scope",
+  "limitations": ["not a permanent cross-call freeze", "timestamps and judgments are synthetic", "no source span semantic validation", "no real W1 input"],
+  "empiricalAdmission": false,
+  "modelCalls": 0,
+  "independentHumanLabels": 0
+}

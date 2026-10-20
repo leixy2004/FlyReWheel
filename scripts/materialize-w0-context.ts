@@ -1,7 +1,7 @@
+import { isMainModule } from './lib/is-main.mjs';
 import { spawn } from 'node:child_process';
 import { appendFile, lstat, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 import { workspaceEnvironment, boundedProcessBytes } from '../src/workspace/process.js';
 import { exportEvaluationCheckout, inspectEvaluationCheckout, evaluationWorkspaceBinding, deriveEvaluationRepository, verifyEvaluationRepository, type EvaluationVisibilityManifest } from '../src/workspace/evaluation-checkout.js';
@@ -179,7 +179,7 @@ export async function runMaterialization(stage: string) {
   if (end.code !== 0) await writeFile(join(stage, 'failure-local.txt'), diagnostic, { flag: 'wx' });
   return report;
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+if (await isMainModule(import.meta.url)) {
   const { values } = parseArgs({ options: { worker: { type: 'string' }, stage: { type: 'string' } } });
   if (values.worker) await worker(resolve(values.worker));
   else if (values.stage) {

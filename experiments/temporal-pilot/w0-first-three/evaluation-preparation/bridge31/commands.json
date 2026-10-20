@@ -1,0 +1,74 @@
+[
+  {
+    "argv": [
+      "node",
+      "--import",
+      "tsx",
+      "experiments/matched-revision/native-evaluation-cli.ts",
+      "native",
+      "init-w0",
+      "--contexts",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3035-before.json",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3035-after.json",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3031-before.json",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3031-after.json",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3036-before.json",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/context-3036-after.json",
+      "--provenance",
+      "/tmp/flyrewheel-bridge31-evidence/inputs/provenance-ledger.json",
+      "--source-commit",
+      "2cb82efbefc764f2b0b04f5ec64da3601da0ef64",
+      "--registry",
+      "/tmp/flyrewheel-bridge31-evidence/registry.json",
+      "--out",
+      "/tmp/flyrewheel-bridge31-evidence/native-manifest.json"
+    ],
+    "cwd": "/tmp/flyrewheel-bridge31-check",
+    "exitCode": 0,
+    "elapsedSeconds": 0.8154575349999504
+  },
+  {
+    "argv": [
+      "timeout",
+      "--kill-after=5s",
+      "180s",
+      "node",
+      "--import",
+      "tsx",
+      "experiments/matched-revision/native-evaluation-cli.ts",
+      "native",
+      "run",
+      "--manifest",
+      "/tmp/flyrewheel-bridge31-evidence/native-manifest.json",
+      "--checkpoint",
+      "/tmp/flyrewheel-bridge31-evidence/checkpoint",
+      "--timeout-ms",
+      "150000"
+    ],
+    "cwd": "/tmp/flyrewheel-bridge31-check",
+    "exitCode": 0,
+    "elapsedSeconds": 14.069638716000554
+  },
+  {
+    "argv": [
+      "timeout",
+      "--kill-after=5s",
+      "180s",
+      "node",
+      "--import",
+      "tsx",
+      "experiments/matched-revision/native-evaluation-cli.ts",
+      "native",
+      "run",
+      "--manifest",
+      "/tmp/flyrewheel-bridge31-evidence/native-manifest.json",
+      "--checkpoint",
+      "/tmp/flyrewheel-bridge31-evidence/checkpoint",
+      "--timeout-ms",
+      "150000"
+    ],
+    "cwd": "/tmp/flyrewheel-bridge31-check",
+    "exitCode": 0,
+    "elapsedSeconds": 14.162382275999335
+  }
+]

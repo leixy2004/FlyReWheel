@@ -1,0 +1,20 @@
+import {readFile,writeFile,rm,readdir} from 'node:fs/promises';
+import {runNativeEvaluationBridge} from '/tmp/flyrewheel-bridge31-check/experiments/matched-revision/native-evaluation-bridge.ts';
+import {cleanupWorkspace} from '/tmp/flyrewheel-bridge31-check/src/workspace/index.ts';
+import {inspectEvaluationCheckout,evaluationWorkspaceBinding} from '/tmp/flyrewheel-bridge31-check/src/workspace/evaluation-checkout.ts';
+import {digestOf} from '/tmp/flyrewheel-bridge31-check/src/core/identity.ts';
+const root='/tmp/flyrewheel-bridge31-evidence';
+const manifest=JSON.parse(await readFile(`${root}/native-manifest.json`,'utf8'));const result={negatives:[],cleanup:[],baseline:[]};
+globalThis.fetch=async()=>{throw Error('NETWORK_FORBIDDEN')};
+for(const kind of ['wrong-purpose','wrong-binding']){
+ const bad=structuredClone(manifest);if(kind==='wrong-purpose')bad.purpose='production';else bad.registry.entries[0].evaluation.inventory.digest='0'.repeat(64);
+ try{await runNativeEvaluationBridge(bad,`${root}/rejected-${kind}`,new AbortController().signal);throw Error('NEGATIVE_ACCEPTED')}catch(e){if(e.message==='NEGATIVE_ACCEPTED')throw e;result.negatives.push({kind,rejected:true,error:e.message});}
+}
+for(const e of manifest.registry.entries){const c=await cleanupWorkspace(e.workspace);if(c.record.status!=='closed-clean'||c.observation.worktreeExists)throw Error('CLEANUP_FAILED');result.cleanup.push({exportId:e.evaluation.exportId,status:c.record.status,worktreeExists:c.observation.worktreeExists});await rm(e.workspace.repoPath,{recursive:true});}
+for(const c of manifest.sources.contexts){
+ const checked=await inspectEvaluationCheckout({storePath:'/tmp/flyrewheel-w0-full-context-attempt-1/exports',exportId:c.binding.exportId,manifest:c.manifest});
+ if(digestOf(evaluationWorkspaceBinding(c.binding.exportId,checked))!==digestOf(c.binding))throw Error('BASELINE_CHANGED');
+ result.baseline.push({exportId:c.binding.exportId,bindingUnchanged:true,observation:checked.observation});
+}
+await writeFile(`${root}/negative-cleanup.json`,JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({negatives:result.negatives.map(x=>x.kind),cleaned:result.cleanup.length,baselineInspected:result.baseline.length}));
