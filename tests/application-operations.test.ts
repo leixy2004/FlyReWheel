@@ -222,3 +222,50 @@ it('preflights the same revision timestamp and selected-snapshot constraints as 
     expect(fixture.calls).toEqual([]);
   } finally { await fixture.cleanup(); }
 }, 30_000);
+
+it.each(['valid-blocked', 'early-time', 'wrong-snapshot'] as const)(
+  'revision preflight %s leaves selected unregistered feedback sources available for holdout registration', async scenario => {
+    const fixture = await revisionGenerationFixture(undefined, true);
+    try {
+      const heldout = { ...fixture.cases[1], id: 'preflight-future-holdout', lineageId: 'preflight-future-holdout',
+        split: 'holdout' as const, expected: 'unknown' as const };
+      const sourceRows = async () => (await fixture.db.query('SELECT digest,split FROM qe_source_splits ORDER BY digest')).rows;
+      const before = await sourceRows();
+      expect(before.some(row => row.digest === heldout.sourceDigest)).toBe(false);
+      const job = ApplicationJobSchema.parse({ schemaVersion: 1, kind: 'revision-generation', workspaceId: 'authored-revision-workspace',
+        requestDigest: fixture.request.digest, snapshotDigest: scenario === 'wrong-snapshot' ? 'f'.repeat(64) : fixture.snapshot.digest,
+        candidateCreatedAt: scenario === 'early-time' ? '2020-01-01T00:00:00Z' : fixedTime });
+      const report = await preflightApplicationJob(fixture.store, job);
+      expect(report).toMatchObject({ status: 'blocked', execution: 'not_run', modelExecution: 'not_run' });
+      expect(report.issues.map(issue => issue.code)).toEqual([
+        ...(scenario === 'early-time' ? ['candidate_predates_request'] : scenario === 'wrong-snapshot' ? ['revision_snapshot_not_selected'] : []),
+        ...defaultIssues,
+      ]);
+      expect(await sourceRows()).toEqual(before);
+      expect(fixture.calls).toEqual([]);
+      expect((await fixture.db.query('SELECT job_digest FROM qe_application_jobs')).rows).toEqual([]);
+      await fixture.store.importProblemCase(heldout);
+      expect((await fixture.store.getProblemCase(heldout.id)).split).toBe('holdout');
+      const afterHoldout = await sourceRows();
+      const rejected = await preflightApplicationJob(fixture.store, ApplicationJobSchema.parse({ ...job, snapshotDigest: fixture.snapshot.digest, candidateCreatedAt: fixedTime }));
+      expect(rejected.issues.map(issue => issue.code)).toEqual(['domain_contract_rejected', ...defaultIssues]);
+      expect(rejected.workspace).toBeNull();
+      expect(await sourceRows()).toEqual(afterHoldout);
+      expect(fixture.calls).toEqual([]);
+    } finally { await fixture.cleanup(); }
+  }, 30_000);
+
+it('actual revision preparation still reserves selected feedback sources against later holdout import', async () => {
+  const fixture = await revisionGenerationFixture(undefined, true);
+  try {
+    const heldout = { ...fixture.cases[1], id: 'after-preparation-holdout', lineageId: 'after-preparation-holdout',
+      split: 'holdout' as const, expected: 'unknown' as const };
+    const selected = async () => (await fixture.db.query('SELECT split FROM qe_source_splits WHERE digest=$1', [heldout.sourceDigest])).rows;
+    expect(await selected()).toEqual([]);
+    await fixture.store.prepareRevisionGeneration(fixture.request.digest);
+    expect(await selected()).toEqual([{ split: 'training' }]);
+    await expect(fixture.store.importProblemCase(heldout)).rejects.toMatchObject({ code: 'SPLIT_LEAKAGE' });
+    await expect(fixture.store.getProblemCase(heldout.id)).rejects.toMatchObject({ code: 'NOT_FOUND' });
+    expect(fixture.calls).toEqual([]);
+  } finally { await fixture.cleanup(); }
+}, 30_000);
