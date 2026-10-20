@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "scope": "real fixed owned Node child; no runtime adoption, lease release or production authority",
+  "modelCalls": 0,
+  "checks": [
+    "creator-close evidence verifies after CLI restart",
+    "inspection leaves evidence unchanged",
+    "identity mismatch rejected",
+    "existing directory refused",
+    "absent/corrupt exit evidence refused",
+    "owner process exits 23 without stop; child exits on IPC disconnect",
+    "crash-side child absence does not substitute for creator evidence"
+  ],
+  "calls": [
+    {
+      "operation": "probe",
+      "exitCode": 0
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 0
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 1
+    },
+    {
+      "operation": "probe",
+      "exitCode": 1
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 2
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 1
+    },
+    {
+      "operation": "inspect",
+      "exitCode": 2
+    }
+  ],
+  "baseHead": "6c12d687b0fcc2371949c9989dc7ea264073bfac",
+  "date": "2026-10-20",
+  "validation": {
+    "typecheck": "passed",
+    "build": "passed",
+    "testFiles": 3,
+    "testsPassed": 38,
+    "testsFailed": 0,
+    "independentReview": "no confirmed defects; reviewer did not run tests"
+  }
+}

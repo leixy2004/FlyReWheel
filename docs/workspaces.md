@@ -324,3 +324,42 @@ hostile programs, sandbox isolation, crash takeover, PID reuse or production
 recovery authority. A local child close does not authorize recovery of another
 attempt. Temporary diagnostic artifacts and the intentionally retained lease
 remain available; terminated zombies may await the environment's PID 1 reaper.
+
+## Persistent evidence for a fixed owned local child
+
+```sh
+node dist/cli.js workspace process-evidence probe --directory /tmp/new-probe-evidence
+node dist/cli.js workspace process-evidence inspect --directory /tmp/new-probe-evidence --identity-digest <digest-from-probe>
+```
+
+`probe` requires a new absolute directory. It starts only an embedded Node probe,
+not repository code or a supplied command. The fixed program creates no descendants
+and exits when asked by its original creator or when its IPC owner disconnects.
+Before stopping it, the creator persists a UUID, Linux boot ID, PID, `/proc`
+start ticks and fixed-program digest. Only the original in-memory child handle
+can request stop. A three-second fallback requests SIGKILL on that same handle;
+this is not a promise of bounded kernel termination. No reopen/kill-by-PID API is
+provided. `probe` records actual child `close` evidence before returning.
+
+`inspect` can run in a new process. It requires the expected identity digest,
+validates bounded non-symlink evidence files, boot identity, current birth identity
+if the PID is present, and the creator-close evidence binding. It returns exit 2
+when stop evidence is insufficient (including a missing creator record even if
+the process is absent or zombie); malformed/mismatched evidence fails with exit 1.
+It returns exit 0 only for verified **fixed-child** exit. Checksums protect content
+integrity relative to the caller's digest, not against a malicious local writer.
+The caller should retain that digest separately. Inspection is an unlocked
+observation, does not signal a process, and never authorizes lease release.
+
+This deliberately does not bind or adopt any existing workspace attempt/runtime.
+`automaticRecovery` and `leaseReleaseAuthorized` are always false. A creator crash
+can leave only identity evidence. Even though this cooperative probe exits on IPC
+disconnection, absence is not used to invent the missing creator-close receipt.
+Production containment, escaped descendants, arbitrary crashed workloads and
+recovery ownership remain unsupported. A kernel/host crash can also lose buffered
+writes; incomplete evidence fails closed rather than authorizing takeover.
+
+Run `npm run build && node scripts/verify-local-process-evidence.mjs` for actual
+compiled CLI verification across process restart, identity mismatch, insufficient
+and corrupt evidence, normal child exit, and a separately launched owner exiting
+without recording stop. These are local owned processes, not a production sandbox.

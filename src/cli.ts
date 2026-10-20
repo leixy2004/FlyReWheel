@@ -1,3 +1,4 @@
+import { startLocalProcessProbe, inspectLocalProcessEvidence } from './local-process-evidence.js';
 import { registerPrMiningPreparationCommands } from './cli-pr-mining-preparation.js';
 import { bindGovernedOfflineFixtures, runGovernedOfflineReview } from './governed-review-offline.js';
 import { loadBatchFixtures } from './review-batch-cli-execution.js';
@@ -479,6 +480,12 @@ databaseCommand(governance, 'select').requiredOption('--repository <id>', 'Exact
   });
 const workspace = cli.command('workspace').description('Local Sandcastle attempt lifecycle in a dedicated trusted Linux Git store; no code execution or sandbox launch');
 registerLocalDevelopmentWorkspaceCommands(workspace, json, output);
+const processEvidence = workspace.command('process-evidence').description('Fixed owned child evidence only; no lease recovery or arbitrary execution');
+processEvidence.command('probe').requiredOption('--directory <path>', 'New absolute evidence directory')
+  .action(async options => { const probe = await startLocalProcessProbe(options.directory); await output(await probe.stop()); });
+processEvidence.command('inspect').requiredOption('--directory <path>').requiredOption('--identity-digest <digest>')
+  .action(async options => { const result = await inspectLocalProcessEvidence(options.directory, options.identityDigest); await output(result); if (!result.childStopVerified) process.exitCode = 2; });
+
 function workspaceIdentity(command: Command) {
   return command.requiredOption('--repo <directory>', 'Full-history main repository root')
     .requiredOption('--run <id>', 'Lowercase letters/digits with single hyphens; up to 40 characters')
