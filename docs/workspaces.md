@@ -294,3 +294,33 @@ The implementation still inspects the complete inventory to preserve damaged
 records; pagination limits output, not scan cost. Ordering is deterministic for
 an unchanged store, but concurrent additions/removals/state changes can shift
 pages. No cursor snapshot or cross-call consistency is claimed.
+
+## Real local process cancellation verification
+
+`boundedProcessBytes` accepts an optional final `AbortSignal`. A pre-aborted
+signal prevents spawning. Aborting an owned running command requests SIGKILL on
+its Linux process group by default, and rejects after the child's close event;
+with `detached=false` only the direct child is targeted. Abort listeners are
+removed when the child closes or spawn fails. Existing callers without a signal
+retain their timeout/output-bound behavior. This does not add an arbitrary
+program execution CLI or automatic abandoned-lease recovery.
+
+Run `npm run build && node scripts/verify-workspace-real-process-cancellation.mjs`
+to exercise compiled CLI cancellation while a real owned Node child and same-group
+descendant are running. The authored adapter passes the runner's AbortSignal to
+the process helper. The check observes both processes running before cancellation,
+then waits for helper completion and verifies both are absent or terminated
+zombies in Linux `/proc`. A zombie awaits the host reaper; PID existence alone
+is not proof of a running process. No signals target pre-existing processes.
+The success case releases the lease only after the adapter's stop check. A second
+case actually terminates the processes but deliberately refuses a verified stop
+receipt, demonstrating that the lease and cleanup block remain.
+
+The child code is an authored fixture, not upstream repository code or model
+output. Prepare/collect/destroy callbacks remain authored test adapters; no
+production runtime destruction is being verified. Process groups do not contain
+descendants that escape with a new session/group, and this check does not test
+hostile programs, sandbox isolation, crash takeover, PID reuse or production
+recovery authority. A local child close does not authorize recovery of another
+attempt. Temporary diagnostic artifacts and the intentionally retained lease
+remain available; terminated zombies may await the environment's PID 1 reaper.
