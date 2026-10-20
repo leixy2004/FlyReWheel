@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { EvaluationWorkspaceBindingSchema, type EvaluationWorkspaceBinding } from './workspace/history-policy.js';
 import { digestOf } from './core/identity.js';
-import type { QualEvoStore } from './storage/store.js';
+import type { QualEvoStore, ApplicationJobClaimOptions } from './storage/store.js';
 import { ApplicationJobSchema, applicationJobDigest, applicationJobSummary,
   type ApplicationJob, type ApplicationJobInput, type ApplicationJobResult } from './application-job-contract.js';
 import { createPrMiningWorkspaceModelAdapter, type PrMiningModelConfig, type PrMiningWorkspaceRuntime, type TrustedPrMiningNoCandidate } from './adapters/pr-mining-model.js';
@@ -55,12 +55,13 @@ function governanceRejection(error: unknown): 'stale_governance_plan' | 'governa
  * Inference is at-least-once across a crash before commit, never exactly-once. */
 export function createApplicationJobDispatcher(dependencies: ApplicationDispatcherDependencies) {
   const { store, resolveWorkspace, runtime, config } = dependencies;
-  return async (input: ApplicationJobInput, signal: AbortSignal) => {
+  return async (input: ApplicationJobInput, signal: AbortSignal, claimOptions: ApplicationJobClaimOptions = {}) => {
     const job = ApplicationJobSchema.parse(input), jobDigest = applicationJobDigest(job), owner = randomUUID();
     if (job.kind === 'semantic-review' && job.continuationDigest) await store.requireReviewContinuationJob(job);
-    const claim = await store.claimApplicationJob(job, owner);
+    const claim = await store.claimApplicationJob(job, owner, claimOptions);
     if (claim.state === 'finished') return applicationJobSummary(claim.record.result!);
     if (claim.state === 'busy') throw new ApplicationJobBusyError();
+    if (claim.state === 'retry-not-authorized') throw new ApplicationJobRetryError(claim.record.result!);
     const finish = async (result: ApplicationJobResult, persist?: (scoped: QualEvoStore) => Promise<void>, noCandidate?: TrustedPrMiningNoCandidate) => {
       if (result.status === 'completed' && signal.aborted)
         return retry({ status: 'failed', modelExecution: result.modelExecution, cleanup: 'verified', reason: 'cancelled' });

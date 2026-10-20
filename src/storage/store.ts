@@ -71,7 +71,10 @@ type ApplicationJobRow = {
   state: string; owner: string | null; lease_expires_at: unknown; lease_valid: boolean;
   attempts: number; result: unknown; result_digest: string | null;
 };
-export type ApplicationJobClaim = { state: 'claimed'; owner: string } | { state: 'busy' } | { state: 'finished'; record: ApplicationJobRecord };
+export type ApplicationJobClaim = { state: 'claimed'; owner: string } | { state: 'busy' }
+  | { state: 'finished' | 'retry-not-authorized'; record: ApplicationJobRecord };
+const ApplicationJobClaimOptionsSchema = z.object({ allowRetry: z.boolean().default(true) }).strict();
+export type ApplicationJobClaimOptions = z.input<typeof ApplicationJobClaimOptionsSchema>;
 const ApplicationJobOwnerSchema = z.uuid().transform(value => value.toLowerCase());
 // Exceeds the bounded 300-second execution plus all bounded cleanup steps.
 const APPLICATION_JOB_LEASE_SECONDS = 15 * 60;
@@ -287,8 +290,9 @@ export class QualEvoStore {
     if (this.applicationJobScope) fail('APPLICATION_JOB_SCOPE_INVALID', 'Application job persistence cannot mutate job claims or outcomes');
   }
   /** Claim once; an interrupted lease is terminally blocked, never silently stolen. */
-  async claimApplicationJob(raw: ApplicationJob, rawOwner: string): Promise<ApplicationJobClaim> {
+  async claimApplicationJob(raw: ApplicationJob, rawOwner: string, options: ApplicationJobClaimOptions = {}): Promise<ApplicationJobClaim> {
     this.checkApplicationJobScope();
+    const { allowRetry } = ApplicationJobClaimOptionsSchema.parse(options);
     const job = ApplicationJobSchema.parse(raw), owner = ApplicationJobOwnerSchema.parse(rawOwner), digest = applicationJobDigest(job);
     return this.db.transaction(async tx => {
       const inserted = await tx.query(`INSERT INTO qe_application_jobs(job_digest,job_payload,job_payload_digest,state,owner,lease_expires_at,attempts)
@@ -309,6 +313,9 @@ export class QualEvoStore {
         }
         return inserted.rows.length ? { state: 'claimed', owner } : { state: 'busy' };
       }
+      // The row is locked: an earlier status read cannot authorize a retry of
+      // a failure committed by a concurrent invocation before this claim.
+      if (!allowRetry) return { state: 'retry-not-authorized', record: current.record };
       const claimed = await tx.query(`UPDATE qe_application_jobs SET state='running',owner=$2,lease_expires_at=clock_timestamp() + $3 * interval '1 second',
         attempts=attempts+1,result=NULL,result_digest=NULL WHERE job_digest=$1 AND state='retryable' RETURNING job_digest`,
       [digest, owner, APPLICATION_JOB_LEASE_SECONDS]);

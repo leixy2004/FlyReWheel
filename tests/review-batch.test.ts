@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { afterEach, expect, it } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 import { Command } from 'commander';
 import { readFile } from 'node:fs/promises';
 import { QualEvoStore } from '../src/storage/store.js';
@@ -54,6 +54,38 @@ it('leaves concurrent owners alone and preserves not-started items on cancellati
   expect(status).toMatchObject({ state: 'running', counts: { running: 1, blocked: 2, completed: 0 } });
   expect(status.items[1].result).toMatchObject({ status: 'blocked', reason: 'runtime_unavailable', modelExecution: 'not_run' });
   expect(f.executions).toHaveLength(0);
+}, 30_000);
+it('requires explicit retry permission inside the claim after a concurrent batch fails', async () => {
+  const f = await fixture(), job = f.input.jobs[0], jobDigest = applicationJobDigest(job);
+  const stored = await f.store.createReviewBatch({ ...f.input, jobs: [job] });
+  let reached!: () => void, resume!: () => void;
+  const atClaim = new Promise<void>(resolve => { reached = resolve; });
+  const released = new Promise<void>(resolve => { resume = resolve; });
+  const claim = f.store.claimApplicationJob.bind(f.store);
+  const paused = vi.spyOn(f.store, 'claimApplicationJob').mockImplementationOnce(async (...args) => {
+    reached(); await released; return claim(...args);
+  });
+  f.faults.executeFailures = 1;
+  // This invocation has already read "not started", but has not claimed yet.
+  const delayed = runReviewBatch(f.dependencies, stored.digest, new AbortController().signal);
+  await atClaim;
+  try {
+    await runReviewBatch(f.dependencies, stored.digest, new AbortController().signal);
+    const failed = await f.store.getApplicationJob(jobDigest);
+    expect(failed).toMatchObject({ state: 'retryable', attempts: 1 });
+    const history = await f.store.getApplicationJobHistory(jobDigest);
+    expect(f.executions).toHaveLength(1);
+    resume();
+    expect(await delayed).toMatchObject({ counts: { retryable: 1, completed: 0 } });
+    expect(await f.store.getApplicationJob(jobDigest)).toEqual(failed);
+    expect(await f.store.getApplicationJobHistory(jobDigest)).toEqual(history);
+    expect(f.executions).toHaveLength(1);
+  } finally { resume(); await delayed; paused.mockRestore(); }
+  const retried = await runReviewBatch(f.dependencies, stored.digest, new AbortController().signal,
+    { retryJobDigests: [jobDigest] });
+  expect(retried).toMatchObject({ counts: { completed: 1, retryable: 0 } });
+  expect(retried.items[0].attempts).toBe(2);
+  expect(f.executions).toHaveLength(2);
 }, 30_000);
 it('rejects duplicate jobs, invalid references and mutations; CLI exports durable item progress', async () => {
   const f = await fixture();

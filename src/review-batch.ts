@@ -54,7 +54,7 @@ export async function runReviewBatch(dependencies: ApplicationDispatcherDependen
     const jobDigest = applicationJobDigest(job), record = await dependencies.store.getApplicationJob(jobDigest);
     if (record?.state === 'finished' || record?.state === 'running'
       || (record?.state === 'retryable' && !selected.retryJobDigests.includes(jobDigest))) continue;
-    try { await dispatch(job, signal); }
+    try { await dispatch(job, signal, { allowRetry: selected.retryJobDigests.includes(jobDigest) }); }
     catch (error) {
       signal.throwIfAborted();
       if (!(error instanceof ApplicationJobRetryError) && !(error instanceof ApplicationJobBusyError)) throw error;

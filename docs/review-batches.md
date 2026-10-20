@@ -37,6 +37,9 @@ Each review/result commits independently through the existing dispatcher.
 A persisted retryable failure does not prevent later batch items from running.
 Resuming a batch processes not-started jobs only by default; failed jobs require
 explicit digest selection. Completed and terminally blocked jobs stay unchanged.
+Retry permission is checked again inside the row-locked claim transaction. A
+concurrent failure between the status read and claim therefore cannot trigger
+an unselected retry or change that failed attempt's history.
 Concurrent active owners are skipped, never stolen. The dispatcher still performs
 governance admission and workspace verification for each job.
 
