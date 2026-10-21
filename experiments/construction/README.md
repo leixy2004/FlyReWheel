@@ -208,3 +208,59 @@ A valid response still uses the existing deterministic candidate cap, and report
 Response budgets count the original UTF-8 response bytes, with bounded JSON depth;
 CLI envelopes have a separate 8 MB cap. Source hashes and declarations do not
 prove exposure history, source truth, independent annotation or efficacy.
+
+## Roster and exposure declaration binding
+
+A separate validator now checks supplied roster, configuration and exposure
+ledger declarations without opening any research inputs automatically:
+
+```sh
+node --import tsx experiments/construction/replay.ts bind-exposure INPUT_JSON NEW_DIRECTORY
+node --import tsx experiments/construction/replay.ts verify-exposure NEW_DIRECTORY
+```
+
+`INPUT_JSON` has exactly `config`, `roster` and `ledger`. `config` is the existing
+configuration schema; this interface does not change its frozen protocol fields.
+The strict exported `RosterManifestSchema` and `ExposureLedgerSchema` in
+[exposure-binding.ts](exposure-binding.ts) define the other inputs:
+
+- Roster: `schemaVersion: 1`, `kind: construction-roster-manifest`, matching
+  `origin` and `repository`, and ordered `entries`. Each entry contains the exact
+  configuration roster fields plus declared `beforeCommit` and `afterCommit`.
+- Ledger: `schemaVersion: 1`, `kind: construction-exposure-ledger`, matching
+  origin/repository, `rosterDigest: digestOf(roster)`, `declaredAt`,
+  `firstRemainingSourceAt`, `firstW1At`, and exactly one same-order entry per PR.
+- Each ledger entry contains `pr`, `classification` (`development-exposed`,
+  `remaining` or `unknown`), nullable `firstSourceAt` and `evidenceDigest`,
+  `priorRejected`, nullable `rejectionReason`, and `missingEvidence`.
+  Rejected slots require a reason; other slots must have no rejection reason.
+- Configuration `exposure.auditDigest` must equal `digestOf(ledger)` and its
+  timestamp summary must match. Thus its digest transitively binds the ordered
+  roster, declared commits, source-packet digests and complete exposure ledger.
+
+Unknown exposure, missing exposure evidence and incomplete non-rejected source
+packets remain in the output with `status: incomplete`. Prior rejections and
+already exposed development cases are retained rather than filtered away.
+`firstRemainingSourceAt` must match the earliest supplied `remaining` exposure;
+recorded source times cannot be later than the ledger declaration. A supplied
+W1 timestamp produces a blocker; no W1 file is opened to establish that field.
+A self-consistent ledger reports `bound-declarations-only`, never execution ready.
+
+Output preserves `inputs.json` and a digest-bound `report.json` in a newly created
+directory. A validation failure preserves inputs with `failure.json`; existing
+output directories are never overwritten. Verification recomputes bindings and
+rejects changed reports. This output is not the construction attempt register,
+not a freeze, not an admission decision and not authenticated evidence. If an
+owner changes all inputs and recomputes every digest, that is a new declaration;
+without an externally trusted expected digest, it cannot be distinguished from
+an authentic original. `verify-exposure` verifies internal consistency only.
+
+Tests use 38 **invented** rows to cover the intended roster scale. The schema
+accepts 1–10000 rows and does not certify membership in the actual retained cohort.
+No actual 38-PR roster or exposure history was loaded. Required real inputs remain
+an authorized W0-only roster projection, complete permitted source-packet bindings,
+prior rejection records and independently audited exposure evidence. Both authored
+and public-source declarations can be checked, while existing real-source freezes
+remain blocked. Source digests/commit IDs are not resolved or authenticated, and
+all reports retain `executionReady: false`, `empiricalAdmission: false`, zero model
+calls and zero independent labels.
