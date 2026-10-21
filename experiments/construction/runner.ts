@@ -5,35 +5,39 @@ import { digestOf } from '../../src/core/identity.js';
 import { DigestSchema } from '../../src/core/model.js';
 import { register } from './registry.js';
 import { validateFreeze } from './contracts.js';
-const Text=z.string().min(1).max(8192);
-const Candidate=z.object({path:Text.refine(p=>!p.startsWith('/') && !p.includes('\\') && p.split('/').every(s=>s && s!=='.' && s!=='..')),
-  side:z.enum(['before','after']),start:z.number().int().positive(),end:z.number().int().positive(),
-  scope:Text,applicability:Text,invariant:Text,exception:Text,requiredContext:z.array(Text),
-}).strict().refine(c=>c.end>=c.start,'invalid span');
-const Receipt=z.object({pr:z.number().int().positive(),packetDigest:DigestSchema,
-  outcome:z.enum(['completed','interrupted']),candidates:z.array(z.unknown()),
+import { Candidate } from './candidate.js';
+import { validateRawResponse } from './raw-response.js';
+const ReceiptBase=z.object({pr:z.number().int().positive(),packetDigest:DigestSchema,
+  outcome:z.enum(['completed','interrupted']),
 }).strict();
+const Receipt=z.union([ReceiptBase.extend({candidates:z.array(z.unknown())}).strict(),
+  ReceiptBase.extend({rawResponse:z.string(),sourcePacket:z.unknown()}).strict()]);
 export function replay(frozen:unknown, inputs:unknown[]) {
   const f=validateFreeze(frozen);
-  // This runner consumes authored objects only, never untrusted raw JSON or model responses.
+  // Both input formats remain authored-only; raw responses are checked before candidate retention.
   const receipts=inputs.map(x=>Receipt.parse(x));
   if(new Set(receipts.map(r=>r.pr)).size!==receipts.length) throw Error('duplicate attempt; no retries');
   if(receipts.some(r=>!f.config.roster.some(p=>p.pr===r.pr&&!p.priorRejected))) throw Error('out-of-roster or previously rejected attempt');
   const eligible=f.config.roster.filter(p=>!p.priorRejected);
   if(receipts.some((r,i)=>r.pr!==eligible[i]?.pr)) throw Error('attempts must follow roster prefix without skipped slots');
-  if(receipts.some(r=>Buffer.byteLength(JSON.stringify(r))>f.config.limits.responseBytes)) throw Error('response byte budget exceeded');
+  if(receipts.some(r=>!('rawResponse' in r) && Buffer.byteLength(JSON.stringify(r))>f.config.limits.responseBytes)) throw Error('response byte budget exceeded');
   const rows=f.config.roster.map(p=>{
     const r=receipts.find(r=>r.pr===p.pr);
     const base={pr:p.pr,packetDigest:p.packetDigest,rawReceiptDigest:r?digestOf(r):null};
     if(p.priorRejected) return {...base,status:'prior_rejected',candidates:[]};
     if(!r) return {...base,status:'not_run',candidates:[]};
     if(r.packetDigest!==p.packetDigest) throw Error('source packet binding mismatch');
-    if(r.outcome==='interrupted') return {...base,status:'failed',reason:'interrupted; slot consumed',candidates:r.candidates};
-    const parsed=r.candidates.map(c=>Candidate.safeParse(c));
-    if(parsed.some(c=>!c.success)) return {...base,status:'failed',reason:'malformed candidate; slot consumed',candidates:r.candidates};
+    const rawValidation='rawResponse' in r?validateRawResponse(r.rawResponse,r.sourcePacket,{repository:f.config.repository,pr:p.pr,
+      packetDigest:p.packetDigest!,maxResponseBytes:f.config.limits.responseBytes}):undefined;
+    const values='candidates' in r?r.candidates:rawValidation?.status==='validated'?rawValidation.candidates:[];
+    const evidence=rawValidation?{rawValidation}:{};
+    if(r.outcome==='interrupted') return {...base,...evidence,status:'failed',reason:'interrupted; slot consumed',candidates:values};
+    if(rawValidation?.status==='failed') return {...base,...evidence,status:'failed',reason:`${rawValidation.reason}; slot consumed`,candidates:[]};
+    const parsed=values.map(c=>Candidate.safeParse(c));
+    if(parsed.some(c=>!c.success)) return {...base,...evidence,status:'failed',reason:'malformed candidate; slot consumed',candidates:values};
     const candidates=parsed.map(c=>c.data!).sort((a,b)=>Buffer.compare(Buffer.from(a.path),Buffer.from(b.path)) ||
       (a.side===b.side?0:a.side==='before'?-1:1)||a.start-b.start||a.end-b.end||digestOf(a).localeCompare(digestOf(b)));
-    return {...base,status:candidates.length?'provisional_rule':'no_rule',candidates:candidates.map((c,i)=>({candidate:c,
+    return {...base,...evidence,status:candidates.length?'provisional_rule':'no_rule',candidates:candidates.map((c,i)=>({candidate:c,
       disposition:i===0?'retained_pending_independent_admission':candidates.slice(0,i).some(prior=>digestOf(prior)===digestOf(c))?'duplicate_excluded':'cap_excluded',
       familyKey:digestOf({repository:f.config.repository,scope:c.scope,applicability:c.applicability,invariant:c.invariant,exception:c.exception,requiredContext:c.requiredContext})}))};
   });

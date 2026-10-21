@@ -16,21 +16,20 @@ filled model configuration still cannot execute; there is no network/model adapt
 The first remaining source exposure must follow the configuration freeze; W1
 exposure blocks it. Declared timestamps/digests are not authenticated exposure proof.
 
-`runner.ts` accepts authored receipt objects only. Each submitted PR must form an
+`runner.ts` accepts authored receipt objects and the explicit raw-response envelope below. Each submitted PR must form an
 ordered prefix of non-rejected roster slots, with no duplicate or replacement.
 A completed empty proposal is `no_rule`; no supplied receipt is `not_run`; an
 interruption or malformed candidate is `failed`. Every raw receipt survives in
 `inputs.json`, including failed runs; cap-excluded candidates stay in the report.
 Byte limits are enforced. Token and time limits are declared for a future executor,
-not measured or claimed enforced by this object-only replay.
+not measured or claimed enforced by this offline replay.
 
 Candidates sort by UTF-8 path, before/after side, line span, then canonical digest.
 Only the first is retained provisionally. Family keys bind repository and semantic
-fields but establish neither independence nor semantic equivalence. This minimal
-module does not audit compound rules, prove spans against actual file bytes, parse
-raw JSON with duplicate-key rejection, independently screen candidates, deduplicate
-families or select W1 episodes. These gates must be implemented before empirical use;
-no candidate is marked admitted. Existing core canonical JSON is reused.
+fields but establish neither independence nor semantic equivalence. The raw-response path now rejects duplicate JSON keys and validates spans against
+digest-bound authored packet bytes. It does not independently screen semantic
+compound rules or establish semantic support. Exact family grouping and authored
+episode routing are described below; no candidate is marked admitted. Existing core canonical JSON is reused.
 
 The authoritative register is `.construction-attempts/` relative to this module's
 checkout, independent of cwd/output directory, with no CLI path override. Repository
@@ -139,3 +138,73 @@ families enter the plan; cap-excluded candidates and omitted families cannot ent
 or disappear through caller-supplied hashes. Recovery rechecks the same authority.
 Declared freeze times do not prove actual construction completion timestamps;
 empirical chronology still requires independent evidence.
+
+## Raw-response ingestion and pinned line anchors
+
+`raw-response.ts` adds an offline input path without changing the frozen research
+protocol or enabling real-source/model execution. Use:
+
+```sh
+node --import tsx experiments/construction/replay.ts raw INPUT_JSON NEW_DIRECTORY
+node --import tsx experiments/construction/replay.ts verify NEW_DIRECTORY
+node --import tsx experiments/construction/replay.ts recover authored/REPOSITORY RECOVERED_DIRECTORY
+```
+
+`INPUT_JSON` contains exactly `{ "frozen": <existing authored freeze>, "inputs":
+[<receipt>, ...] }`. Each receipt contains `pr`, `packetDigest`, `outcome`
+(`completed` or `interrupted`), `rawResponse` (the original JSON text, **not** an
+already parsed object), and `sourcePacket`. Do not supply `candidates` in the same
+receipt. The complete ordered attempted prefix is required, including failures.
+The outer JSON also rejects duplicate keys; an ambiguous/unparseable envelope
+cannot identify a trustworthy slot and is rejected before registration.
+
+A source packet has exactly these fields:
+
+```json
+{
+  "schemaVersion": 1,
+  "kind": "authored-construction-source-packet",
+  "repository": "authored/REPOSITORY",
+  "pr": 1,
+  "beforeCommit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "afterCommit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "files": [{
+    "path": "source.ts", "side": "after",
+    "content": "guard();\noperation();\n",
+    "sha256": "<SHA-256 of the UTF-8 content bytes>"
+  }]
+}
+```
+
+The example commit IDs are synthetic declarations. `packetDigest` must equal the
+existing `digestOf(packet)` canonical JSON digest in both the receipt and frozen
+roster. Repository, PR, before/after revisions and every file are thereby bound.
+Each file-side pair must be unique. Content is strict UTF-8 with its own SHA-256;
+packets contain at most 256 files and 2,000,000 content bytes. No repository paths
+are opened, no sources are acquired and no commit provenance is authenticated.
+The actual 38-PR roster, complete permitted source packets and independently
+verified exposure ledger are still missing integration inputs. Real-source
+configurations continue to fail closed.
+
+`rawResponse` is exactly `{"candidates":[...]}`. Candidates use the existing
+[path/side/start/end/scope/applicability/invariant/exception/requiredContext
+schema](candidate.ts), plus required `quote`. Positive safe-integer line spans
+must be ordered, exist on the specified side, and match `quote` exactly. Quotes
+include each selected line's existing LF/CRLF terminator; a final unterminated
+line has none. Empty files have no addressable lines. No trimming or newline
+normalization occurs. Nested and escaped duplicate keys, unsafe spans, extra
+fields (including a separate compound `invariants` array), wrong quotes and
+ambiguous sources fail the **whole attempt**, even when another candidate is valid.
+Natural-language compound invariants are not automatically detected or admitted;
+that remains independent semantic screening work.
+
+The original raw text and source packet survive in `inputs.json` and the fixed
+attempt register. Malformed/budget-exceeded/interrupted responses consume their
+identified slot with a failed disposition; correcting their text in another
+output directory conflicts with the register. Empty proposals yield `no_rule`;
+missing receipts remain `not_run`. Recovery reuses the original receipt only.
+A valid response still uses the existing deterministic candidate cap, and reports
+`semanticSupport: not_assessed`, zero model calls and `empiricalAdmission: false`.
+Response budgets count the original UTF-8 response bytes, with bounded JSON depth;
+CLI envelopes have a separate 8 MB cap. Source hashes and declarations do not
+prove exposure history, source truth, independent annotation or efficacy.
