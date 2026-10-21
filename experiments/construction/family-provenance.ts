@@ -10,7 +10,7 @@ export const FamilyBindingSchema=z.object({id:z.string().min(1),representativeOr
  constructionMembers:z.array(z.object({pr:z.number().int().positive(),candidateDigest:DigestSchema}).strict()).min(1),
 }).strict();
 export const ConstructionBindingSchema=z.object({freezeDigest:DigestSchema,reportDigest:DigestSchema}).strict();
-export function constructedFamilies(repository:string){
+function enumerateFamilies(repository:string){
  const {frozen,inputs}=registeredInputs(repository);
  const report=replay(frozen,inputs);
  if(report.rows.some(r=>r.status==='not_run'))throw Error('construction roster incomplete; missing attempt');
@@ -23,14 +23,18 @@ export function constructedFamilies(repository:string){
   if(existing)existing.constructionMembers.push(member);
   else families.set(selected.familyKey,{id:`family-${selected.familyKey}`,representativeOrder:i+1,ruleDigest:selected.familyKey,constructionMembers:[member]});
  });
- if(!families.size)throw Error('construction has no retained authored family');
  return {construction:{freezeDigest:frozen.digest,reportDigest:digestOf(report)},
   families:[...families.values()].sort((a,b)=>a.representativeOrder-b.representativeOrder||a.ruleDigest.localeCompare(b.ruleDigest)),
   constructionFrozenAt:frozen.frozenAt};
 }
+export function constructedFamilies(repository:string){
+ const result=enumerateFamilies(repository);
+ if(!result.families.length)throw Error('construction has no retained authored family');
+ return result;
+}
 export const ScreeningBindingSchema=z.object({lockDigest:DigestSchema,reportDigest:DigestSchema}).strict();
 export function screenedFamilies(repository:string){
- const base=constructedFamilies(repository),{selection,report}=recoverScreening(repository);
+ const base=enumerateFamilies(repository),{selection,report}=recoverScreening(repository);
  if(!report)throw Error('screening assessments not finalized');
  const accepted=new Set(report.rows.filter(r=>r.status==='accepted-authored-only').map(r=>JSON.stringify([r.pr,r.candidateDigest])));
  const families=base.families.flatMap(f=>{

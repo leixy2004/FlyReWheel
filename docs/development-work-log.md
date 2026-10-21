@@ -53,3 +53,16 @@ The earlier stopped local run and cancelled PR #42 CI exposure uncertainty remai
 recorded; replacing tests cannot establish what those earlier runs read. The new
 user confirmation authorizes normal repository updates/validation/merge, not W1
 access, model execution, deployment, or bypassing protection.
+
+### 2026-10-21 — PR #42 zero-yield review correction
+
+Copilot discussion `r4338202251` identified a confirmed omission after the first
+full CI passed at `be67373`: `screenedFamilies` called the legacy nonempty-family
+helper before reading the final screening report. A complete construction with
+only no-rule, failed, and prior-rejected rows could therefore not export its
+zero-yield diagnostic. Private enumeration now allows an empty list for screening
+exports; the legacy helper and episode schema retain their nonempty requirement.
+A synthetic CLI regression verifies all rows and report digest survive and empty
+episodes remain refused. Typecheck/build and 4 targeted files / 40 tests passed.
+The earlier no-confirmed-defect reviews did not establish absence of defects;
+new-head CI is required for this correction before merge.

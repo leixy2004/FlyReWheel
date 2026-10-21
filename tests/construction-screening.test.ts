@@ -16,12 +16,12 @@ import { lockScreening, finalizeScreening, recoverScreening, screeningRegistryRo
 const roots:string[]=[];
 afterEach(()=>{while(roots.length)rmSync(roots.pop()!,{recursive:true,force:true});});
 // No real study files, roster, W1 metadata or source content are loaded.
-function setup(incomplete=false){
+function setup(incomplete=false,zeroYield=false){
   const config=fixture();config.repository=`authored/screening-${randomUUID()}`;
   config.roster=[1,2,3,4].map(pr=>({pr,mergedAt:`2024-01-0${pr}T00:00:00Z`,packetDigest:digestOf(`authored-packet-${pr}`),priorRejected:pr===4,missingEvidence:[]}));
   const first={path:'a.ts',side:'after',start:1,end:1,scope:'authored',applicability:'authored operation',invariant:'authored invariant',exception:'none',requiredContext:[]};
   const second={...first,path:'z.ts',invariant:'different authored invariant'};
-  const inputs=config.roster.slice(0,incomplete?1:3).map((r,i)=>({pr:r.pr,packetDigest:r.packetDigest,outcome:i===2?'interrupted':'completed',candidates:i===0?[second,first]:[]}));
+  const inputs=config.roster.slice(0,incomplete?1:3).map((r,i)=>({pr:r.pr,packetDigest:r.packetDigest,outcome:i===2?'interrupted':'completed',candidates:i===0&&!zeroYield?[second,first]:[]}));
   const frozen=freeze(config,'2026-10-13T00:00:01Z');register(frozen,inputs);
   const report=replay(frozen,inputs),repository=config.repository,dir=join(screeningRegistryRoot,digestOf({repository}));
   roots.push(dir,join(registryRoot,digestOf({repository})));
@@ -146,3 +146,14 @@ it('runs screened family to persisted episode and recovery through separate CLI 
  const report=cli('episode-finalize',f.repository,path);expect(report.rows[0].status).toBe('blocked_feedback_or_gates');
  expect(cli('episode-recover',f.repository)).toMatchObject({index,report,empiricalAdmission:false});
 },30000);
+
+it('exports complete zero-yield screening diagnostics but refuses an empty episode',()=>{
+ const f=setup(false,true);f.lock();const report=finalizeScreening(f.repository,[]);
+ const bound=JSON.parse(execFileSync(process.execPath,['--import','tsx',resolve('experiments/construction/replay.ts'),'screen-families',f.repository],
+  {env:{PATH:process.env.PATH},encoding:'utf8',timeout:15000}));
+ expect(bound.families).toEqual([]);expect(bound.screeningRows).toEqual(report.rows);
+ expect(bound.screeningRows.map((r:{status:string})=>r.status)).toEqual(['no_rule','no_rule','failed','prior_rejected']);
+ expect(bound.screening.reportDigest).toBe(report.digest);
+ expect(()=>selectIndices(episodePlan(f),[],'2026-10-13T00:00:04Z')).toThrow();
+ expect(()=>constructedFamilies(f.repository)).toThrow('no retained authored family');
+});
