@@ -34,3 +34,22 @@ it must not be rewritten as “no exposure.” The separate
 retains this uncertainty. No W1 source, annotations or model output was inspected
 in this development work. This log is an operational record, not a study exposure
 audit or a change to frozen research declarations.
+
+### 2026-10-21 — routine test research-input isolation
+
+The temporal validator test directly loaded the real cross-window frame and
+readiness record. A second path was found in `w0-evaluation-inputs.test.ts`:
+`prepareW0EvaluationInputs` loaded the entire frame and invoked its validator.
+Both paths are now replaced in routine tests with authored metadata. The temporal
+validator still runs its real verifier in a temporary directory, exercising all
+existing mutation checks. W0 preparation mocks only its extracted pinned frame
+loader; package, context, schema, output and blinding checks still execute against
+the existing W0 development inputs. It no longer compares the generated ledger to
+a saved research ledger. The real loader still requires the original SHA-256 and
+validates those same bytes; synthetic bytes are explicitly tested as rejected.
+
+This does not revise research freezes or prove real source/label independence.
+The earlier stopped local run and cancelled PR #42 CI exposure uncertainty remains
+recorded; replacing tests cannot establish what those earlier runs read. The new
+user confirmation authorizes normal repository updates/validation/merge, not W1
+access, model execution, deployment, or bypassing protection.

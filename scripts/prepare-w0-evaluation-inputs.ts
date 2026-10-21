@@ -1,7 +1,6 @@
 import { isMainModule } from './lib/is-main.mjs';
-import { createHash, randomUUID } from 'node:crypto';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
+import { randomUUID } from 'node:crypto';
+import { loadFrozenTemporalFrame } from './lib/frozen-temporal-frame.js';
 import { lstat, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
 import { resolve, join, dirname, basename, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,7 +16,6 @@ import { validateGithubPrEvidence } from '../src/github-pr-evidence.js';
 import { MEMBERS, validateFrozenPackage } from './prepare-w0-mining.js';
 const root = new URL('../experiments/temporal-pilot/w0-first-three/', import.meta.url);
 const read = async (path: string) => JSON.parse(await readFile(new URL(path, root), 'utf8'));
-const hash = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 const put = async (path: string, value: unknown) => writeFile(path, JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
 
 /** Preparation envelope only. Real response labels/anchors remain governed by the existing annotation schema. */
@@ -83,12 +81,7 @@ export async function prepareW0EvaluationInputs(output: string, privateDirectory
   output = await canonical(output); privateDirectory = await canonical(privateDirectory);
   if (inside(repo, privateDirectory) || inside(output, privateDirectory) || inside(privateDirectory, output)) throw new Error('Private annotation directory must be outside repository and output');
   await rejectGitAncestors(privateDirectory);
-  const frameBytes = await readFile(new URL('../httpx-2024-frame.json', root));
-  const frameHash = hash(frameBytes);
-  if (frameHash !== '07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b') throw new Error('Frozen frame changed');
-  const frame = JSON.parse(frameBytes.toString('utf8'));
-  const checked = await promisify(execFile)(process.execPath, [fileURLToPath(new URL('./validate-temporal-frame.mjs', import.meta.url))], { env: {}, timeout: 15000, maxBuffer: 1_000_000 });
-  if (JSON.parse(checked.stdout).frameSha256 !== frameHash) throw new Error('Frame validator identity differs');
+  const { frame, frameHash } = await loadFrozenTemporalFrame();
   await mkdir(output); await mkdir(privateDirectory, { mode: 0o700 });
   await mkdir(join(privateDirectory, 'packets'), { mode: 0o700 });
   await mkdir(join(privateDirectory, 'facilitator'), { mode: 0o700 });

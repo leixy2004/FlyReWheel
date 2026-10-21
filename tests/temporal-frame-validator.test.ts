@@ -1,12 +1,12 @@
-import { readFileSync } from 'node:fs';
+import { authoredTemporalFrame, authoredCollectorBytes } from './helpers/authored-temporal-frame.js';
 import { describe, expect, it } from 'vitest';
 
 const { validateTemporalFrame } = await import(new URL('../scripts/validate-temporal-frame.mjs', import.meta.url).href);
-const frame = JSON.parse(readFileSync(new URL('../experiments/temporal-pilot/httpx-2024-frame.json', import.meta.url), 'utf8'));
-const collectorBytes = readFileSync(new URL('../scripts/capture-temporal-frame.mjs', import.meta.url));
+const frame: any = authoredTemporalFrame();
+const collectorBytes = authoredCollectorBytes;
 
-describe('saved temporal metadata frame integrity', () => {
-  it('validates the saved 70-PR frame without asserting evaluation readiness', async () => {
+describe('authored temporal metadata frame integrity', () => {
+  it('validates an authored 70-row frame without asserting evaluation readiness', async () => {
     expect(frame.pullRequests).toHaveLength(70);
     expect(frame.windowCounts).toEqual({ W0: 38, W1: 13, W2: 19 });
     expect(await validateTemporalFrame(frame, collectorBytes)).toMatchObject({
@@ -31,11 +31,7 @@ describe('saved temporal metadata frame integrity', () => {
     });
   });
 
-  it('preserves input values and saved frame/readiness bytes on success and rejection', async () => {
-    const frameURL = new URL('../experiments/temporal-pilot/httpx-2024-frame.json', import.meta.url);
-    const readinessURL = new URL('../experiments/temporal-pilot/annotation-readiness.json', import.meta.url);
-    const originalFrameBytes = readFileSync(frameURL);
-    const originalReadinessBytes = readFileSync(readinessURL);
+  it('preserves supplied input values on success and rejection', async () => {
     const supplied = structuredClone(frame);
     const originalInput = structuredClone(supplied);
     const originalCollector = Buffer.from(collectorBytes);
@@ -46,8 +42,6 @@ describe('saved temporal metadata frame integrity', () => {
     await expect(validateTemporalFrame(supplied, collectorBytes)).rejects.toThrow();
     expect(supplied).toEqual(failedInput);
     expect(collectorBytes).toEqual(originalCollector);
-    expect(readFileSync(frameURL)).toEqual(originalFrameBytes);
-    expect(readFileSync(readinessURL)).toEqual(originalReadinessBytes);
   });
 
   const mutations: Array<[string, (copy: typeof frame) => void]> = [
