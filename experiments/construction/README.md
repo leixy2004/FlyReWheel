@@ -323,3 +323,49 @@ interfaces to a screened-production route. Actual independently collected screen
 judgments, identity/independence evidence and semantic-support evidence remain
 missing. All screening tests use invented construction and assessor inputs; no W1
 metadata or content is loaded by the selected test set.
+
+### Screened authored families and episodes
+
+After `screen-finalize`, export the authoritative selection:
+
+```sh
+node --import tsx experiments/construction/replay.ts screen-families authored/REPOSITORY
+```
+
+The output contains `construction`, `screening: {lockDigest, reportDigest}`,
+`families`, and full `screeningRows`. Only `accepted-authored-only` members enter
+families; rejected, missing, unknown and disputed rows remain in `screeningRows`.
+An empty family list is a valid diagnostic output, but cannot start an episode.
+Family order is derived from the earliest accepted construction member, never a
+cap-excluded alternative from the same PR.
+
+Copy the returned `construction`, `screening`, and `families` into an
+`authored-episode-selection-plan` with the same repository, a declared `frozenAt`
+after the screening lock, and the authored target `prs` roster. Each review cell
+must bind `digestOf(plan)` (including screening), its family/rule and target packet.
+Use the existing cell and feedback schemas in `episode-selection.ts`:
+
+```sh
+# REQUEST_JSON is exactly {plan, rawCells, lockedAt}.
+node --import tsx experiments/construction/replay.ts episode-index REQUEST_JSON
+# FEEDBACK_JSON is an array bound to the returned index digest and findings.
+node --import tsx experiments/construction/replay.ts episode-finalize authored/REPOSITORY FEEDBACK_JSON
+node --import tsx experiments/construction/replay.ts episode-recover authored/REPOSITORY
+```
+
+These commands reserve their first requests, including failures and missing
+feedback, through the existing episode registry. Repeated identical requests are
+idempotent; corrections or reselection are refused. Recovery revalidates the
+screening and construction records. Once a screening directory exists, omitting
+the screening binding is refused, including for older episode plans: complete
+screening before creating an episode in that repository. Repositories without
+screening retain the legacy provisional authored workflow. This is a local
+workflow guard, not tamper resistance against the filesystem owner.
+
+All judgments, target packets and findings here remain authored declarations.
+Times do not prove actual assessment chronology; assessor IDs do not establish
+independence. No empirical admission, real model call, or human label is inferred.
+The local authored chain now has CLI entry points through episode feedback and
+recovery. Real use still requires permitted source/roster/exposure inputs and
+independent screening/support evidence; adding more synthetic gates cannot supply
+those inputs or authorize the currently blocked real-source path.

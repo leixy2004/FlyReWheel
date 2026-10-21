@@ -1,12 +1,12 @@
 import { z } from 'zod';
 import { digestOf } from '../../src/core/identity.js';
-import { ConstructionBindingSchema,FamilyBindingSchema,validateFamilyProvenance } from './family-provenance.js';
+import { ConstructionBindingSchema,ScreeningBindingSchema,FamilyBindingSchema,validateFamilyProvenance } from './family-provenance.js';
 import { DigestSchema } from '../../src/core/model.js';
 const Text=z.string().min(1).max(4096);
 const Time=z.string().datetime({offset:true});
 export const EpisodePlanSchema=z.object({kind:z.literal('authored-episode-selection-plan'),origin:z.literal('authored-fixture'),
   repository:Text.refine(s=>s.startsWith('authored/')),frozenAt:Time,
-  construction:ConstructionBindingSchema,families:z.array(FamilyBindingSchema).min(1),
+  construction:ConstructionBindingSchema,screening:ScreeningBindingSchema.optional(),families:z.array(FamilyBindingSchema).min(1),
   prs:z.array(z.object({pr:z.number().int().positive(),mergedAt:Time,packetDigest:DigestSchema}).strict()).min(1),
 }).strict().superRefine((p,ctx)=>{
   if(new Set(p.families.map(f=>f.ruleDigest)).size!==p.families.length)ctx.addIssue({code:'custom',message:'duplicate exact rule family'});

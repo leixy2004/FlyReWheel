@@ -1,3 +1,6 @@
+import { screenedFamilies, constructedFamilies } from '../experiments/construction/family-provenance.js';
+import { selectIndices } from '../experiments/construction/episode-selection.js';
+import { episodeRegistryRoot } from '../experiments/construction/episode-registry.js';
 import { afterEach, expect, it } from 'vitest';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -101,4 +104,45 @@ it('runs lock/finalize/recover in separate CLI processes with synthetic inputs o
   const selection=cli('screen-lock',request);writeFileSync(results,JSON.stringify(f.assessments(selection,'reject')));
   const report=cli('screen-finalize',f.repository,results);expect(report.rows[0].status).toBe('rejected');
   expect(cli('screen-recover',f.repository).report).toEqual(report);
+},30000);
+
+function episodePlan(f:ReturnType<typeof setup>){
+ const bound=screenedFamilies(f.repository);
+ return {kind:'authored-episode-selection-plan',origin:'authored-fixture',repository:f.repository,
+  frozenAt:'2026-10-13T00:00:03Z',construction:bound.construction,screening:bound.screening,families:bound.families,
+  prs:[{pr:20,mergedAt:'2024-02-01T00:00:00Z',packetDigest:digestOf('synthetic-target')}]};
+}
+it.each(['reject','unknown','missing','disputed'] as const)('excludes %s screening from families while retaining its status',verdict=>{
+ const f=setup(),lock=f.lock();
+ const results=verdict==='missing'?[]:verdict==='disputed'?[f.assessments(lock)[0],f.assessments(lock,'reject')[1]]:f.assessments(lock,verdict);
+ const report=finalizeScreening(f.repository,results),bound=screenedFamilies(f.repository);
+ expect(bound.families).toEqual([]);expect(bound.screeningRows).toEqual(report.rows);
+ expect(()=>selectIndices(episodePlan(f),[],'2026-10-13T00:00:04Z')).toThrow();
+ const forged={...episodePlan(f),families:constructedFamilies(f.repository).families};
+ expect(()=>selectIndices(forged,[],'2026-10-13T00:00:04Z')).toThrow('provenance');
+});
+it('refuses unfinished screening, removed bindings, substituted members and stale digests',()=>{
+ const f=setup(),lock=f.lock();expect(()=>screenedFamilies(f.repository)).toThrow('not finalized');
+ finalizeScreening(f.repository,f.assessments(lock));const plan=episodePlan(f);
+ const {screening,...removed}=plan;
+ expect(()=>selectIndices(removed,[],'2026-10-13T00:00:04Z')).toThrow('binding required');
+ for(const field of ['reportDigest','lockDigest'])expect(()=>selectIndices({...plan,screening:{...screening,[field]:'0'.repeat(64)}},[],'2026-10-13T00:00:04Z')).toThrow('binding mismatch');
+ const forged=structuredClone(plan);forged.families[0].constructionMembers[0].candidateDigest=digestOf(f.second);
+ expect(()=>selectIndices(forged,[],'2026-10-13T00:00:04Z')).toThrow('provenance');
+ expect(()=>selectIndices({...plan,frozenAt:f.lockedAt},[],'2026-10-13T00:00:04Z')).toThrow('follow screening');
+});
+it('runs screened family to persisted episode and recovery through separate CLI processes',()=>{
+ const f=setup(),lock=f.lock();finalizeScreening(f.repository,f.assessments(lock));
+ const root=mkdtempSync(join(tmpdir(),'screened-episode-cli-'));roots.push(root,join(episodeRegistryRoot,digestOf({repository:f.repository})));
+ const cli=(...args:string[])=>JSON.parse(execFileSync(process.execPath,['--import','tsx',resolve('experiments/construction/replay.ts'),...args],{env:{PATH:process.env.PATH},encoding:'utf8',timeout:15000}));
+ const bound=cli('screen-families',f.repository),plan=episodePlan(f);expect(bound.screening).toEqual(plan.screening);
+ const rawCells=[{familyId:plan.families[0].id,ruleDigest:plan.families[0].ruleDigest,planDigest:digestOf(plan),pr:20,
+  packetDigest:plan.prs[0].packetDigest,recordedAt:'2026-10-13T00:00:04Z',status:'completed',findings:[{path:'a.ts',side:'after',start:1,end:1,claim:'Synthetic finding'}]}];
+ const request=join(root,'index.json');writeFileSync(request,JSON.stringify({plan,rawCells,lockedAt:'2026-10-13T00:00:05Z'}));
+ const index=cli('episode-index',request);expect(cli('episode-index',request)).toEqual(index);
+ const feedback=[{origin:'authored-fixture',indexLockDigest:index.digest,familyId:plan.families[0].id,findingDigest:index.indices[0].findingDigest,
+  lockedAt:'2026-10-13T00:00:06Z',verdict:'unknown',otherGates:'blocked',reason:'Synthetic unknown'}];
+ const path=join(root,'feedback.json');writeFileSync(path,JSON.stringify(feedback));
+ const report=cli('episode-finalize',f.repository,path);expect(report.rows[0].status).toBe('blocked_feedback_or_gates');
+ expect(cli('episode-recover',f.repository)).toMatchObject({index,report,empiricalAdmission:false});
 },30000);

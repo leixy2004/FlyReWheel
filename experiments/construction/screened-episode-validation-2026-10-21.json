@@ -1,0 +1,42 @@
+{
+  "kind": "authored-screened-episode-validation",
+  "date": "2026-10-21",
+  "baseCommit": "1ff6e560d1f999425a6857d5a3514a4143f45785",
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npm test -- tests/construction-screening.test.ts tests/family-provenance.test.ts tests/episode-selection.test.ts tests/episode-registry.test.ts",
+      "exitCode": 0,
+      "filesPassed": 4,
+      "testsPassed": 39,
+      "testsFailed": 0
+    }
+  ],
+  "inputScope": "Synthetic fixtures and task-owned generated registry records only. Test entry points and helpers inspected before execution. No full suite run.",
+  "coverage": [
+    "accepted screening to CLI episode index, unknown feedback, recovery and repeat invocation",
+    "rejected/missing/unknown/disputed members excluded, diagnostic rows retained",
+    "removed binding, wrong lock/report digest, substituted candidate and unfinished screening refused",
+    "legacy provisional episode provenance and registry regressions"
+  ],
+  "limitations": [
+    "No real source inputs, model calls or independently verified human judgments",
+    "No empirical admission or production isolation claim",
+    "Prior cross-window metadata exposure uncertainty remains in validation-2026-10-21.json",
+    "No independent agent review was run in this iteration; implementation diff reviewed locally"
+  ],
+  "remoteWrites": false,
+  "files": {
+    "experiments/construction/family-provenance.ts": "0e42610c69bfb710065f991c15d08559337da037be18ad3972d10d774ddd2c06",
+    "experiments/construction/episode-selection.ts": "8e6bf3313954e62d7866db55f4ba68faccadec2c2670d4b1effcc96e00a78071",
+    "experiments/construction/replay.ts": "97fc2de431a80a70386d1715709861afd2e609185bf07e3780a3134f772d5125",
+    "tests/construction-screening.test.ts": "9d391ef0f6038a5631ecfcaa7c03f0f0d49166ccd6a760766b8aa33f0c9f92b8"
+  }
+}
