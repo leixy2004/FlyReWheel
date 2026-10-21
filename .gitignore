@@ -13,3 +13,6 @@ coverage/
 .construction-attempts/
 # Local authoritative authored index/feedback records
 .episode-attempts/
+
+# Local authored construction screening choices/results
+.construction-screenings/

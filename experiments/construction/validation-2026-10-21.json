@@ -1,0 +1,55 @@
+{
+  "kind": "construction-software-validation-record",
+  "recordedAt": "2026-10-21T07:20:58.062766+00:00",
+  "baseCommit": "408f784c5b7b9c82cdc16df2d095f44a32e8b3d7",
+  "branch": "codex/construction-exposure-binding",
+  "sourceHashes": {
+    "experiments/construction/candidate.ts": "9c7099bf719d3034f8211c389896575cd707d978f291c9d36e5cc6bb8912d1ac",
+    "experiments/construction/raw-response.ts": "f46064cc3d4854729ea1066d81d23b4d1168926fdeebcb4f095f5c108136d752",
+    "experiments/construction/exposure-binding.ts": "c5f479fc3b02824e29b14d1189b1030670d64d86b1ddf309094e127863560488",
+    "experiments/construction/runner.ts": "47d0c728d37fb8c3eade35af4619b6a1c199483f9d9c6e936d413b030c4afd45",
+    "experiments/construction/replay.ts": "51d37201eb4952141388d08a79127753381716ebcc36e3b8947fe94276ffb5f1",
+    "tests/construction-raw-response.test.ts": "cacdfb64a4412008a614f4afc803e397d8ed13fed16e6f8dc0dbd330e45f5a5b",
+    "tests/construction-exposure-binding.test.ts": "e58c0f01f0c9dbf8272ec56fe09dad10c72f59965f5ab789db183b7ea1bea0b2"
+  },
+  "commands": [
+    "npm run typecheck",
+    "npm run build",
+    "npm test -- tests/construction-exposure-binding.test.ts tests/construction-raw-response.test.ts tests/construction-freeze.test.ts tests/construction-registry.test.ts tests/episode-selection.test.ts tests/episode-registry.test.ts"
+  ],
+  "results": {
+    "typecheck": "passed",
+    "build": "passed",
+    "testFilesPassed": 6,
+    "testsPassed": 70,
+    "testsFailed": 0
+  },
+  "inputScope": "All six selected test files use authored construction/episode inputs and temporary artifacts; no actual retained roster or exposure ledger was loaded.",
+  "independentReview": {
+    "kind": "read-only source review",
+    "confirmedDefects": 0,
+    "reviewerRanTests": false
+  },
+  "exposureUncertainty": [
+    {
+      "run": "local full-suite invocation before this isolated regression",
+      "outcome": "stopped",
+      "exitCode": 130,
+      "crossWindowMetadataRead": "unknown; legacy temporal-frame-validator test reads the cross-window PR metadata frame; cannot establish whether it ran before stop"
+    },
+    {
+      "run": "https://github.com/leixy2004/FlyReWheel/actions/runs/39560434996",
+      "outcome": "cancelled",
+      "crossWindowMetadataRead": "unknown; standard suite had started before cancellation"
+    }
+  ],
+  "limits": {
+    "studyExposureAudit": false,
+    "empiricalAdmission": false,
+    "actualRosterVerified": false,
+    "projectModelCalls": 0,
+    "paperFilesModified": false,
+    "w1SourceAnnotationsOrModelOutputsInspected": false
+  },
+  "note": "This is a software validation record, not an authenticated study ledger. The uncertainty above must not be replaced by a no-exposure claim."
+}

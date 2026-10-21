@@ -3,14 +3,24 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { expect, it, vi } from 'vitest';
 import { BlindDraftSchema, validateBlindDraft, prepareW0EvaluationInputs, verifyContextRecord, verifyRuffPairRecords } from '../scripts/prepare-w0-evaluation-inputs.js';
+import { authoredTemporalFrame } from './helpers/authored-temporal-frame.js';
+import { digestOf } from '../src/core/identity.js';
 import { MEMBERS } from '../scripts/prepare-w0-mining.js';
+// Replace only the research-data loader. W0 package/context checks still execute.
+vi.mock('../scripts/lib/frozen-temporal-frame.js', async () => ({loadFrozenTemporalFrame:async()=>{
+  const frame=authoredTemporalFrame();
+  MEMBERS.forEach((m,i)=>{frame.pullRequests[i].number=m.number;});
+  return {frame,frameHash:digestOf(frame)};
+}}));
 const load = async (file: string) => JSON.parse(await readFile(new URL(`../experiments/temporal-pilot/w0-first-three/${file}`, import.meta.url), 'utf8'));
-it('reproduces provenance offline while keeping unassigned packets and identity map outside Git', async () => {
+it('binds authored temporal rows to W0 provenance while keeping unassigned packets and identity map outside Git', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'w0-eval-test-'));
   const fetch = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('No network'));
   try {
     const ledger = await prepareW0EvaluationInputs(join(dir, 'out'), join(dir, 'private'));
-    expect(ledger).toEqual(await load('evaluation-preparation/provenance-ledger.json'));
+    expect(ledger).toMatchObject({modelCalls:0,independentHumanLabels:0,blinding:{localDraftPackets:3}});
+    expect(ledger.items.map(row=>row.frameRow.number)).toEqual(MEMBERS.map(m=>m.number));
+    expect(ledger.items.every(row=>row.frameRow.mergeCommit.startsWith('000000'))).toBe(true);
     const mapping = JSON.parse(await readFile(join(dir, 'private', 'facilitator', 'facilitator-only.json'), 'utf8'));
     const names = await readdir(join(dir, 'private', 'packets'));
     expect(names).toHaveLength(3);
