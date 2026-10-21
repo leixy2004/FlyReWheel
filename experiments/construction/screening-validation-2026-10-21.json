@@ -1,0 +1,40 @@
+{
+  "kind": "authored-screening-software-validation",
+  "recordedAt": "2026-10-21T07:28:09.824603+00:00",
+  "baseCommit": "ab0c67181455ae530f1c900672db6ce18f154242",
+  "branch": "codex/construction-screening-binding",
+  "sourceHashes": {
+    "experiments/construction/screening.ts": "03e29f90b0e859fb02d701fa832208c217e1913f4b96e288710eab776bf38bd6",
+    "experiments/construction/replay.ts": "bef9071a1e6790f87d4aa6f62c7eae091a91ba6c8318d3a7065f16468803db36",
+    "tests/construction-screening.test.ts": "f618e091916af8067acfe3699a26406d0b3ead2388f3c33cf97cd704b77d6c36"
+  },
+  "commands": [
+    "npm run typecheck",
+    "npm run build",
+    "npm test -- tests/construction-screening.test.ts tests/construction-exposure-binding.test.ts tests/construction-raw-response.test.ts tests/construction-freeze.test.ts tests/construction-registry.test.ts tests/episode-selection.test.ts tests/episode-registry.test.ts"
+  ],
+  "results": {
+    "typecheck": "passed",
+    "build": "passed",
+    "testFilesPassed": 7,
+    "testsPassed": 85,
+    "testsFailed": 0
+  },
+  "inputScope": "Selected test sources use authored construction/episode fixtures and task-created temporary artifacts. No actual roster, W1 metadata, source, annotations or model output was loaded by this selected test set.",
+  "independentReview": {
+    "kind": "read-only source review",
+    "confirmedDefects": 0,
+    "reviewerRanTests": false
+  },
+  "priorExposureUncertaintyRecord": "experiments/construction/validation-2026-10-21.json",
+  "authorizationErrorRecord": "docs/development-work-log.md",
+  "limits": {
+    "empiricalAdmission": false,
+    "independentHumanLabels": 0,
+    "assessorIdentityAuthenticated": false,
+    "projectModelCalls": 0,
+    "paperFilesModified": false,
+    "remoteWritesInThisScreeningTask": false
+  },
+  "note": "Software mechanics only. Prior interrupted-suite metadata exposure remains uncertain; this focused run does not resolve that uncertainty."
+}

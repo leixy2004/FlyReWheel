@@ -264,3 +264,62 @@ and public-source declarations can be checked, while existing real-source freeze
 remain blocked. Source digests/commit IDs are not resolved or authenticated, and
 all reports retain `executionReady: false`, `empiricalAdmission: false`, zero model
 calls and zero independent labels.
+
+## Authored screening of the fixed first candidate
+
+The screening interface binds supplied assessor results to the already-retained
+construction candidate. It performs no semantic judgment or human authentication:
+
+```sh
+node --import tsx experiments/construction/replay.ts screen-lock REQUEST_JSON
+node --import tsx experiments/construction/replay.ts screen-finalize authored/REPOSITORY RESULTS_JSON
+node --import tsx experiments/construction/replay.ts screen-recover authored/REPOSITORY
+```
+
+The lock request contains exactly `plan` and `lockedAt`. `ScreeningPlanSchema` in
+[screening.ts](screening.ts) requires `kind: authored-construction-screening-plan`,
+`origin: authored-fixture`, the registered authored repository, its exact
+`construction.freezeDigest` and `construction.reportDigest`, and two distinct
+predeclared assessor IDs. All construction slots must have a disposition before
+screening. The lock derives choices from the authoritative construction register;
+it never accepts a caller-selected replacement candidate. No-rule, failed and
+previously rejected construction slots stay in the selection. Cap-excluded
+candidate digests stay visible but cannot receive screening results.
+
+`RESULTS_JSON` is an array. Each result binds `origin: authored-fixture`, the
+selection `lockDigest`, `pr`, retained `candidateDigest` and a predeclared
+`assessorId`. It supplies `verdict` (accept/reject/unknown), `atomicity`
+(single/compound/unknown), `scope` and `sourceSupport`
+(supported/unsupported/unknown), `rationale` and nullable `evidenceDigest`.
+Accept requires all positive criteria and an evidence digest; that digest is a
+binding declaration, not verified semantic evidence. Results for a later candidate,
+foreign assessor or non-candidate slot, duplicate assessments and contradictory
+accept fields fail validation.
+
+Finalization explicitly fixes the whole result request, including an empty array
+(final missing assessment). Missing, Unknown, disagreement and rejection never
+select another candidate. Matching positive declarations yield only
+`accepted-authored-only`. Every report keeps `independentLabels: 0`,
+`assessorIdentityVerified: false`, `empiricalAdmission: false` and zero model calls.
+Distinct assessor IDs do not establish independent people or authentic judgments.
+`lockedAt` is a declared time checked against the construction freeze; it cannot
+prove actual wall-clock ordering or that an assessor had not already seen outcomes.
+Before finalization, recovery reports `awaiting-assessments` without inventing data.
+
+The fixed checkout-local `.construction-screenings/` register reserves the first
+plan and final result request before deriving outputs. New output directories or
+processes do not reset choices. Exact replay is allowed; changed plans/results
+conflict, including attempts to correct an invalid finalized request. Recovery
+revalidates the original construction binding and reconstructs missing derived
+artifacts only from preserved requests. Partial/corrupt records, conflicting
+reports and interrupted locks fail closed; no automatic lock takeover occurs.
+As with the existing registers, this is a trusted local filesystem mechanism,
+not protection against owner tampering, repository aliases, copied checkouts or
+power loss. No fsync durability or authenticated study identity is claimed.
+
+This interface does not change the frozen protocol, automatically admit a family
+into an empirical study, or upgrade the existing provisional authored family/episode
+interfaces to a screened-production route. Actual independently collected screening
+judgments, identity/independence evidence and semantic-support evidence remain
+missing. All screening tests use invented construction and assessor inputs; no W1
+metadata or content is loaded by the selected test set.
