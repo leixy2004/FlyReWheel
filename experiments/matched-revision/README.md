@@ -10,7 +10,7 @@ npx vitest run tests/matched-revision.experiment.test.ts --maxWorkers=2
 npx vitest run tests/matched-revision.codex.test.ts tests/workspace-worker-entrypoint.test.ts --maxWorkers=2
 ```
 
-The output directory must be new. `packet.json`, `future.json`, and `report.json` contain all inputs, requests, bounded raw outputs/failures, effective states, gate diagnostics, per-target observations, usage and paired H−U/H−M differences. Existing files are never replaced. The TypeScript API is `runMatchedRevision({ mode, packet, future, transport })`; it accepts an already digest-locked episode plus a separately locked future roster. The CLI intentionally exposes only the built-in authored fixture.
+The output directory must be new. `packet.json`, `future.json`, and `report.json` contain all inputs, requests, bounded raw outputs/failures, effective states, gate diagnostics, per-target observations, usage and paired H−U/H−M differences. Existing files are never replaced. The TypeScript API is `runMatchedRevision({ mode, packet, future, transport })`; it accepts an already digest-locked episode plus a separately locked future roster. The `replay.ts` CLI above intentionally exposes only the built-in authored fixture. The separate source application CLI also exposes the authored/blocked native workflow described below; neither path enables real-model execution.
 
 The fixture uses the **same authored candidate in U/H**, an equivalent authored memory delta in M, and **identical scripted review predictions in every arm**, including F. Consequently the demonstration does not manufacture a method win. It reports zero model executions, zero empirical episodes and zero independent human annotations. These outputs test plumbing, not accuracy, diagnosis quality, memory competence, chronology, or effect size.
 
@@ -20,7 +20,7 @@ The fixture uses the **same authored candidate in U/H**, an equivalent authored 
 - U and H use exactly the same strict proposal envelope and structured-content schema. The shared evidence/feedback/diagnosis/budget block is byte-identical. Only their edit policy changes
 - H internally injects the immutable supplied per-feedback diagnoses into the existing `validateRevisionModelResponse` / `diagnosis-operators-v1` validator. Its jointly generated diagnosis prompt is **never sent**. Boundary retention stays invalid; context requests do not acquire evidence; inferred contract diagnoses reach the existing replacement branch
 - U does not enter H's validator. It may revise all supported rule-content fields or retain/abstain/request context. Both structured arms retain product rule-schema validation, immutable provenance/obligations and exact evidence identities
-- M begins with a lossless rendering of the same content. It permits one `revise`, `qualify` or `suppress` delta. The immutable initial lesson plus the delta count toward the persistent-state cap. Suppression still reviews every scheduled target
+- M begins with a lossless rendering of the same content. It permits one `revise`, `qualify` or `suppress` delta. The active rendering alone counts toward the persistent-state cap; retired versions remain in model-invisible audit records. Suppression still reviews every scheduled target
 - Non-mutation, invalid output and rejection consume the single scheduled proposal slot; there is no retry, reroll or gate-conditioned rewriting. Only a valid changed proposal passing every gate obligation becomes effective. Otherwise the incumbent is evaluated on the entire later roster
 - Gate feedback rows must bind the selected finding's exact snapshot/source/path/issue scope and TP/FP expectation. Historical regression labels and positive obligations cannot change. Revision-consumed source digests and declared lineages cannot reappear as future targets
 - Review prompts contain only content-only persistent state and the fixed source/issue packets. They omit diagnosis, proposal rationale, gate answers, reference labels and sibling outputs. Rule provenance is not used as hidden persistent memory
@@ -31,7 +31,7 @@ The fixture uses the **same authored candidate in U/H**, an equivalent authored 
 
 `AuthoredTransport.execute(request, signal)` is the runnable **test adapter**, not a credentialed runtime. It returns a strict result, bounded output and usage. Requests declare model, sampler, response schema and output limit. It must honor cancellation; the runner also rejects late returns, including callbacks that block the timer. JavaScript cannot forcibly terminate an arbitrary injected function, and no isolation is claimed.
 
-The common review request takes the rendered effective state and every exact target/issue scope; a memory implementation must interpret `revise` as replacing the active lesson, `qualify` as a local qualification, and `suppress` as disabling it. The retained original text is audit-only under replacement/suppression. This is an explicit **local-delta memory representation and review interface**, not a heuristic that pretends to implement or validate a competent external memory system. A future real adapter must demonstrate these semantics, use a frozen model-tokenizer and trusted no-tools runtime, support exact evidence/scope assessment, and document the chosen memory method before empirical comparison. No such adapter or competence result is supplied here.
+The common review request takes the rendered effective state and every exact target/issue scope; a memory implementation must interpret `revise` as replacing the active lesson, `qualify` as a local qualification, and `suppress` as disabling it. The retained original text is audit-only under replacement/suppression and is physically absent from gate/future prompts, not accompanied by an instruction to ignore it. Replacement renders exactly the new text; qualification includes both still-active texts and its framing; suppression includes only the suppression instruction and framing. This is an explicit **local-delta memory representation and review interface**, not a heuristic that pretends to implement or validate a competent external memory system. A future real adapter must demonstrate these semantics, use a frozen model-tokenizer and trusted no-tools runtime, support exact evidence/scope assessment, and document the chosen memory method before empirical comparison. No such adapter or competence result is supplied here.
 
 The current packet reuses the product's selected-evidence revision graph, including its versioned context-citation rules. It supports detectorless or proposal-schema-compatible structured content. It is not a general W0/W1 assembler or an independent newly acquired context store. Extra restored context needs a separately validated common-evidence adapter before real use; declaration text alone is not a source record.
 
@@ -70,13 +70,13 @@ An SDK-native study could instead explicitly freeze temperature/seed as **unset 
 A separately versioned [SDK-native configuration and call-record contract](sdk-native-contracts.md)
 validates supported role settings, schedule-only seeds, unavailable generation
 controls, declared byte/time/call bounds, nullable usage/cost and explicit monetary
-admission records. Its import-only authored transport now runs a supplied block
+admission records. Its authored transport API runs a supplied block
 through this existing F/U/H/M loop and the supervised SDK fake executable, with
 separate native requests and validated `authored_completed` no-model records.
 It retains complete failure/target rosters and measures byte/time/call limits;
 unknown usage or exceeded bounds stop further work in an arm, and unverified
-cleanup stops later launches across arms. The default source CLI now exposes `evaluation native init-authored`, `init-w0`
-and `run`; use the [offline reproducibility guide](../../docs/offline-reproducibility.md)
+cleanup stops later launches across arms. The source CLI (`node --import tsx src/cli.ts`) exposes `evaluation native init-authored`, `init-w0`
+and `run`; the compiled CLI reports the source-checkout prerequisite instead of dispatching these research commands; use the [offline reproducibility guide](../../docs/offline-reproducibility.md)
 for complete runnable commands and reopen. This authored/blocked bridge does not
 provide a real-model operational dispatch path. Legacy packet validation, frozen controls and production
 `not_run` remain unchanged. Authored repeated-block scheduling and an optional
@@ -168,3 +168,33 @@ Focused integration coverage:
 ```sh
 npx vitest run tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=1
 ```
+
+## Minimal executable comparison contract
+
+[evaluation-contract.md](evaluation-contract.md) provides a runnable authored-only
+F/U/H/M admission profile over this existing runner, exact stage-input bindings,
+declared cutoff checks, mechanism-specific strict-resolution metrics and real-study
+prerequisites. It supplies no model/backend enablement or superiority evidence.
+
+## Descriptive macro report
+
+[macro-report.md](macro-report.md) adds a runnable, authored-only report over the
+existing legacy results, with equal repository/family/episode/repetition weights,
+paired H−U/H−M contrasts, explicit missingness and nullable standalone costs.
+All empirical uncertainty intervals remain withheld. Independent arithmetic
+references and a saved no-model smoke report are included.
+
+[Native macro reporting](native-macro-report.md) now accepts the canonical native
+study schedule/results with complete frozen sources and explicit dependence
+clusters. `macro-replay.ts --native-authored-smoke <new-directory>` runs the
+existing authored SDK fixture; `--native-study <input.json> --out <new-file>`
+replays its report without dispatch. Missing/interrupted blocks stay on the
+schedule, costs remain unknown, and empirical intervals remain withheld.
+
+### Active-state capacity contrast (v2 renderer)
+
+H−U contrasts hard diagnosis-conditioned edit constraints with advice under the same structured representation. H−M additionally changes the representation/update interface to one local lesson delta; it is not a pure validator ablation or a validated external memory-system comparison. M and H/U share the old-rule/evidence/diagnosis proposal input and fixed gate/future targets. The audit proposal retains `initialLesson` and the explicit delta for reproducibility, but the common renderer projects only effective current state for both review prompts and capacity admission. A replacement whose text equals H/U content produces byte-identical review input with the same targets; qualification keeps the base active and pays for both texts and framing; suppression pays for its instruction/framing and cannot remove targets or establish safety. Proposal serialization/output limits still apply to the complete audit envelope, and this remaining update-interface overhead is not claimed to be token-neutral.
+
+Legacy authored `fixture-utf8-byte-upper-bound-v1` accounting counts UTF-8 bytes despite historical token field names. Native state limits explicitly count rendered UTF-8 bytes. Equal byte limits do not establish equal model-token capacity or effective semantic capacity; a real comparison requires a frozen model/tokenizer, measured input/output use and separately demonstrated M competence. No such empirical claim is made. Saved v1 reports are historical evidence, not v2 results: replay rebuilds and validates exact requests under the current renderer/policy and rejects mismatches. Preserve old artifacts; create new runs to evaluate v2.
+
+Native recovery identity also pins the execution-policy digest (including active-state-v2). Unversioned historical checkpoints keep their original identity and remain inspectable, but cannot be silently reused for a v2 run; v2 reopening reuses its own completed records without dispatch. No existing checkpoint or migration is rewritten.

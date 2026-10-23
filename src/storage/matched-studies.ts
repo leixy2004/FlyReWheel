@@ -17,7 +17,7 @@ type Row = Record<string, unknown> & { study_digest: string; manifest: MatchedSt
 const BlockBinding = z.object({ blockId: DigestSchema, repetition: z.number().int().positive(), episodeId: z.string(),
   armOrder: z.array(z.enum(['F','U','H','M'])), futureTargetOrder: z.array(z.string()) }).passthrough();
 const ManifestInput = z.object({ schedule: z.object({ digest: DigestSchema, blocks: z.array(BlockBinding) }).passthrough(),
-  evaluation: NativeEvaluationContextSchema.optional(), configuration: z.unknown(), blocks: z.array(z.unknown()) }).strict();
+  evaluation: NativeEvaluationContextSchema.optional(), executionPolicyDigest: DigestSchema.optional(), configuration: z.unknown(), blocks: z.array(z.unknown()) }).strict();
 const ObjectPayload = z.record(z.string(), z.unknown());
 function lockedDigest(value: unknown) {
   const record = ObjectPayload.parse(value), { digest, ...body } = record;
@@ -65,7 +65,8 @@ export function matchedStudyDigest(manifest: MatchedStudyManifest): string {
   [manifest.scheduleDigest, manifest.configurationDigest, ...manifest.blockIds].forEach(d => DigestSchema.parse(d));
   digestOf(manifest); const input = bindings(manifest);
   return digestOf([manifest.kind, manifest.scheduleDigest, manifest.configurationDigest,
-    ...(input.evaluation === undefined ? [] : [digestOf(input.evaluation)])]);
+    ...(input.evaluation === undefined ? [] : [digestOf(input.evaluation)]),
+    ...(input.executionPolicyDigest === undefined ? [] : [input.executionPolicyDigest])]);
 }
 
 /** SQL transactions and row fencing, like application jobs. No broker, filesystem

@@ -1,0 +1,72 @@
+{
+  "baseCommit": "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+  "scope": "canonical native schedule authored reporting; no model/data acquisition",
+  "modelCalls": 0,
+  "empiricalEpisodes": 0,
+  "commands": [
+    "node --import tsx experiments/matched-revision/macro-replay.ts --native-authored-smoke /tmp/flyrewheel-native-macro-smoke-final",
+    "node --import tsx experiments/matched-revision/macro-replay.ts --native-study experiments/matched-revision/native-macro-smoke/input.json --out /tmp/flyrewheel-native-macro-final-report-repeat.json",
+    "cmp /tmp/flyrewheel-native-macro-final-report-repeat.json experiments/matched-revision/native-macro-smoke/report.json",
+    "npx vitest run tests/matched-revision.native-macro.test.ts tests/matched-revision.macro-report.test.ts tests/matched-revision.sdk-native-schedule.test.ts tests/matched-revision.sdk-native-diagnosis.test.ts tests/matched-revision.sdk-native-recovery.test.ts --maxWorkers=1",
+    "npx tsc --noEmit",
+    "npm run build",
+    "git diff --check"
+  ],
+  "tests": {
+    "numTotalTests": 49,
+    "numPassedTests": 49,
+    "numFailedTests": 0,
+    "success": true
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "nativeReplayByteIdentical": true,
+  "legacyReplayByteIdentical": true,
+  "reportDigest": "955deb316ee496d83917426167100c5d5b360cad5fdcecae2142a193dbe1b519",
+  "smoke": {
+    "plannedRepetitions": 3,
+    "completedBlocks": 2,
+    "missingBlocks": 1,
+    "armCallRecords": 22,
+    "sharedDiagnosisRecords": 2,
+    "standaloneMonetaryCosts": "unknown",
+    "empiricalIntervals": "withheld"
+  },
+  "reviewers": [
+    {
+      "name": "identity_audit",
+      "role": "statistical",
+      "outcome": "no remaining blocker"
+    },
+    {
+      "name": "leakage_audit",
+      "role": "code integrity",
+      "outcome": "no remaining blocker after interrupted request/diagnosis and within/across block fail-stop checks"
+    }
+  ],
+  "extremeAlphaFix": {
+    "formula": "sqrt(2*(log(2)-log(alpha))/n)",
+    "alpha": "Number.MIN_VALUE = 2^-1074",
+    "n": 2,
+    "independentDecimal60Reference": "27.2971284039537977117016457713274089348983693810834791288227",
+    "finiteAndJsonSerializationRegression": "passed"
+  },
+  "fileSha256": {
+    "experiments/matched-revision/macro-report.ts": "e1cbaf282da0dfbdba5bffea429e84d63d3ad16137758ed1e0fdfa4a1d246b2f",
+    "experiments/matched-revision/macro-replay.ts": "10991a1db41486c86538ddf40265cf28140fc8c35da8b53c8e4f54a208c330a2",
+    "experiments/matched-revision/macro-reference.py": "f168865fefe6446705bdca6baf96a35997be3e723b9cebd20f2773313677b68a",
+    "experiments/matched-revision/native-macro-report.ts": "4043ca8bc336261cc97c1190f363f02053eb9a08a1c6fcdba4b80281ed8f124e",
+    "experiments/matched-revision/native-macro-integrity.ts": "edc6e97771f48f714977a201e9cc7788561a13950ab2ba72abdbddc182fd4159",
+    "experiments/matched-revision/native-macro-fixture.ts": "f9186bfab1715e5e194d64906349865bf5af160eef302dc0800eeeb6c52add3f",
+    "experiments/matched-revision/native-macro-smoke/input.json": "a0d9ce3d942b92969c56b759fbac7c530af8338fe32b5dc823d5d1a60a49b21f",
+    "experiments/matched-revision/native-macro-smoke/report.json": "da27e1a56eb7d8508f1794865464f2874e96aafab55f81abc8a0f92abb978441",
+    "experiments/matched-revision/native-macro-smoke/arithmetic-reference.json": "f3fb6e0b7f3db4c58e33da9699a6cf1769f201161155ba9d45f0fc7dac9ad6c5",
+    "tests/matched-revision.native-macro.test.ts": "1bf5809fa9186769cbdf70afd82057ca25f86593e7e782fd1dccac524d18c4d2",
+    "tests/matched-revision.macro-report.test.ts": "3bea3892815f4ddd30fb84025e4b0545fec9ed32504eb22b3b07db15f61909b1"
+  },
+  "remainingBoundaries": [
+    "authored receipt consistency is not execution/label truth attestation",
+    "cluster mapping is declared, not proof of independent probability sampling",
+    "all empirical intervals withheld; cross-repository equal weighting is a documented descriptive extension"
+  ]
+}

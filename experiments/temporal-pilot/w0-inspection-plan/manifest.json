@@ -1,0 +1,1334 @@
+{
+  "schemaVersion": 1,
+  "kind": "prospective-w0-development-inspection-plan",
+  "baseCommit": "e410339414f42292f14f938d877a58308e997c25",
+  "freezeEvent": "Git commit containing this manifest and protocol, verified on remote before further source inspection",
+  "formalPreregistration": false,
+  "acquisitionAuthorized": false,
+  "inputDigests": {
+    "experiments/temporal-pilot/httpx-2024-frame.json": "07c1ded10a03002eed7b3f25d75c33e161876d72f71371b4cbfc1652022f477b",
+    "experiments/annotation/verification/httpx-family-admission.json": "fbf7d2c4316b018c2da5c75d27cf0de244b28a42cd801a308592d4cfa188de24",
+    "experiments/temporal-pilot/w0-inspection-plan/PROTOCOL.md": "eaff448d23664d4c32fda345b0ace0f337a1dac0200c46f4d22fc1d76493b7a7"
+  },
+  "orderRule": "mergedAt ascending, numeric PR number ascending tie-break",
+  "window": {
+    "id": "W0",
+    "start": "2024-01-01T00:00:00Z",
+    "endExclusive": "2024-04-01T00:00:00Z"
+  },
+  "counts": {
+    "frame": 70,
+    "W0": 38,
+    "priorBlocked": 3,
+    "remaining": 35
+  },
+  "proposedBudget": {
+    "pendingPRsOnly": true,
+    "requestsPerPR": 30,
+    "totalRequests": 1050,
+    "responseBytes": 2097152,
+    "perPRBytes": 20971520,
+    "totalReceivedDecodedBytes": 367001600,
+    "totalRetainedBytes": 367001600,
+    "timeoutSeconds": 60,
+    "retries": 0
+  },
+  "rows": [
+    {
+      "order": 1,
+      "number": 3035,
+      "mergedAt": "2024-01-03T05:11:45Z",
+      "window": "W0",
+      "mergeCommit": "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5",
+      "parents": [
+        "dd5304d3eb97f0aad7126a45f3fd7041dfee0ac2"
+      ],
+      "tree": "f8589290a1d1f584662baf10fe61f17f7f26ddeb",
+      "priorAdmission": {
+        "number": 3035,
+        "sha256": "a0e1de76143154a1fd8f021c8be9f9a778a161986e5d5d03fc50e1ca92a92883",
+        "snapshotDigest": "4532d1b688fe3e437720fbd54edcddb87da8d644a57aa4ed21f49a4ef54ee535",
+        "admission": "blocked",
+        "missing": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "planningDisposition": "previously_blocked_insufficient_evidence",
+      "sourceExposure": "previously_exposed_development",
+      "screening": {
+        "candidateId": "encode/httpx#3035",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3035",
+          "experiments/annotation/verification/httpx-family-admission.json"
+        ],
+        "screeningOrder": 1,
+        "status": "unresolved",
+        "reasons": [
+          "3035 is a mkdocs-material pin change; no docs behavior result establishes a defect"
+        ],
+        "developmentExposure": "Previously exposed; current admission blocked",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 2,
+      "number": 3031,
+      "mergedAt": "2024-01-03T05:14:26Z",
+      "window": "W0",
+      "mergeCommit": "ea3071642d12ed546d901861a5901da6fad37073",
+      "parents": [
+        "b871b4b8b29aca2e675645fae0c9f8e7d2a5e7d5"
+      ],
+      "tree": "9ca547def2324e42cc626f9ffc23ee66a26c7046",
+      "priorAdmission": {
+        "number": 3031,
+        "sha256": "41f3209e3209d8790127149d5928c27910048e3515cf60e786ccfd30b2247c7a",
+        "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+        "admission": "blocked",
+        "missing": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "planningDisposition": "previously_blocked_insufficient_evidence",
+      "sourceExposure": "previously_exposed_development",
+      "screening": {
+        "candidateId": "encode/httpx#3031",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3031",
+          "experiments/annotation/verification/httpx-family-admission.json"
+        ],
+        "screeningOrder": 2,
+        "status": "unresolved",
+        "reasons": [
+          "3031 is a Ruff pin change; both bounded tool checks pass, not a semantic repair label"
+        ],
+        "developmentExposure": "Previously exposed; current admission blocked",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 3,
+      "number": 3036,
+      "mergedAt": "2024-01-03T05:36:16Z",
+      "window": "W0",
+      "mergeCommit": "f1ed7463086f0aed97afa61a1197c51840d3bb2e",
+      "parents": [
+        "ea3071642d12ed546d901861a5901da6fad37073"
+      ],
+      "tree": "58c8dffae1c39b3954b68d13041d024d45e6f712",
+      "priorAdmission": {
+        "number": 3036,
+        "sha256": "9eb899563bd26d08fbd03d8b0fe0d4323243f5b20fd663d0969d81d877840ffd",
+        "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+        "admission": "blocked",
+        "missing": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "planningDisposition": "previously_blocked_insufficient_evidence",
+      "sourceExposure": "previously_exposed_development",
+      "screening": {
+        "candidateId": "encode/httpx#3036",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3036",
+          "experiments/annotation/verification/httpx-family-admission.json"
+        ],
+        "screeningOrder": 3,
+        "status": "unresolved",
+        "reasons": [
+          "3036 changes setup-python references; static syntax/ref checks do not establish external action behavior"
+        ],
+        "developmentExposure": "Previously exposed; current admission blocked",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "source-supported substantive rule/constraint",
+          "actual independently verified feedback",
+          "independent future opportunities"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 4,
+      "number": 3034,
+      "mergedAt": "2024-01-03T05:44:26Z",
+      "window": "W0",
+      "mergeCommit": "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3",
+      "parents": [
+        "f1ed7463086f0aed97afa61a1197c51840d3bb2e"
+      ],
+      "tree": "ce25806e1c1121ade2cef4e8197866713232bd01",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3034",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3034"
+        ],
+        "screeningOrder": 4,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 5,
+      "number": 3032,
+      "mergedAt": "2024-01-03T07:18:02Z",
+      "window": "W0",
+      "mergeCommit": "ebc1393c5cf6430e3027bdb724368a9d6e3429ef",
+      "parents": [
+        "4ddff16bbe41c0bc4b8a5ea3a2c204d8e99478f3"
+      ],
+      "tree": "f005abc6d72aeb76ff234a6fba8a63637930281d",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3032",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3032"
+        ],
+        "screeningOrder": 5,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 6,
+      "number": 3038,
+      "mergedAt": "2024-01-04T15:03:10Z",
+      "window": "W0",
+      "mergeCommit": "c6907c22034e2739c4c1af89908e3c9f90602788",
+      "parents": [
+        "ebc1393c5cf6430e3027bdb724368a9d6e3429ef"
+      ],
+      "tree": "fc69d2ef76957364de977cd389cd9efd3b18c222",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3038",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3038"
+        ],
+        "screeningOrder": 6,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 7,
+      "number": 3042,
+      "mergedAt": "2024-01-08T11:09:14Z",
+      "window": "W0",
+      "mergeCommit": "ca51b4532a4495c38c8abf1a393dbd80099deae3",
+      "parents": [
+        "c6907c22034e2739c4c1af89908e3c9f90602788"
+      ],
+      "tree": "4fe059332d4f3aa1e04f6d616070b30579dcb242",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3042",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3042"
+        ],
+        "screeningOrder": 7,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 8,
+      "number": 3045,
+      "mergedAt": "2024-01-10T10:08:43Z",
+      "window": "W0",
+      "mergeCommit": "99cba6ac642b12f0331d069ae324402c54c4c600",
+      "parents": [
+        "ca51b4532a4495c38c8abf1a393dbd80099deae3"
+      ],
+      "tree": "6309516480c904b2adcfac9d536e6f2a6861a862",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3045",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3045"
+        ],
+        "screeningOrder": 8,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 9,
+      "number": 3054,
+      "mergedAt": "2024-01-12T18:48:03Z",
+      "window": "W0",
+      "mergeCommit": "ab720d325808e1d092787995c2023c9aeb24aff5",
+      "parents": [
+        "99cba6ac642b12f0331d069ae324402c54c4c600"
+      ],
+      "tree": "aff4c0d689d1dafade67bf691c0a92fe33e1af91",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3054",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3054"
+        ],
+        "screeningOrder": 9,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 10,
+      "number": 3049,
+      "mergedAt": "2024-01-15T09:48:56Z",
+      "window": "W0",
+      "mergeCommit": "8cd952c88fc2d0469cee8f08c2a580652b084375",
+      "parents": [
+        "ab720d325808e1d092787995c2023c9aeb24aff5"
+      ],
+      "tree": "d235d2ddd64305270c8c54b154541aa3d4e618d0",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3049",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3049"
+        ],
+        "screeningOrder": 10,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 11,
+      "number": 3055,
+      "mergedAt": "2024-01-15T10:04:09Z",
+      "window": "W0",
+      "mergeCommit": "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9",
+      "parents": [
+        "8cd952c88fc2d0469cee8f08c2a580652b084375"
+      ],
+      "tree": "2c408880bcaf9bc1daae3fac91ef00d2925eb02d",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3055",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3055"
+        ],
+        "screeningOrder": 11,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 12,
+      "number": 3058,
+      "mergedAt": "2024-01-15T11:15:31Z",
+      "window": "W0",
+      "mergeCommit": "73e688875a3579b67eee5795839b9660a1cfe5d8",
+      "parents": [
+        "419d3a9d80d0c4072f6cb58eeb306148ae89e2e9"
+      ],
+      "tree": "c1d66c87afdcea9b1288d3e628f511253904ae18",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3058",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3058"
+        ],
+        "screeningOrder": 12,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 13,
+      "number": 3056,
+      "mergedAt": "2024-01-15T12:30:09Z",
+      "window": "W0",
+      "mergeCommit": "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e",
+      "parents": [
+        "73e688875a3579b67eee5795839b9660a1cfe5d8"
+      ],
+      "tree": "0e88f8b60fb82a1c632c2266ca71a3c15f8302b6",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3056",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3056"
+        ],
+        "screeningOrder": 13,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 14,
+      "number": 3057,
+      "mergedAt": "2024-01-15T13:01:04Z",
+      "window": "W0",
+      "mergeCommit": "15f925336c6bad2f5b2711553a6b6763923175de",
+      "parents": [
+        "d76607b112bf0bfbc79dc4dd8566101c69dbfa6e"
+      ],
+      "tree": "09b6ae75014545254949564ce034b0cd28075788",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3057",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3057"
+        ],
+        "screeningOrder": 14,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 15,
+      "number": 3063,
+      "mergedAt": "2024-01-16T09:53:23Z",
+      "window": "W0",
+      "mergeCommit": "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8",
+      "parents": [
+        "15f925336c6bad2f5b2711553a6b6763923175de"
+      ],
+      "tree": "8dca6ed316f0f907238122dac6e63bb538c74746",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3063",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3063"
+        ],
+        "screeningOrder": 15,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 16,
+      "number": 3061,
+      "mergedAt": "2024-01-16T10:25:02Z",
+      "window": "W0",
+      "mergeCommit": "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5",
+      "parents": [
+        "c7cd6aa5bdcf9f9d63e7dcea33cb78d6920aeed8"
+      ],
+      "tree": "2a00ea62200f31efa73ef213b64b70e0533b5998",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3061",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3061"
+        ],
+        "screeningOrder": 16,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 17,
+      "number": 3068,
+      "mergedAt": "2024-01-24T14:30:23Z",
+      "window": "W0",
+      "mergeCommit": "371b6e946c9e70df3dce79590c195448eac3f635",
+      "parents": [
+        "4f6edf36e93fd9f83ff95b065718fd6bd0c4d3c5"
+      ],
+      "tree": "cfa03bb38e898dd5c4ae3fa9aef3961ef961f5d6",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3068",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3068"
+        ],
+        "screeningOrder": 17,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 18,
+      "number": 3066,
+      "mergedAt": "2024-01-30T07:01:56Z",
+      "window": "W0",
+      "mergeCommit": "37a2901af38f4142ee902c838aaaf92cf8a80f6a",
+      "parents": [
+        "371b6e946c9e70df3dce79590c195448eac3f635"
+      ],
+      "tree": "ccb1dfefb4def3389f15e01e7328b2f930b82f3e",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3066",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3066"
+        ],
+        "screeningOrder": 18,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 19,
+      "number": 3077,
+      "mergedAt": "2024-02-01T16:19:47Z",
+      "window": "W0",
+      "mergeCommit": "6f461522a5c58839c31be3c82b7bd47fba77109b",
+      "parents": [
+        "37a2901af38f4142ee902c838aaaf92cf8a80f6a"
+      ],
+      "tree": "a63dc46f3668b5133825144bafc0120b4515ffc1",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3077",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3077"
+        ],
+        "screeningOrder": 19,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 20,
+      "number": 3050,
+      "mergedAt": "2024-02-02T13:29:41Z",
+      "window": "W0",
+      "mergeCommit": "cabd1c095e52e2f67ab63ec17941d3a539d7c877",
+      "parents": [
+        "6f461522a5c58839c31be3c82b7bd47fba77109b"
+      ],
+      "tree": "889bbd1a370f10b105234e8229a5184995d4745c",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3050",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3050"
+        ],
+        "screeningOrder": 20,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 21,
+      "number": 3080,
+      "mergedAt": "2024-02-06T10:40:35Z",
+      "window": "W0",
+      "mergeCommit": "c51af4ba52d4103517a91f770e617cc579803b2d",
+      "parents": [
+        "cabd1c095e52e2f67ab63ec17941d3a539d7c877"
+      ],
+      "tree": "a92ef97ff802286d022f2b5ac75053388666ddcd",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3080",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3080"
+        ],
+        "screeningOrder": 21,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 22,
+      "number": 3081,
+      "mergedAt": "2024-02-14T11:14:02Z",
+      "window": "W0",
+      "mergeCommit": "3faa4a8f2e0d406167b913bbfd3afab087662d03",
+      "parents": [
+        "c51af4ba52d4103517a91f770e617cc579803b2d"
+      ],
+      "tree": "c29b80a51cb1e6cf1e8af21630640db337293bf0",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3081",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3081"
+        ],
+        "screeningOrder": 22,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 23,
+      "number": 3097,
+      "mergedAt": "2024-02-20T16:04:43Z",
+      "window": "W0",
+      "mergeCommit": "cdf1c7ab3a9bd9c0065202d22958999fb8688928",
+      "parents": [
+        "769302a3480ef400baeb5c15e49e9d94849a019a"
+      ],
+      "tree": "d525a8a214559f9d50b0601dae524a322815c1b5",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3097",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3097"
+        ],
+        "screeningOrder": 23,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 24,
+      "number": 3095,
+      "mergedAt": "2024-02-21T13:06:20Z",
+      "window": "W0",
+      "mergeCommit": "326b9431c761e1ef1e00b9f760d1f654c8db48c6",
+      "parents": [
+        "3faa4a8f2e0d406167b913bbfd3afab087662d03"
+      ],
+      "tree": "40173b1c8fd3f7895fb2e5ae91f41cf66f1d2cb8",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3095",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3095"
+        ],
+        "screeningOrder": 24,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 25,
+      "number": 3107,
+      "mergedAt": "2024-02-22T14:52:20Z",
+      "window": "W0",
+      "mergeCommit": "77cb36f181b6ee728dd25c781ba5550a8804ee1d",
+      "parents": [
+        "326b9431c761e1ef1e00b9f760d1f654c8db48c6"
+      ],
+      "tree": "d25acdfc7030c3fda529d56769baf6085cef0d46",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3107",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3107"
+        ],
+        "screeningOrder": 25,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 26,
+      "number": 3106,
+      "mergedAt": "2024-02-23T12:30:05Z",
+      "window": "W0",
+      "mergeCommit": "87713d2172053c4ad05efacf3ab7e0a5c15616fc",
+      "parents": [
+        "77cb36f181b6ee728dd25c781ba5550a8804ee1d"
+      ],
+      "tree": "b56d071d58f24f0d75b4b47c8bc3c534f098d8c2",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3106",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3106"
+        ],
+        "screeningOrder": 26,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 27,
+      "number": 3109,
+      "mergedAt": "2024-02-23T13:36:45Z",
+      "window": "W0",
+      "mergeCommit": "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2",
+      "parents": [
+        "87713d2172053c4ad05efacf3ab7e0a5c15616fc"
+      ],
+      "tree": "c90dfb8be4e394ab1b63a9ba00092b1391b9a16d",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3109",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3109"
+        ],
+        "screeningOrder": 27,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 28,
+      "number": 3064,
+      "mergedAt": "2024-02-23T14:11:43Z",
+      "window": "W0",
+      "mergeCommit": "e745060c75d06a7a6c1c90007120af2a43b3fffc",
+      "parents": [
+        "4de13707ee0fbc6e3ea5b30c90cf64aae0af7fb2"
+      ],
+      "tree": "efa04e600df75aaa02cba19fe835fc02ca5de8d3",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3064",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3064"
+        ],
+        "screeningOrder": 28,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 29,
+      "number": 3062,
+      "mergedAt": "2024-02-23T14:16:03Z",
+      "window": "W0",
+      "mergeCommit": "fc84f7f6eb77fe5d4428261c837ac8016ec77a28",
+      "parents": [
+        "e745060c75d06a7a6c1c90007120af2a43b3fffc"
+      ],
+      "tree": "5faa4e2bce6a0a16819b94d5b8dfd116d5b5eda9",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3062",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3062"
+        ],
+        "screeningOrder": 29,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 30,
+      "number": 3112,
+      "mergedAt": "2024-02-23T14:33:15Z",
+      "window": "W0",
+      "mergeCommit": "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f",
+      "parents": [
+        "fc84f7f6eb77fe5d4428261c837ac8016ec77a28"
+      ],
+      "tree": "b5eb8afc512648ec8595bdef96ac7c057f12ed2e",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3112",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3112"
+        ],
+        "screeningOrder": 30,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 31,
+      "number": 3116,
+      "mergedAt": "2024-02-26T16:36:58Z",
+      "window": "W0",
+      "mergeCommit": "6d852d319acd5d97caf14037dff15ede04b37542",
+      "parents": [
+        "df5345140e09ac6c2de0d9589bcd6f3e31c6aa3f"
+      ],
+      "tree": "28924b16f92e72ea15946d9aa614e6afe1f0f070",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3116",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3116"
+        ],
+        "screeningOrder": 31,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 32,
+      "number": 3123,
+      "mergedAt": "2024-02-28T18:13:23Z",
+      "window": "W0",
+      "mergeCommit": "6045186f7d3a665b965c13dec413e3a346b1a01d",
+      "parents": [
+        "6d852d319acd5d97caf14037dff15ede04b37542"
+      ],
+      "tree": "4d0df881741d097801c8ad03815ca171d8e9f720",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3123",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3123"
+        ],
+        "screeningOrder": 32,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 33,
+      "number": 3124,
+      "mergedAt": "2024-02-29T11:11:44Z",
+      "window": "W0",
+      "mergeCommit": "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33",
+      "parents": [
+        "6045186f7d3a665b965c13dec413e3a346b1a01d"
+      ],
+      "tree": "cda44d047e03607b82e1d4678a4059a56bf55261",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3124",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3124"
+        ],
+        "screeningOrder": 33,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 34,
+      "number": 3122,
+      "mergedAt": "2024-02-29T11:42:17Z",
+      "window": "W0",
+      "mergeCommit": "7e10342c2ad44955582e4fef96470f3e653347d4",
+      "parents": [
+        "4941b40cbbae1ceb2b7a3d4e8064df96806c5e33"
+      ],
+      "tree": "fae52b2c5ffd9ea1e6c9b7da8e56d966bd59b233",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3122",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3122"
+        ],
+        "screeningOrder": 34,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 35,
+      "number": 3120,
+      "mergedAt": "2024-02-29T13:40:07Z",
+      "window": "W0",
+      "mergeCommit": "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb",
+      "parents": [
+        "7e10342c2ad44955582e4fef96470f3e653347d4"
+      ],
+      "tree": "771456d0587370fabadddbd15845b3fa2edb6e30",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3120",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3120"
+        ],
+        "screeningOrder": 35,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 36,
+      "number": 3131,
+      "mergedAt": "2024-03-01T19:49:23Z",
+      "window": "W0",
+      "mergeCommit": "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d",
+      "parents": [
+        "f3eb3c90fdd19d2e4c5239e19a3588d072ff53fb"
+      ],
+      "tree": "7d2b98ce5d901b0bb4a8f879613ee7ae7c4d388c",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3131",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3131"
+        ],
+        "screeningOrder": 36,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 37,
+      "number": 3129,
+      "mergedAt": "2024-03-01T20:05:55Z",
+      "window": "W0",
+      "mergeCommit": "7df47ce4d93a06f2c3310cd692b4c2336d7663ba",
+      "parents": [
+        "0006ed0547f8f8a3cbe2edf758e996c3c73b5e7d"
+      ],
+      "tree": "e7f009ced4ed412fdb476a75970e67ada7ea29ce",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3129",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3129"
+        ],
+        "screeningOrder": 37,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    },
+    {
+      "order": 38,
+      "number": 3139,
+      "mergedAt": "2024-03-21T10:17:15Z",
+      "window": "W0",
+      "mergeCommit": "392dbe45f086d0877bd288c5d68abf860653b680",
+      "parents": [
+        "7df47ce4d93a06f2c3310cd692b4c2336d7663ba"
+      ],
+      "tree": "2607b9e37d12ad5b198eff48e4e915cc785cebda",
+      "priorAdmission": null,
+      "planningDisposition": "pending_source_inspection",
+      "sourceExposure": "not_inspected_in_this_planning_task_other_exposure_unverified",
+      "screening": {
+        "candidateId": "encode/httpx#3139",
+        "sourceRefs": [
+          "experiments/temporal-pilot/httpx-2024-frame.json#PR3139"
+        ],
+        "screeningOrder": 38,
+        "status": "pending",
+        "reasons": [],
+        "developmentExposure": "Metadata only in this task; collaborator exposure requires audit",
+        "naturalOrConstructed": "generated_rule_temporal",
+        "annotationMinutes": 0,
+        "missingEvidence": [
+          "pinned source package and identity/license receipts",
+          "substantive source-bound rule/contract and complete semantic context"
+        ]
+      },
+      "newSourceRequests": 0,
+      "independentHumanLabels": 0,
+      "constructionAttempt": null
+    }
+  ]
+}

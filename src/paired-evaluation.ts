@@ -55,9 +55,12 @@ function explicitAnchor(review: SemanticReview, finding: ReviewFinding): boolean
     ? judgment.anchorJudgments.some(a => digestOf(a.anchor) === digestOf(finding.anchor))
     : judgment.findingAnchors.some(a => digestOf(a) === digestOf(finding.anchor));
 }
-function validate(dataset: EvaluationDataset, annotations: EvaluationAnnotations, runs: EvaluationRuns) {
+/** Pure annotation validation without fabricating model runs. */
+export function validateEvaluationAnnotations(datasetInput: unknown, annotationInput: unknown) {
+  bounded(datasetInput, LIMITS.datasetBytes, 'Dataset'); bounded(annotationInput, LIMITS.annotationBytes, 'Annotations');
+  const dataset = EvaluationDatasetSchema.parse(datasetInput), annotations = EvaluationAnnotationSchema.parse(annotationInput);
   const datasetDigest = digestOf(dataset);
-  if (annotations.datasetDigest !== datasetDigest || runs.datasetDigest !== datasetDigest) throw new Error('Dataset digest mismatch');
+  if (annotations.datasetDigest !== datasetDigest) throw new Error('Dataset digest mismatch');
   unique(dataset.prs.map(p => p.id), 'PR ID'); unique(dataset.families.map(f => f.id), 'family ID');
   unique(dataset.families.flatMap(f => f.ruleIds), 'rule ID across frozen families');
   unique(dataset.prs.map(p => JSON.stringify([p.repository, p.number])), 'PR alias; only one checkpoint per sampled PR is supported');
@@ -102,6 +105,15 @@ function validate(dataset: EvaluationDataset, annotations: EvaluationAnnotations
       occupied.add(identity);
     }
   }
+  return { dataset, annotations };
+}
+function validate(dataset: EvaluationDataset, annotations: EvaluationAnnotations, runs: EvaluationRuns) {
+  validateEvaluationAnnotations(dataset, annotations);
+  if (runs.datasetDigest !== digestOf(dataset)) throw new Error('Dataset digest mismatch');
+  const units = new Set(dataset.prs.flatMap(pr => dataset.families.map(f => key(pr.id, f.id))));
+  const checkUnit = (prId: string, familyId: string) => {
+    if (!units.has(key(prId, familyId))) throw new Error('Orphan PR/family unit outside the dataset roster');
+  };
   unique(runs.arms.map(a => a.id), 'arm ID');
   if (!runs.arms.some(a => a.id === runs.baselineArmId)) throw new Error('Baseline arm is absent');
   let findings = 0;

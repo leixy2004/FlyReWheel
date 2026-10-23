@@ -185,7 +185,7 @@ it('requires memory initial bytes, one bounded delta, and a representation-neutr
   const report = await run(f), m = report.arms.find(a => a.arm === 'M')!;
   expect(m.disposition).toBe('changed'); expect(m.future).toHaveLength(3);
   expect(m.calls.find(c => c.stage === 'future')!.request.prompt).toContain('lesson is suppressed');
-  expect(m.calls.find(c => c.stage === 'future')!.request.prompt).toContain('initialLesson is audit-only');
+  expect(m.calls.find(c => c.stage === 'future')!.request.prompt).not.toContain('initialLesson');
 });
 
 it('fails closed for production, absent transport, and unavailable usage', async () => {

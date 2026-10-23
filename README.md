@@ -4,6 +4,8 @@
 
 本目录是唯一持续维护的 FlyReWheel 版本：基于恢复的公开提交 `7bc18b4ac4cd932d8cde12d085b1d947c7816c4e`，现已合入固定版本 Sandcastle 的工作区生命周期。重启前报告的 425 项测试对应的后续源码未找回，不能将旧结果用于当前版本；恢复范围与本次实测见[验证记录](docs/verification.md)。旁边的 `workspace-proof/` 仅保留作历史实验归档，不是第二个产品版本。
 
+当前收敛状态、已整合分支与可运行入口见[统一应用检查点](docs/converged-application-2026-10-04.md)。其中本地 authored 治理闭环可运行，真实模型、完整 runtime 与实际部署的边界仍单独保留。
+
 当前是 **0.1 验证版本**：领域证据、真实 AST 检测、规则版本、回放、反馈、晋升门禁、队列和 Codex 适配已经实现。它尚未覆盖完整的持续治理工作流。没有完成真实模型调用或部署 k3s；开发验证不等于真实效果或生产就绪。
 
 ## 为什么这样选
@@ -343,3 +345,10 @@ See [governed semantic reviews](docs/governed-semantic-reviews.md) for the CLI,
 Domain migrations now reuse pinned node-pg-migrate with ordered history, SHA-256 checksums and atomic upgrades. Existing pre-ledger databases must be backed up, reviewed with `database inspect`, then explicitly adopted without replaying historical SQL. See [database migrations and recovery](docs/database-migrations.md) before upgrading an existing store.
 
 Worker deployment entrypoint compatibility and explicit opt-in flags: [worker launch guide](docs/worker-launch-compatibility.md). JSON preflight remains inspection-only.
+
+## Repository backlog and history
+
+Outstanding runtime and research work is tracked in [docs/TODO.md](docs/TODO.md).
+Issue closure means tracking migration, not empirical or runtime completion.
+The [2026-10-23 branch audit](docs/repository-governance-2026-10-23.md) records
+retained branch SHAs, integration decisions and verification boundaries.

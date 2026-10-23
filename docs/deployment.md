@@ -194,7 +194,8 @@ PVC 分别声明 Codex 1Gi、Postgres 10Gi、SeaweedFS 20Gi。**local-path 的 P
 
 The base worker now registers both the legacy replay queue and a bounded workspace
 application queue. The checked-in executable reports application runtime `blocked`
-until a reviewed bootstrap injects a trusted backend, enabled model configuration,
+by default. The [explicit worker bootstrap](worker-application-bootstrap.md) can
+inject a trusted backend, enabled model configuration,
 and logical workspace resolver. No manifest environment variable enables a fixture
 fallback. `/readyz` covers the queue service and includes `applicationRuntime`; it
 is not a workspace-execution readiness attestation. See [application jobs](application-jobs.md)
@@ -213,7 +214,7 @@ Service selector 或探针端口的确定性错配。修正了上面的 S3 范�
 | --- | --- | --- |
 | 队列服务镜像 | 根目录 Dockerfile 的 `/app`、`node dist/worker.js` 与 base command 一致；UID/GID 10001 | 该集成版本镜像构建、目标架构与容器启动 |
 | 隔离 workspace 镜像 | `deploy/workspace-worker` 的工作目录为 `/workspace/repo`，入口为 `/opt/flyrewheel/bin/workspace-worker`；默认 CMD 仅 sleep，recipe gateway 为 blocked | 不能替换成 base 的 `flyrewheel:dev` 后继续使用相对 `dist/worker.js`；需独立固定镜像和实际 authority/gateway |
-| 显式 application composition | `worker-bootstrap.ts` 提供组合函数，但 checked-in `worker.ts` 未调用；配置环境变量不能替代可信代码注入 | 已授权的精确 workspace resolver、实际 lifecycle authority、固定 OpenSandbox/模型配置与凭据门禁 |
+| 显式 application composition | `worker.ts` 现提供显式 enable + 绝对模块路径 + SHA256 的组合入口；默认仍 blocked，环境变量不能替代可信代码注入 | 已授权的精确 workspace resolver、实际 lifecycle authority、固定 OpenSandbox/模型配置与凭据门禁 |
 | 环境变量 | `DATABASE_URL` 明确选择 PostgreSQL；`PORT=8080`；`QE_S3_*` 对应 replay artifacts；`QE_ENABLE_MODEL`、`QE_CODEX_*`、`QE_MODEL_*` 对应 legacy replay | 不存在一个已接线的 ambient bootstrap JSON/module 环境变量；不要发明该入口 |
 | 迁移顺序 | `openSelectedStore` 完成领域迁移后才调用 `openQueue`，再注册两类 handler 并监听健康端口；SQL 随 build 复制到 dist/storage/migrations | 旧库备份/显式接管、实际数据库 DDL 权限、真实恢复核验 |
 | readiness | `/readyz` 可在 `applicationRuntime=blocked` 时返回 200；后续 maintenance 每 30 秒核对过期 job reconciliation 和 application queue | 不证明模型、S3 签名、runtime/frozen-read 或请求入口可用；HTTP 探针不检查 JSON 字段 |

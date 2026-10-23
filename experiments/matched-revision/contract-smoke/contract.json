@@ -1,0 +1,85 @@
+{
+  "digest": "8d949d5153e65ccd744d376fbcf6cf916a0f5edcffaa375a0c3a88137110b33d",
+  "value": {
+    "schemaVersion": 1,
+    "purpose": "offline-study",
+    "execution": "authored-only",
+    "arms": [
+      "F",
+      "U",
+      "H",
+      "M"
+    ],
+    "implementationBaseCommit": "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+    "researchDesign": "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+    "packetDigest": "771843f194a1c93c48df5cd30cbcca594c8e903a06a80b1b2ffec34766145e19",
+    "futureDigest": "2a80283454697590f137e1aa340311c928b219b6bdd502db28d336c129cc37ba",
+    "settings": {
+      "revisionModel": "authored-no-live-model",
+      "reviewerModel": "authored-no-live-model",
+      "sampler": {
+        "temperature": 0,
+        "seed": 1
+      },
+      "armOrder": [
+        "U",
+        "F",
+        "M",
+        "H"
+      ],
+      "tokenizer": "fixture-utf8-byte-upper-bound-v1",
+      "limits": {
+        "revisionInputTokens": 100000,
+        "revisionOutputTokens": 20000,
+        "persistentStateTokens": 8000,
+        "reviewInputTokens": 100000,
+        "reviewOutputTokens": 20000,
+        "maxCallsPerArm": 3,
+        "maxInputBytes": 200000,
+        "maxOutputBytes": 100000,
+        "maxInputTokensPerArm": 300000,
+        "maxOutputTokensPerArm": 60000,
+        "timeoutMsPerCall": 1000,
+        "maxElapsedMsPerArm": 10000,
+        "maxCostMicrosPerArm": 0
+      }
+    },
+    "temporal": {
+      "basis": "authored-declarations-not-historical-proof",
+      "revisionCutoff": "2026-10-02T00:00:00Z",
+      "futureWindowStart": "2026-10-03T00:00:00Z"
+    },
+    "inputs": {
+      "revision": {
+        "inputDigest": "c83a6f606d7f5b6e8350036b4271ba0c738290f2411f5f4feb52dac6abdd0911",
+        "declaredAvailableAt": "2026-10-02T00:00:00Z"
+      },
+      "gate": [
+        {
+          "inputDigest": "b42c387d118d2cb557e9d6a8c5823ec1b8a71f9e43823f8e23b6cf82b0182c3b",
+          "declaredAvailableAt": "2026-10-02T00:00:00Z"
+        },
+        {
+          "inputDigest": "a97c1a4032820b0b964b172d756d2629965275b51d7fd47917b1134e51f9b873",
+          "declaredAvailableAt": "2026-10-02T00:00:00Z"
+        }
+      ],
+      "futureReview": [
+        {
+          "inputDigest": "b0e7721a72ad11c5d588be5db0361409f266593cc0861073b90e165f65c65a3a",
+          "declaredAvailableAt": "2026-10-03T00:00:00Z"
+        },
+        {
+          "inputDigest": "413b7a780588cc6252231a0c9622d122838eda3dc2c5af3d25edc8e64e5b2856",
+          "declaredAvailableAt": "2026-10-03T00:00:00Z"
+        },
+        {
+          "inputDigest": "e2ef120120d287f28caf6994938741c9eb92ace2842cd7376f5b60ab4538ebf7",
+          "declaredAvailableAt": "2026-10-03T00:00:00Z"
+        }
+      ],
+      "scoringLabelsDigest": "aaa7c0fcafc57cb68386ff3e63b614cc83882e6f5026eae4f0ccaf1686dc554f"
+    },
+    "accounting": "existing-authored-ledger-declared-usage-not-provider-billing"
+  }
+}

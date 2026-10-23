@@ -141,6 +141,9 @@ function pairedDifferences(runs: { arm: Arm; metrics: ReturnType<typeof scoreFut
     return { contrast: `H-${other}`, positiveRecall: difference(hard.positiveRecall.value, baseline.positiveRecall.value),
       legalFalseAlarmRate: difference(hard.legalFalseAlarmRate.value, baseline.legalFalseAlarmRate.value),
       strictLegalResolution: difference(hard.strictLegalResolution.value, baseline.strictLegalResolution.value),
+      repeatedFeedbackFalseAlarmRate: difference(hard.repeatedFeedbackFalseAlarmRate.value, baseline.repeatedFeedbackFalseAlarmRate.value),
+      repeatedFeedbackStrictResolution: difference(hard.repeatedFeedbackStrictResolution.value, baseline.repeatedFeedbackStrictResolution.value),
+      repeatedFeedbackCoverage: difference(hard.repeatedFeedbackCoverage.value, baseline.repeatedFeedbackCoverage.value),
       gainedPositiveTargets: hard.rows.filter(r => r.label === 'violation' && r.detected && !baseline.rows.find(b => b.targetId === r.targetId)!.detected).map(r => r.targetId),
       lostPositiveTargets: baseline.rows.filter(r => r.label === 'violation' && r.detected && !hard.rows.find(h => h.targetId === r.targetId)!.detected).map(r => r.targetId) };
   });

@@ -298,17 +298,23 @@ send({type:'turn.completed',usage:${JSON.stringify(usage)}});`);
     }
   });
 
-  it('counts M initial lesson, delta and rendering overhead under the same native state cap', async () => {
+  it('admits M replacement at the same native active-state cap as H/U', async () => {
     const f = await harness(), prepared = validatePacket(f.fixture.packet, f.fixture.future).prepared;
     f.config.limits.renderedPersistentStateBytes = 500;
     expect(Buffer.byteLength(renderState(initialMemory(prepared)))).toBeLessThan(500);
-    expect(Buffer.byteLength(renderState(f.fixture.memoryProposal.state!))).toBeGreaterThan(500);
+    expect(Buffer.byteLength(renderState(f.fixture.memoryProposal.state!))).toBeLessThan(500);
     const report = await f.run(); expectRoster(report, f.fixture);
     const memory = report.arms.find(a => a.arm === 'M')!;
-    expect(memory.disposition).toBe('policy_invalid');
-    expect(memory.proposalError).toContain('native rendered byte cap');
+    expect(memory.disposition).toBe('changed');
+    expect(memory.acceptedChange).toBe(true);
     expect(memory.calls[1].nativeRecord!.observations.renderedPersistentStateBytes)
-      .toBe(Buffer.byteLength(renderState(initialMemory(prepared))));
+      .toBe(Buffer.byteLength(renderState(f.fixture.memoryProposal.state!)));
+    for (const stage of ['gate', 'future'] as const) {
+      const call = memory.calls.find(c => c.stage === stage)!;
+      expect(call.request).toEqual(report.arms.find(a => a.arm === 'U')!.calls.find(c => c.stage === stage)!.request);
+      expect(call.nativeRecord!.observations.renderedPersistentStateBytes).toBe(Buffer.byteLength(renderState(f.fixture.memoryProposal.state!)));
+      expect(call.request.prompt).not.toContain('initialLesson');
+    }
     expect(report.arms.filter(a => a.arm === 'U' || a.arm === 'H').every(a => a.acceptedChange)).toBe(true);
   }, 15_000);
 

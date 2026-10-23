@@ -122,7 +122,7 @@ belong to that head, not automatically to later changes.
 
 Separate pinned evidence: [six real exports and blocked reopen, `1565fade`](https://github.com/leixy2004/FlyReWheel/blob/1565fade76e4fe640bcfc810415e491d7ac6e13b/experiments/temporal-pilot/w0-first-three/evaluation-preparation/bridge31/README.md),
 and [official-tool rendering/schema checks, `d5f0b49`](https://github.com/leixy2004/FlyReWheel/blob/d5f0b49db7da7cb53c5c8528433c8b3fc295651f/docs/evidence/kubernetes-offline-2026-10-04/README.md).
-They are linked evidence, not incorporated implementations or a live deployment.
+These pinned implementations/evidence are now incorporated in the [converged task branch](converged-application-2026-10-04.md). Their historical results remain bound to their original commits and do not establish a live deployment or a pass for the current tree.
 
 For the earlier request/preflight/scorer chain and its 13 command receipts, retain
 the [historical guide at `9f51467`](https://github.com/leixy2004/FlyReWheel/blob/9f51467e9135389bc86f616a6c303c86a22ee95c/docs/offline-reproducibility.md)

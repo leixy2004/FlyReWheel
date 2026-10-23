@@ -1,0 +1,83 @@
+{
+  "digest": "2a80283454697590f137e1aa340311c928b219b6bdd502db28d336c129cc37ba",
+  "cases": [
+    {
+      "input": {
+        "id": "target-c",
+        "prId": "pr-target-c",
+        "familyId": "fixture-family",
+        "lineageId": "later-c",
+        "path": "src/c.ts",
+        "source": "danger(c);\n",
+        "sourceDigest": "54f62e7e1b1658db12eb8faaa7dbc752d08de1b848b9feb3dcd326044669e8cf",
+        "sourceSnapshotDigest": "4cef121bb2f06fa94a3536b6f12e96affa13fd0049cdad60c9b876a806c58788",
+        "issueScope": {
+          "start": 0,
+          "end": 11
+        },
+        "evidence": [
+          {
+            "id": "evidence-target-c",
+            "content": "danger(c);\n"
+          }
+        ],
+        "missingEvidence": []
+      },
+      "label": "violation",
+      "repeatedFeedbackMechanism": false,
+      "labelRecordDigest": "91862ebbd97791fc011fa139ba095254e6f9c8dfd9f5da5c62c497d4fb663c28"
+    },
+    {
+      "input": {
+        "id": "target-d",
+        "prId": "pr-target-d",
+        "familyId": "fixture-family",
+        "lineageId": "later-d",
+        "path": "src/d.ts",
+        "source": "guard(d); danger(d);\n",
+        "sourceDigest": "50e7496f836cd24b14cc69ccc21c8da65de1620ac02cd6ba4e6fa60aa9ded320",
+        "sourceSnapshotDigest": "f10d449b70722549a228156eb7422707dc45a757c1545c07dd87511240df09b5",
+        "issueScope": {
+          "start": 0,
+          "end": 21
+        },
+        "evidence": [
+          {
+            "id": "evidence-target-d",
+            "content": "guard(d); danger(d);\n"
+          }
+        ],
+        "missingEvidence": []
+      },
+      "label": "legal_neighbor",
+      "repeatedFeedbackMechanism": true,
+      "labelRecordDigest": "d2b8f3c5b2807e531d4951e1539a00b94be1e358feeecf3b95d4aeb00ff6ee34"
+    },
+    {
+      "input": {
+        "id": "target-e",
+        "prId": "pr-target-e",
+        "familyId": "fixture-family",
+        "lineageId": "later-e",
+        "path": "src/e.ts",
+        "source": "unknown(e);\n",
+        "sourceDigest": "db5514345053c0d7289d1002187d11094e61e2bf201d89d74059934b7bdb36b4",
+        "sourceSnapshotDigest": "55e002e89dd7a2b99f604226bb084d51377bf91be257d189d36b248848200a48",
+        "issueScope": {
+          "start": 0,
+          "end": 12
+        },
+        "evidence": [
+          {
+            "id": "evidence-target-e",
+            "content": "unknown(e);\n"
+          }
+        ],
+        "missingEvidence": []
+      },
+      "label": "unknown",
+      "repeatedFeedbackMechanism": false,
+      "labelRecordDigest": "7558c6c6fb0c5618a2c6bff382be29ffa00db5c2783663f21b90978d490ca34b"
+    }
+  ]
+}

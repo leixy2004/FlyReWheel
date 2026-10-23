@@ -50,9 +50,15 @@ execution still requires authenticated study identity and exposure auditing.
 1. Bind the actual retained 38-PR metadata roster, complete permitted source packets,
    prior rejections and exposure audit to a versioned configuration. Do not acquire
    new sources or expose W1 merely to fill configuration fields.
-2. Implement a raw-response parser rejecting duplicate keys and unorderable spans,
-   validate anchors against pinned bytes, and test compound-rule rejection and
-   independent screening with no replacement. Audit study identity and registry storage durability before connecting an executor.
+2. The raw-response parser now rejects duplicate keys and unsafe/unorderable
+   spans, verifies anchors and quotes against pinned authored bytes, and rejects
+   extra structural fields. Authored screening binds the retained first candidate,
+   preserves rejected/missing/unknown/disputed outcomes and forbids replacement.
+   These are implemented and regression-tested in `construction-raw-response` and
+   `construction-screening`; they do not detect natural-language compound rules
+   automatically or supply independent human screening. Remaining work is actual
+   semantic assessment, authenticated study identity/exposure auditing and registry
+   durability review before any real executor is connected.
 3. Exact-key family grouping and construction-to-episode membership binding are now
    implemented for authored receipts. Independently audit semantic admission and
    lineage; audit the now-persisted authored index/feedback lock against authenticated study
@@ -66,3 +72,6 @@ execution still requires authenticated study identity and exposure auditing.
 
 The [system method](construction-and-episode-method.md) specifies stage ordering,
 once-only slot semantics, registry trust, failure accounting and empirical gaps.
+
+Outstanding issue work is tracked in [the main backlog](../docs/TODO.md); closing
+the GitHub tracking issues does not establish runtime or empirical completion.
