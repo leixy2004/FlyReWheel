@@ -1,0 +1,57 @@
+{
+  "baseCommit": "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+  "scope": "one preexisting authored development family; retained HTTPX admission is blocked",
+  "tests": {
+    "numTotalTests": 27,
+    "numPassedTests": 27,
+    "numFailedTests": 0,
+    "success": true
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "retainedAuditReplayByteIdentical": true,
+  "commands": [
+    "npx vitest run tests/guarded-family-admission.test.ts tests/blinded-annotation-workflow.test.ts tests/matched-revision.evaluation-contract.test.ts --maxWorkers=1",
+    "npx tsc --noEmit",
+    "npm run build",
+    "node --import tsx experiments/annotation/guarded-family-replay.ts retained-admission --out /tmp/httpx-family-admission-repeat.json",
+    "cmp /tmp/httpx-family-admission-repeat.json experiments/annotation/verification/httpx-family-admission.json",
+    "node --import tsx experiments/annotation/guarded-family-replay.ts init-authored --out /tmp/flyrewheel-guarded-family-blank-smoke",
+    "node --import tsx experiments/annotation/replay.ts status --workspace /tmp/flyrewheel-guarded-family-blank-smoke"
+  ],
+  "reviewers": [
+    {
+      "name": "identity_audit",
+      "role": "independent methodology",
+      "testsPassed": 5,
+      "result": "No forced HTTPX family or H2 episode; source truth and finding feedback remain distinct"
+    },
+    {
+      "name": "leakage_audit",
+      "role": "independent code review",
+      "testsPassed": 6,
+      "result": "No remaining blocker after exact base-rule pin and multi-anchor source validation"
+    }
+  ],
+  "realFamiliesAdmitted": 0,
+  "realHumanLabels": 0,
+  "modelCalls": 0,
+  "newAcquisitions": 0,
+  "futureRosterEmitted": false,
+  "privateBlankPacketsPublished": false,
+  "limits": [
+    "Only three exposed W0 samples examined, not all HTTPX or W1/W2",
+    "Guard/operation semantics are authored test material, not proven real source behavior",
+    "Core negative lacks L/S subclass and L_mech adjudication; missing and excluded cannot be silently converted",
+    "No FrozenFuture or matched evaluation contract is manufactured",
+    "Still requires substantive real rule, actual W1 findings/feedback, independent future labels and study admission"
+  ],
+  "fileSha256": {
+    "experiments/annotation/guarded-family.ts": "77c0d362af84405e5c7d6bcc228d79383e5504cd7aff072a88d5ba85c8207a82",
+    "experiments/annotation/guarded-family-fixture.ts": "337f36a6c57f268e4d3688606ac5a5626e8ff9ed752d2d363484ed1cc64edd74",
+    "experiments/annotation/guarded-family-replay.ts": "a799628a2389b58ddf9baabe5b80f48e6322c3dd89ba0b998c68a35eb99c2e91",
+    "experiments/annotation/GUARDED-FAMILY-v1.md": "fdf1fc5fc8cd9ab7fe76257f2f14e696a538a926bac4acd15534b0a0a6db9f6f",
+    "tests/guarded-family-admission.test.ts": "864b7e2ce8ae31a509c58b83da7faafdb86e9cc628e459128f300fb394df520a",
+    "experiments/annotation/verification/httpx-family-admission.json": "fbf7d2c4316b018c2da5c75d27cf0de244b28a42cd801a308592d4cfa188de24"
+  }
+}

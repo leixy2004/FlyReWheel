@@ -1,0 +1,648 @@
+{
+  "date": "2026-10-23",
+  "baselineMain": "d749e3acd997514208b8b83a8b35c6095288a565",
+  "integrationTip": "73e61dff7890f7daa486cd95c88e4dd5104e952e",
+  "initialRemoteBranches": 55,
+  "initialOpenPullRequests": 0,
+  "initialOpenIssues": [
+    2,
+    3
+  ],
+  "branches": [
+    {
+      "branch": "codex/blinded-annotation-workflow",
+      "sha": "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+      "uniqueCommits": 9,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb"
+      ],
+      "recovery": "git switch -c recovered-branch 5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb"
+    },
+    {
+      "branch": "codex/cli-smoke-audit",
+      "sha": "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+      "uniqueCommits": 1,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e"
+      ],
+      "recovery": "git switch -c recovered-branch 54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e"
+    },
+    {
+      "branch": "codex/construction-raw-response-validation",
+      "sha": "0af24f3d66e3823897368dc078c1543b6dd78b12",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 0af24f3d66e3823897368dc078c1543b6dd78b12"
+    },
+    {
+      "branch": "codex/converged-admission-20261004",
+      "sha": "e410339414f42292f14f938d877a58308e997c25",
+      "uniqueCommits": 22,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+        "905ece08911b882c76cd606b5ddfaaa759747c8e",
+        "e410339414f42292f14f938d877a58308e997c25"
+      ],
+      "recovery": "git switch -c recovered-branch e410339414f42292f14f938d877a58308e997c25"
+    },
+    {
+      "branch": "codex/converged-application-20261004",
+      "sha": "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+      "uniqueCommits": 20,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16"
+      ],
+      "recovery": "git switch -c recovered-branch 2727dcf987dfe1c254b0bb8475da4db1b318bd16"
+    },
+    {
+      "branch": "codex/deterministic-construction-protocol",
+      "sha": "05dfcf6f2746b17369b5dfc858d9ad27d66844db",
+      "uniqueCommits": 25,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+        "905ece08911b882c76cd606b5ddfaaa759747c8e",
+        "e410339414f42292f14f938d877a58308e997c25",
+        "3182b4c02045c414d22275e92c9d319f00a9fe64",
+        "f69dbb0091e7fc7a7b29daf87d4f5cf9d9d98505",
+        "05dfcf6f2746b17369b5dfc858d9ad27d66844db"
+      ],
+      "recovery": "git switch -c recovered-branch 05dfcf6f2746b17369b5dfc858d9ad27d66844db"
+    },
+    {
+      "branch": "codex/development-family-admission",
+      "sha": "905ece08911b882c76cd606b5ddfaaa759747c8e",
+      "uniqueCommits": 21,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+        "905ece08911b882c76cd606b5ddfaaa759747c8e"
+      ],
+      "recovery": "git switch -c recovered-branch 905ece08911b882c76cd606b5ddfaaa759747c8e"
+    },
+    {
+      "branch": "codex/entrypoint-identity-followup",
+      "sha": "82bdad9efc09912f7200959fcda7750fcee67c80",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 82bdad9efc09912f7200959fcda7750fcee67c80"
+    },
+    {
+      "branch": "codex/evaluation-cli-registration",
+      "sha": "029917926d577430febcab1654f440d31bc1f01f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 029917926d577430febcab1654f440d31bc1f01f"
+    },
+    {
+      "branch": "codex/explicit-review-continuation",
+      "sha": "48d6bb8c4e8006bf1c2c1d848a1afbe4a6122c53",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 48d6bb8c4e8006bf1c2c1d848a1afbe4a6122c53"
+    },
+    {
+      "branch": "codex/feedback-governance-loop",
+      "sha": "3a427f3911b605f506be23057697c6b73ae917c8",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 3a427f3911b605f506be23057697c6b73ae917c8"
+    },
+    {
+      "branch": "codex/governance-committed-recovery",
+      "sha": "eefd35c3814684e22046022df248429789bccb33",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch eefd35c3814684e22046022df248429789bccb33"
+    },
+    {
+      "branch": "codex/integration-candidate-2026-10-03",
+      "sha": "0471c0b2e69c187c7907a9d1ade396b310cb6f3d",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 0471c0b2e69c187c7907a9d1ade396b310cb6f3d"
+    },
+    {
+      "branch": "codex/integration-context-composition",
+      "sha": "9f51467e9135389bc86f616a6c303c86a22ee95c",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 9f51467e9135389bc86f616a6c303c86a22ee95c"
+    },
+    {
+      "branch": "codex/integration-matched-paper-20261004",
+      "sha": "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+      "uniqueCommits": 6,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a"
+      ],
+      "recovery": "git switch -c recovered-branch 89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a"
+    },
+    {
+      "branch": "codex/integration-native-macro-20261004",
+      "sha": "a05af56c4427859a2e003e7581f129c75aafb73b",
+      "uniqueCommits": 8,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b"
+      ],
+      "recovery": "git switch -c recovered-branch a05af56c4427859a2e003e7581f129c75aafb73b"
+    },
+    {
+      "branch": "codex/integration-w0-candidate",
+      "sha": "0b476d9f6835fec63b3b924c0de3120d3c79922f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 0b476d9f6835fec63b3b924c0de3120d3c79922f"
+    },
+    {
+      "branch": "codex/issue-1-real-postgres",
+      "sha": "3fdb63bb767622c9177a3f4d6283126496154277",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 3fdb63bb767622c9177a3f4d6283126496154277"
+    },
+    {
+      "branch": "codex/issue-1-recovery-review-fixes",
+      "sha": "e296ae8f17f569f0b694464273dcc45ef28c41e2",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch e296ae8f17f569f0b694464273dcc45ef28c41e2"
+    },
+    {
+      "branch": "codex/issue-11-bounded-pr-ci",
+      "sha": "2f19dc3427249a2253061b5570d8ebde7fb56829",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 2f19dc3427249a2253061b5570d8ebde7fb56829"
+    },
+    {
+      "branch": "codex/issue-2-authorized-runtime-retry",
+      "sha": "8dc8070d22b26291d978aa58a4fd59a375a350df",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 8dc8070d22b26291d978aa58a4fd59a375a350df"
+    },
+    {
+      "branch": "codex/issue-2-bounded-runtime-image",
+      "sha": "036e64ae1182348491d6587d028a156d17f0f8be",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 036e64ae1182348491d6587d028a156d17f0f8be"
+    },
+    {
+      "branch": "codex/issue-2-deploy-contract-audit",
+      "sha": "6c2185c7eb47e3856fd86f5aeb56d8ba7f3aed5f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 6c2185c7eb47e3856fd86f5aeb56d8ba7f3aed5f"
+    },
+    {
+      "branch": "codex/issue-2-explicit-worker-bootstrap",
+      "sha": "1bc2afffdd28c5ebde64f81e39944d816fdca8f7",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 1bc2afffdd28c5ebde64f81e39944d816fdca8f7"
+    },
+    {
+      "branch": "codex/issue-2-pinned-kubernetes-render",
+      "sha": "d5f0b49db7da7cb53c5c8528433c8b3fc295651f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch d5f0b49db7da7cb53c5c8528433c8b3fc295651f"
+    },
+    {
+      "branch": "codex/issue-2-runtime-readiness",
+      "sha": "daa72fd7b6d423bd68032432fe7fef045b7a9560",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch daa72fd7b6d423bd68032432fe7fef045b7a9560"
+    },
+    {
+      "branch": "codex/issue-2-stop-recovery-resolver",
+      "sha": "6a1a8ac1d56f659f2e7d96b000739025f9755672",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 6a1a8ac1d56f659f2e7d96b000739025f9755672"
+    },
+    {
+      "branch": "codex/issue-3-evaluation-resolver-cli",
+      "sha": "8f26428d6723dd8792d8733301a4098c57138b06",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 8f26428d6723dd8792d8733301a4098c57138b06"
+    },
+    {
+      "branch": "codex/issue-3-evidence-boundaries",
+      "sha": "d8c89d85e7e4d5c12fab5028fa6fbf54e6114ae3",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch d8c89d85e7e4d5c12fab5028fa6fbf54e6114ae3"
+    },
+    {
+      "branch": "codex/issue-3-frame-validation",
+      "sha": "7ecaefdef30d7cc903c850fb4f5c6f58aff98257",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 7ecaefdef30d7cc903c850fb4f5c6f58aff98257"
+    },
+    {
+      "branch": "codex/issue-3-native-evaluation-bridge",
+      "sha": "498e704dd91c76dd846fb64183df3ed20b887ec0",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 498e704dd91c76dd846fb64183df3ed20b887ec0"
+    },
+    {
+      "branch": "codex/issue-3-offline-evaluation-route",
+      "sha": "ba319f64eafc06b816975ee159c510a8404e0644",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch ba319f64eafc06b816975ee159c510a8404e0644"
+    },
+    {
+      "branch": "codex/issue-3-w0-behavior-validation",
+      "sha": "ce9b9fbfc3abf5d1d542652e0b19ca01fca8e4fc",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch ce9b9fbfc3abf5d1d542652e0b19ca01fca8e4fc"
+    },
+    {
+      "branch": "codex/issue-3-w0-evaluation-inputs",
+      "sha": "1565fade76e4fe640bcfc810415e491d7ac6e13b",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 1565fade76e4fe640bcfc810415e491d7ac6e13b"
+    },
+    {
+      "branch": "codex/issue-3-w0-evidence",
+      "sha": "671e57dd0f41099260d9d50c8cbac15b631a6c9f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 671e57dd0f41099260d9d50c8cbac15b631a6c9f"
+    },
+    {
+      "branch": "codex/issue-3-w0-full-context",
+      "sha": "dfee04c00674371551153c71c02473b2205a44de",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch dfee04c00674371551153c71c02473b2205a44de"
+    },
+    {
+      "branch": "codex/issue-3-w0-mining-preparation",
+      "sha": "f02c9c483abd79533b29e52f41aca51f979c1320",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch f02c9c483abd79533b29e52f41aca51f979c1320"
+    },
+    {
+      "branch": "codex/issue-3-w0-permission-diagnosis",
+      "sha": "a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch a7adb0ee4c86fd6e72f5a1327ff2ac0e0a8ec760"
+    },
+    {
+      "branch": "codex/issue-3-w0-producer",
+      "sha": "528d4bb1d21aaa6588bf9b88c6ecc2e761724c2f",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 528d4bb1d21aaa6588bf9b88c6ecc2e761724c2f"
+    },
+    {
+      "branch": "codex/issue-3-w0-proxy-capture",
+      "sha": "04155f2d4fafa7063e55caedaa3f2353b85fc268",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 04155f2d4fafa7063e55caedaa3f2353b85fc268"
+    },
+    {
+      "branch": "codex/issue-entrypoint-symlink",
+      "sha": "f1f2f61523eb82cafd2af09827ca6e73b8cb6792",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch f1f2f61523eb82cafd2af09827ca6e73b8cb6792"
+    },
+    {
+      "branch": "codex/matched-macro-uncertainty",
+      "sha": "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+      "uniqueCommits": 7,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c"
+      ],
+      "recovery": "git switch -c recovered-branch 4445cb65a548cf6c3c3b58b9f7b66953672adf2c"
+    },
+    {
+      "branch": "codex/memory-active-state-20261005",
+      "sha": "73e61dff7890f7daa486cd95c88e4dd5104e952e",
+      "uniqueCommits": 29,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+        "905ece08911b882c76cd606b5ddfaaa759747c8e",
+        "e410339414f42292f14f938d877a58308e997c25",
+        "3182b4c02045c414d22275e92c9d319f00a9fe64",
+        "f69dbb0091e7fc7a7b29daf87d4f5cf9d9d98505",
+        "05dfcf6f2746b17369b5dfc858d9ad27d66844db",
+        "7f008a5433f1120071f712158f7d954b6e098190",
+        "563abc69517d9015a5ad8f1f41e74039e422af6e",
+        "a5fd47f35d2cf05ee2809de406d5edc462cba898",
+        "73e61dff7890f7daa486cd95c88e4dd5104e952e"
+      ],
+      "recovery": "git switch -c recovered-branch 73e61dff7890f7daa486cd95c88e4dd5104e952e"
+    },
+    {
+      "branch": "codex/minimal-matched-evaluation-contract",
+      "sha": "6c25eac50ccb05223a024a52a521b60d8f738d20",
+      "uniqueCommits": 4,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20"
+      ],
+      "recovery": "git switch -c recovered-branch 6c25eac50ccb05223a024a52a521b60d8f738d20"
+    },
+    {
+      "branch": "codex/native-macro-report",
+      "sha": "a05af56c4427859a2e003e7581f129c75aafb73b",
+      "uniqueCommits": 8,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b"
+      ],
+      "recovery": "git switch -c recovered-branch a05af56c4427859a2e003e7581f129c75aafb73b"
+    },
+    {
+      "branch": "codex/offline-construction-freeze",
+      "sha": "f729dc638e69824bed03fdcbd7ed7e6b68680a85",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch f729dc638e69824bed03fdcbd7ed7e6b68680a85"
+    },
+    {
+      "branch": "codex/offline-reproducibility-followup",
+      "sha": "9d98197fa6183f98e5da15d5c207167f8d3dbcb2",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 9d98197fa6183f98e5da15d5c207167f8d3dbcb2"
+    },
+    {
+      "branch": "codex/opensandbox-plan-entrypoint-fix",
+      "sha": "e777ec0302ec960b5aa552ececf1855ac41e8672",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch e777ec0302ec960b5aa552ececf1855ac41e8672"
+    },
+    {
+      "branch": "codex/paper-primary-source-gap-audit",
+      "sha": "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+      "uniqueCommits": 1,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec"
+      ],
+      "recovery": "git switch -c recovered-branch 7eb922bf91e4c5ee0fd1f51088ff6d2348597bec"
+    },
+    {
+      "branch": "codex/pglite-setup-budget-9043274-20261004",
+      "sha": "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+      "uniqueCommits": 3,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6"
+      ],
+      "recovery": "git switch -c recovered-branch 90432743d2a8ff316aecf862e42c0613d35ff9a6"
+    },
+    {
+      "branch": "codex/remaining-w0-inspection-plan",
+      "sha": "f69dbb0091e7fc7a7b29daf87d4f5cf9d9d98505",
+      "uniqueCommits": 24,
+      "disposition": "Integrate full ancestry through 73e61dff7890f7daa486cd95c88e4dd5104e952e; retain implementations with documented conflict resolution",
+      "uniqueCommitShas": [
+        "54a2f4dfebc9a3a5e7c03930ac9997b19db8d96e",
+        "6fe90565a173d73d7f8b007e2861cf543dc2386c",
+        "abec3e07d9a9bbb571301e3e76722ef99b92164b",
+        "90432743d2a8ff316aecf862e42c0613d35ff9a6",
+        "7eb922bf91e4c5ee0fd1f51088ff6d2348597bec",
+        "6c25eac50ccb05223a024a52a521b60d8f738d20",
+        "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+        "4445cb65a548cf6c3c3b58b9f7b66953672adf2c",
+        "a05af56c4427859a2e003e7581f129c75aafb73b",
+        "39cf168bff505fb10b4b8a37996a43a95dff55a7",
+        "c7a320693d5e05e135a97457248f4c530167d362",
+        "ebd7ce051a6b541025586fbdecc0c18e617f89df",
+        "c8a7f215484f0da41868c73e35becf54753e6810",
+        "0c794db218648bcc7fb6a5eb972a58860cd15048",
+        "26b1466dcadaa70ecfb2ef345f77085f1cc0f43d",
+        "30c65a72e7ae108c9982f543b696d893a42010ad",
+        "76a7a14bcfcf1c8c11b42030ddd27d9a700d92de",
+        "5e9ea02035c1f5d7c5ada0db2d09ead4efd77ecb",
+        "98ed22ca5de16e712ffb761d262855d29d843e81",
+        "2727dcf987dfe1c254b0bb8475da4db1b318bd16",
+        "905ece08911b882c76cd606b5ddfaaa759747c8e",
+        "e410339414f42292f14f938d877a58308e997c25",
+        "3182b4c02045c414d22275e92c9d319f00a9fe64",
+        "f69dbb0091e7fc7a7b29daf87d4f5cf9d9d98505"
+      ],
+      "recovery": "git switch -c recovered-branch f69dbb0091e7fc7a7b29daf87d4f5cf9d9d98505"
+    },
+    {
+      "branch": "codex/repository-integration-20261020",
+      "sha": "b09f3afe39479795e8f70ecc5beaf131b77cf6a6",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch b09f3afe39479795e8f70ecc5beaf131b77cf6a6"
+    },
+    {
+      "branch": "codex/revision-preflight-readonly",
+      "sha": "28a567a96eb2331fdd2be22f7154623a8a28bd59",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 28a567a96eb2331fdd2be22f7154623a8a28bd59"
+    },
+    {
+      "branch": "codex/worker-launch-compatibility",
+      "sha": "5589505549cdd23d7eb91ac460c95f822538d805",
+      "uniqueCommits": 0,
+      "disposition": "Already reachable from baseline main; no unique commits",
+      "uniqueCommitShas": [],
+      "recovery": "git switch -c recovered-branch 5589505549cdd23d7eb91ac460c95f822538d805"
+    }
+  ]
+}

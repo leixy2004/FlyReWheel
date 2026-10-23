@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "retained-httpx-family-admission",
+  "examinedScope": "three exposed W0 development packages only",
+  "conclusions": [
+    "3035 is a mkdocs-material pin change; no docs behavior result establishes a defect",
+    "3031 is a Ruff pin change; both bounded tool checks pass, not a semantic repair label",
+    "3036 changes setup-python references; static syntax/ref checks do not establish external action behavior"
+  ],
+  "rows": [
+    {
+      "number": 3035,
+      "sha256": "a0e1de76143154a1fd8f021c8be9f9a778a161986e5d5d03fc50e1ca92a92883",
+      "snapshotDigest": "4532d1b688fe3e437720fbd54edcddb87da8d644a57aa4ed21f49a4ef54ee535",
+      "admission": "blocked",
+      "missing": [
+        "source-supported substantive rule/constraint",
+        "actual independently verified feedback",
+        "independent future opportunities"
+      ]
+    },
+    {
+      "number": 3031,
+      "sha256": "41f3209e3209d8790127149d5928c27910048e3515cf60e786ccfd30b2247c7a",
+      "snapshotDigest": "7ff07e5ca6b4c546249f6d7f335c067ff14d59e4a3a204cb682640b07d8f9e1e",
+      "admission": "blocked",
+      "missing": [
+        "source-supported substantive rule/constraint",
+        "actual independently verified feedback",
+        "independent future opportunities"
+      ]
+    },
+    {
+      "number": 3036,
+      "sha256": "9eb899563bd26d08fbd03d8b0fe0d4323243f5b20fd663d0969d81d877840ffd",
+      "snapshotDigest": "0460f1a7e25f10d7de8528b903ca962acd30dceeae131b9c09c11ef8f884b83c",
+      "admission": "blocked",
+      "missing": [
+        "source-supported substantive rule/constraint",
+        "actual independently verified feedback",
+        "independent future opportunities"
+      ]
+    }
+  ],
+  "auditEvidence": [
+    {
+      "path": "experiments/temporal-pilot/w0-first-three/evaluation-preparation/PAPER-DATA-AUDIT.md",
+      "sha256": "8760b0209454d8b138248d25f4927575632e06ddedfadecb86ec758ab0d7eb12"
+    },
+    {
+      "path": "experiments/temporal-pilot/w0-first-three/evaluation-preparation/provenance-ledger.json",
+      "sha256": "9d6835f5a00eb84037c0dcdada00bc50495a1483a42f31cbcc5ab32ac0f69d93"
+    },
+    {
+      "path": "experiments/temporal-pilot/w0-first-three/behavior-validation/container-results.json",
+      "sha256": "f156d5c086b9571aa17b767d217e30ea30ed60e329459cea9922779a8c766caf"
+    }
+  ],
+  "conclusionBasis": "Retained source changes and recorded offline audit/tool evidence; no fresh behavior run",
+  "admittedEmpiricalFamilies": 0,
+  "interpretation": "Insufficient retained evidence; not proof no useful family exists in HTTPX",
+  "h2EpisodeAdmission": "blocked",
+  "currentDiscussionIsHistoricalFeedback": false,
+  "authoredFamilyDisposition": "Separate preexisting guarded-operation fixture only; not mined from HTTPX",
+  "modelCalls": 0,
+  "humanLabels": 0,
+  "newAcquisitions": 0,
+  "digest": "6a16d34378dbf9a0a0723b74e7fbeeaea181d7e7ecee0b3a49c6d3349d159f14"
+}

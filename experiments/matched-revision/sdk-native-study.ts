@@ -1,3 +1,4 @@
+import { MATCHED_EXECUTION_POLICY_DIGEST } from './prompts.js';
 import { NativeEvaluationContextSchema, type NativeEvaluationContext } from '../../src/core/matched-revision-model.js';
 import { MatchedStudyStore, MatchedStudyError, type MatchedStudyClaim, type MatchedStudyEvent } from '../../src/storage/matched-studies.js';
 import { digestOf } from '../../src/core/identity.js';
@@ -19,7 +20,7 @@ export function sdkNativeStudyDigest(schedule: SdkNativeSchedule, configuration:
   const config = validateSdkNativeConfiguration(configuration);
   const frozen = validateSdkNativeSchedule(schedule, config);
   return digestOf(['authored-matched-study-recovery', frozen.digest, digestOf(config),
-    ...(evaluation === undefined ? [] : [digestOf(NativeEvaluationContextSchema.parse(evaluation))])]);
+    ...(evaluation === undefined ? [] : [digestOf(NativeEvaluationContextSchema.parse(evaluation))]), MATCHED_EXECUTION_POLICY_DIGEST]);
 }
 function roster(block: SdkNativeScheduledBlock, report: CompletedBlock | null, recorded: { arm: Arm; call: CallRecord }[],
   uncertain: BlockOutcome['uncertainCalls']) {
@@ -76,7 +77,7 @@ function blockReport(block: SdkNativeScheduledBlock, schedule: SdkNativeSchedule
 }
 type StudyBlock = ReturnType<typeof blockReport>;
 function studyReport(schedule: SdkNativeSchedule, configuration: SdkNativeConfiguration, blocks: StudyBlock[], studyDigest?: string, evaluation?: NativeEvaluationContext) {
-  const body = { ...(evaluation ? { evaluation } : {}), schemaVersion: 1, kind: 'matched-revision-sdk-native-authored-study-report',
+  const body = { executionPolicyDigest: MATCHED_EXECUTION_POLICY_DIGEST, ...(evaluation ? { evaluation } : {}), schemaVersion: 1, kind: 'matched-revision-sdk-native-authored-study-report',
     execution: 'completed' as const, modelExecution: 'not_run' as const, empiricalEpisodes: 0,
     independentHumanAnnotations: 0, providerModelCalls: 0,
     operationalAdmission: 'not_evaluated', declaredPinsVerified: false,
@@ -146,7 +147,7 @@ export async function runSdkNativeStudy(input: {
   if (store) {
     const manifest = { schemaVersion: 1 as const, kind: 'authored-matched-study-recovery' as const,
       scheduleDigest: schedule.digest, configurationDigest: digestOf(configuration), blockIds: schedule.blocks.map(b => b.blockId),
-      input: { ...(evaluation ? { evaluation } : {}), schedule, configuration, blocks: schedule.blocks.map(b => byId.get(b.blockId) ?? null) } };
+      input: { executionPolicyDigest: MATCHED_EXECUTION_POLICY_DIGEST, ...(evaluation ? { evaluation } : {}), schedule, configuration, blocks: schedule.blocks.map(b => byId.get(b.blockId) ?? null) } };
     // Renewed on each awaited checkpoint; one call plus cleanup cannot outlive this bound.
     const leaseMs = configuration.limits.deadlineMsPerCall + configuration.limits.cleanupTimeoutMs + 30_000;
     const admission = await store.claim(manifest, leaseMs);

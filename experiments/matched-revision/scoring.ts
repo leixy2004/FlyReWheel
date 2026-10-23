@@ -51,6 +51,8 @@ export function scoreFuture(cases: FutureCase[], predictions: Observation[]) {
     // An unsupported alert still burdens a negative; it gets no positive recall credit.
     legalFalseAlarmRate: ratio(legal.filter(r => r.prediction === 'violation').length, legal.length), strictLegalResolution,
     safeApplicableResolution: ratio(safe.filter(r => r.safeResolved).length, safe.length),
+    repeatedFeedbackStrictResolution: ratio(repeated.filter(r => r.legalResolved).length, repeated.length),
+    repeatedFeedbackCoverage: ratio(repeated.filter(r => r.determinate).length, repeated.length),
     repeatedFeedbackFalseAlarmRate: ratio(repeated.filter(r => r.prediction === 'violation').length, repeated.length),
     strictBalancedResolution: positiveRecall.value === null || strictLegalResolution.value === null ? null
       : (positiveRecall.value + strictLegalResolution.value) / 2,

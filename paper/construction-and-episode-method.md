@@ -122,8 +122,9 @@ with all members preserved; invented or omitted families are rejected. This clos
 the authored dataflow connection, while retained candidates still lack independent
 semantic admission. The register enforces construction completion before selection
 in the local call sequence, not independently verified historical timestamps. Still required are actual
-source-packet verification (including span bounds and evidence), a raw-response
-parser with duplicate-key rejection, compound-rule assessment, independent eligibility
+real-source provenance and semantic verification (the authored raw-response parser
+already rejects duplicate keys and verifies span/quote bindings), independent
+compound-rule assessment, independent eligibility
 and lineage review, authenticated construction/index locks, neutral opportunity
 packets and independently locked source/support judgments. Model/version/decoding,
 resource measurement and execution configuration are unconfigured; their absence

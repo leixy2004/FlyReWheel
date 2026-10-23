@@ -3,6 +3,71 @@
 Historical local checkpoints begin **2026-10-02**, canonical directory `FlyReWheel/`. This is a local
 source/build/test result, not a deployed sandbox or production service.
 
+## Tests in a constrained local workspace
+
+Use `npm run test:serial` to run the complete suite with one Vitest worker when
+parallel PGlite initialization competes for local CPU resources. The default
+`npm test` and CI retain two workers. Both commands run the same tests and keep
+their existing assertions, timeouts, isolation and cleanup. Record the command,
+commit, exit status, failures and skips; a serial pass does not erase a failed
+parallel run or certify parallel stability.
+
+On the 4-CPU/16-GiB cloud workspace at `28a567a`, the two-worker full suite had
+two default 5-second timeouts. A measured two-file rerun reproduced cancellation
+rollback timing out with PGlite readiness taking 4801ms and migrations 560ms;
+closing took 6ms. The same 66 tests passed with one worker, with cancellation
+rollback taking 1936ms. No new memory-limit or OOM events occurred in either
+measured run. CPU throttling increased in both, more in the two-worker run.
+This supports a resource-sensitive initialization budget, not a proven cleanup
+leak or a claim that CPU throttling alone caused every timeout. Phase observation
+adds overhead; validate the complete serial suite without those transforms.
+
+The optional offline rendering tests need an installed `kubectl` or `kustomize`
+on PATH. Earlier runtime-lane evidence used the temporary
+`/workspace/scratch/flyrewheel-kube-tools/kubectl` cache (kubectl v1.34.1,
+Kustomize v5.7.1). That cache is absent in this workspace. Git tracks the rendered
+artifacts and verification receipts, not the renderer binary; these two tests
+remain explicitly skipped when neither tool is available.
+
+### Targeted database setup budgets
+
+The fresh-database fixture in `tests/helpers/fresh-pglite.ts` uses Vitest's
+`aroundEach` with separate 10000ms setup and teardown limits. The original
+5000ms behavioral test limit is unchanged. This is the existing hook budget,
+not a global timeout increase. A measured cold PGlite readiness phase took
+8321ms, and another readiness-plus-migration sequence took 4801ms + 560ms;
+neither belongs in the budget for claims, cancellation or evidence assertions.
+
+Scope is limited to default-5000ms cases with plain fresh in-memory database
+initialization in the history and application-job storage files, and the disk
+semantic version recovery case (23 existing cases in total). The first narrow
+candidate still timed out in another history case with initialization embedded
+in its behavioral budget, so the same setup ownership now covers the remaining
+17 cases of that pattern. That failure did not separately measure its phases.
+Existing 30000ms/60000ms cases, injected database wrappers and composite storage
+fixtures remain unchanged. Each task owns a new database; no database is shared
+between tests. The disk case no longer creates an unused outer memory database.
+Only its first database allocation moves to setup: imports, explicit close,
+public-API reopen and all identity assertions remain in the test body. In a
+separate observation, first disk initialization took 2087ms, reopen 205ms and
+recovery assertions 9ms. That observation did not reproduce the earlier disk
+timeout and does not establish its exact slow phase.
+
+Close promises are owned and deduplicated, including initialization failure.
+Teardown fences a pending reopen, waits for it to settle and closes it before
+removing its directory. A late first close cannot start another reopen after
+teardown. The six authored lifecycle tests cover cleanup and error propagation;
+they are not database or runtime efficacy evidence. Hook timeouts do not cancel
+underlying initialization: a late completion still has a cleanup owner, but an
+operation that never settles cannot be claimed to have released its resources.
+
+Other embedded initializations in these three files were reviewed and left
+unchanged: they include persistence/reopen behavior, transaction fault wrappers,
+and unrelated fixtures without a reproduced setup-budget failure. No production
+code, assertions, test selection, default two-worker command or CI setting was
+changed. The failed parallel aggregate and local serial experiment remain
+separate historical results; subsequent verification must identify its own commit.
+
 ## Real PostgreSQL cloud checkpoint: 2026-10-03
 
 At GitHub baseline `237056acaaa3c21684fd63772eaca119e2af5f3a` (tree

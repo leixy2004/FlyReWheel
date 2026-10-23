@@ -1,0 +1,47 @@
+{
+  "baseCommit": "89d1cfdc7a3d06d5164176fb52e0edba93f2ba0a",
+  "scope": "authored reporting only",
+  "modelCalls": 0,
+  "empiricalEpisodes": 0,
+  "commands": [
+    "node --import tsx experiments/matched-revision/macro-replay.ts --from-contract-smoke experiments/matched-revision/contract-smoke --out /tmp/flyrewheel-macro-verified.json",
+    "cmp /tmp/flyrewheel-macro-verified.json experiments/matched-revision/macro-smoke/report.json",
+    "python3 experiments/matched-revision/macro-reference.py",
+    "npx vitest run tests/matched-revision.macro-report.test.ts tests/matched-revision.evaluation-contract.test.ts tests/matched-revision.experiment.test.ts --maxWorkers=1",
+    "npx tsc --noEmit",
+    "git diff --check"
+  ],
+  "tests": {
+    "numTotalTests": 40,
+    "numPassedTests": 40,
+    "numFailedTests": 0,
+    "success": true
+  },
+  "typecheck": "passed",
+  "replayByteIdentical": true,
+  "reviews": [
+    {
+      "reviewer": "identity_audit",
+      "role": "statistical",
+      "outcome": "no remaining blocker after missing report null propagation"
+    },
+    {
+      "reviewer": "leakage_audit",
+      "role": "code integrity",
+      "outcome": "no remaining blocker after raw proposal/gate/state/output reconstruction"
+    }
+  ],
+  "fileSha256": {
+    "experiments/matched-revision/macro-report.ts": "a569818038f1046b69308f58e927becdc789708cc5ed1c0933d8d50744ef4503",
+    "experiments/matched-revision/macro-replay.ts": "5eb4435faf616311688b966f9c0e758d1df5eaddb675861d4e1dd53048ac18cc",
+    "experiments/matched-revision/macro-reference.py": "73c2ae28e24a815b7e40e9ec247a64fbd2153367502203c891ffbfa1eab17034",
+    "tests/matched-revision.macro-report.test.ts": "9534a756055161b93a6d7a020d8315e7a3c58f5e1f6b25ddc6c6ffeffeae932f",
+    "experiments/matched-revision/macro-smoke/report.json": "cfcffa85dbdcd49b1ee5d9d4a5443004ba26b834375b31930affe95b8d1be61c",
+    "experiments/matched-revision/macro-smoke/arithmetic-reference.json": "901d49b4896bc17918dc1e1ffd9b70b068bcfbb8f6f874e61b01ad74f275653d"
+  },
+  "limits": [
+    "legacy authored reports only; native schedule adapter remains unavailable",
+    "all empirical intervals withheld",
+    "declared labels, repetition IDs and usage are not independent attestations"
+  ]
+}

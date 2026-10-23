@@ -1,3 +1,4 @@
+import { MATCHED_EXECUTION_POLICY_DIGEST } from '../experiments/matched-revision/prompts.js';
 import { afterEach, expect, it } from 'vitest';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -21,9 +22,9 @@ async function fixture() {
   const transport = createAuthoredCodexNativeMatchedTransport(input.transportOptions);
   return { input, transport };
 }
-it('requires explicit verification before claim and keeps absent-context digest unchanged', async () => {
+it('requires explicit verification before claim and pins execution policy independently of optional evaluation context', async () => {
   const { input, transport } = await fixture();
-  expect(sdkNativeStudyDigest(input.schedule, input.configuration)).toBe(digestOf(['authored-matched-study-recovery', input.schedule.digest, digestOf(input.configuration)]));
+  expect(sdkNativeStudyDigest(input.schedule, input.configuration)).toBe(digestOf(['authored-matched-study-recovery', input.schedule.digest, digestOf(input.configuration), MATCHED_EXECUTION_POLICY_DIGEST]));
   expect(sdkNativeStudyDigest(input.schedule, input.configuration, context)).not.toBe(sdkNativeStudyDigest(input.schedule, input.configuration));
   await expect(runSdkNativeStudy({ ...input, transport, evaluation: context })).rejects.toThrow(/verification hook/);
   await expect(runSdkNativeStudy({ ...input, transport, evaluation: context, verifyEvaluation: async () => { throw new Error('stale export'); } })).rejects.toThrow('stale export');
